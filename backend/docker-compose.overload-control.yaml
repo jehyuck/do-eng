@@ -1,0 +1,13 @@
+services:
+  flux-corrected:
+    image: doeng-overload-control-20260801-flux:latest
+    ports:
+      - "8003:8000"
+      - "9003:9091"
+    environment:
+      DOENG_HTTP_MAX_CONNECTIONS: "400"
+      DOENG_AI_ADMISSION_ENABLED: "true"
+      DOENG_AI_ADMISSION_MAX_CONCURRENT: "320"
+      DOENG_POOL_OBSERVATION_ENABLED: "true"
+      DOENG_DIAGNOSTIC_ENABLED: "false"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics,doengdiagnosticpool,doengadmission"

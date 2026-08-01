@@ -1,0 +1,27 @@
+param(
+    [Parameter(Mandatory = $true)][string]$ManagementUrl,
+    [Parameter(Mandatory = $true)][string]$OutputPath,
+    [int]$DurationSeconds = 1,
+    [int]$IntervalMilliseconds = 1000
+)
+
+$ErrorActionPreference = "Stop"
+$parent = Split-Path -Parent $OutputPath
+New-Item -ItemType Directory -Force -Path $parent | Out-Null
+$deadline = (Get-Date).AddSeconds($DurationSeconds)
+$failures = 0
+while ((Get-Date) -lt $deadline) {
+    $capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+    try {
+        $snapshot = Invoke-RestMethod -Uri ($ManagementUrl.TrimEnd('/') + "/actuator/doengstages") -TimeoutSec 5
+        [ordered]@{ timestamp = $capturedAt; stages = $snapshot.stages; failure = $null } |
+            ConvertTo-Json -Depth 8 -Compress | Add-Content -Encoding UTF8 -LiteralPath $OutputPath
+    } catch {
+        $failures++
+        [ordered]@{ timestamp = $capturedAt; stages = @(); failure = $_.Exception.Message } |
+            ConvertTo-Json -Depth 8 -Compress | Add-Content -Encoding UTF8 -LiteralPath $OutputPath
+    }
+    Start-Sleep -Milliseconds $IntervalMilliseconds
+}
+[ordered]@{ durationSeconds = $DurationSeconds; intervalMilliseconds = $IntervalMilliseconds; failures = $failures } |
+    ConvertTo-Json -Depth 4 | Set-Content -Encoding UTF8 -LiteralPath ($OutputPath + ".summary.json")

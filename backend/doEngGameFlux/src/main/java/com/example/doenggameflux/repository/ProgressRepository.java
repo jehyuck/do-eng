@@ -6,7 +6,6 @@ import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import reactor.core.CorePublisher;
 import reactor.core.publisher.Mono;
 
 public interface ProgressRepository extends ReactiveCrudRepository<Progress, Long> {
@@ -14,5 +13,7 @@ public interface ProgressRepository extends ReactiveCrudRepository<Progress, Lon
 
     @Modifying
     @Query("UPDATE progress SET played_at = :now where id = :progressId")
-    Mono<Progress> updateProgress(@Param("now") LocalDateTime now, @Param("progressId") long progressId);
+    Mono<Integer> updateProgress(
+            @Param("now") LocalDateTime now,
+            @Param("progressId") long progressId);
 }

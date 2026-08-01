@@ -1,0 +1,3 @@
+services:
+  experiment-mock:
+    cpus: "4.00"

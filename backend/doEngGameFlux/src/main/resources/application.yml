@@ -1,0 +1,30 @@
+spring:
+  codec:
+    max-in-memory-size: ${DOENG_MISSION_MAX_IN_MEMORY_SIZE:2MB}
+  r2dbc:
+    pool:
+      enabled: true
+      initial-size: 1
+      max-size: ${DOENG_DB_POOL_MAX_SIZE:10}
+      max-acquire-time: 10s
+
+doeng:
+  diagnostic:
+    enabled: ${DOENG_DIAGNOSTIC_ENABLED:false}
+  pool-observation:
+    enabled: ${DOENG_POOL_OBSERVATION_ENABLED:false}
+  stage-observation:
+    enabled: ${DOENG_STAGE_OBSERVATION_ENABLED:false}
+  admission:
+    ai:
+      enabled: ${DOENG_AI_ADMISSION_ENABLED:false}
+      max-concurrent: ${DOENG_AI_ADMISSION_MAX_CONCURRENT:320}
+  mission:
+    max-request-bytes: ${DOENG_MISSION_MAX_REQUEST_BYTES:2097152}
+  storage:
+    mode: ${DOENG_STORAGE_MODE:http}
+  external:
+    max-connections: ${DOENG_HTTP_MAX_CONNECTIONS:200}
+    connect-timeout-ms: ${DOENG_HTTP_CONNECT_TIMEOUT_MS:2000}
+    response-timeout-ms: ${DOENG_HTTP_RESPONSE_TIMEOUT_MS:10000}
+    pending-acquire-timeout-ms: ${DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS:10000}

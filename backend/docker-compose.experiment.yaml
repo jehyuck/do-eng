@@ -1,0 +1,163 @@
+name: doeng-experiment
+
+services:
+  mariadb:
+    image: mariadb:10.11
+    cpus: "1.0"
+    mem_limit: 1g
+    environment:
+      TZ: Asia/Seoul
+      MARIADB_ROOT_PASSWORD: doeng-experiment-root
+      MARIADB_DATABASE: doeng
+      MARIADB_USER: doeng
+      MARIADB_PASSWORD: doeng-experiment-pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - doeng-experiment-db-data:/var/lib/mysql
+      - "../exec/3 (DB 덤프파일)/doEng.sql:/docker-entrypoint-initdb.d/01-doeng.sql:ro"
+      - "./experiment-db/02-mission-completion.sql:/docker-entrypoint-initdb.d/02-mission-completion.sql:ro"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mariadb-admin ping -h 127.0.0.1 -udoeng -pdoeng-experiment-pass --silent",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  experiment-mock:
+    build:
+      context: ./experiment-mock
+    cpus: "0.5"
+    mem_limit: 256m
+    environment:
+      MOCK_PORT: "9100"
+      MOCK_MEMBER_ID: "${DOENG_EXPERIMENT_MEMBER_ID:-15}"
+      MOCK_AI_RESULT: "false"
+      MOCK_AI_DELAY_MS: "0"
+      MOCK_AI_STATUS: "200"
+      MOCK_STORAGE_DELAY_MS: "0"
+      MOCK_STORAGE_STATUS: "200"
+    ports:
+      - "9100:9100"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:9100/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  camera-measure:
+    image: node:20-alpine
+    working_dir: /app
+    environment:
+      CAPTURE_HOST: 0.0.0.0
+      CAPTURE_PORT: "9200"
+    volumes:
+      - "../experiment/capture:/app:ro"
+    command: ["node", "server.js"]
+    ports:
+      - "9200:9200"
+
+  flux-baseline:
+    build:
+      context: ../.experiment-work/baseline-source-8e85646
+      dockerfile: ../../experiment/docker/Dockerfile.flux-java11
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      experiment-mock:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Seoul
+      AWS_EC2_METADATA_DISABLED: "true"
+      DOENG_EXTERNAL_AI_BASE_URL: http://experiment-mock:9100/analyze
+      DOENG_EXTERNAL_TOKEN_VERIFICATION_URL: http://experiment-mock:9100/api/member/ai
+      SPRING_R2DBC_URL: r2dbc:mariadb://mariadb:3306/doeng
+      SPRING_R2DBC_USERNAME: doeng
+      SPRING_R2DBC_PASSWORD: doeng-experiment-pass
+      SPRING_SQL_INIT_MODE: never
+      SPRING_APPLICATION_JSON: >-
+        {"cloud":{"aws":{"credentials":{"accessKey":"${DOENG_EXPERIMENT_AWS_ACCESS_KEY:-set-me}","secretKey":"${DOENG_EXPERIMENT_AWS_SECRET_KEY:-set-me}"},"region":{"static":"${DOENG_EXPERIMENT_AWS_REGION:-ap-northeast-2}"},"s3":{"bucket":"${DOENG_EXPERIMENT_S3_BUCKET:-set-me}"}}}}
+    ports:
+      - "8000:8000"
+
+  flux-corrected:
+    build:
+      context: ./doEngGameFlux
+      dockerfile: Dockerfile.experiment
+    cpus: "1.0"
+    mem_limit: 512m
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      experiment-mock:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Seoul
+      SPRING_PROFILES_ACTIVE: experiment
+      JAVA_TOOL_OPTIONS: -Xms256m -Xmx384m -XX:+UseG1GC
+      AWS_EC2_METADATA_DISABLED: "true"
+      DOENG_EXTERNAL_AI_BASE_URL: http://experiment-mock:9100/analyze
+      DOENG_EXTERNAL_TOKEN_VERIFICATION_URL: http://experiment-mock:9100/api/member/ai
+      DOENG_EXTERNAL_STORAGE_BASE_URL: http://experiment-mock:9100
+      DOENG_STORAGE_MODE: http
+      DOENG_MISSION_MAX_REQUEST_BYTES: "2097152"
+      DOENG_MISSION_MAX_IN_MEMORY_SIZE: 2MB
+      DOENG_HTTP_MAX_CONNECTIONS: "200"
+      DOENG_HTTP_CONNECT_TIMEOUT_MS: "2000"
+      DOENG_HTTP_RESPONSE_TIMEOUT_MS: "10000"
+      DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS: "10000"
+      DOENG_DB_POOL_MAX_SIZE: "10"
+      DOENG_STAGE_OBSERVATION_ENABLED: "false"
+      SPRING_R2DBC_URL: r2dbc:mariadb://mariadb:3306/doeng
+      SPRING_R2DBC_USERNAME: doeng
+      SPRING_R2DBC_PASSWORD: doeng-experiment-pass
+      SPRING_SQL_INIT_MODE: never
+      SPRING_APPLICATION_JSON: >-
+        {"cloud":{"aws":{"credentials":{"accessKey":"${DOENG_EXPERIMENT_AWS_ACCESS_KEY:-set-me}","secretKey":"${DOENG_EXPERIMENT_AWS_SECRET_KEY:-set-me}"},"region":{"static":"${DOENG_EXPERIMENT_AWS_REGION:-ap-northeast-2}"},"s3":{"bucket":"${DOENG_EXPERIMENT_S3_BUCKET:-set-me}"}}}}
+    ports:
+      - "8001:8000"
+      - "9001:9091"
+
+  mvc:
+    build:
+      context: ./doEngGameMvc
+      dockerfile: Dockerfile.experiment
+    cpus: "1.0"
+    mem_limit: 512m
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      experiment-mock:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Seoul
+      SPRING_PROFILES_ACTIVE: experiment
+      JAVA_TOOL_OPTIONS: -Xms256m -Xmx384m -XX:+UseG1GC
+      DOENG_EXTERNAL_AI_BASE_URL: http://experiment-mock:9100/analyze
+      DOENG_EXTERNAL_TOKEN_VERIFICATION_URL: http://experiment-mock:9100/api/member/ai
+      DOENG_EXTERNAL_STORAGE_BASE_URL: http://experiment-mock:9100
+      DOENG_MISSION_MAX_REQUEST_BYTES: "2097152"
+      DOENG_HTTP_MAX_CONNECTIONS: "200"
+      DOENG_HTTP_CONNECT_TIMEOUT_MS: "2000"
+      DOENG_HTTP_RESPONSE_TIMEOUT_MS: "10000"
+      DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS: "10000"
+      DOENG_DB_POOL_MAX_SIZE: "10"
+      DOENG_MVC_MAX_THREADS: "200"
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/doeng
+      SPRING_DATASOURCE_USERNAME: doeng
+      SPRING_DATASOURCE_PASSWORD: doeng-experiment-pass
+    ports:
+      - "8002:8000"
+      - "9002:9091"
+
+volumes:
+  doeng-experiment-db-data:

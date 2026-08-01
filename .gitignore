@@ -1,0 +1,4 @@
+/backend/.env.experiment
+/experiment/results/**
+!/experiment/results/.gitkeep
+/.experiment-work/

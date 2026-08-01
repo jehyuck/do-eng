@@ -1,0 +1,22 @@
+# Applied together with docker-compose.experiment.yaml for document 40 only.
+# It models a deliberate t3.medium-sized (2 vCPU / 4 GiB) resource envelope.
+services:
+  mariadb:
+    cpus: "0.50"
+    mem_limit: 768m
+
+  experiment-mock:
+    cpus: "0.25"
+    mem_limit: 256m
+
+  flux-corrected:
+    cpus: "1.00"
+    mem_limit: 1g
+    environment:
+      JAVA_TOOL_OPTIONS: -Xms256m -Xmx640m -XX:+UseG1GC
+
+  mvc:
+    cpus: "1.00"
+    mem_limit: 1g
+    environment:
+      JAVA_TOOL_OPTIONS: -Xms256m -Xmx640m -XX:+UseG1GC

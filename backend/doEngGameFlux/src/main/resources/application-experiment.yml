@@ -1,0 +1,15 @@
+management:
+  server:
+    port: 9091
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,doengexperiment
+  endpoint:
+    health:
+      show-details: never
+
+doeng:
+  experiment:
+    metrics:
+      enabled: true

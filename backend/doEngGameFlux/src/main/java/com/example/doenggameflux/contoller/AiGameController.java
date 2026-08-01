@@ -1,23 +1,18 @@
 package com.example.doenggameflux.contoller;
 
+import com.example.doenggameflux.component.AiOutboundAdmissionGate;
 import com.example.doenggameflux.component.DBComponentHttp;
+import com.example.doenggameflux.component.DiagnosticErrorLogger;
+import com.example.doenggameflux.component.StageObservation;
 import com.example.doenggameflux.component.TokenComponent;
-import com.example.doenggameflux.config.WebSocketConfig;
-import com.example.doenggameflux.config.urlEnum.WebSocketMapping;
+import com.example.doenggameflux.config.ExternalServiceProperties;
 import com.example.doenggameflux.dto.request.ImageRequestDto;
-import com.example.doenggameflux.dto.response.FaceResultResponseDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Base64;
+import com.example.doenggameflux.dto.response.AiDecisionResultDto;
+import com.example.doenggameflux.util.ImagePayloadDecoder;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.UUID;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,173 +26,175 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
-@RequiredArgsConstructor
 @RestController
-@RequestMapping()
-public class
-AiGameController {
+@RequestMapping
+public class AiGameController {
 
-    static private final String URL = WebSocketMapping.FACE.getUrl();
-    static private final String BASIC_URL = "https://j8a601.p.ssafy.io/analyze";
-    static final Logger LOGGER = LoggerFactory.getLogger(WebSocketConfig.class);
     private final DBComponentHttp dbComponent;
     private final TokenComponent tokenComponent;
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private final WebClient aiWebClient;
+    private final DiagnosticErrorLogger diagnosticErrorLogger;
+    private final AiOutboundAdmissionGate aiAdmissionGate;
+    private final StageObservation stageObservation;
+
+    public AiGameController(
+            DBComponentHttp dbComponent,
+            TokenComponent tokenComponent,
+            ExternalServiceProperties properties,
+            DiagnosticErrorLogger diagnosticErrorLogger,
+            AiOutboundAdmissionGate aiAdmissionGate,
+            StageObservation stageObservation,
+            @Qualifier("externalWebClientBuilder")
+            WebClient.Builder externalWebClientBuilder) {
+        this.dbComponent = dbComponent;
+        this.tokenComponent = tokenComponent;
+        this.diagnosticErrorLogger = diagnosticErrorLogger;
+        this.aiAdmissionGate = aiAdmissionGate;
+        this.stageObservation = stageObservation;
+        this.aiWebClient = externalWebClientBuilder.clone()
+                .baseUrl(properties.getAiBaseUrl())
+                .codecs(configurer ->
+                        configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024))
+                .build();
+    }
 
     @GetMapping("/test")
-
     public Mono<String> test() {
         return Mono.just("안녕하세요");
     }
 
     @PostMapping("/game/face")
-    public Mono<ResponseEntity<String>> requestFaceAi(@RequestBody Mono<ImageRequestDto> image,
+    public Mono<ResponseEntity<String>> requestFaceAi(
+            @RequestBody Mono<ImageRequestDto> image,
             @RequestParam("answer") String answer,
             @RequestParam("sceneId") long sceneId,
             ServerWebExchange exchange) {
-        if (exchange.getRequest().getHeaders().getFirst("Authorization") == null) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT token Not Found")).log();
-        }
-        Mono<Long> memberId = tokenComponent.jwtConfirm(
-                exchange.getRequest().getHeaders().getFirst("Authorization")).cache();
-        return image.map(s -> {
-                    return memberId.map(memberIdValue -> {
-                        Map<String, String> map = new HashMap<>();
-                        map.put("answer", answer);
-                        map.put("image", s.getImage());
-                        return map;
-                    });
-                })
-                .flatMap(map -> map.flatMap(param -> makeWebClient(param, "/face")))
-                .flatMap(message -> {
-                    boolean rtn = message.isResult();
-                    if (rtn) {
-                        byte[] decodedImage = Base64.getDecoder().decode(message.getImage());
-                        return memberId.cache().flatMap(memberIdValue -> {
-                            System.out.println(memberIdValue);
-                            return dbComponent.saveData(decodedImage, sceneId, memberIdValue)
-                                    .doOnSuccess(
-                                            result -> System.out.println("Saved data: " + result))
-                                    .then(Mono.just(ResponseEntity.ok().body("true")));
-                        });
-                    }
-                    return Mono.just(ResponseEntity.ok().body("false"));
-                })
-                .onErrorResume(WebClientResponseException.class, e -> {
-                    return Mono.just(ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString()));
-                })
-                .log();
+        return requestAi(image, answer, sceneId, exchange, "/face");
     }
 
     @PostMapping("/game/object")
-    public Mono<ResponseEntity<String>> requestObjectAi(@RequestBody Mono<ImageRequestDto> image,
+    public Mono<ResponseEntity<String>> requestObjectAi(
+            @RequestBody Mono<ImageRequestDto> image,
             @RequestParam("answer") String answer,
             @RequestParam("sceneId") long sceneId,
             ServerWebExchange exchange) {
-        if (exchange.getRequest().getHeaders().getFirst("Authorization") == null) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT token Not Found")).log();
-        }
-        Mono<Long> memberId = tokenComponent.jwtConfirm(
-                exchange.getRequest().getHeaders().getFirst("Authorization")).cache();
-        return image.map(s -> {
-                    return memberId.map(memberIdValue -> {
-                        Map<String, String> map = new HashMap<>();
-                        map.put("answer", answer);
-                        map.put("image", s.getImage());
-                        return map;
-                    });
-                })
-                .flatMap(map -> map.flatMap(param -> makeWebClient(param, "/object")))
-                .flatMap(message -> {
-                    boolean rtn = message.isResult();
-                    if (rtn) {
-                        byte[] decodedImage = Base64.getDecoder().decode(message.getImage());
-                        return memberId.cache().flatMap(memberIdValue -> {
-                            System.out.println(memberIdValue);
-                            return dbComponent.saveData(decodedImage, sceneId, memberIdValue)
-                                    .doOnSuccess(
-                                            result -> System.out.println("Saved data: " + result))
-                                    .then(Mono.just(ResponseEntity.ok().body("true")));
-                        });
-                    }
-                    return Mono.just(ResponseEntity.ok().body("false"));
-                })
-                .onErrorResume(WebClientResponseException.class, e -> {
-                    return Mono.just(ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString()));
-                })
-                .log();
+        return requestAi(image, answer, sceneId, exchange, "/object");
     }
 
     @PostMapping("/game/doodle")
-    public Mono<ResponseEntity<String>> requestDoodleAi(@RequestBody Mono<ImageRequestDto> image,
+    public Mono<ResponseEntity<String>> requestDoodleAi(
+            @RequestBody Mono<ImageRequestDto> image,
             @RequestParam("answer") String answer,
             @RequestParam("sceneId") long sceneId,
             ServerWebExchange exchange) {
-        if (exchange.getRequest().getHeaders().getFirst("Authorization") == null) {
-            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT token Not Found")).log();
-        }
-        Mono<Long> memberId = tokenComponent.jwtConfirm(
-                exchange.getRequest().getHeaders().getFirst("Authorization")).cache();
-        return image.map(s -> {
-                    return memberId.map(memberIdValue -> {
-                        Map<String, String> map = new HashMap<>();
-                        map.put("answer", answer);
-                        map.put("image", s.getImage());
-                        return map;
-                    });
-                })
-                .flatMap(map -> map.flatMap(param -> makeWebClient(param, "/doodle")))
-                .flatMap(message -> {
-                    boolean rtn = message.isResult();
-                    if (rtn) {
-                        byte[] decodedImage = Base64.getDecoder().decode(message.getImage());
-                        return memberId.cache().flatMap(memberIdValue -> {
-                            return dbComponent.saveData(decodedImage, sceneId, memberIdValue)
-                                    .doOnSuccess(
-                                            result -> System.out.println("Saved data: " + result))
-                                    .then(Mono.just(ResponseEntity.ok().body("true")));
-                        });
-                    }
-                    return Mono.just(ResponseEntity.ok().body("false"));
-                })
-                .onErrorResume(WebClientResponseException.class, e -> {
-                    return Mono.just(ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString()));
-                })
-                .log();
+        return requestAi(image, answer, sceneId, exchange, "/doodle");
     }
 
-    private Mono<FaceResultResponseDto> makeWebClient(Map<String, String> map, String url) {
-        return WebClient.builder()
-                .baseUrl(BASIC_URL)
-                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(1024 * 1024))
-                .build()
-                .post()
-                .uri(url)
+    private Mono<ResponseEntity<String>> requestAi(
+            Mono<ImageRequestDto> image,
+            String answer,
+            long sceneId,
+            ServerWebExchange exchange,
+            String aiPath) {
+        String authorization = exchange.getRequest()
+                .getHeaders()
+                .getFirst("Authorization");
+        String missionRunId = normalizeMissionRunId(exchange.getRequest()
+                .getHeaders()
+                .getFirst("X-Mission-Run-Id"));
+
+        if (authorization == null) {
+            return Mono.just(ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("JWT token Not Found"));
+        }
+        if (missionRunId == null) {
+            return Mono.just(ResponseEntity.badRequest()
+                    .body("Invalid X-Mission-Run-Id"));
+        }
+
+        // The first remediation moves the existing admission boundary from the
+        // AI call to the complete token -> AI -> storage -> DB request path.
+        // The gate still fails fast and preserves the existing 503 mapping;
+        // only the scope of the observation/admission boundary changes.
+        Mono<ResponseEntity<String>> pipeline = Mono.zip(
+                        image,
+                        stageObservation.observe("TOKEN", aiAdmissionGate.executeStage(
+                                com.example.doenggameflux.component.OutboundStage.TOKEN,
+                                () -> tokenComponent.jwtConfirm(authorization))))
+                .flatMap(tuple -> stageObservation.observe("AI", aiAdmissionGate.executeStage(
+                        com.example.doenggameflux.component.OutboundStage.AI,
+                        () -> requestDecision(
+                        tuple.getT1(),
+                        answer,
+                        aiPath)))
+                        .flatMap(decision -> completeIfMatched(
+                                decision,
+                                tuple.getT1().getImage(),
+                                sceneId,
+                                tuple.getT2(),
+                                missionRunId)));
+        return (aiAdmissionGate.isPerOutboundCall() ? pipeline : aiAdmissionGate.execute(() -> pipeline))
+                .doOnError(error -> diagnosticErrorLogger.log(missionRunId, error))
+                .onErrorResume(
+                        WebClientResponseException.class,
+                        error -> Mono.just(ResponseEntity
+                                .status(error.getStatusCode())
+                                .body(error.getResponseBodyAsString())));
+    }
+
+    private Mono<AiDecisionResultDto> requestDecision(
+            ImageRequestDto image,
+            String answer,
+            String aiPath) {
+        Map<String, String> request = new HashMap<>();
+        request.put("answer", answer);
+        request.put("image", image.getImage());
+
+        return aiWebClient.post()
+                .uri(aiPath)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(map)
+                .bodyValue(request)
                 .retrieve()
-                .bodyToMono(FaceResultResponseDto.class);
+                // The deployed AI still returns an image echo. REST storage
+                // intentionally consumes only its decision and retains the
+                // original request image for a successful upload.
+                .bodyToMono(AiDecisionResultDto.class);
     }
 
-    @ToString
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    private static class ErrorResponse {
-
-        private final String code;
-        private final String message;
-
-        public String getCode() {
-            return code;
+    private Mono<ResponseEntity<String>> completeIfMatched(
+            AiDecisionResultDto decision,
+            String originalImage,
+            long sceneId,
+            long memberId,
+            String missionRunId) {
+        if (!decision.isResult()) {
+            return Mono.just(ResponseEntity.ok("false"));
         }
 
-        public String getMessage() {
-            return message;
-        }
+        return Mono.fromCallable(() ->
+                        ImagePayloadDecoder.decodeDataUrlOrBase64(originalImage))
+                .subscribeOn(Schedulers.parallel())
+                .flatMap(decodedImage ->
+                        dbComponent.saveData(
+                                decodedImage,
+                                sceneId,
+                                memberId,
+                                missionRunId))
+                .thenReturn(ResponseEntity.ok("true"));
     }
 
+    private String normalizeMissionRunId(String missionRunId) {
+        if (missionRunId == null) {
+            return UUID.randomUUID().toString();
+        }
+        String normalized = missionRunId.trim();
+        if (normalized.isEmpty() || normalized.length() > 191) {
+            return null;
+        }
+        return normalized;
+    }
 }
-

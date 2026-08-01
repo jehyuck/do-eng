@@ -1,0 +1,11 @@
+services:
+  flux-corrected:
+    image: doeng-flux-exp13-remediated-20260801:latest
+    build: null
+    environment:
+      DOENG_DIAGNOSTIC_ENABLED: "false"
+      DOENG_POOL_OBSERVATION_ENABLED: "true"
+      DOENG_STAGE_OBSERVATION_ENABLED: "true"
+      DOENG_AI_ADMISSION_ENABLED: "true"
+      DOENG_AI_ADMISSION_MAX_CONCURRENT: "320"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics,doengdiagnosticpool,doengstages,doengadmission"

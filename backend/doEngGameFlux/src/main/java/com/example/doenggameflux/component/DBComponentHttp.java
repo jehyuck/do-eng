@@ -1,68 +1,39 @@
 package com.example.doenggameflux.component;
 
-import com.example.doenggameflux.entity.Picture;
-import com.example.doenggameflux.entity.Progress;
-import com.example.doenggameflux.repository.PictureRepository;
-import com.example.doenggameflux.repository.ProgressRepository;
-import com.example.doenggameflux.s3.AwsS3Service;
-import com.example.doenggameflux.s3.PictureUtil;
-import java.time.LocalDateTime;
+import com.example.doenggameflux.s3.MissionImageStorage;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @Component
 @RequiredArgsConstructor
 public class DBComponentHttp {
-    private static final String AUTH_CREDENTIALS = "auth_credentials";
-    private final PictureUtil pictureUtil;
-    private final AwsS3Service awsS3Service;
-    private final ProgressRepository progressRepository;
-    private final PictureRepository pictureRepository;
+    private final MissionImageStorage missionImageStorage;
+    private final MissionDatabaseService missionDatabaseService;
+    private final StageObservation stageObservation;
+    private final AiOutboundAdmissionGate admissionGate;
 
-    public Mono<String> saveData(byte[] saveImage, long sceneId, long memberId){
+    public Mono<String> saveData(
+            byte[] image,
+            long sceneId,
+            long memberId,
+            String missionRunId) {
+        String source = memberId + ":" + sceneId + ":" + missionRunId;
+        String objectKey = "picture/"
+                + UUID.nameUUIDFromBytes(source.getBytes(StandardCharsets.UTF_8))
+                + ".jpeg";
 
-        String filename = UUID.randomUUID().toString();
-        CustomFilePart customFilePart = CustomFilePart.create(filename, saveImage);
-
-        Mono<Progress> progress = progressRepository.getByMemberIdAndSceneId(memberId, sceneId);
-        awsS3Service
-                .getUser()
-                .flatMap(deleteResponse -> {
-                    return pictureUtil
-                            .uploadUserProfilePict(customFilePart, filename);
-                })
-                .log()
-                .subscribeOn(Schedulers.boundedElastic())
-                .subscribe();
-        return saveDataBase(progress, sceneId, memberId, filename);
+        return stageObservation.observe("STORAGE", admissionGate.executeStage(
+                        OutboundStage.STORAGE,
+                        () -> missionImageStorage.upload(objectKey, image)))
+                .flatMap(savedObjectKey ->
+                        stageObservation.observe("DB", missionDatabaseService.saveCompletionIfFirst(
+                                savedObjectKey,
+                                sceneId,
+                                memberId,
+                                missionRunId)))
+                .thenReturn("true");
     }
-
-    @Transactional
-    public Mono<String> saveDataBase(Mono<Progress> progress, long sceneId, long memberId, String filename) {
-
-        return progress.switchIfEmpty(progressRepository.save(
-                        Progress.builder()
-                                .memberId(memberId)
-                                .sceneId(sceneId)
-                                .playedAt(LocalDateTime.now())
-                                .build()))
-                .map(progress1 -> {
-                    Picture picture = Picture.builder()
-                            .progressId(progress1.getId())
-                            .image("picture/" + filename + ".jpeg")
-                            .createdAt(LocalDateTime.now())
-                            .build();
-                    pictureRepository.save(picture).log().subscribe();
-                    System.out.println(progress1);
-                    progressRepository.updateProgress(LocalDateTime.now(), progress1.getId()).subscribe();
-                    System.out.println(progress1);
-                    return "true";
-                });
-    }
-
-
 }

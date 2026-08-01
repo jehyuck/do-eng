@@ -1,0 +1,8 @@
+services:
+  flux-corrected:
+    environment:
+      DOENG_HTTP_MAX_CONNECTIONS: "400"
+
+  mvc:
+    environment:
+      DOENG_HTTP_MAX_CONNECTIONS: "400"

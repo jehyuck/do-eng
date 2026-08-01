@@ -1,0 +1,5 @@
+services:
+  experiment-mock:
+    mem_limit: 1g
+    environment:
+      NODE_OPTIONS: "--max-old-space-size=768"

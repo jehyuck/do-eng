@@ -1,0 +1,16 @@
+# Applied with docker-compose.experiment.yaml for document 41 only.
+# The target application is modeled as a single t3.medium-sized app instance.
+# MariaDB and the AI/storage/auth mock remain external dependencies and retain
+# their base-compose resources so that only the application profile changes.
+services:
+  flux-corrected:
+    cpus: "2.00"
+    mem_limit: 3g
+    environment:
+      JAVA_TOOL_OPTIONS: -Xms512m -Xmx2048m -XX:+UseG1GC
+
+  mvc:
+    cpus: "2.00"
+    mem_limit: 3g
+    environment:
+      JAVA_TOOL_OPTIONS: -Xms512m -Xmx2048m -XX:+UseG1GC

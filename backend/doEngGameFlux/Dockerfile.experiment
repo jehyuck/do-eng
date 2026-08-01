@@ -1,0 +1,22 @@
+FROM eclipse-temurin:11-jdk AS builder
+
+WORKDIR /workspace
+
+COPY gradlew gradlew.bat build.gradle settings.gradle ./
+COPY gradle gradle
+RUN sed -i 's/\r$//' gradlew \
+    && chmod +x gradlew
+
+COPY src src
+
+RUN ./gradlew clean bootJar -x test --no-daemon
+
+FROM eclipse-temurin:11-jdk
+
+WORKDIR /app
+
+COPY --from=builder /workspace/build/libs/doEngGameFlux-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8000 9091
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "--server.port=8000"]

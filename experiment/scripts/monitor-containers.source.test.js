@@ -1,0 +1,16 @@
+const assert = require("assert")
+const fs = require("fs")
+const path = require("path")
+
+const source = fs.readFileSync(path.join(__dirname, "monitor-containers.js"), "utf8")
+
+assert.ok(!source.includes("spawnSync"), "observer must not use synchronous child processes")
+assert.ok(source.includes("databaseSampleInFlight"))
+assert.ok(source.includes("skippedDatabaseSamples"))
+assert.ok(source.includes("timeoutMs = 5000"))
+assert.ok(source.includes("commandArguments"))
+assert.ok(source.includes("startedAt"))
+assert.ok(source.includes("finishedAt"))
+assert.ok(source.includes("durationMs"))
+assert.ok(source.includes("timeout: sample.timeout"))
+console.log("monitor-containers observer source contract test passed")

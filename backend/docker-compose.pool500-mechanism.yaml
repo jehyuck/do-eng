@@ -1,0 +1,12 @@
+services:
+  flux-corrected:
+    image: doeng-capacity-closure-20260731-flux-corrected:latest
+    ports:
+      - "8003:8000"
+      - "9003:9091"
+
+  mvc:
+    image: doeng-capacity-closure-20260731-mvc:latest
+    ports:
+      - "8004:8000"
+      - "9004:9091"
