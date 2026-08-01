@@ -3,6 +3,8 @@ package com.example.doenggameflux.config;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,8 +45,7 @@ public class DiagnosticPoolEndpoint {
                 "total.connections",
                 "max.connections",
                 "pending.connections",
-                "max.pending.connections",
-                "pending.connections.time"}) {
+                "max.pending.connections"}) {
             for (Gauge gauge : registry.find(PREFIX + suffix).gauges()) {
                 Map<String, Object> value = new LinkedHashMap<>();
                 value.put("name", PREFIX + suffix);
@@ -52,6 +53,24 @@ public class DiagnosticPoolEndpoint {
                 value.put("tags", tags(gauge.getId()));
                 values.add(value);
             }
+        }
+        for (Timer timer : registry.find(PREFIX + "pending.connections.time").timers()) {
+            Map<String, Object> value = new LinkedHashMap<>();
+            value.put("name", PREFIX + "pending.connections.time");
+            value.put("type", "TIMER");
+            value.put("count", timer.count());
+            value.put("totalTimeMs", timer.totalTime(TimeUnit.MILLISECONDS));
+            value.put("meanMs", timer.mean(TimeUnit.MILLISECONDS));
+            value.put("maxMs", timer.max(TimeUnit.MILLISECONDS));
+            Map<String, Double> percentiles = new LinkedHashMap<>();
+            for (io.micrometer.core.instrument.distribution.ValueAtPercentile percentile
+                    : timer.takeSnapshot().percentileValues()) {
+                percentiles.put(Double.toString(percentile.percentile()),
+                        percentile.value(TimeUnit.MILLISECONDS));
+            }
+            value.put("percentiles", percentiles);
+            value.put("tags", tags(timer.getId()));
+            values.add(value);
         }
         return values;
     }
