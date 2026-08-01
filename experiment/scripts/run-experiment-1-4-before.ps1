@@ -1,7 +1,8 @@
 param(
     [Parameter(Mandatory = $true)][string]$RunId,
     [ValidateSet("scout", "core")][string]$RunKind = "core",
-    [string]$ComposeOverlay = "backend\docker-compose.experiment-1-4-before.yaml"
+    [string]$ComposeOverlay = "backend\docker-compose.experiment-1-4-before.yaml",
+    [ValidateRange(0, 60000)][int]$AiDelayMs = 2000
 )
 
 $ErrorActionPreference = "Stop"
@@ -52,7 +53,7 @@ if ($null -eq $health -or $health.status -ne "UP") { throw "management health is
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run-isolated-vu-success-smoke.ps1") `
     -RunId $warmupId -Implementation webflux -TargetUrl http://127.0.0.1:8001/game/face `
     -ServerService flux-corrected -ComposeProject doeng-exp13 -ComposeFiles $composeArg `
-    -ActiveMissions 20 -AiDelayMs 2000 -StorageDelayMs 100 -IntervalMs 1000 `
+    -ActiveMissions 20 -AiDelayMs $AiDelayMs -StorageDelayMs 100 -IntervalMs 1000 `
     -DurationMs 5000 -RequestTimeoutMs 10000 -TargetP95Ms 10000 `
     -EnableObservability 0 -OutcomeMode controlled-admission -AccountingMode corrected -DrainObservationSeconds 10 `
     -NodeCommand $node
@@ -65,7 +66,7 @@ try {
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run-isolated-vu-success-smoke.ps1") `
         -RunId $RunId -Implementation webflux -TargetUrl http://127.0.0.1:8001/game/face `
         -ServerService flux-corrected -ComposeProject doeng-exp13 -ComposeFiles $composeArg `
-        -ActiveMissions 200 -AiDelayMs 2000 -StorageDelayMs 100 -IntervalMs 1000 `
+        -ActiveMissions 200 -AiDelayMs $AiDelayMs -StorageDelayMs 100 -IntervalMs 1000 `
         -DurationMs 105000 -RequestTimeoutMs 10000 -TargetP95Ms 10000 `
         -EnableObservability 1 -EnableJfr 0 -EnableContainerMonitor 1 `
         -SkipApplicationSnapshot 1 -SkipMockMetrics 1 -OutcomeMode controlled-admission `
