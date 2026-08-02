@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-08-02T11:31:24.960Z",
+  "verdict": "NOT_EFFECTIVE",
+  "allValid": true,
+  "baselineReproducedRuns": 3,
+  "remediationMechanismZero": false,
+  "aiPrematureCloseReduction": -1.1538461538461537,
+  "newFailureCategories": [],
+  "guards": {
+    "uncontrolledGuard": true,
+    "successGuard": true,
+    "latencyGuard": true
+  },
+  "adopted": false
+}

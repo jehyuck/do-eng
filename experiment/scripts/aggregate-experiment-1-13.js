@@ -15,7 +15,8 @@ function json(file) {
 }
 
 function jsonl(file) {
-  return fs.readFileSync(file, "utf8").split(/\r?\n/).filter(Boolean).map(JSON.parse)
+  return fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "")
+    .split(/\r?\n/).filter(Boolean).map(JSON.parse)
 }
 
 function median(values) {
@@ -34,9 +35,33 @@ function parseBytes(value) {
 
 function poolMaximum(rows, suffix) {
   const values = rows.flatMap((row) => row.metrics || [])
-    .filter((metric) => metric.name.endsWith(suffix) && Number.isFinite(Number(metric.value)))
+    .filter((metric) => metric.name === `reactor.netty.connection.provider.${suffix}`
+      && Number.isFinite(Number(metric.value)))
     .map((metric) => Number(metric.value))
   return values.length ? Math.max(...values) : null
+}
+
+function prematureIdleAges(rows) {
+  const lastRelease = new Map()
+  const acquiredIdleAge = new Map()
+  const ages = []
+  for (const row of rows) {
+    if (!row.channelIdLong) continue
+    const at = Date.parse(row.timestamp)
+    if (!Number.isFinite(at)) continue
+    if (row.state === "[released]") lastRelease.set(row.channelIdLong, at)
+    if (row.state === "[acquired]") {
+      const releasedAt = lastRelease.get(row.channelIdLong)
+      if (Number.isFinite(releasedAt)) {
+        acquiredIdleAge.set(`${row.channelIdLong}|${row.leaseSequence}`, at - releasedAt)
+      }
+    }
+    if (row.stage === "AI" && row.phase === "PREMATURE_CLOSE") {
+      const age = acquiredIdleAge.get(`${row.channelIdLong}|${row.leaseSequence}`)
+      if (Number.isFinite(age)) ages.push(age)
+    }
+  }
+  return ages
 }
 
 function runResult(runId) {
@@ -47,6 +72,8 @@ function runResult(runId) {
   const mechanism = json(path.join(directory, "connection-mechanism-summary.json"))
   const provenance = json(path.join(directory, "experiment-1-13-provenance.json"))
   const pool = jsonl(path.join(directory, "pool-metrics.jsonl"))
+  const connectionEvents = jsonl(path.join(directory, "application-connections.jsonl"))
+  const idleAges = prematureIdleAges(connectionEvents)
   const container = jsonl(path.join(directory, "container-stats.jsonl"))
     .filter((row) => row.service === "flux-corrected")
   const aiStarts = jsonl(path.join(directory, "correlation-join.jsonl"))
@@ -84,9 +111,13 @@ function runResult(runId) {
     acceptedP95Ms: client.latencyByOutcome.HTTP_200_ACCEPTED.p95,
     acceptedP99Ms: client.latencyByOutcome.HTTP_200_ACCEPTED.p99,
     throughputRps: client.throughputRequestsPerSecond,
+    acceptedThroughputRps: client.durationMs
+      ? outcome.HTTP_200_ACCEPTED / (client.durationMs / 1000) : null,
     missionCompletions: verification.missionCompletionCount,
     aiCompleted: verification.mockMetrics.aiCompleted,
+    aiMaxInFlight: verification.mockMetrics.aiMaxInFlight,
     storageCompleted: verification.mockMetrics.storageCompleted,
+    storageMaxInFlight: verification.mockMetrics.storageMaxInFlight,
     drainTimeToZeroMs: verification.systemOutcome.drain.timeToZeroMs,
     clientEventLoopDelayP95Ms: client.loadGenerator.eventLoopDelayMs.p95,
     appCpuMaxPercent: cpu.length ? Math.max(...cpu) : null,
@@ -94,6 +125,12 @@ function runResult(runId) {
     appMemoryMaxBytes: memory.length ? Math.max(...memory) : null,
     poolMaxActive: poolMaximum(pool, "active.connections"),
     poolMaxPending: poolMaximum(pool, "pending.connections"),
+    prematureIdleAgeCount: idleAges.length,
+    prematureIdleAgeMedianMs: median(idleAges),
+    prematureIdleAgeMinMs: idleAges.length ? Math.min(...idleAges) : null,
+    prematureIdleAgeMaxMs: idleAges.length ? Math.max(...idleAges) : null,
+    prematureIdleAgeAtOrAboveConfiguredMax: idleAges.filter((age) =>
+      provenance.maxIdleTimeMs > 0 && age >= provenance.maxIdleTimeMs).length,
     connectionChurn: mechanism.connectionChurn,
     outcomeCounts: outcome,
   }
@@ -108,10 +145,13 @@ const byCondition = Object.fromEntries(["BASELINE", "REMEDIATION"].map((conditio
     "mockCloseAfterAcquire", "preparedWithoutSent", "http200", "http500",
     "controlled503", "clientTimeout", "connectionError", "uncontrolledFailure",
     "http500Rate", "connectionErrorRate", "acceptedP50Ms", "acceptedP95Ms",
-    "acceptedP99Ms", "throughputRps", "missionCompletions", "aiCompleted",
-    "storageCompleted", "drainTimeToZeroMs", "clientEventLoopDelayP95Ms",
+    "acceptedP99Ms", "throughputRps", "acceptedThroughputRps", "missionCompletions",
+    "aiCompleted", "aiMaxInFlight", "storageCompleted", "storageMaxInFlight",
+    "drainTimeToZeroMs", "clientEventLoopDelayP95Ms",
     "appCpuMaxPercent", "appCpuMedianPercent", "appMemoryMaxBytes",
-    "poolMaxActive", "poolMaxPending",
+    "poolMaxActive", "poolMaxPending", "prematureIdleAgeCount",
+    "prematureIdleAgeMedianMs", "prematureIdleAgeMinMs", "prematureIdleAgeMaxMs",
+    "prematureIdleAgeAtOrAboveConfiguredMax",
   ]
   const statistics = {}
   for (const field of numericFields) {

@@ -1,0 +1,1240 @@
+{
+  "BASELINE": {
+    "runs": [
+      {
+        "runId": "RUN-20260802-EXP113-BASELINE-001",
+        "condition": "BASELINE",
+        "maxIdleTimeMs": 0,
+        "validity": "VALID",
+        "aiPrematureClose": 64,
+        "aiStageStarts": 6230,
+        "aiPrematureCloseRate": 0.010272873194221509,
+        "connectionPrematureClose": 64,
+        "reusedPrematureClose": 64,
+        "newPrematureClose": 0,
+        "mockCloseBeforeAcquire": 64,
+        "mockCloseAfterAcquire": 0,
+        "preparedWithoutSent": 64,
+        "http200": 4736,
+        "http500": 161,
+        "controlled503": 6060,
+        "clientTimeout": 1688,
+        "connectionError": 7474,
+        "uncontrolledFailure": 9323,
+        "completedRequests": 20119,
+        "http500Rate": 0.008002385804463443,
+        "connectionErrorRate": 0.3714896366618619,
+        "acceptedP50Ms": 5160,
+        "acceptedP95Ms": 9180,
+        "acceptedP99Ms": 9829,
+        "throughputRps": 191.6095238095238,
+        "acceptedThroughputRps": 45.10476190476191,
+        "missionCompletions": 200,
+        "aiCompleted": 6090,
+        "aiMaxInFlight": 294,
+        "storageCompleted": 5397,
+        "storageMaxInFlight": 61,
+        "drainTimeToZeroMs": 4011,
+        "clientEventLoopDelayP95Ms": 68.157439,
+        "appCpuMaxPercent": 263.92,
+        "appCpuMedianPercent": 210.29,
+        "appMemoryMaxBytes": 2463163744.256,
+        "poolMaxActive": 283,
+        "poolMaxPending": 55,
+        "prematureIdleAgeCount": 64,
+        "prematureIdleAgeMedianMs": 7098,
+        "prematureIdleAgeMinMs": 2934,
+        "prematureIdleAgeMaxMs": 8104,
+        "prematureIdleAgeAtOrAboveConfiguredMax": 0,
+        "connectionChurn": {
+          "distinctChannels": 2092,
+          "configuredLeases": 18202,
+          "newConnectionLeases": 2092,
+          "reusedConnectionLeases": 16110
+        },
+        "outcomeCounts": {
+          "HTTP_200_ACCEPTED": 4736,
+          "HTTP_503_ADMISSION": 6060,
+          "HTTP_503_DOWNSTREAM": 0,
+          "HTTP_4XX_DOWNSTREAM": 0,
+          "HTTP_5XX_DOWNSTREAM": 0,
+          "HTTP_500_UNCONTROLLED": 161,
+          "HTTP_OTHER": 0,
+          "CLIENT_TIMEOUT": 1688,
+          "CLIENT_ABORT": 0,
+          "CONNECTION_ERROR": 7474,
+          "UNCLASSIFIED": 0
+        }
+      },
+      {
+        "runId": "RUN-20260802-EXP113-BASELINE-002",
+        "condition": "BASELINE",
+        "maxIdleTimeMs": 0,
+        "validity": "VALID",
+        "aiPrematureClose": 4,
+        "aiStageStarts": 3209,
+        "aiPrematureCloseRate": 0.0012464942349641633,
+        "connectionPrematureClose": 4,
+        "reusedPrematureClose": 4,
+        "newPrematureClose": 0,
+        "mockCloseBeforeAcquire": 2,
+        "mockCloseAfterAcquire": 2,
+        "preparedWithoutSent": 4,
+        "http200": 1729,
+        "http500": 15,
+        "controlled503": 459,
+        "clientTimeout": 1710,
+        "connectionError": 13181,
+        "uncontrolledFailure": 14906,
+        "completedRequests": 17094,
+        "http500Rate": 0.0008775008775008775,
+        "connectionErrorRate": 0.7710892710892711,
+        "acceptedP50Ms": 5393,
+        "acceptedP95Ms": 9931,
+        "acceptedP99Ms": 10312,
+        "throughputRps": 162.8,
+        "acceptedThroughputRps": 16.466666666666665,
+        "missionCompletions": 200,
+        "aiCompleted": 2878,
+        "aiMaxInFlight": 149,
+        "storageCompleted": 1945,
+        "storageMaxInFlight": 38,
+        "drainTimeToZeroMs": 6003,
+        "clientEventLoopDelayP95Ms": 271.319039,
+        "appCpuMaxPercent": 255.32,
+        "appCpuMedianPercent": 209.54,
+        "appMemoryMaxBytes": 1768452784.128,
+        "poolMaxActive": 184,
+        "poolMaxPending": 7,
+        "prematureIdleAgeCount": 4,
+        "prematureIdleAgeMedianMs": 5371.5,
+        "prematureIdleAgeMinMs": 4375,
+        "prematureIdleAgeMaxMs": 5992,
+        "prematureIdleAgeAtOrAboveConfiguredMax": 0,
+        "connectionChurn": {
+          "distinctChannels": 2252,
+          "configuredLeases": 8760,
+          "newConnectionLeases": 2252,
+          "reusedConnectionLeases": 6508
+        },
+        "outcomeCounts": {
+          "HTTP_200_ACCEPTED": 1729,
+          "HTTP_503_ADMISSION": 459,
+          "HTTP_503_DOWNSTREAM": 0,
+          "HTTP_4XX_DOWNSTREAM": 0,
+          "HTTP_5XX_DOWNSTREAM": 0,
+          "HTTP_500_UNCONTROLLED": 15,
+          "HTTP_OTHER": 0,
+          "CLIENT_TIMEOUT": 1710,
+          "CLIENT_ABORT": 0,
+          "CONNECTION_ERROR": 13181,
+          "UNCLASSIFIED": 0
+        }
+      },
+      {
+        "runId": "RUN-20260802-EXP113-BASELINE-003",
+        "condition": "BASELINE",
+        "maxIdleTimeMs": 0,
+        "validity": "VALID",
+        "aiPrematureClose": 10,
+        "aiStageStarts": 4040,
+        "aiPrematureCloseRate": 0.0024752475247524753,
+        "connectionPrematureClose": 10,
+        "reusedPrematureClose": 10,
+        "newPrematureClose": 0,
+        "mockCloseBeforeAcquire": 9,
+        "mockCloseAfterAcquire": 1,
+        "preparedWithoutSent": 10,
+        "http200": 2153,
+        "http500": 45,
+        "controlled503": 612,
+        "clientTimeout": 2028,
+        "connectionError": 14572,
+        "uncontrolledFailure": 16645,
+        "completedRequests": 19410,
+        "http500Rate": 0.00231839258114374,
+        "connectionErrorRate": 0.7507470376094797,
+        "acceptedP50Ms": 4979,
+        "acceptedP95Ms": 9332,
+        "acceptedP99Ms": 9893,
+        "throughputRps": 184.85714285714286,
+        "acceptedThroughputRps": 20.504761904761907,
+        "missionCompletions": 200,
+        "aiCompleted": 3788,
+        "aiMaxInFlight": 172,
+        "storageCompleted": 2504,
+        "storageMaxInFlight": 47,
+        "drainTimeToZeroMs": 8001,
+        "clientEventLoopDelayP95Ms": 97.058815,
+        "appCpuMaxPercent": 264.45,
+        "appCpuMedianPercent": 210.89,
+        "appMemoryMaxBytes": 1877974450.176,
+        "poolMaxActive": 226,
+        "poolMaxPending": 4,
+        "prematureIdleAgeCount": 10,
+        "prematureIdleAgeMedianMs": 5265.5,
+        "prematureIdleAgeMinMs": 2350,
+        "prematureIdleAgeMaxMs": 5802,
+        "prematureIdleAgeAtOrAboveConfiguredMax": 0,
+        "connectionChurn": {
+          "distinctChannels": 2377,
+          "configuredLeases": 10832,
+          "newConnectionLeases": 2377,
+          "reusedConnectionLeases": 8455
+        },
+        "outcomeCounts": {
+          "HTTP_200_ACCEPTED": 2153,
+          "HTTP_503_ADMISSION": 612,
+          "HTTP_503_DOWNSTREAM": 0,
+          "HTTP_4XX_DOWNSTREAM": 0,
+          "HTTP_5XX_DOWNSTREAM": 0,
+          "HTTP_500_UNCONTROLLED": 45,
+          "HTTP_OTHER": 0,
+          "CLIENT_TIMEOUT": 2028,
+          "CLIENT_ABORT": 0,
+          "CONNECTION_ERROR": 14572,
+          "UNCLASSIFIED": 0
+        }
+      }
+    ],
+    "statistics": {
+      "aiPrematureClose": {
+        "values": [
+          64,
+          4,
+          10
+        ],
+        "sum": 78,
+        "min": 4,
+        "max": 64,
+        "median": 10
+      },
+      "aiPrematureCloseRate": {
+        "values": [
+          0.010272873194221509,
+          0.0012464942349641633,
+          0.0024752475247524753
+        ],
+        "sum": 0.013994614953938148,
+        "min": 0.0012464942349641633,
+        "max": 0.010272873194221509,
+        "median": 0.0024752475247524753
+      },
+      "connectionPrematureClose": {
+        "values": [
+          64,
+          4,
+          10
+        ],
+        "sum": 78,
+        "min": 4,
+        "max": 64,
+        "median": 10
+      },
+      "reusedPrematureClose": {
+        "values": [
+          64,
+          4,
+          10
+        ],
+        "sum": 78,
+        "min": 4,
+        "max": 64,
+        "median": 10
+      },
+      "newPrematureClose": {
+        "values": [
+          0,
+          0,
+          0
+        ],
+        "sum": 0,
+        "min": 0,
+        "max": 0,
+        "median": 0
+      },
+      "mockCloseBeforeAcquire": {
+        "values": [
+          64,
+          2,
+          9
+        ],
+        "sum": 75,
+        "min": 2,
+        "max": 64,
+        "median": 9
+      },
+      "mockCloseAfterAcquire": {
+        "values": [
+          0,
+          2,
+          1
+        ],
+        "sum": 3,
+        "min": 0,
+        "max": 2,
+        "median": 1
+      },
+      "preparedWithoutSent": {
+        "values": [
+          64,
+          4,
+          10
+        ],
+        "sum": 78,
+        "min": 4,
+        "max": 64,
+        "median": 10
+      },
+      "http200": {
+        "values": [
+          4736,
+          1729,
+          2153
+        ],
+        "sum": 8618,
+        "min": 1729,
+        "max": 4736,
+        "median": 2153
+      },
+      "http500": {
+        "values": [
+          161,
+          15,
+          45
+        ],
+        "sum": 221,
+        "min": 15,
+        "max": 161,
+        "median": 45
+      },
+      "controlled503": {
+        "values": [
+          6060,
+          459,
+          612
+        ],
+        "sum": 7131,
+        "min": 459,
+        "max": 6060,
+        "median": 612
+      },
+      "clientTimeout": {
+        "values": [
+          1688,
+          1710,
+          2028
+        ],
+        "sum": 5426,
+        "min": 1688,
+        "max": 2028,
+        "median": 1710
+      },
+      "connectionError": {
+        "values": [
+          7474,
+          13181,
+          14572
+        ],
+        "sum": 35227,
+        "min": 7474,
+        "max": 14572,
+        "median": 13181
+      },
+      "uncontrolledFailure": {
+        "values": [
+          9323,
+          14906,
+          16645
+        ],
+        "sum": 40874,
+        "min": 9323,
+        "max": 16645,
+        "median": 14906
+      },
+      "http500Rate": {
+        "values": [
+          0.008002385804463443,
+          0.0008775008775008775,
+          0.00231839258114374
+        ],
+        "sum": 0.01119827926310806,
+        "min": 0.0008775008775008775,
+        "max": 0.008002385804463443,
+        "median": 0.00231839258114374
+      },
+      "connectionErrorRate": {
+        "values": [
+          0.3714896366618619,
+          0.7710892710892711,
+          0.7507470376094797
+        ],
+        "sum": 1.8933259453606128,
+        "min": 0.3714896366618619,
+        "max": 0.7710892710892711,
+        "median": 0.7507470376094797
+      },
+      "acceptedP50Ms": {
+        "values": [
+          5160,
+          5393,
+          4979
+        ],
+        "sum": 15532,
+        "min": 4979,
+        "max": 5393,
+        "median": 5160
+      },
+      "acceptedP95Ms": {
+        "values": [
+          9180,
+          9931,
+          9332
+        ],
+        "sum": 28443,
+        "min": 9180,
+        "max": 9931,
+        "median": 9332
+      },
+      "acceptedP99Ms": {
+        "values": [
+          9829,
+          10312,
+          9893
+        ],
+        "sum": 30034,
+        "min": 9829,
+        "max": 10312,
+        "median": 9893
+      },
+      "throughputRps": {
+        "values": [
+          191.6095238095238,
+          162.8,
+          184.85714285714286
+        ],
+        "sum": 539.2666666666667,
+        "min": 162.8,
+        "max": 191.6095238095238,
+        "median": 184.85714285714286
+      },
+      "acceptedThroughputRps": {
+        "values": [
+          45.10476190476191,
+          16.466666666666665,
+          20.504761904761907
+        ],
+        "sum": 82.07619047619048,
+        "min": 16.466666666666665,
+        "max": 45.10476190476191,
+        "median": 20.504761904761907
+      },
+      "missionCompletions": {
+        "values": [
+          200,
+          200,
+          200
+        ],
+        "sum": 600,
+        "min": 200,
+        "max": 200,
+        "median": 200
+      },
+      "aiCompleted": {
+        "values": [
+          6090,
+          2878,
+          3788
+        ],
+        "sum": 12756,
+        "min": 2878,
+        "max": 6090,
+        "median": 3788
+      },
+      "aiMaxInFlight": {
+        "values": [
+          294,
+          149,
+          172
+        ],
+        "sum": 615,
+        "min": 149,
+        "max": 294,
+        "median": 172
+      },
+      "storageCompleted": {
+        "values": [
+          5397,
+          1945,
+          2504
+        ],
+        "sum": 9846,
+        "min": 1945,
+        "max": 5397,
+        "median": 2504
+      },
+      "storageMaxInFlight": {
+        "values": [
+          61,
+          38,
+          47
+        ],
+        "sum": 146,
+        "min": 38,
+        "max": 61,
+        "median": 47
+      },
+      "drainTimeToZeroMs": {
+        "values": [
+          4011,
+          6003,
+          8001
+        ],
+        "sum": 18015,
+        "min": 4011,
+        "max": 8001,
+        "median": 6003
+      },
+      "clientEventLoopDelayP95Ms": {
+        "values": [
+          68.157439,
+          271.319039,
+          97.058815
+        ],
+        "sum": 436.53529299999997,
+        "min": 68.157439,
+        "max": 271.319039,
+        "median": 97.058815
+      },
+      "appCpuMaxPercent": {
+        "values": [
+          263.92,
+          255.32,
+          264.45
+        ],
+        "sum": 783.69,
+        "min": 255.32,
+        "max": 264.45,
+        "median": 263.92
+      },
+      "appCpuMedianPercent": {
+        "values": [
+          210.29,
+          209.54,
+          210.89
+        ],
+        "sum": 630.72,
+        "min": 209.54,
+        "max": 210.89,
+        "median": 210.29
+      },
+      "appMemoryMaxBytes": {
+        "values": [
+          2463163744.256,
+          1768452784.128,
+          1877974450.176
+        ],
+        "sum": 6109590978.559999,
+        "min": 1768452784.128,
+        "max": 2463163744.256,
+        "median": 1877974450.176
+      },
+      "poolMaxActive": {
+        "values": [
+          283,
+          184,
+          226
+        ],
+        "sum": 693,
+        "min": 184,
+        "max": 283,
+        "median": 226
+      },
+      "poolMaxPending": {
+        "values": [
+          55,
+          7,
+          4
+        ],
+        "sum": 66,
+        "min": 4,
+        "max": 55,
+        "median": 7
+      },
+      "prematureIdleAgeCount": {
+        "values": [
+          64,
+          4,
+          10
+        ],
+        "sum": 78,
+        "min": 4,
+        "max": 64,
+        "median": 10
+      },
+      "prematureIdleAgeMedianMs": {
+        "values": [
+          7098,
+          5371.5,
+          5265.5
+        ],
+        "sum": 17735,
+        "min": 5265.5,
+        "max": 7098,
+        "median": 5371.5
+      },
+      "prematureIdleAgeMinMs": {
+        "values": [
+          2934,
+          4375,
+          2350
+        ],
+        "sum": 9659,
+        "min": 2350,
+        "max": 4375,
+        "median": 2934
+      },
+      "prematureIdleAgeMaxMs": {
+        "values": [
+          8104,
+          5992,
+          5802
+        ],
+        "sum": 19898,
+        "min": 5802,
+        "max": 8104,
+        "median": 5992
+      },
+      "prematureIdleAgeAtOrAboveConfiguredMax": {
+        "values": [
+          0,
+          0,
+          0
+        ],
+        "sum": 0,
+        "min": 0,
+        "max": 0,
+        "median": 0
+      }
+    }
+  },
+  "REMEDIATION": {
+    "runs": [
+      {
+        "runId": "RUN-20260802-EXP113-REMEDIATION-001",
+        "condition": "REMEDIATION",
+        "maxIdleTimeMs": 4000,
+        "validity": "VALID",
+        "aiPrematureClose": 56,
+        "aiStageStarts": 6708,
+        "aiPrematureCloseRate": 0.008348240906380441,
+        "connectionPrematureClose": 56,
+        "reusedPrematureClose": 56,
+        "newPrematureClose": 0,
+        "mockCloseBeforeAcquire": 56,
+        "mockCloseAfterAcquire": 0,
+        "preparedWithoutSent": 56,
+        "http200": 5495,
+        "http500": 64,
+        "controlled503": 8090,
+        "clientTimeout": 1524,
+        "connectionError": 5036,
+        "uncontrolledFailure": 6624,
+        "completedRequests": 20209,
+        "http500Rate": 0.003166905834034341,
+        "connectionErrorRate": 0.2491959028155772,
+        "acceptedP50Ms": 4956,
+        "acceptedP95Ms": 8735,
+        "acceptedP99Ms": 9746,
+        "throughputRps": 192.46666666666667,
+        "acceptedThroughputRps": 52.333333333333336,
+        "missionCompletions": 200,
+        "aiCompleted": 6496,
+        "aiMaxInFlight": 285,
+        "storageCompleted": 5938,
+        "storageMaxInFlight": 65,
+        "drainTimeToZeroMs": 4010,
+        "clientEventLoopDelayP95Ms": 61.308927,
+        "appCpuMaxPercent": 239.41,
+        "appCpuMedianPercent": 208.05,
+        "appMemoryMaxBytes": 2437393940.48,
+        "poolMaxActive": 282,
+        "poolMaxPending": 2,
+        "prematureIdleAgeCount": 56,
+        "prematureIdleAgeMedianMs": 3652,
+        "prematureIdleAgeMinMs": 1506,
+        "prematureIdleAgeMaxMs": 5344,
+        "prematureIdleAgeAtOrAboveConfiguredMax": 11,
+        "connectionChurn": {
+          "distinctChannels": 1816,
+          "configuredLeases": 19538,
+          "newConnectionLeases": 1816,
+          "reusedConnectionLeases": 17722
+        },
+        "outcomeCounts": {
+          "HTTP_200_ACCEPTED": 5495,
+          "HTTP_503_ADMISSION": 8090,
+          "HTTP_503_DOWNSTREAM": 0,
+          "HTTP_4XX_DOWNSTREAM": 0,
+          "HTTP_5XX_DOWNSTREAM": 0,
+          "HTTP_500_UNCONTROLLED": 64,
+          "HTTP_OTHER": 0,
+          "CLIENT_TIMEOUT": 1524,
+          "CLIENT_ABORT": 0,
+          "CONNECTION_ERROR": 5036,
+          "UNCLASSIFIED": 0
+        }
+      },
+      {
+        "runId": "RUN-20260802-EXP113-REMEDIATION-002",
+        "condition": "REMEDIATION",
+        "maxIdleTimeMs": 4000,
+        "validity": "VALID",
+        "aiPrematureClose": 67,
+        "aiStageStarts": 7634,
+        "aiPrematureCloseRate": 0.00877652606759235,
+        "connectionPrematureClose": 67,
+        "reusedPrematureClose": 67,
+        "newPrematureClose": 0,
+        "mockCloseBeforeAcquire": 67,
+        "mockCloseAfterAcquire": 0,
+        "preparedWithoutSent": 67,
+        "http200": 6919,
+        "http500": 99,
+        "controlled503": 11451,
+        "clientTimeout": 831,
+        "connectionError": 1252,
+        "uncontrolledFailure": 2182,
+        "completedRequests": 20552,
+        "http500Rate": 0.004817049435578046,
+        "connectionErrorRate": 0.06091864538731024,
+        "acceptedP50Ms": 4161,
+        "acceptedP95Ms": 8498,
+        "acceptedP99Ms": 9727,
+        "throughputRps": 195.73333333333332,
+        "acceptedThroughputRps": 65.8952380952381,
+        "missionCompletions": 200,
+        "aiCompleted": 7559,
+        "aiMaxInFlight": 270,
+        "storageCompleted": 7299,
+        "storageMaxInFlight": 75,
+        "drainTimeToZeroMs": 4009,
+        "clientEventLoopDelayP95Ms": 44.040191,
+        "appCpuMaxPercent": 230.67,
+        "appCpuMedianPercent": 203.31,
+        "appMemoryMaxBytes": 2495375998.976,
+        "poolMaxActive": 279,
+        "poolMaxPending": 7,
+        "prematureIdleAgeCount": 67,
+        "prematureIdleAgeMedianMs": 3820,
+        "prematureIdleAgeMinMs": 2007,
+        "prematureIdleAgeMaxMs": 5897,
+        "prematureIdleAgeAtOrAboveConfiguredMax": 32,
+        "connectionChurn": {
+          "distinctChannels": 1469,
+          "configuredLeases": 22623,
+          "newConnectionLeases": 1469,
+          "reusedConnectionLeases": 21154
+        },
+        "outcomeCounts": {
+          "HTTP_200_ACCEPTED": 6919,
+          "HTTP_503_ADMISSION": 11451,
+          "HTTP_503_DOWNSTREAM": 0,
+          "HTTP_4XX_DOWNSTREAM": 0,
+          "HTTP_5XX_DOWNSTREAM": 0,
+          "HTTP_500_UNCONTROLLED": 99,
+          "HTTP_OTHER": 0,
+          "CLIENT_TIMEOUT": 831,
+          "CLIENT_ABORT": 0,
+          "CONNECTION_ERROR": 1252,
+          "UNCLASSIFIED": 0
+        }
+      },
+      {
+        "runId": "RUN-20260802-EXP113-REMEDIATION-003",
+        "condition": "REMEDIATION",
+        "maxIdleTimeMs": 4000,
+        "validity": "VALID",
+        "aiPrematureClose": 45,
+        "aiStageStarts": 7197,
+        "aiPrematureCloseRate": 0.006252605252188412,
+        "connectionPrematureClose": 45,
+        "reusedPrematureClose": 45,
+        "newPrematureClose": 0,
+        "mockCloseBeforeAcquire": 43,
+        "mockCloseAfterAcquire": 2,
+        "preparedWithoutSent": 45,
+        "http200": 6450,
+        "http500": 45,
+        "controlled503": 10560,
+        "clientTimeout": 948,
+        "connectionError": 2475,
+        "uncontrolledFailure": 3468,
+        "completedRequests": 20478,
+        "http500Rate": 0.0021974802226779958,
+        "connectionErrorRate": 0.12086141224728977,
+        "acceptedP50Ms": 4687,
+        "acceptedP95Ms": 8632,
+        "acceptedP99Ms": 9841,
+        "throughputRps": 195.02857142857144,
+        "acceptedThroughputRps": 61.42857142857143,
+        "missionCompletions": 200,
+        "aiCompleted": 7089,
+        "aiMaxInFlight": 306,
+        "storageCompleted": 6901,
+        "storageMaxInFlight": 86,
+        "drainTimeToZeroMs": 3015,
+        "clientEventLoopDelayP95Ms": 42.860543,
+        "appCpuMaxPercent": 243.32,
+        "appCpuMedianPercent": 206.2,
+        "appMemoryMaxBytes": 2433098973.184,
+        "poolMaxActive": 305,
+        "poolMaxPending": 11,
+        "prematureIdleAgeCount": 45,
+        "prematureIdleAgeMedianMs": 3407,
+        "prematureIdleAgeMinMs": 2410,
+        "prematureIdleAgeMaxMs": 5414,
+        "prematureIdleAgeAtOrAboveConfiguredMax": 18,
+        "connectionChurn": {
+          "distinctChannels": 1252,
+          "configuredLeases": 21316,
+          "newConnectionLeases": 1252,
+          "reusedConnectionLeases": 20064
+        },
+        "outcomeCounts": {
+          "HTTP_200_ACCEPTED": 6450,
+          "HTTP_503_ADMISSION": 10560,
+          "HTTP_503_DOWNSTREAM": 0,
+          "HTTP_4XX_DOWNSTREAM": 0,
+          "HTTP_5XX_DOWNSTREAM": 0,
+          "HTTP_500_UNCONTROLLED": 45,
+          "HTTP_OTHER": 0,
+          "CLIENT_TIMEOUT": 948,
+          "CLIENT_ABORT": 0,
+          "CONNECTION_ERROR": 2475,
+          "UNCLASSIFIED": 0
+        }
+      }
+    ],
+    "statistics": {
+      "aiPrematureClose": {
+        "values": [
+          56,
+          67,
+          45
+        ],
+        "sum": 168,
+        "min": 45,
+        "max": 67,
+        "median": 56
+      },
+      "aiPrematureCloseRate": {
+        "values": [
+          0.008348240906380441,
+          0.00877652606759235,
+          0.006252605252188412
+        ],
+        "sum": 0.0233773722261612,
+        "min": 0.006252605252188412,
+        "max": 0.00877652606759235,
+        "median": 0.008348240906380441
+      },
+      "connectionPrematureClose": {
+        "values": [
+          56,
+          67,
+          45
+        ],
+        "sum": 168,
+        "min": 45,
+        "max": 67,
+        "median": 56
+      },
+      "reusedPrematureClose": {
+        "values": [
+          56,
+          67,
+          45
+        ],
+        "sum": 168,
+        "min": 45,
+        "max": 67,
+        "median": 56
+      },
+      "newPrematureClose": {
+        "values": [
+          0,
+          0,
+          0
+        ],
+        "sum": 0,
+        "min": 0,
+        "max": 0,
+        "median": 0
+      },
+      "mockCloseBeforeAcquire": {
+        "values": [
+          56,
+          67,
+          43
+        ],
+        "sum": 166,
+        "min": 43,
+        "max": 67,
+        "median": 56
+      },
+      "mockCloseAfterAcquire": {
+        "values": [
+          0,
+          0,
+          2
+        ],
+        "sum": 2,
+        "min": 0,
+        "max": 2,
+        "median": 0
+      },
+      "preparedWithoutSent": {
+        "values": [
+          56,
+          67,
+          45
+        ],
+        "sum": 168,
+        "min": 45,
+        "max": 67,
+        "median": 56
+      },
+      "http200": {
+        "values": [
+          5495,
+          6919,
+          6450
+        ],
+        "sum": 18864,
+        "min": 5495,
+        "max": 6919,
+        "median": 6450
+      },
+      "http500": {
+        "values": [
+          64,
+          99,
+          45
+        ],
+        "sum": 208,
+        "min": 45,
+        "max": 99,
+        "median": 64
+      },
+      "controlled503": {
+        "values": [
+          8090,
+          11451,
+          10560
+        ],
+        "sum": 30101,
+        "min": 8090,
+        "max": 11451,
+        "median": 10560
+      },
+      "clientTimeout": {
+        "values": [
+          1524,
+          831,
+          948
+        ],
+        "sum": 3303,
+        "min": 831,
+        "max": 1524,
+        "median": 948
+      },
+      "connectionError": {
+        "values": [
+          5036,
+          1252,
+          2475
+        ],
+        "sum": 8763,
+        "min": 1252,
+        "max": 5036,
+        "median": 2475
+      },
+      "uncontrolledFailure": {
+        "values": [
+          6624,
+          2182,
+          3468
+        ],
+        "sum": 12274,
+        "min": 2182,
+        "max": 6624,
+        "median": 3468
+      },
+      "http500Rate": {
+        "values": [
+          0.003166905834034341,
+          0.004817049435578046,
+          0.0021974802226779958
+        ],
+        "sum": 0.010181435492290383,
+        "min": 0.0021974802226779958,
+        "max": 0.004817049435578046,
+        "median": 0.003166905834034341
+      },
+      "connectionErrorRate": {
+        "values": [
+          0.2491959028155772,
+          0.06091864538731024,
+          0.12086141224728977
+        ],
+        "sum": 0.4309759604501773,
+        "min": 0.06091864538731024,
+        "max": 0.2491959028155772,
+        "median": 0.12086141224728977
+      },
+      "acceptedP50Ms": {
+        "values": [
+          4956,
+          4161,
+          4687
+        ],
+        "sum": 13804,
+        "min": 4161,
+        "max": 4956,
+        "median": 4687
+      },
+      "acceptedP95Ms": {
+        "values": [
+          8735,
+          8498,
+          8632
+        ],
+        "sum": 25865,
+        "min": 8498,
+        "max": 8735,
+        "median": 8632
+      },
+      "acceptedP99Ms": {
+        "values": [
+          9746,
+          9727,
+          9841
+        ],
+        "sum": 29314,
+        "min": 9727,
+        "max": 9841,
+        "median": 9746
+      },
+      "throughputRps": {
+        "values": [
+          192.46666666666667,
+          195.73333333333332,
+          195.02857142857144
+        ],
+        "sum": 583.2285714285714,
+        "min": 192.46666666666667,
+        "max": 195.73333333333332,
+        "median": 195.02857142857144
+      },
+      "acceptedThroughputRps": {
+        "values": [
+          52.333333333333336,
+          65.8952380952381,
+          61.42857142857143
+        ],
+        "sum": 179.65714285714284,
+        "min": 52.333333333333336,
+        "max": 65.8952380952381,
+        "median": 61.42857142857143
+      },
+      "missionCompletions": {
+        "values": [
+          200,
+          200,
+          200
+        ],
+        "sum": 600,
+        "min": 200,
+        "max": 200,
+        "median": 200
+      },
+      "aiCompleted": {
+        "values": [
+          6496,
+          7559,
+          7089
+        ],
+        "sum": 21144,
+        "min": 6496,
+        "max": 7559,
+        "median": 7089
+      },
+      "aiMaxInFlight": {
+        "values": [
+          285,
+          270,
+          306
+        ],
+        "sum": 861,
+        "min": 270,
+        "max": 306,
+        "median": 285
+      },
+      "storageCompleted": {
+        "values": [
+          5938,
+          7299,
+          6901
+        ],
+        "sum": 20138,
+        "min": 5938,
+        "max": 7299,
+        "median": 6901
+      },
+      "storageMaxInFlight": {
+        "values": [
+          65,
+          75,
+          86
+        ],
+        "sum": 226,
+        "min": 65,
+        "max": 86,
+        "median": 75
+      },
+      "drainTimeToZeroMs": {
+        "values": [
+          4010,
+          4009,
+          3015
+        ],
+        "sum": 11034,
+        "min": 3015,
+        "max": 4010,
+        "median": 4009
+      },
+      "clientEventLoopDelayP95Ms": {
+        "values": [
+          61.308927,
+          44.040191,
+          42.860543
+        ],
+        "sum": 148.209661,
+        "min": 42.860543,
+        "max": 61.308927,
+        "median": 44.040191
+      },
+      "appCpuMaxPercent": {
+        "values": [
+          239.41,
+          230.67,
+          243.32
+        ],
+        "sum": 713.4,
+        "min": 230.67,
+        "max": 243.32,
+        "median": 239.41
+      },
+      "appCpuMedianPercent": {
+        "values": [
+          208.05,
+          203.31,
+          206.2
+        ],
+        "sum": 617.56,
+        "min": 203.31,
+        "max": 208.05,
+        "median": 206.2
+      },
+      "appMemoryMaxBytes": {
+        "values": [
+          2437393940.48,
+          2495375998.976,
+          2433098973.184
+        ],
+        "sum": 7365868912.639999,
+        "min": 2433098973.184,
+        "max": 2495375998.976,
+        "median": 2437393940.48
+      },
+      "poolMaxActive": {
+        "values": [
+          282,
+          279,
+          305
+        ],
+        "sum": 866,
+        "min": 279,
+        "max": 305,
+        "median": 282
+      },
+      "poolMaxPending": {
+        "values": [
+          2,
+          7,
+          11
+        ],
+        "sum": 20,
+        "min": 2,
+        "max": 11,
+        "median": 7
+      },
+      "prematureIdleAgeCount": {
+        "values": [
+          56,
+          67,
+          45
+        ],
+        "sum": 168,
+        "min": 45,
+        "max": 67,
+        "median": 56
+      },
+      "prematureIdleAgeMedianMs": {
+        "values": [
+          3652,
+          3820,
+          3407
+        ],
+        "sum": 10879,
+        "min": 3407,
+        "max": 3820,
+        "median": 3652
+      },
+      "prematureIdleAgeMinMs": {
+        "values": [
+          1506,
+          2007,
+          2410
+        ],
+        "sum": 5923,
+        "min": 1506,
+        "max": 2410,
+        "median": 2007
+      },
+      "prematureIdleAgeMaxMs": {
+        "values": [
+          5344,
+          5897,
+          5414
+        ],
+        "sum": 16655,
+        "min": 5344,
+        "max": 5897,
+        "median": 5414
+      },
+      "prematureIdleAgeAtOrAboveConfiguredMax": {
+        "values": [
+          11,
+          32,
+          18
+        ],
+        "sum": 61,
+        "min": 11,
+        "max": 32,
+        "median": 18
+      }
+    }
+  }
+}

@@ -98,7 +98,10 @@ try {
         -SkipApplicationSnapshot 1 -SkipMockMetrics 1 -OutcomeMode controlled-admission `
         -AccountingMode corrected -DrainObservationSeconds 30 -NodeCommand $node
     if ($LASTEXITCODE -ne 0) { throw "Experiment 1-13 core failed" }
-    Wait-Process -Id $poolProcess.Id
+    if (-not $poolProcess.HasExited) {
+        Wait-Process -Id $poolProcess.Id
+    }
+    $poolProcess.Refresh()
     if ($poolProcess.ExitCode -ne 0) { throw "pool collector failed" }
 } finally {
     if ($poolProcess -and -not $poolProcess.HasExited) { Stop-Process -Id $poolProcess.Id -ErrorAction SilentlyContinue }
