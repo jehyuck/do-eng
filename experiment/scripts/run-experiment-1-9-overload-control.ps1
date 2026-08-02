@@ -15,7 +15,9 @@ try {
         -File (Join-Path $PSScriptRoot "run-experiment-1-4-before.ps1") `
         -RunId $RunId -RunKind $RunKind `
         -ComposeOverlay "backend\docker-compose.experiment-1-9-overload-control.yaml" `
-        -AiDelayMs 2000 -ComposeProject "doeng-exp19"
+        # Reuse the already healthy dependency project on the fixed experiment
+        # ports; the runner still force-recreates flux-corrected for a fresh JVM.
+        -AiDelayMs 2000 -ComposeProject "doeng-exp18"
     if ($LASTEXITCODE -ne 0) {
         throw "Experiment 1-9 $RunKind failed: exit code $LASTEXITCODE"
     }
