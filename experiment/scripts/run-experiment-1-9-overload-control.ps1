@@ -11,12 +11,12 @@ $previousLimit = $env:DOENG_ADMISSION_MAX_CONCURRENT
 $env:DOENG_ADMISSION_MODE = $AdmissionMode
 $env:DOENG_ADMISSION_MAX_CONCURRENT = [string]$AdmissionLimit
 try {
+    # Reuse the already healthy dependency project on the fixed experiment
+    # ports; the runner still force-recreates flux-corrected for a fresh JVM.
     & powershell.exe -NoProfile -ExecutionPolicy Bypass `
         -File (Join-Path $PSScriptRoot "run-experiment-1-4-before.ps1") `
         -RunId $RunId -RunKind $RunKind `
         -ComposeOverlay "backend\docker-compose.experiment-1-9-overload-control.yaml" `
-        # Reuse the already healthy dependency project on the fixed experiment
-        # ports; the runner still force-recreates flux-corrected for a fresh JVM.
         -AiDelayMs 2000 -ComposeProject "doeng-exp18"
     if ($LASTEXITCODE -ne 0) {
         throw "Experiment 1-9 $RunKind failed: exit code $LASTEXITCODE"
