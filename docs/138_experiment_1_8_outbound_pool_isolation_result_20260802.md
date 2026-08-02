@@ -41,18 +41,20 @@ SHARED는 `doeng-external=400/800`, ISOLATED는 `doeng-token=40/80`, `doeng-ai=3
 
 ## 4. VALID core system outcome
 
-| Arm / Run | 성공 | 실패 | successful RPS | accepted p95/p99 (ms) | 동시 active max | pending max | drain time |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| SHARED-001-RPL-001 | 12,056 | 8,621 | 196.92 | 8,703 / 9,529 | 400 | 1,292 | 5,015ms |
-| SHARED-003 | 12,291 | 8,396 | 197.02 | 8,732 / 9,735 | 400 | 1,679 | 6,013ms |
-| ISOLATED-001 | 3,745 | 16,913 | 196.74 | 8,538 / 9,301 | 400 | 1,313 | 3,001ms |
-| ISOLATED-002 | 9,606 | 11,058 | 196.80 | 7,541 / 8,795 | 400 | 1,083 | 7,013ms |
-| ISOLATED-003 | 8,541 | 12,105 | 196.63 | 8,414 / 9,357 | 400 | 782 | 7,003ms |
+| Arm / Run | HTTP 200 성공 | 비성공 terminal | successful RPS | completed RPS | accepted p95/p99 (ms) | 동시 active max | pending max | drain time |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| SHARED-001-RPL-001 | 12,056 | 8,621 | 114.819 | 196.924 | 8,703 / 9,529 | 400 | 1,292 | 5,015ms |
+| SHARED-003 | 12,291 | 8,396 | 117.057 | 197.019 | 8,732 / 9,735 | 400 | 1,679 | 6,013ms |
+| ISOLATED-001 | 3,745 | 16,913 | 35.667 | 196.743 | 8,538 / 9,301 | 400 | 1,313 | 3,001ms |
+| ISOLATED-002 | 9,606 | 11,058 | 91.486 | 196.800 | 7,541 / 8,795 | 400 | 1,083 | 7,013ms |
+| ISOLATED-003 | 8,541 | 12,105 | 81.343 | 196.629 | 8,414 / 9,357 | 400 | 782 | 7,003ms |
+
+`successful RPS = HTTP 200 / 105초`, `completed RPS = 모든 terminal 완료 / 105초`이다. 이전 문서의 약 196.9 표기는 completed RPS를 successful RPS로 잘못 이름 붙인 것이며, raw는 변경하지 않았다.
 
 VALID run 기준 arm 관찰값은 다음과 같다.
 
-- SHARED 성공 중앙값 12,056, successful RPS 중앙값 196.97, accepted p95 중앙값 8,718ms, pending max 중앙값 1,486
-- ISOLATED 성공 중앙값 8,541, successful RPS 중앙값 196.74, accepted p95 중앙값 8,414ms, pending max 중앙값 1,083
+- SHARED 성공 중앙값 12,173.5, successful RPS 중앙값 115.938, completed RPS 중앙값 196.972, accepted p95 중앙값 8,718ms, pending max 중앙값 1,486
+- ISOLATED 성공 중앙값 8,541, successful RPS 중앙값 81.343, completed RPS 중앙값 196.743, accepted p95 중앙값 8,414ms, pending max 중앙값 1,083
 - ISOLATED의 세 run 모두 HTTP 500과 client failure가 남았고, successful RPS는 SHARED보다 증가하지 않았다.
 - 모든 VALID run은 최종 unfinished 0, drain completed true였다.
 
