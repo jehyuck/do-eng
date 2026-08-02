@@ -127,6 +127,63 @@ function percentile(sortedValues, fraction) {
   return sortedValues[index]
 }
 
+function errorDetails(error, maxDepth = 3) {
+  const chain = []
+  let current = error
+  let depth = 0
+  while (current && depth < maxDepth) {
+    chain.push({
+      name: current.name || null,
+      message: current.message || null,
+      code: current.code || null,
+      errno: current.errno || null,
+      syscall: current.syscall || null,
+    })
+    current = current.cause
+    depth += 1
+  }
+  const root = chain[chain.length - 1] || {}
+  return {
+    chain,
+    socket: {
+      localAddress: error?.address || error?.localAddress || null,
+      localPort: error?.localPort || null,
+      remoteAddress: error?.hostname || error?.remoteAddress || null,
+      remotePort: error?.port || error?.remotePort || null,
+      bytesWritten: error?.bytesWritten ?? null,
+      bytesRead: error?.bytesRead ?? null,
+    },
+    rootCode: root.code || null,
+  }
+}
+
+function transportCategory(error, phase, deadlineAborted) {
+  const details = errorDetails(error)
+  const text = details.chain
+    .map((item) => `${item.name || ""} ${item.message || ""} ${item.code || ""}`)
+    .join(" ")
+    .toLowerCase()
+  if (deadlineAborted) return "CLIENT_ABORT_DEADLINE"
+  if (text.includes("econnrefused")) return "CONNECT_REFUSED"
+  if (text.includes("etimedout") || text.includes("connect timeout")) return "CONNECT_TIMEOUT"
+  if (text.includes("econnreset") || text.includes("socket reset")) return "SOCKET_RESET"
+  if (text.includes("socket closed") || text.includes("closed")) return "SOCKET_CLOSED"
+  if (text.includes("headers timeout")) return "UNDICI_HEADERS_TIMEOUT"
+  if (text.includes("body timeout")) return "UNDICI_BODY_TIMEOUT"
+  if (text.includes("undici") || text.includes("socket")) return "UNDICI_SOCKET"
+  if (phase === "PHASE_FETCH_HEADERS") return "FETCH_BEFORE_HEADERS_OTHER"
+  if (phase === "PHASE_RESPONSE_BODY") return "FETCH_AFTER_HEADERS_OTHER"
+  return "UNCLASSIFIED_TRANSPORT"
+}
+
+function transportError(error, phase, deadlineAborted) {
+  return {
+    phase,
+    category: transportCategory(error, phase, deadlineAborted),
+    details: errorDetails(error),
+  }
+}
+
 if (fixturePath && !fs.existsSync(fixturePath)) {
   throw new Error(`fixture does not exist: ${fixturePath}`)
 }
@@ -256,14 +313,21 @@ async function submitFrame(user) {
   startedRequests += 1
   const requestId = `${experimentRunId}-u${user.index + 1}-f${user.sequence}`
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), requestTimeoutMs)
+  let deadlineAborted = false
+  const timeout = setTimeout(() => {
+    deadlineAborted = true
+    controller.abort()
+  }, requestTimeoutMs)
   const startedAt = Date.now()
 
   inFlight += 1
   maxInFlight = Math.max(maxInFlight, inFlight)
 
+  let response
+  let transport = null
   try {
-    const response = await fetch(requestUrl, {
+    try {
+      response = await fetch(requestUrl, {
       method: "POST",
       headers: {
         Authorization: user.authorization,
@@ -274,8 +338,18 @@ async function submitFrame(user) {
       },
       body: payload,
       signal: controller.signal,
-    })
-    const body = await response.text()
+      })
+    } catch (error) {
+      transport = transportError(error, "PHASE_FETCH_HEADERS", deadlineAborted)
+      throw error
+    }
+    let body
+    try {
+      body = await response.text()
+    } catch (error) {
+      transport = transportError(error, "PHASE_RESPONSE_BODY", deadlineAborted)
+      throw error
+    }
     const normalizedBody = body.trim().toLowerCase()
 
     results.push({
@@ -291,6 +365,7 @@ async function submitFrame(user) {
       body,
       latencyMs: Date.now() - startedAt,
       error: null,
+      transport: null,
     })
 
     if (
@@ -324,6 +399,7 @@ async function submitFrame(user) {
       body: null,
       latencyMs: Date.now() - startedAt,
       error: error.name,
+      transport: transport || transportError(error, "PHASE_FETCH_HEADERS", deadlineAborted),
     })
   } finally {
     clearTimeout(timeout)
@@ -550,6 +626,8 @@ async function run() {
     else if (result.error === null && result.status >= 400 && result.status < 500) category = "HTTP_4XX_DOWNSTREAM"
     else if (result.error === null && result.status >= 500) category = "HTTP_5XX_DOWNSTREAM"
     else if (result.error === null && result.status !== null) category = "HTTP_OTHER"
+    else if (result.transport?.category === "CLIENT_ABORT_DEADLINE") category = "CLIENT_TIMEOUT"
+    else if (result.transport?.category) category = "CONNECTION_ERROR"
     else if (result.error === "AbortError") category = "CLIENT_TIMEOUT"
     else if (result.error === "TypeError") category = "CONNECTION_ERROR"
     outcomeCategories[category].push(result)
@@ -685,8 +763,16 @@ async function run() {
       heapUsedBytes: memoryUsage.heapUsed,
       eventLoopDelayMs: {
         mean: Number(eventLoopDelay.mean) / 1e6,
+        p50: Number(eventLoopDelay.percentile(50)) / 1e6,
         p95: Number(eventLoopDelay.percentile(95)) / 1e6,
+        p99: Number(eventLoopDelay.percentile(99)) / 1e6,
         max: Number(eventLoopDelay.max) / 1e6,
+      },
+      runtime: {
+        nodeVersion: process.version,
+        undiciVersion: process.versions.undici || null,
+        platform: process.platform,
+        arch: process.arch,
       },
     },
     targetP95Ms,

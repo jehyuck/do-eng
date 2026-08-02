@@ -3,7 +3,8 @@ param(
     [ValidateSet("scout", "core")][string]$RunKind = "core",
     [string]$ComposeOverlay = "backend\docker-compose.experiment-1-4-before.yaml",
     [ValidateRange(0, 60000)][int]$AiDelayMs = 2000,
-    [string]$ComposeProject = "doeng-exp13"
+    [string]$ComposeProject = "doeng-exp13",
+    [switch]$SkipPhase1Observer
 )
 
 $ErrorActionPreference = "Stop"
@@ -61,7 +62,7 @@ if ($null -eq $health -or $health.status -ne "UP") { throw "management health is
 if ($LASTEXITCODE -ne 0) { throw "warm-up failed" }
 
 try {
-    if ($RunKind -eq "core") {
+    if ($RunKind -eq "core" -and -not $SkipPhase1Observer) {
         $collectorProcesses += Start-Collector "collect-phase1-observer.ps1" "phase1-observer" 145
     }
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run-isolated-vu-success-smoke.ps1") `
@@ -82,7 +83,7 @@ try {
 }
 
 $runDirectory = Join-Path $root "experiment\results\$RunId"
-if ($RunKind -eq "core" -and (Test-Path -LiteralPath $runDirectory)) {
+if ($RunKind -eq "core" -and -not $SkipPhase1Observer -and (Test-Path -LiteralPath $runDirectory)) {
     Copy-Item -Force (Join-Path $collectorRoot "phase1-observer\*.jsonl") -Destination $runDirectory -ErrorAction SilentlyContinue
     Copy-Item -Force (Join-Path $collectorRoot "phase1-observer\*.summary.json") -Destination $runDirectory -ErrorAction SilentlyContinue
     $summaryPath = Join-Path $collectorRoot "phase1-observer\phase1-observer.summary.json"

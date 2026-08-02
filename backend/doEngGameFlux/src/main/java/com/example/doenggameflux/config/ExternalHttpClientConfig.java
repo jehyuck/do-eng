@@ -1,6 +1,8 @@
 package com.example.doenggameflux.config;
 
 import io.netty.channel.ChannelOption;
+import com.example.doenggameflux.component.TransportDiagnosticLogger;
+import com.example.doenggameflux.component.TransportHttpClientObservation;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,11 +10,45 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.ClientRequest;
+import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
 
 @Configuration
 public class ExternalHttpClientConfig {
+
+    // Compatibility overloads keep the existing configuration unit tests and
+    // callers source-compatible; diagnostic observation is disabled here.
+    public WebClient tokenWebClient(
+            ExternalServiceProperties properties,
+            ConnectionProvider sharedProvider,
+            ConnectionProvider isolatedProvider,
+            DiagnosticProperties diagnosticProperties) {
+        TransportAttributionProperties transportProperties = new TransportAttributionProperties();
+        return tokenWebClient(properties, sharedProvider, isolatedProvider, diagnosticProperties,
+                transportProperties, new TransportDiagnosticLogger(transportProperties));
+    }
+
+    public WebClient aiWebClient(
+            ExternalServiceProperties properties,
+            ConnectionProvider sharedProvider,
+            ConnectionProvider isolatedProvider,
+            DiagnosticProperties diagnosticProperties) {
+        TransportAttributionProperties transportProperties = new TransportAttributionProperties();
+        return aiWebClient(properties, sharedProvider, isolatedProvider, diagnosticProperties,
+                transportProperties, new TransportDiagnosticLogger(transportProperties));
+    }
+
+    public WebClient storageWebClient(
+            ExternalServiceProperties properties,
+            ConnectionProvider sharedProvider,
+            ConnectionProvider isolatedProvider,
+            DiagnosticProperties diagnosticProperties) {
+        TransportAttributionProperties transportProperties = new TransportAttributionProperties();
+        return storageWebClient(properties, sharedProvider, isolatedProvider, diagnosticProperties,
+                transportProperties, new TransportDiagnosticLogger(transportProperties));
+    }
 
     @Value("${doeng.experiment.metrics.enabled:false}")
     private boolean experimentMetricsEnabled;
@@ -70,9 +106,12 @@ public class ExternalHttpClientConfig {
             ExternalServiceProperties properties,
             @Qualifier("sharedConnectionProvider") ConnectionProvider sharedProvider,
             @Qualifier("tokenConnectionProvider") ConnectionProvider isolatedProvider,
-            DiagnosticProperties diagnosticProperties) {
+            DiagnosticProperties diagnosticProperties,
+            TransportAttributionProperties transportProperties,
+            TransportDiagnosticLogger transportLogger) {
         return buildClient(properties, selectProvider(properties, sharedProvider, isolatedProvider),
-                properties.getTokenVerificationUrl(), diagnosticProperties);
+                properties.getTokenVerificationUrl(), diagnosticProperties, "TOKEN",
+                transportProperties, transportLogger);
     }
 
     @Bean("aiWebClient")
@@ -80,11 +119,13 @@ public class ExternalHttpClientConfig {
             ExternalServiceProperties properties,
             @Qualifier("sharedConnectionProvider") ConnectionProvider sharedProvider,
             @Qualifier("aiConnectionProvider") ConnectionProvider isolatedProvider,
-            DiagnosticProperties diagnosticProperties) {
+            DiagnosticProperties diagnosticProperties,
+            TransportAttributionProperties transportProperties,
+            TransportDiagnosticLogger transportLogger) {
         WebClient.Builder builder = buildClientBuilder(
                 properties,
                 selectProvider(properties, sharedProvider, isolatedProvider),
-                diagnosticProperties);
+                diagnosticProperties, "AI", transportProperties, transportLogger);
         return builder
                 .baseUrl(properties.getAiBaseUrl())
                 .codecs(configurer ->
@@ -97,9 +138,12 @@ public class ExternalHttpClientConfig {
             ExternalServiceProperties properties,
             @Qualifier("sharedConnectionProvider") ConnectionProvider sharedProvider,
             @Qualifier("storageConnectionProvider") ConnectionProvider isolatedProvider,
-            DiagnosticProperties diagnosticProperties) {
+            DiagnosticProperties diagnosticProperties,
+            TransportAttributionProperties transportProperties,
+            TransportDiagnosticLogger transportLogger) {
         return buildClient(properties, selectProvider(properties, sharedProvider, isolatedProvider),
-                properties.getStorageBaseUrl(), diagnosticProperties);
+                properties.getStorageBaseUrl(), diagnosticProperties, "STORAGE",
+                transportProperties, transportLogger);
     }
 
     private ConnectionProvider buildProvider(
@@ -132,8 +176,12 @@ public class ExternalHttpClientConfig {
             ExternalServiceProperties properties,
             ConnectionProvider provider,
             String baseUrl,
-            DiagnosticProperties diagnosticProperties) {
-        return buildClientBuilder(properties, provider, diagnosticProperties)
+            DiagnosticProperties diagnosticProperties,
+            String stage,
+            TransportAttributionProperties transportProperties,
+            TransportDiagnosticLogger transportLogger) {
+        return buildClientBuilder(properties, provider, diagnosticProperties, stage,
+                transportProperties, transportLogger)
                 .baseUrl(baseUrl)
                 .build();
     }
@@ -141,7 +189,10 @@ public class ExternalHttpClientConfig {
     private WebClient.Builder buildClientBuilder(
             ExternalServiceProperties properties,
             ConnectionProvider provider,
-            DiagnosticProperties diagnosticProperties) {
+            DiagnosticProperties diagnosticProperties,
+            String stage,
+            TransportAttributionProperties transportProperties,
+            TransportDiagnosticLogger transportLogger) {
         HttpClient httpClient = HttpClient
                 .create(provider)
                 .option(
@@ -152,7 +203,21 @@ public class ExternalHttpClientConfig {
         if (experimentMetricsEnabled || diagnosticProperties.isEnabled() || poolObservationEnabled) {
             httpClient = httpClient.metrics(true, uri -> uri);
         }
+        httpClient = TransportHttpClientObservation.instrument(
+                httpClient, stage, transportLogger, transportProperties.isEnabled());
         return WebClient.builder()
+                .filter((request, next) -> Mono.deferContextual(context -> {
+                    ClientRequest.Builder builder = ClientRequest.from(request);
+                    String requestId = context.getOrDefault(
+                            TransportRequestObservationFilter.class.getName(), null);
+                    if (requestId != null) {
+                        builder.header("X-Experiment-Request-Id", requestId);
+                        builder.header("X-Mission-Run-Id",
+                                context.getOrDefault("doeng.missionRunId", ""));
+                    }
+                    builder.header("X-Experiment-Stage", stage);
+                    return next.exchange(builder.build());
+                }))
                 .clientConnector(new ReactorClientHttpConnector(httpClient));
     }
 }
