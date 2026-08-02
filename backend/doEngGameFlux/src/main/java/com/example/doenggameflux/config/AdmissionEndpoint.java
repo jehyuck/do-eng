@@ -4,12 +4,10 @@ import com.example.doenggameflux.component.AiOutboundAdmissionGate;
 import java.util.Map;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
 @Endpoint(id = "doengadmission")
-@ConditionalOnProperty(name = "doeng.admission.ai.enabled", havingValue = "true")
 public class AdmissionEndpoint {
 
     private final AiOutboundAdmissionGate gate;

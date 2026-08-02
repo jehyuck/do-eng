@@ -1,6 +1,5 @@
 package com.example.doenggameflux.s3;
 
-import com.example.doenggameflux.config.ExternalServiceProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
@@ -18,12 +17,8 @@ public class HttpMissionImageStorage implements MissionImageStorage {
     private final WebClient webClient;
 
     public HttpMissionImageStorage(
-            ExternalServiceProperties properties,
-            @Qualifier("externalWebClientBuilder")
-            WebClient.Builder externalWebClientBuilder) {
-        this.webClient = externalWebClientBuilder.clone()
-                .baseUrl(properties.getStorageBaseUrl())
-                .build();
+            @Qualifier("storageWebClient") WebClient storageWebClient) {
+        this.webClient = storageWebClient;
     }
 
     @Override

@@ -24,7 +24,19 @@ doeng:
   storage:
     mode: ${DOENG_STORAGE_MODE:http}
   external:
-    max-connections: ${DOENG_HTTP_MAX_CONNECTIONS:200}
+    pool-mode: ${DOENG_EXTERNAL_POOL_MODE:SHARED}
+    shared-pool:
+      max-connections: ${DOENG_SHARED_POOL_MAX_CONNECTIONS:${DOENG_HTTP_MAX_CONNECTIONS:200}}
+      pending-acquire-max-count: ${DOENG_SHARED_POOL_PENDING_MAX_COUNT:${DOENG_HTTP_PENDING_MAX_COUNT:400}}
+    token-pool:
+      max-connections: ${DOENG_TOKEN_POOL_MAX_CONNECTIONS:40}
+      pending-acquire-max-count: ${DOENG_TOKEN_POOL_PENDING_MAX_COUNT:80}
+    ai-pool:
+      max-connections: ${DOENG_AI_POOL_MAX_CONNECTIONS:320}
+      pending-acquire-max-count: ${DOENG_AI_POOL_PENDING_MAX_COUNT:640}
+    storage-pool:
+      max-connections: ${DOENG_STORAGE_POOL_MAX_CONNECTIONS:40}
+      pending-acquire-max-count: ${DOENG_STORAGE_POOL_PENDING_MAX_COUNT:80}
     connect-timeout-ms: ${DOENG_HTTP_CONNECT_TIMEOUT_MS:2000}
     response-timeout-ms: ${DOENG_HTTP_RESPONSE_TIMEOUT_MS:10000}
     pending-acquire-timeout-ms: ${DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS:10000}

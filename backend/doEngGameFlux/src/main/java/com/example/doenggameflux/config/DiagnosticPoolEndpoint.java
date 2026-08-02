@@ -6,12 +6,15 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /** Targeted Reactor Netty pool view used by low-interference experiments. */
@@ -23,18 +26,47 @@ public class DiagnosticPoolEndpoint {
     private static final String PREFIX = "reactor.netty.connection.provider.";
 
     private final MeterRegistry registry;
+    private final ExternalServiceProperties properties;
 
     public DiagnosticPoolEndpoint(MeterRegistry registry) {
+        this(registry, defaultProperties());
+    }
+
+    @Autowired
+    public DiagnosticPoolEndpoint(
+            MeterRegistry registry,
+            ExternalServiceProperties properties) {
         this.registry = registry;
+        this.properties = properties;
     }
 
     @ReadOperation
     public Map<String, Object> snapshot() {
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("capturedAtEpochMs", System.currentTimeMillis());
-        response.put("provider", "doeng-external");
+        response.put("poolMode", properties.getPoolMode().name());
+        response.put("providers", providers());
         response.put("metrics", measurements());
         return response;
+    }
+
+    private List<String> providers() {
+        Set<String> providers = new LinkedHashSet<>();
+        if (properties.getPoolMode() == ExternalPoolMode.ISOLATED) {
+            providers.add("doeng-token");
+            providers.add("doeng-ai");
+            providers.add("doeng-storage");
+        } else {
+            providers.add("doeng-external");
+        }
+        for (Map<String, Object> measurement : measurements()) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> tags = (Map<String, String>) measurement.get("tags");
+            if (tags != null && tags.get("name") != null) {
+                providers.add(tags.get("name"));
+            }
+        }
+        return new ArrayList<>(providers);
     }
 
     private List<Map<String, Object>> measurements() {
@@ -83,5 +115,11 @@ public class DiagnosticPoolEndpoint {
         Map<String, String> tags = new LinkedHashMap<>();
         id.getTags().forEach(tag -> tags.put(tag.getKey(), tag.getValue()));
         return tags;
+    }
+
+    private static ExternalServiceProperties defaultProperties() {
+        ExternalServiceProperties properties = new ExternalServiceProperties();
+        properties.setPoolMode(ExternalPoolMode.SHARED);
+        return properties;
     }
 }

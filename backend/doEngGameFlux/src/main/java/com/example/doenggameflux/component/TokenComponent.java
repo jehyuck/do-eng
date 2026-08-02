@@ -1,6 +1,5 @@
 package com.example.doenggameflux.component;
 
-import com.example.doenggameflux.config.ExternalServiceProperties;
 import com.example.doenggameflux.dto.response.TokenResponseDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -14,12 +13,8 @@ public class TokenComponent {
     private final WebClient webClient;
 
     public TokenComponent(
-            ExternalServiceProperties properties,
-            @Qualifier("externalWebClientBuilder")
-            WebClient.Builder externalWebClientBuilder) {
-        this.webClient = externalWebClientBuilder.clone()
-                .baseUrl(properties.getTokenVerificationUrl())
-                .build();
+            @Qualifier("tokenWebClient") WebClient tokenWebClient) {
+        this.webClient = tokenWebClient;
     }
 
     public Mono<Long> jwtConfirm(String authorization) {

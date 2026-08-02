@@ -5,7 +5,6 @@ import com.example.doenggameflux.component.DBComponentHttp;
 import com.example.doenggameflux.component.DiagnosticErrorLogger;
 import com.example.doenggameflux.component.StageObservation;
 import com.example.doenggameflux.component.TokenComponent;
-import com.example.doenggameflux.config.ExternalServiceProperties;
 import com.example.doenggameflux.dto.request.ImageRequestDto;
 import com.example.doenggameflux.dto.response.AiDecisionResultDto;
 import com.example.doenggameflux.util.ImagePayloadDecoder;
@@ -42,22 +41,16 @@ public class AiGameController {
     public AiGameController(
             DBComponentHttp dbComponent,
             TokenComponent tokenComponent,
-            ExternalServiceProperties properties,
             DiagnosticErrorLogger diagnosticErrorLogger,
             AiOutboundAdmissionGate aiAdmissionGate,
             StageObservation stageObservation,
-            @Qualifier("externalWebClientBuilder")
-            WebClient.Builder externalWebClientBuilder) {
+            @Qualifier("aiWebClient") WebClient aiWebClient) {
         this.dbComponent = dbComponent;
         this.tokenComponent = tokenComponent;
         this.diagnosticErrorLogger = diagnosticErrorLogger;
         this.aiAdmissionGate = aiAdmissionGate;
         this.stageObservation = stageObservation;
-        this.aiWebClient = externalWebClientBuilder.clone()
-                .baseUrl(properties.getAiBaseUrl())
-                .codecs(configurer ->
-                        configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024))
-                .build();
+        this.aiWebClient = aiWebClient;
     }
 
     @GetMapping("/test")

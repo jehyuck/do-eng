@@ -20,7 +20,8 @@ while ((Get-Date) -lt $deadline) {
         $snapshot = Invoke-RestMethod -Uri ($ManagementUrl.TrimEnd('/') + "/actuator/doengdiagnosticpool") -TimeoutSec 5
         [ordered]@{
             timestamp = $capturedAt
-            provider = $snapshot.provider
+            poolMode = $snapshot.poolMode
+            providers = $snapshot.providers
             metrics = $snapshot.metrics
             failure = $null
         } | ConvertTo-Json -Depth 8 -Compress | Add-Content -Encoding UTF8 -LiteralPath $OutputPath
@@ -28,7 +29,8 @@ while ((Get-Date) -lt $deadline) {
         $failures++
         [ordered]@{
             timestamp = $capturedAt
-            provider = "doeng-external"
+            poolMode = $null
+            providers = @()
             metrics = @()
             failure = $_.Exception.Message
         } | ConvertTo-Json -Depth 8 -Compress | Add-Content -Encoding UTF8 -LiteralPath $OutputPath
