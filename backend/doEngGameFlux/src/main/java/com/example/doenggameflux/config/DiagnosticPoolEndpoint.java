@@ -51,14 +51,7 @@ public class DiagnosticPoolEndpoint {
     }
 
     private List<String> providers() {
-        Set<String> providers = new LinkedHashSet<>();
-        if (properties.getPoolMode() == ExternalPoolMode.ISOLATED) {
-            providers.add("doeng-token");
-            providers.add("doeng-ai");
-            providers.add("doeng-storage");
-        } else {
-            providers.add("doeng-external");
-        }
+        Set<String> providers = activeProviderNames();
         for (Map<String, Object> measurement : measurements()) {
             @SuppressWarnings("unchecked")
             Map<String, String> tags = (Map<String, String>) measurement.get("tags");
@@ -69,8 +62,16 @@ public class DiagnosticPoolEndpoint {
         return new ArrayList<>(providers);
     }
 
+    private Set<String> activeProviderNames() {
+        if (properties.getPoolMode() == ExternalPoolMode.ISOLATED) {
+            return new LinkedHashSet<>(List.of("doeng-token", "doeng-ai", "doeng-storage"));
+        }
+        return new LinkedHashSet<>(List.of("doeng-external"));
+    }
+
     private List<Map<String, Object>> measurements() {
         List<Map<String, Object>> values = new ArrayList<>();
+        Set<String> activeProviders = activeProviderNames();
         for (String suffix : new String[]{
                 "active.connections",
                 "idle.connections",
@@ -79,6 +80,9 @@ public class DiagnosticPoolEndpoint {
                 "pending.connections",
                 "max.pending.connections"}) {
             for (Gauge gauge : registry.find(PREFIX + suffix).gauges()) {
+                if (!activeProviders.contains(gauge.getId().getTag("name"))) {
+                    continue;
+                }
                 Map<String, Object> value = new LinkedHashMap<>();
                 value.put("name", PREFIX + suffix);
                 value.put("value", finiteOrNull(gauge.value()));
@@ -87,6 +91,9 @@ public class DiagnosticPoolEndpoint {
             }
         }
         for (Timer timer : registry.find(PREFIX + "pending.connections.time").timers()) {
+            if (!activeProviders.contains(timer.getId().getTag("name"))) {
+                continue;
+            }
             Map<String, Object> value = new LinkedHashMap<>();
             value.put("name", PREFIX + "pending.connections.time");
             value.put("type", "TIMER");

@@ -21,9 +21,9 @@ class ExternalHttpClientConfigTest {
         ConnectionProvider ai = config.aiConnectionProvider(properties, diagnosticProperties);
         ConnectionProvider storage = config.storageConnectionProvider(properties, diagnosticProperties);
         try {
-            assertNotNull(config.tokenWebClient(properties, token, diagnosticProperties));
-            assertNotNull(config.aiWebClient(properties, ai, diagnosticProperties));
-            assertNotNull(config.storageWebClient(properties, storage, diagnosticProperties));
+            assertNotNull(config.tokenWebClient(properties, shared, token, diagnosticProperties));
+            assertNotNull(config.aiWebClient(properties, shared, ai, diagnosticProperties));
+            assertNotNull(config.storageWebClient(properties, shared, storage, diagnosticProperties));
             assertNotNull(shared);
         } finally {
             shared.dispose();

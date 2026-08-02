@@ -68,17 +68,23 @@ public class ExternalHttpClientConfig {
     @Bean("tokenWebClient")
     public WebClient tokenWebClient(
             ExternalServiceProperties properties,
-            @Qualifier("tokenConnectionProvider") ConnectionProvider provider,
+            @Qualifier("sharedConnectionProvider") ConnectionProvider sharedProvider,
+            @Qualifier("tokenConnectionProvider") ConnectionProvider isolatedProvider,
             DiagnosticProperties diagnosticProperties) {
-        return buildClient(properties, provider, properties.getTokenVerificationUrl(), diagnosticProperties);
+        return buildClient(properties, selectProvider(properties, sharedProvider, isolatedProvider),
+                properties.getTokenVerificationUrl(), diagnosticProperties);
     }
 
     @Bean("aiWebClient")
     public WebClient aiWebClient(
             ExternalServiceProperties properties,
-            @Qualifier("aiConnectionProvider") ConnectionProvider provider,
+            @Qualifier("sharedConnectionProvider") ConnectionProvider sharedProvider,
+            @Qualifier("aiConnectionProvider") ConnectionProvider isolatedProvider,
             DiagnosticProperties diagnosticProperties) {
-        WebClient.Builder builder = buildClientBuilder(properties, provider, diagnosticProperties);
+        WebClient.Builder builder = buildClientBuilder(
+                properties,
+                selectProvider(properties, sharedProvider, isolatedProvider),
+                diagnosticProperties);
         return builder
                 .baseUrl(properties.getAiBaseUrl())
                 .codecs(configurer ->
@@ -89,9 +95,11 @@ public class ExternalHttpClientConfig {
     @Bean("storageWebClient")
     public WebClient storageWebClient(
             ExternalServiceProperties properties,
-            @Qualifier("storageConnectionProvider") ConnectionProvider provider,
+            @Qualifier("sharedConnectionProvider") ConnectionProvider sharedProvider,
+            @Qualifier("storageConnectionProvider") ConnectionProvider isolatedProvider,
             DiagnosticProperties diagnosticProperties) {
-        return buildClient(properties, provider, properties.getStorageBaseUrl(), diagnosticProperties);
+        return buildClient(properties, selectProvider(properties, sharedProvider, isolatedProvider),
+                properties.getStorageBaseUrl(), diagnosticProperties);
     }
 
     private ConnectionProvider buildProvider(
@@ -109,6 +117,15 @@ public class ExternalHttpClientConfig {
             builder.metrics(true);
         }
         return builder.build();
+    }
+
+    private ConnectionProvider selectProvider(
+            ExternalServiceProperties properties,
+            ConnectionProvider sharedProvider,
+            ConnectionProvider isolatedProvider) {
+        return properties.getPoolMode() == ExternalPoolMode.ISOLATED
+                ? isolatedProvider
+                : sharedProvider;
     }
 
     private WebClient buildClient(
