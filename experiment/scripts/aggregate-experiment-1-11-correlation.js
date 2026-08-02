@@ -138,7 +138,11 @@ function normalize(item) {
   else if (!controlledRejection && !mockReceived) completeness = "MISSING_MOCK"
 
   const clientCompletedAt = item.client?.completedAt ? Date.parse(item.client.completedAt) : null
-  const mockAbortAt = mockAborted?.observedAt ? Date.parse(mockAborted.observedAt) : null
+  const mockInterruptionAt = [mockAborted, mockClosed?.incompleteResponse ? mockClosed : null]
+    .filter(Boolean)
+    .map((event) => Date.parse(event.observedAt))
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right)[0] ?? null
 
   return {
     requestId: item.requestId,
@@ -164,7 +168,8 @@ function normalize(item) {
     },
     duplicateCallbacks,
     clientAbortPrecededMockAbort:
-      Boolean(item.client?.deadlineAbort && clientCompletedAt && mockAbortAt && clientCompletedAt <= mockAbortAt),
+      Boolean(item.client?.deadlineAbort && clientCompletedAt && mockInterruptionAt
+        && clientCompletedAt <= mockInterruptionAt),
     correlationCompleteness: completeness,
   }
 }
