@@ -19,7 +19,8 @@ public class AdmissionEndpoint {
     @ReadOperation
     public Map<String, Object> snapshot() {
         return Map.of("capturedAtEpochMs", System.currentTimeMillis(),
-                "mode", gate.isPerOutboundCall() ? "PER_OUTBOUND_CALL" : "FULL_PATH",
+                "mode", gate.getMode().name(),
+                "scope", gate.isPerOutboundCall() ? "PER_OUTBOUND_CALL" : "FULL_PATH",
                 "admission", gate.snapshot(), "stages", gate.stageSnapshot());
     }
 }

@@ -3,6 +3,7 @@ package com.example.doenggameflux.handler;
 import com.example.doenggameflux.component.AiCapacityExceededException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +14,7 @@ public class AiCapacityExceptionHandler {
     @ExceptionHandler(AiCapacityExceededException.class)
     public ResponseEntity<Map<String, String>> handle(AiCapacityExceededException error) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .header(HttpHeaders.RETRY_AFTER, "1")
                 .body(Map.of("error", "AI_CAPACITY_EXCEEDED"));
     }
 }

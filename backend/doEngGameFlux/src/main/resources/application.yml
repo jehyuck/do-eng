@@ -19,6 +19,9 @@ doeng:
     ai:
       enabled: ${DOENG_AI_ADMISSION_ENABLED:false}
       max-concurrent: ${DOENG_AI_ADMISSION_MAX_CONCURRENT:320}
+      mode: ${DOENG_ADMISSION_MODE:OFF}
+      # The two legacy names are accepted only as a scope compatibility path.
+      scope: ${DOENG_ADMISSION_SCOPE:${DOENG_ADMISSION_AI_MODE:${DOENG_AI_ADMISSION_MODE:FULL_PATH}}}
   mission:
     max-request-bytes: ${DOENG_MISSION_MAX_REQUEST_BYTES:2097152}
   storage:
