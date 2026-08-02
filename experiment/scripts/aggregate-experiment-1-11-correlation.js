@@ -11,6 +11,7 @@ const clientArtifact = JSON.parse(
 const mockArtifact = JSON.parse(
   fs.readFileSync(path.join(runDirectory, "mock-requests.json"), "utf8").replace(/^\uFEFF/, ""),
 )
+const expectedRunId = clientArtifact.summary?.experimentRunId || path.basename(runDirectory)
 
 const joined = new Map()
 const connectionEvents = []
@@ -30,7 +31,7 @@ function row(requestId) {
 }
 
 function field(text, name) {
-  const match = text.match(new RegExp(`${name}=([^,}]*)`))
+  const match = text.match(new RegExp(`${name}=([^,}\\s]+)`))
   if (!match) return null
   const value = match[1].trim()
   return value === "null" || value === "uncommitted" ? null : value
@@ -62,6 +63,7 @@ for (const event of mockArtifact.aiLifecycleEvents || []) {
     connectionEvents.push(event)
     continue
   }
+  if (event.experimentRunId && event.experimentRunId !== expectedRunId) continue
   row(event.requestId).mockEvents.push(event)
 }
 
@@ -70,6 +72,7 @@ async function readApplicationLog() {
   const lines = readline.createInterface({ input: stream, crlfDelay: Infinity })
   for await (const line of lines) {
     if (line.includes("DOENG_INBOUND_EVENT")) {
+      if (field(line, "runId") !== expectedRunId) continue
       const requestId = field(line, "requestId")
       if (!requestId) continue
       row(requestId).inboundEvents.push({
@@ -80,6 +83,7 @@ async function readApplicationLog() {
         signalError: field(line, "signalError"),
       })
     } else if (line.includes("DOENG_STAGE_EVENT")) {
+      if (field(line, "runId") !== expectedRunId) continue
       const requestId = field(line, "requestId")
       if (!requestId) continue
       row(requestId).stageEvents.push({
@@ -90,6 +94,7 @@ async function readApplicationLog() {
         rootCauseClass: field(line, "rootCauseClass"),
       })
     } else if (line.includes("experiment_request")) {
+      if (field(line, "runId") !== expectedRunId) continue
       const requestId = field(line, "requestId")
       if (!requestId) continue
       row(requestId).responseEvent = {
