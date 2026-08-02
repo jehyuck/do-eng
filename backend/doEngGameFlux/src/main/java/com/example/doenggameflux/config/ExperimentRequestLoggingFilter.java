@@ -1,5 +1,6 @@
 package com.example.doenggameflux.config;
 
+import com.example.doenggameflux.component.RequestIdentity;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class ExperimentRequestLoggingFilter implements WebFilter {
 
-    public static final String RUN_ID_HEADER = "X-Experiment-Run-Id";
-    public static final String REQUEST_ID_HEADER = "X-Experiment-Request-Id";
+    public static final String RUN_ID_HEADER = RequestIdentity.EXPERIMENT_RUN_ID_HEADER;
+    public static final String REQUEST_ID_HEADER = RequestIdentity.EXPERIMENT_REQUEST_ID_HEADER;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {

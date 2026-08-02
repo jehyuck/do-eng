@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.ClientRequest;
-import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
 
@@ -206,18 +204,7 @@ public class ExternalHttpClientConfig {
         httpClient = TransportHttpClientObservation.instrument(
                 httpClient, stage, transportLogger, transportProperties.isEnabled());
         return WebClient.builder()
-                .filter((request, next) -> Mono.deferContextual(context -> {
-                    ClientRequest.Builder builder = ClientRequest.from(request);
-                    String requestId = context.getOrDefault(
-                            TransportRequestObservationFilter.class.getName(), null);
-                    if (requestId != null) {
-                        builder.header("X-Experiment-Request-Id", requestId);
-                        builder.header("X-Mission-Run-Id",
-                                context.getOrDefault("doeng.missionRunId", ""));
-                    }
-                    builder.header("X-Experiment-Stage", stage);
-                    return next.exchange(builder.build());
-                }))
+                .defaultHeader("X-Experiment-Stage", stage)
                 .clientConnector(new ReactorClientHttpConnector(httpClient));
     }
 }

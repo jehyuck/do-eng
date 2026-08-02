@@ -5,6 +5,7 @@ import com.example.doenggameflux.component.DBComponentHttp;
 import com.example.doenggameflux.component.DiagnosticErrorLogger;
 import com.example.doenggameflux.component.StageObservation;
 import com.example.doenggameflux.component.TokenComponent;
+import com.example.doenggameflux.component.RequestIdentity;
 import com.example.doenggameflux.dto.request.ImageRequestDto;
 import com.example.doenggameflux.dto.response.AiDecisionResultDto;
 import com.example.doenggameflux.util.ImagePayloadDecoder;
@@ -138,7 +139,7 @@ public class AiGameController {
                                 .body(error.getResponseBodyAsString())));
     }
 
-    private Mono<AiDecisionResultDto> requestDecision(
+    Mono<AiDecisionResultDto> requestDecision(
             ImageRequestDto image,
             String answer,
             String aiPath) {
@@ -146,16 +147,34 @@ public class AiGameController {
         request.put("answer", answer);
         request.put("image", image.getImage());
 
-        return aiWebClient.post()
-                .uri(aiPath)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue(request)
-                .retrieve()
-                // The deployed AI still returns an image echo. REST storage
-                // intentionally consumes only its decision and retains the
-                // original request image for a successful upload.
-                .bodyToMono(AiDecisionResultDto.class);
+        return Mono.deferContextual(contextView -> {
+            RequestIdentity identity = RequestIdentity.from(contextView);
+            WebClient.RequestBodySpec requestSpec = aiWebClient.post()
+                    .uri(aiPath)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON);
+            if (identity.hasExperimentRequestId()) {
+                requestSpec.headers(headers -> {
+                    headers.set(RequestIdentity.EXPERIMENT_REQUEST_ID_HEADER,
+                            identity.getExperimentRequestId());
+                    if (identity.getExperimentRunId() != null) {
+                        headers.set(RequestIdentity.EXPERIMENT_RUN_ID_HEADER,
+                                identity.getExperimentRunId());
+                    }
+                    if (identity.getMissionRunId() != null) {
+                        headers.set(RequestIdentity.MISSION_RUN_ID_HEADER,
+                                identity.getMissionRunId());
+                    }
+                });
+            }
+            return requestSpec
+                    .bodyValue(request)
+                    .retrieve()
+                    // The deployed AI still returns an image echo. REST storage
+                    // intentionally consumes only its decision and retains the
+                    // original request image for a successful upload.
+                    .bodyToMono(AiDecisionResultDto.class);
+        });
     }
 
     private Mono<ResponseEntity<String>> completeIfMatched(

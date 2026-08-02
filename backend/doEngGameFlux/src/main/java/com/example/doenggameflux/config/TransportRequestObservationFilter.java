@@ -1,5 +1,6 @@
 package com.example.doenggameflux.config;
 
+import com.example.doenggameflux.component.RequestIdentity;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,7 +22,6 @@ import reactor.core.publisher.SignalType;
 @Slf4j
 public class TransportRequestObservationFilter implements WebFilter {
 
-    private static final String CONTEXT_KEY = TransportRequestObservationFilter.class.getName();
     private final TransportAttributionProperties properties;
 
     @Override
@@ -29,12 +29,11 @@ public class TransportRequestObservationFilter implements WebFilter {
         if (!properties.isEnabled()) {
             return chain.filter(exchange);
         }
-        String requestId = exchange.getRequest().getHeaders().getFirst("X-Experiment-Request-Id");
-        if (requestId == null || requestId.isBlank()) {
-            return chain.filter(exchange);
-        }
-        String runId = exchange.getRequest().getHeaders().getFirst("X-Experiment-Run-Id");
-        String missionRunId = exchange.getRequest().getHeaders().getFirst("X-Mission-Run-Id");
+        RequestIdentity identity = RequestIdentity.fromHeaders(exchange.getRequest().getHeaders());
+        if (!identity.hasExperimentRequestId()) return chain.filter(exchange);
+        String requestId = identity.getExperimentRequestId();
+        String runId = identity.getExperimentRunId();
+        String missionRunId = identity.getMissionRunId();
         long started = System.nanoTime();
         event("RECEIVED", exchange, requestId, runId, missionRunId, null, started);
         return chain.filter(exchange)
@@ -44,9 +43,7 @@ public class TransportRequestObservationFilter implements WebFilter {
                                 requestId, runId, missionRunId, signal.getThrowable(), started);
                     }
                 })
-                .contextWrite(context -> context
-                        .put(CONTEXT_KEY, requestId)
-                        .put("doeng.missionRunId", missionRunId == null ? "" : missionRunId));
+                .contextWrite(identity::writeTo);
     }
 
     private void event(String phase, ServerWebExchange exchange, String requestId, String runId,

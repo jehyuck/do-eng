@@ -319,6 +319,7 @@ async function submitFrame(user) {
     controller.abort()
   }, requestTimeoutMs)
   const startedAt = Date.now()
+  const requestStartedAt = new Date(startedAt).toISOString()
 
   inFlight += 1
   maxInFlight = Math.max(maxInFlight, inFlight)
@@ -364,6 +365,8 @@ async function submitFrame(user) {
       status: response.status,
       body,
       latencyMs: Date.now() - startedAt,
+      requestStartedAt,
+      completedAt: new Date().toISOString(),
       error: null,
       transport: null,
     })
@@ -398,6 +401,8 @@ async function submitFrame(user) {
       status: null,
       body: null,
       latencyMs: Date.now() - startedAt,
+      requestStartedAt,
+      completedAt: new Date().toISOString(),
       error: error.name,
       transport: transport || transportError(error, "PHASE_FETCH_HEADERS", deadlineAborted),
     })

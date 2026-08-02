@@ -8,6 +8,7 @@ const defaultAiState = {
   result: String(process.env.MOCK_AI_RESULT || "false").toLowerCase() === "true",
   delayMs: Number(process.env.MOCK_AI_DELAY_MS || 0),
   status: Number(process.env.MOCK_AI_STATUS || 200),
+  closeBeforeResponse: false,
 }
 
 let aiState = { ...defaultAiState }
@@ -19,6 +20,9 @@ let storageState = { ...defaultStorageState }
 const storedObjects = new Map()
 let requestSequence = 0
 let observedRequests = []
+let aiLifecycleEvents = []
+let socketSequence = 0
+const socketIds = new WeakMap()
 let aiInFlight = 0
 let aiMaxInFlight = 0
 let aiCompleted = 0
@@ -42,6 +46,31 @@ function observeRequest(request, pathname) {
     contentLength: Number(request.headers["content-length"] || 0),
     experimentRunId: request.headers["x-experiment-run-id"] || null,
     experimentRequestId: request.headers["x-experiment-request-id"] || null,
+  })
+}
+
+function getSocketId(socket) {
+  if (!socket) return null
+  if (!socketIds.has(socket)) {
+    socketSequence += 1
+    socketIds.set(socket, `socket-${socketSequence}`)
+  }
+  return socketIds.get(socket)
+}
+
+function observeAiLifecycle(event, request, state, extra = {}) {
+  const { socket: connectionSocket, ...details } = extra
+  aiLifecycleEvents.push({
+    event,
+    observedAt: new Date().toISOString(),
+    requestId: request?.headers?.["x-experiment-request-id"] || null,
+    experimentRunId: request?.headers?.["x-experiment-run-id"] || null,
+    missionRunId: request?.headers?.["x-mission-run-id"] || null,
+    socketId: getSocketId(request?.socket || connectionSocket),
+    responseFinished: state?.responseFinished ?? null,
+    responseWriteStarted: state?.writeStarted ?? null,
+    requestAborted: state?.requestAborted ?? null,
+    ...details,
   })
 }
 
@@ -223,6 +252,10 @@ const server = http.createServer(async (request, response) => {
         result: body.result === undefined ? aiState.result : Boolean(body.result),
         delayMs: body.delayMs === undefined ? aiState.delayMs : Number(body.delayMs),
         status: body.status === undefined ? aiState.status : Number(body.status),
+        closeBeforeResponse:
+          body.closeBeforeResponse === undefined
+            ? aiState.closeBeforeResponse
+            : Boolean(body.closeBeforeResponse),
       }
       storageState = {
         delayMs:
@@ -248,6 +281,7 @@ const server = http.createServer(async (request, response) => {
     storedObjects.clear()
     requestSequence = 0
     observedRequests = []
+    aiLifecycleEvents = []
     aiInFlight = 0
     aiMaxInFlight = 0
     aiCompleted = 0
@@ -267,6 +301,7 @@ const server = http.createServer(async (request, response) => {
     sendJson(response, 200, {
       counts: requestCounts(),
       requests: observedRequests,
+      aiLifecycleEvents,
     })
     return
   }
@@ -285,6 +320,7 @@ const server = http.createServer(async (request, response) => {
       authLoginCompleted,
       authLoginFailures,
       resetGeneration,
+      aiLifecycleEventCount: aiLifecycleEvents.length,
       requestCounts: requestCounts(),
     })
     return
@@ -348,6 +384,34 @@ const server = http.createServer(async (request, response) => {
   if (request.method === "POST" && isAnalyzePath(url.pathname)) {
     observeRequest(request, url.pathname)
     const requestGeneration = resetGeneration
+    const lifecycle = {
+      requestReceived: true,
+      delayStarted: false,
+      writeStarted: false,
+      responseFinished: false,
+      requestAborted: false,
+      requestClosed: false,
+      responseClosed: false,
+    }
+    observeAiLifecycle("MOCK_AI_REQUEST_RECEIVED", request, lifecycle)
+    request.once("aborted", () => {
+      lifecycle.requestAborted = true
+      observeAiLifecycle("MOCK_AI_REQUEST_ABORTED", request, lifecycle)
+    })
+    request.once("close", () => {
+      lifecycle.requestClosed = true
+      observeAiLifecycle("MOCK_AI_REQUEST_CLOSED", request, lifecycle)
+    })
+    response.once("finish", () => {
+      lifecycle.responseFinished = true
+      observeAiLifecycle("MOCK_AI_RESPONSE_FINISHED", request, lifecycle)
+    })
+    response.once("close", () => {
+      lifecycle.responseClosed = true
+      observeAiLifecycle("MOCK_AI_RESPONSE_CLOSED", request, lifecycle, {
+        incompleteResponse: !lifecycle.responseFinished,
+      })
+    })
     try {
       const body = await readJson(request)
       const snapshot = { ...aiState }
@@ -355,9 +419,17 @@ const server = http.createServer(async (request, response) => {
         aiInFlight += 1
         aiMaxInFlight = Math.max(aiMaxInFlight, aiInFlight)
       }
+      lifecycle.delayStarted = true
+      observeAiLifecycle("MOCK_AI_DELAY_STARTED", request, lifecycle)
 
       setTimeout(() => {
         try {
+          if (snapshot.closeBeforeResponse) {
+            request.socket.destroy()
+            return
+          }
+          lifecycle.writeStarted = true
+          observeAiLifecycle("MOCK_AI_RESPONSE_WRITE_STARTED", request, lifecycle)
           if (snapshot.status >= 400) {
             sendJson(response, snapshot.status, {
               error: "mock AI failure",
@@ -384,6 +456,26 @@ const server = http.createServer(async (request, response) => {
   }
 
   sendJson(response, 404, { error: "not found" })
+})
+
+server.on("connection", (socket) => {
+  getSocketId(socket)
+  socket.once("close", (hadError) => {
+    observeAiLifecycle("MOCK_AI_SOCKET_CLOSED", null, null, {
+      socket,
+      connectionLevel: true,
+      hadError: Boolean(hadError),
+    })
+  })
+  socket.once("error", (error) => {
+    observeAiLifecycle("MOCK_AI_SOCKET_ERROR", null, null, {
+      socket,
+      connectionLevel: true,
+      errorClass: error.name || null,
+      errorMessage: error.message || null,
+      errorCode: error.code || null,
+    })
+  })
 })
 
 server.listen(port, "0.0.0.0", () => {

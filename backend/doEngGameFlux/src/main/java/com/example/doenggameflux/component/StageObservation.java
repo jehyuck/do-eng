@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
 
 /** Low-overhead, opt-in stage counters. It never changes publisher semantics. */
@@ -17,10 +19,21 @@ import reactor.core.publisher.Mono;
 public class StageObservation {
 
     private final StageObservationProperties properties;
+    private final DiagnosticErrorLogger diagnosticLogger;
     private final Map<String, StageStats> stages = new ConcurrentHashMap<>();
 
-    public StageObservation(StageObservationProperties properties) {
+    @Autowired
+    public StageObservation(
+            StageObservationProperties properties,
+            DiagnosticErrorLogger diagnosticLogger) {
         this.properties = properties;
+        this.diagnosticLogger = diagnosticLogger;
+    }
+
+    public StageObservation(StageObservationProperties properties) {
+        this(properties, new DiagnosticErrorLogger(
+                new com.example.doenggameflux.config.DiagnosticProperties(),
+                new com.example.doenggameflux.config.TransportAttributionProperties()));
     }
 
     public <T> Mono<T> observe(String stage, Mono<T> source) {
@@ -28,21 +41,35 @@ public class StageObservation {
             return source;
         }
         StageStats stats = stages.computeIfAbsent(stage, ignored -> new StageStats());
-        return Mono.defer(() -> {
-            long started = System.nanoTime();
-            stats.started.increment();
-            int current = stats.inFlight.incrementAndGet();
-            stats.maxInFlight.accumulateAndGet(current, Math::max);
-            stats.lastThread = Thread.currentThread().getName();
-            return source
-                    .doOnSuccess(value -> stats.succeeded.increment())
-                    .doOnError(error -> stats.failed.increment())
+        return Mono.deferContextual(contextView -> {
+            RequestIdentity identity = RequestIdentity.from(contextView);
+            AtomicLong subscriptionStartedAt = new AtomicLong();
+            return Mono.defer(() -> source)
+                    .doOnSubscribe(ignored -> {
+                        subscriptionStartedAt.set(System.nanoTime());
+                        stats.started.increment();
+                        int current = stats.inFlight.incrementAndGet();
+                        stats.maxInFlight.accumulateAndGet(current, Math::max);
+                        stats.lastThread = Thread.currentThread().getName();
+                        diagnosticLogger.logStageEvent(identity, stage, "STAGE_STARTED", null);
+                    })
+                    .doOnSuccess(value -> {
+                        stats.succeeded.increment();
+                        diagnosticLogger.logStageEvent(identity, stage, "STAGE_SUCCEEDED", null);
+                    })
+                    .doOnError(error -> {
+                        stats.failed.increment();
+                        diagnosticLogger.logStageEvent(identity, stage, "STAGE_FAILED", error);
+                    })
                     .doFinally(signal -> {
-                        stats.durationNanos.add(System.nanoTime() - started);
+                        long started = subscriptionStartedAt.get();
+                        if (started != 0) stats.durationNanos.add(System.nanoTime() - started);
                         stats.inFlight.decrementAndGet();
                         if (signal == reactor.core.publisher.SignalType.CANCEL) {
                             stats.cancelled.increment();
+                            diagnosticLogger.logStageEvent(identity, stage, "STAGE_CANCELLED", null);
                         }
+                        diagnosticLogger.logStageEvent(identity, stage, "STAGE_TERMINATED", null);
                     });
         });
     }
