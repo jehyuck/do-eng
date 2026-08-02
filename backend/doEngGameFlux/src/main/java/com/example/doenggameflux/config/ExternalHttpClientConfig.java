@@ -202,7 +202,8 @@ public class ExternalHttpClientConfig {
             httpClient = httpClient.metrics(true, uri -> uri);
         }
         httpClient = TransportHttpClientObservation.instrument(
-                httpClient, stage, transportLogger, transportProperties.isEnabled());
+                httpClient, stage, provider.name(), transportLogger,
+                transportProperties.isEnabled());
         return WebClient.builder()
                 .defaultHeader("X-Experiment-Stage", stage)
                 .clientConnector(new ReactorClientHttpConnector(httpClient));

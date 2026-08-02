@@ -1,0 +1,60 @@
+services:
+  flux-corrected:
+    image: doeng-flux-exp112-connection-20260802:latest
+    build: null
+    environment:
+      DOENG_DIAGNOSTIC_ENABLED: "false"
+      DOENG_TRANSPORT_ATTRIBUTION_ENABLED: "true"
+      DOENG_POOL_OBSERVATION_ENABLED: "true"
+      DOENG_STAGE_OBSERVATION_ENABLED: "true"
+      DOENG_AI_ADMISSION_ENABLED: "true"
+      DOENG_ADMISSION_MODE: "ENFORCE"
+      DOENG_ADMISSION_SCOPE: "FULL_PATH"
+      DOENG_AI_ADMISSION_MAX_CONCURRENT: "${DOENG_ADMISSION_MAX_CONCURRENT:-320}"
+      DOENG_EXTERNAL_POOL_MODE: "SHARED"
+      DOENG_HTTP_MAX_CONNECTIONS: "400"
+      DOENG_SHARED_POOL_MAX_CONNECTIONS: "400"
+      DOENG_SHARED_POOL_PENDING_MAX_COUNT: "800"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics,doengdiagnosticpool,doengstages,doengadmission"
+
+  capture-application:
+    image: nicolaka/netshoot:v0.13
+    network_mode: "service:flux-corrected"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    depends_on:
+      flux-corrected:
+        condition: service_started
+    volumes:
+      - type: bind
+        source: "${EXP112_CAPTURE_ROOT}/application"
+        target: /capture
+    command:
+      - sh
+      - -lc
+      - >-
+        exec tcpdump -i any -nn -s 96 -U -Z root
+        -w /capture/application-control.pcap
+        'tcp port 9100 and (tcp[tcpflags] & (tcp-syn|tcp-fin|tcp-rst) != 0)'
+
+  capture-mock:
+    image: nicolaka/netshoot:v0.13
+    network_mode: "service:experiment-mock"
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    depends_on:
+      experiment-mock:
+        condition: service_started
+    volumes:
+      - type: bind
+        source: "${EXP112_CAPTURE_ROOT}/mock"
+        target: /capture
+    command:
+      - sh
+      - -lc
+      - >-
+        exec tcpdump -i any -nn -s 96 -U -Z root
+        -w /capture/mock-control.pcap
+        'tcp port 9100 and (tcp[tcpflags] & (tcp-syn|tcp-fin|tcp-rst) != 0)'

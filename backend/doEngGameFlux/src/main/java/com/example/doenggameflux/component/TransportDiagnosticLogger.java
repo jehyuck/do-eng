@@ -63,6 +63,46 @@ public class TransportDiagnosticLogger {
         log.info("DOENG_TRANSPORT_EVENT {}", event);
     }
 
+    public void logConnectionEvent(
+            String stage,
+            String phase,
+            String state,
+            Map<String, Object> connection,
+            Throwable error) {
+        if (!properties.isEnabled()) return;
+        Map<String, Object> event = new LinkedHashMap<>();
+        event.put("transportDiagnostic", true);
+        event.put("timestamp", Instant.now().toString());
+        event.put("stage", stage);
+        event.put("phase", phase);
+        event.put("state", state);
+        event.putAll(connection);
+        event.put("exceptionClass", error == null ? null : error.getClass().getName());
+        event.put("rootCauseClass", error == null ? null : rootCause(error).getClass().getName());
+        event.put("rootCauseMessage", error == null ? null : rootCause(error).getMessage());
+        event.put("thread", Thread.currentThread().getName());
+        if (error == null) log.info("DOENG_CONNECTION_EVENT {}", event);
+        else log.warn("DOENG_CONNECTION_EVENT {}", event);
+    }
+
+    public void logRequestChannelBound(
+            String requestId,
+            String runId,
+            String missionRunId,
+            Map<String, Object> connection) {
+        if (!properties.isEnabled()) return;
+        Map<String, Object> event = new LinkedHashMap<>();
+        event.put("transportDiagnostic", true);
+        event.put("timestamp", Instant.now().toString());
+        event.put("event", "AI_REQUEST_CHANNEL_BOUND");
+        event.put("experimentRequestId", requestId);
+        event.put("experimentRunId", runId);
+        event.put("missionRunId", missionRunId);
+        event.putAll(connection);
+        event.put("thread", Thread.currentThread().getName());
+        log.info("DOENG_REQUEST_CHANNEL_EVENT {}", event);
+    }
+
     private Throwable rootCause(Throwable error) {
         Throwable root = error;
         int depth = 0;

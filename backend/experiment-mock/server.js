@@ -23,6 +23,7 @@ let observedRequests = []
 let aiLifecycleEvents = []
 let socketSequence = 0
 const socketIds = new WeakMap()
+const socketMetadata = new WeakMap()
 let aiInFlight = 0
 let aiMaxInFlight = 0
 let aiCompleted = 0
@@ -58,15 +59,50 @@ function getSocketId(socket) {
   return socketIds.get(socket)
 }
 
+function snapshotSocket(socket) {
+  if (!socket) return {
+    mockChannelId: null,
+    localAddress: null,
+    localPort: null,
+    remoteAddress: null,
+    remotePort: null,
+  }
+  if (!socketMetadata.has(socket)) {
+    socketMetadata.set(socket, {
+      mockChannelId: getSocketId(socket),
+      localAddress: socket.localAddress || null,
+      localPort: socket.localPort || null,
+      remoteAddress: socket.remoteAddress || null,
+      remotePort: socket.remotePort || null,
+    })
+  }
+  return socketMetadata.get(socket)
+}
+
+function observeConnection(event, socket, extra = {}) {
+  aiLifecycleEvents.push({
+    event,
+    observedAt: new Date().toISOString(),
+    requestId: null,
+    experimentRunId: null,
+    missionRunId: null,
+    connectionLevel: true,
+    ...snapshotSocket(socket),
+    ...extra,
+  })
+}
+
 function observeAiLifecycle(event, request, state, extra = {}) {
   const { socket: connectionSocket, ...details } = extra
+  const socket = request?.socket || connectionSocket
   aiLifecycleEvents.push({
     event,
     observedAt: new Date().toISOString(),
     requestId: request?.headers?.["x-experiment-request-id"] || null,
     experimentRunId: request?.headers?.["x-experiment-run-id"] || null,
     missionRunId: request?.headers?.["x-mission-run-id"] || null,
-    socketId: getSocketId(request?.socket || connectionSocket),
+    socketId: getSocketId(socket),
+    ...snapshotSocket(socket),
     responseFinished: state?.responseFinished ?? null,
     responseWriteStarted: state?.writeStarted ?? null,
     requestAborted: state?.requestAborted ?? null,
@@ -459,8 +495,16 @@ const server = http.createServer(async (request, response) => {
 })
 
 server.on("connection", (socket) => {
-  getSocketId(socket)
+  snapshotSocket(socket)
+  observeConnection("MOCK_CONNECTION_ACCEPTED", socket)
+  observeConnection("MOCK_CONNECTION_ACTIVE", socket)
+  socket.once("end", () => {
+    observeConnection("MOCK_CONNECTION_INACTIVE", socket)
+  })
   socket.once("close", (hadError) => {
+    observeConnection("MOCK_CONNECTION_CLOSED", socket, {
+      hadError: Boolean(hadError),
+    })
     observeAiLifecycle("MOCK_AI_SOCKET_CLOSED", null, null, {
       socket,
       connectionLevel: true,
@@ -468,6 +512,11 @@ server.on("connection", (socket) => {
     })
   })
   socket.once("error", (error) => {
+    observeConnection("MOCK_CONNECTION_EXCEPTION", socket, {
+      errorClass: error.name || null,
+      errorMessage: error.message || null,
+      errorCode: error.code || null,
+    })
     observeAiLifecycle("MOCK_AI_SOCKET_ERROR", null, null, {
       socket,
       connectionLevel: true,
