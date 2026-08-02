@@ -2,7 +2,8 @@ param(
     [Parameter(Mandatory = $true)][string]$RunId,
     [ValidateSet("scout", "core")][string]$RunKind = "core",
     [string]$ComposeOverlay = "backend\docker-compose.experiment-1-4-before.yaml",
-    [ValidateRange(0, 60000)][int]$AiDelayMs = 2000
+    [ValidateRange(0, 60000)][int]$AiDelayMs = 2000,
+    [string]$ComposeProject = "doeng-exp13"
 )
 
 $ErrorActionPreference = "Stop"
@@ -37,7 +38,7 @@ function Start-Collector([string]$ScriptName, [string]$OutputName, [int]$Duratio
 
 $previousErrorAction = $ErrorActionPreference
 $ErrorActionPreference = "Continue"
-docker compose -p doeng-exp13 @composeArgs up -d --force-recreate flux-corrected | Out-Null
+docker compose -p $ComposeProject @composeArgs up -d --force-recreate flux-corrected | Out-Null
 $composeExit = $LASTEXITCODE
 $ErrorActionPreference = $previousErrorAction
 if ($composeExit -ne 0) { throw "compose recreate failed with exit $composeExit" }
@@ -52,7 +53,7 @@ if ($null -eq $health -or $health.status -ne "UP") { throw "management health is
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run-isolated-vu-success-smoke.ps1") `
     -RunId $warmupId -Implementation webflux -TargetUrl http://127.0.0.1:8001/game/face `
-    -ServerService flux-corrected -ComposeProject doeng-exp13 -ComposeFiles $composeArg `
+    -ServerService flux-corrected -ComposeProject $ComposeProject -ComposeFiles $composeArg `
     -ActiveMissions 20 -AiDelayMs $AiDelayMs -StorageDelayMs 100 -IntervalMs 1000 `
     -DurationMs 5000 -RequestTimeoutMs 10000 -TargetP95Ms 10000 `
     -EnableObservability 0 -OutcomeMode controlled-admission -AccountingMode corrected -DrainObservationSeconds 10 `
@@ -65,7 +66,7 @@ try {
     }
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run-isolated-vu-success-smoke.ps1") `
         -RunId $RunId -Implementation webflux -TargetUrl http://127.0.0.1:8001/game/face `
-        -ServerService flux-corrected -ComposeProject doeng-exp13 -ComposeFiles $composeArg `
+        -ServerService flux-corrected -ComposeProject $ComposeProject -ComposeFiles $composeArg `
         -ActiveMissions 200 -AiDelayMs $AiDelayMs -StorageDelayMs 100 -IntervalMs 1000 `
         -DurationMs 105000 -RequestTimeoutMs 10000 -TargetP95Ms 10000 `
         -EnableObservability 1 -EnableJfr 0 -EnableContainerMonitor 1 `

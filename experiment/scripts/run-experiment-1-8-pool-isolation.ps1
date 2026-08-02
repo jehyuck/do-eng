@@ -15,7 +15,7 @@ try {
         -File (Join-Path $PSScriptRoot "run-experiment-1-4-before.ps1") `
         -RunId $RunId -RunKind core `
         -ComposeOverlay "backend\docker-compose.experiment-1-8-pool-isolation.yaml" `
-        -AiDelayMs 2000
+        -AiDelayMs 2000 -ComposeProject "doeng-exp18"
     if ($LASTEXITCODE -ne 0) {
         throw "Experiment 1-8 $RunKind failed: exit code $LASTEXITCODE"
     }
