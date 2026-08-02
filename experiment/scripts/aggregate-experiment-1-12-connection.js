@@ -109,6 +109,17 @@ function uniqueBy(items, key) {
   })
 }
 
+function addToIndex(index, key, value) {
+  if (!key) return
+  if (!index.has(key)) index.set(key, [])
+  index.get(key).push(value)
+}
+
+function channelLeaseKey(channelIdLong, leaseSequence) {
+  if (!channelIdLong || leaseSequence === null || leaseSequence === undefined) return null
+  return `${channelIdLong}|${leaseSequence}`
+}
+
 async function main() {
   const client = readJson("client-results.json")
   const baseRows = fs.readFileSync(path.join(runDirectory, "correlation-join.jsonl"), "utf8")
@@ -166,6 +177,12 @@ async function main() {
     }
   }
 
+  const applicationEventsByChannelLease = new Map()
+  for (const event of applicationEvents) {
+    addToIndex(applicationEventsByChannelLease,
+      channelLeaseKey(event.channelIdLong, event.leaseSequence), event)
+  }
+
   const mockEvents = mock.aiLifecycleEvents || []
   const mockRequests = new Map()
   const mockConnectionsByTuple = new Map()
@@ -189,6 +206,8 @@ async function main() {
     packet.destinationAddress, packet.destinationPort, packet.flags,
     packet.sequence, packet.acknowledgement,
   ].join("|"))
+  const packetsByTuple = new Map()
+  for (const packet of packets) addToIndex(packetsByTuple, packet.tuple, packet)
 
   const rows = baseRows.map((base) => {
     const binding = bindings.get(base.requestId) || null
@@ -201,17 +220,19 @@ async function main() {
       .map((event) => event.mockChannelId || event.socketId).filter(Boolean))]
     const bindingAt = binding?.timestamp ? Date.parse(binding.timestamp) : null
     const clientEndAt = base.client?.completedAt ? Date.parse(base.client.completedAt) : null
-    const channelErrors = binding ? applicationEvents.filter((event) =>
-      event.channelIdLong === binding.channelIdLong
-      && event.leaseSequence === binding.leaseSequence
-      && ["PREMATURE_CLOSE", "REQUEST_SEND_ERROR", "RESPONSE_ERROR", "CHANNEL_INACTIVE", "EXCEPTION_CAUGHT"]
-        .includes(event.phase)) : []
+    const leaseEvents = binding
+      ? (applicationEventsByChannelLease.get(
+        channelLeaseKey(binding.channelIdLong, binding.leaseSequence)) || [])
+      : []
+    const channelErrors = leaseEvents.filter((event) =>
+      ["PREMATURE_CLOSE", "REQUEST_SEND_ERROR", "RESPONSE_ERROR", "CHANNEL_INACTIVE", "EXCEPTION_CAUGHT"]
+        .includes(event.phase))
     const errorAt = channelErrors.map((event) => Date.parse(event.timestamp))
       .filter(Number.isFinite).sort((left, right) => left - right)[0] || null
     const windowEnd = errorAt || clientEndAt || (bindingAt ? bindingAt + 15000 : null)
     const requestPackets = applicationSocketTuple && bindingAt
-      ? packets.filter((packet) => packet.tuple === applicationSocketTuple
-        && packet.timestamp >= bindingAt - 50
+      ? (packetsByTuple.get(applicationSocketTuple) || []).filter((packet) =>
+        packet.timestamp >= bindingAt - 50
         && packet.timestamp <= windowEnd + 2000
         && (packet.flags.includes("F") || packet.flags.includes("R")))
       : []

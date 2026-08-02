@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-08-02T10:54:00+09:00",
+  "mockImageBase": "node:20-alpine",
+  "mockNodeVersion": "v20.20.2",
+  "serverSourceOverridesKeepAliveTimeout": false,
+  "serverSourceOverridesTimeout": false,
+  "serverSourceOverridesMaxRequestsPerSocket": false,
+  "runtimeKeepAliveTimeoutMs": 5000,
+  "runtimeTimeoutMs": 0,
+  "runtimeRequestTimeoutMs": 300000,
+  "runtimeHeadersTimeoutMs": 60000,
+  "runtimeMaxRequestsPerSocket": 0,
+  "responseConnectionHeader": "keep-alive",
+  "responseKeepAliveHeader": "timeout=5",
+  "baselineClientMaxIdleTimeMs": 0,
+  "remediationClientMaxIdleTimeMs": 4000,
+  "relationship": "remediation client maxIdleTime 4000ms < mock keepAliveTimeout 5000ms"
+}

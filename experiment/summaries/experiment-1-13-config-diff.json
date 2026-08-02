@@ -1,0 +1,8 @@
+{
+  "generatedAt": "2026-08-02T10:54:50.801Z",
+  "baselineClientMaxIdleTimeMs": 0,
+  "remediationClientMaxIdleTimeMs": 4000,
+  "allowedDifference": "DOENG_EXTERNAL_MAX_IDLE_TIME_MS",
+  "otherwiseIdentical": true,
+  "valid": true
+}

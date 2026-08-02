@@ -1,0 +1,6 @@
+services:
+  flux-corrected:
+    image: doeng-flux-exp113-idle-20260802:latest
+    build: null
+    environment:
+      DOENG_EXTERNAL_MAX_IDLE_TIME_MS: "${DOENG_EXTERNAL_MAX_IDLE_TIME_MS:-0}"

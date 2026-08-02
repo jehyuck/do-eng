@@ -43,3 +43,4 @@ doeng:
     connect-timeout-ms: ${DOENG_HTTP_CONNECT_TIMEOUT_MS:2000}
     response-timeout-ms: ${DOENG_HTTP_RESPONSE_TIMEOUT_MS:10000}
     pending-acquire-timeout-ms: ${DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS:10000}
+    max-idle-time-ms: ${DOENG_EXTERNAL_MAX_IDLE_TIME_MS:0}

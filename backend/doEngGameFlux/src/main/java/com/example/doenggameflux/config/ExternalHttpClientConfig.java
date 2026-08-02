@@ -155,6 +155,9 @@ public class ExternalHttpClientConfig {
                 .pendingAcquireMaxCount(settings.getPendingAcquireMaxCount())
                 .pendingAcquireTimeout(Duration.ofMillis(
                         properties.getPendingAcquireTimeoutMs()));
+        if (properties.getMaxIdleTimeMs() > 0) {
+            builder.maxIdleTime(Duration.ofMillis(properties.getMaxIdleTimeMs()));
+        }
         if (experimentMetricsEnabled || diagnosticProperties.isEnabled() || poolObservationEnabled) {
             builder.metrics(true);
         }

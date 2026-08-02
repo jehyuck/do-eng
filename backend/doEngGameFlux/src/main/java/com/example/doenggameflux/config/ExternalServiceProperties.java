@@ -20,6 +20,7 @@ public class ExternalServiceProperties {
     private int connectTimeoutMs = 2000;
     private int responseTimeoutMs = 10000;
     private int pendingAcquireTimeoutMs = 10000;
+    private long maxIdleTimeMs = 0;
     private ExternalPoolMode poolMode = ExternalPoolMode.SHARED;
     private PoolSettings sharedPool = new PoolSettings(200, 400);
     private PoolSettings tokenPool = new PoolSettings(40, 80);
@@ -27,6 +28,9 @@ public class ExternalServiceProperties {
     private PoolSettings storagePool = new PoolSettings(40, 80);
 
     public void validatePoolContract() {
+        if (maxIdleTimeMs < 0) {
+            throw new IllegalStateException("max-idle-time-ms must be zero or positive");
+        }
         validateSettings("shared-pool", sharedPool);
         validateSettings("token-pool", tokenPool);
         validateSettings("ai-pool", aiPool);

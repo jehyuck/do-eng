@@ -4,10 +4,23 @@ const path = require("path")
 const runDirectory = path.resolve(process.argv[2] || "")
 if (!runDirectory) throw new Error("run directory is required")
 
+const client = JSON.parse(fs.readFileSync(path.join(runDirectory, "client-results.json"), "utf8")
+  .replace(/^\uFEFF/, ""))
+const measurementStartedAt = Date.parse(client.summary?.startedAt)
+const measurementFinishedAt = Date.parse(client.summary?.finishedAt)
 const events = fs.readFileSync(path.join(runDirectory, "application-connections.jsonl"), "utf8")
   .split(/\r?\n/).filter(Boolean).map(JSON.parse)
 const premature = events.filter((event) =>
-  event.stage === "AI" && event.phase === "PREMATURE_CLOSE")
+  event.stage === "AI"
+    && event.phase === "PREMATURE_CLOSE"
+    && (!Number.isFinite(measurementStartedAt) || Date.parse(event.timestamp) >= measurementStartedAt)
+    && (!Number.isFinite(measurementFinishedAt) || Date.parse(event.timestamp) <= measurementFinishedAt))
+const measurementEvents = events.filter((event) =>
+  (!Number.isFinite(measurementStartedAt) || Date.parse(event.timestamp) >= measurementStartedAt)
+    && (!Number.isFinite(measurementFinishedAt) || Date.parse(event.timestamp) <= measurementFinishedAt))
+const configuredLeases = [...new Map(measurementEvents
+  .filter((event) => event.state === "[configured]")
+  .map((event) => [`${event.channelIdLong}|${event.leaseSequence}`, event])).values()]
 
 function endpoint(value) {
   const separator = value.lastIndexOf(".")
@@ -86,6 +99,9 @@ function count(field, value = true) {
 
 const summary = {
   generatedAt: new Date().toISOString(),
+  runId: client.summary?.experimentRunId || path.basename(runDirectory),
+  measurementStartedAt: client.summary?.startedAt || null,
+  measurementFinishedAt: client.summary?.finishedAt || null,
   scope: "connection-level only; no request ID is inferred",
   prematureConnectionEvents: details.length,
   newChannelEvents: count("connectionClass", "NEW_CHANNEL"),
@@ -94,6 +110,14 @@ const summary = {
   withAcquire: count("acquired"),
   withRequestPrepared: count("requestPrepared"),
   withRequestSent: count("requestSent"),
+  connectionChurn: {
+    distinctChannels: new Set(configuredLeases.map((event) => event.channelIdLong)).size,
+    configuredLeases: configuredLeases.length,
+    newConnectionLeases: configuredLeases.filter((event) =>
+      event.connectionClass === "NEW_CHANNEL").length,
+    reusedConnectionLeases: configuredLeases.filter((event) =>
+      event.connectionClass === "REUSED_CHANNEL").length,
+  },
   firstCloseActor: {
     application: count("firstCloseActor", "APPLICATION"),
     mock: count("firstCloseActor", "MOCK"),
