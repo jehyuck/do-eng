@@ -2,6 +2,8 @@
     "ready":  true,
     "sameImages":  true,
     "allowedPolicyDiff":  true,
+    "baselineCollectorProbe":  "COLLECTOR_PROBE_READY",
+    "remediationCollectorProbe":  "COLLECTOR_PROBE_READY",
     "warmup":  0,
     "k6":  0,
     "core":  0,

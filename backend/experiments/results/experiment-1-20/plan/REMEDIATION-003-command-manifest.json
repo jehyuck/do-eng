@@ -14,13 +14,15 @@
                    "maxIdleTimeMs":  "3000"
                },
     "collector":  {
-                      "managementUrl":  "http://127.0.0.1:9001",
-                      "durationSeconds":  150,
                       "intervalMilliseconds":  1000,
+                      "durationSeconds":  150,
+                      "managementUrl":  "http://127.0.0.1:9001",
                       "finalPaths":  [
                                          "pool/pool-metrics.jsonl",
-                                         "pool/pool-metrics.jsonl.summary.json"
+                                         "pool/pool-metrics.jsonl.summary.json",
+                                         "pool/collector-coverage.json"
                                      ],
+                      "readinessTimeoutSeconds":  10,
                       "stagingPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\collector-staging\\RUN-PLAN-DATE-EXP120-REMEDIATION-003"
                   },
     "workload":  {
@@ -41,10 +43,13 @@
     "orderedSteps":  [
                          "fresh recreate",
                          "warm-up",
-                         "collector start",
-                         "core",
+                         "collector process start timestamp",
+                         "collector readiness",
+                         "core invocation start timestamp",
+                         "core invocation",
+                         "core invocation complete timestamp",
                          "collector completion",
-                         "collector validation",
+                         "collector coverage validation",
                          "artifact copy",
                          "finalization"
                      ]
