@@ -8,10 +8,10 @@
                },
     "stop":  {
                  "runId":  "PROBE-EXP122-REMEDIATION",
-                 "containerId":  "8f0d593f512b4fb60af8992c1f05472bd04621a19fef47bf98f65e0e3af48abc",
+                 "containerId":  "9d38af0e58800fe7897b9cc1a74699f6aa7c2783b56813f30534847b416a4434",
                  "command":  "docker.exe compose -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.app-instance-t3-medium.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.mock-headroom-4cpu.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.http-pool-400.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.mock-memory-headroom.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment-1-12-connection-attribution.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml -p doeng-exp122-post-stop-probe stop -t 15 flux-corrected",
-                 "startedAt":  "2026-08-03T15:29:40.7573148Z",
-                 "completedAt":  "2026-08-03T15:29:44.2286834Z",
+                 "startedAt":  "2026-08-03T15:51:17.4134018Z",
+                 "completedAt":  "2026-08-03T15:51:20.7504525Z",
                  "gracePeriodSeconds":  15,
                  "processTimeoutSeconds":  30,
                  "timedOut":  false,
@@ -25,14 +25,14 @@
                  "processTerminationConfirmed":  false,
                  "stopStatus":  "APPLICATION_CONTAINER_STOPPED",
                  "stdout":  "",
-                 "stderr":  "time=\"2026-08-04T00:29:41+09:00\" level=warning msg=\"The \\\"EXP112_CAPTURE_ROOT\\\" variable is not set. Defaulting to a blank string.\"\ntime=\"2026-08-04T00:29:41+09:00\" level=warning msg=\"The \\\"EXP112_CAPTURE_ROOT\\\" variable is not set. Defaulting to a blank string.\"\n Container doeng-exp122-post-stop-probe-flux-corrected-1 Stopping \n Container doeng-exp122-post-stop-probe-flux-corrected-1 Stopped \n"
+                 "stderr":  "time=\"2026-08-04T00:51:17+09:00\" level=warning msg=\"The \\\"EXP112_CAPTURE_ROOT\\\" variable is not set. Defaulting to a blank string.\"\ntime=\"2026-08-04T00:51:17+09:00\" level=warning msg=\"The \\\"EXP112_CAPTURE_ROOT\\\" variable is not set. Defaulting to a blank string.\"\n Container doeng-exp122-post-stop-probe-flux-corrected-1 Stopping \n Container doeng-exp122-post-stop-probe-flux-corrected-1 Stopped \n"
              },
     "capture":  {
                     "runId":  "PROBE-EXP122-REMEDIATION",
-                    "containerId":  "8f0d593f512b4fb60af8992c1f05472bd04621a19fef47bf98f65e0e3af48abc",
-                    "command":  "docker.exe logs --timestamps 8f0d593f512b4fb60af8992c1f05472bd04621a19fef47bf98f65e0e3af48abc",
-                    "startedAt":  "2026-08-03T15:29:44.3631695Z",
-                    "completedAt":  "2026-08-03T15:29:44.5645174Z",
+                    "containerId":  "9d38af0e58800fe7897b9cc1a74699f6aa7c2783b56813f30534847b416a4434",
+                    "command":  "docker.exe logs --timestamps 9d38af0e58800fe7897b9cc1a74699f6aa7c2783b56813f30534847b416a4434",
+                    "startedAt":  "2026-08-03T15:51:20.8128564Z",
+                    "completedAt":  "2026-08-03T15:51:21.0974942Z",
                     "timeoutSeconds":  30,
                     "timedOut":  false,
                     "processTerminationAttempted":  false,

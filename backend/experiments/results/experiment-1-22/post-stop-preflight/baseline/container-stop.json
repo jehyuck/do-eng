@@ -1,9 +1,9 @@
 ﻿{
     "runId":  "PROBE-EXP122-BASELINE",
-    "containerId":  "80bbf43c795a5c22b71085e9f1c86adbaf16f9314ad4efb515cebac2332adf0b",
+    "containerId":  "29274dfa481583037e5dde9e247226eb56878cf85477e89bac7ea5bd8a4e9462",
     "command":  "docker.exe compose -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.app-instance-t3-medium.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.mock-headroom-4cpu.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.http-pool-400.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.mock-memory-headroom.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment-1-12-connection-attribution.yaml -f D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml -p doeng-exp122-post-stop-probe stop -t 15 flux-corrected",
-    "startedAt":  "2026-08-03T15:29:16.6520579Z",
-    "completedAt":  "2026-08-03T15:29:19.9510338Z",
+    "startedAt":  "2026-08-03T15:50:58.2029700Z",
+    "completedAt":  "2026-08-03T15:51:01.5636534Z",
     "gracePeriodSeconds":  15,
     "processTimeoutSeconds":  30,
     "timedOut":  false,
@@ -17,5 +17,5 @@
     "processTerminationConfirmed":  false,
     "stopStatus":  "APPLICATION_CONTAINER_STOPPED",
     "stdout":  "",
-    "stderr":  "time=\"2026-08-04T00:29:16+09:00\" level=warning msg=\"The \\\"EXP112_CAPTURE_ROOT\\\" variable is not set. Defaulting to a blank string.\"\ntime=\"2026-08-04T00:29:17+09:00\" level=warning msg=\"The \\\"EXP112_CAPTURE_ROOT\\\" variable is not set. Defaulting to a blank string.\"\n Container doeng-exp122-post-stop-probe-flux-corrected-1 Stopping \n Container doeng-exp122-post-stop-probe-flux-corrected-1 Stopped \n"
+    "stderr":  "time=\"2026-08-04T00:50:58+09:00\" level=warning msg=\"The \\\"EXP112_CAPTURE_ROOT\\\" variable is not set. Defaulting to a blank string.\"\ntime=\"2026-08-04T00:50:58+09:00\" level=warning msg=\"The \\\"EXP112_CAPTURE_ROOT\\\" variable is not set. Defaulting to a blank string.\"\n Container doeng-exp122-post-stop-probe-flux-corrected-1 Stopping \n Container doeng-exp122-post-stop-probe-flux-corrected-1 Stopped \n"
 }
