@@ -1,0 +1,15 @@
+﻿{
+    "experiment":  "Experiment 1-19",
+    "runId":  "RUN-20260803-EXP119-BASELINE-001",
+    "classification":  "MEASUREMENT_EXECUTED_ARTIFACT_INCOMPLETE",
+    "warmupStarted":  true,
+    "coreStarted":  true,
+    "k6Started":  true,
+    "requiredArtifactMissing":  "pool/pool-metrics.jsonl",
+    "eligibleForAggregate":  false,
+    "rerunAllowedUnderExperiment119":  false,
+    "remainingExperiment119RunsAllowed":  false,
+    "policyDecision":  "NOT_RUN",
+    "finalExperimentState":  "INVALID",
+    "rawOutcomeInspectedDuringClosure":  false
+}

@@ -1,0 +1,51 @@
+﻿{
+    "experiment":  "Experiment 1-20",
+    "runId":  "RUN-PLAN-DATE-EXP120-REMEDIATION-001",
+    "runDate":  "PLAN-DATE",
+    "condition":  "REMEDIATION",
+    "executionMode":  "PLAN",
+    "applicationImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+    "mockImageTag":  "doeng-exp119-mock-frozen-20260803:latest",
+    "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+    "mockImageBindingMode":  "EXPLICIT_FROZEN_TAG",
+    "policy":  {
+                   "evictionIntervalMs":  "1000",
+                   "leasingStrategy":  "LIFO",
+                   "maxIdleTimeMs":  "3000"
+               },
+    "collector":  {
+                      "managementUrl":  "http://127.0.0.1:9001",
+                      "durationSeconds":  150,
+                      "intervalMilliseconds":  1000,
+                      "finalPaths":  [
+                                         "pool/pool-metrics.jsonl",
+                                         "pool/pool-metrics.jsonl.summary.json"
+                                     ],
+                      "stagingPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\collector-staging\\RUN-PLAN-DATE-EXP120-REMEDIATION-001"
+                  },
+    "workload":  {
+                     "intervalSeconds":  1,
+                     "durationSeconds":  105,
+                     "poolMax":  400,
+                     "drainSeconds":  30,
+                     "appMemory":  "3GiB",
+                     "appCpu":  2,
+                     "aiDelayMs":  2000,
+                     "admission":  320,
+                     "dbPool":  10,
+                     "vu":  200,
+                     "storageDelayMs":  100,
+                     "pending":  800,
+                     "timeoutMs":  10000
+                 },
+    "orderedSteps":  [
+                         "fresh recreate",
+                         "warm-up",
+                         "collector start",
+                         "core",
+                         "collector completion",
+                         "collector validation",
+                         "artifact copy",
+                         "finalization"
+                     ]
+}

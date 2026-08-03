@@ -1,0 +1,17 @@
+﻿{
+    "condition":  "BASELINE",
+    "appImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+    "mockTag":  "doeng-exp119-mock-frozen-20260803:latest",
+    "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+    "policy":  {
+                   "e":  "0",
+                   "s":  "FIFO",
+                   "i":  "0"
+               },
+    "collectorValid":  true,
+    "lineCount":  3,
+    "failures":  0,
+    "warmup":  0,
+    "k6":  0,
+    "core":  0
+}

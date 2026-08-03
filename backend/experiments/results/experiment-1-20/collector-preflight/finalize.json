@@ -1,0 +1,9 @@
+﻿{
+    "ready":  true,
+    "sameImages":  true,
+    "allowedPolicyDiff":  true,
+    "warmup":  0,
+    "k6":  0,
+    "core":  0,
+    "state":  "EXP120_READY_FOR_SIX_CORE_RUNS"
+}

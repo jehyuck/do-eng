@@ -1,0 +1,207 @@
+﻿{
+    "experiment":  "Experiment 1-19",
+    "runId":  "RUN-20260803-EXP119-BASELINE-001",
+    "outcomeInspected":  false,
+    "inventoryMethod":  "path, size and SHA-256 only",
+    "generatedAt":  "2026-08-03T10:41:56.8220220Z",
+    "files":  [
+                  {
+                      "root":  "backend/experiments/results/experiment-1-19/core/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "client-progress.jsonl",
+                      "sizeBytes":  22437,
+                      "sha256":  "cfb8e37e676148adcc05956d51f8adfd44277d1d1531e7fe7fa70358e9d041ce"
+                  },
+                  {
+                      "root":  "backend/experiments/results/experiment-1-19/core/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "client-results.json",
+                      "sizeBytes":  16882591,
+                      "sha256":  "1b96d4adb8ec2a30bf9441ce6be65d2dcdd7e0f8b4b2433e05b1bae6ae31f846"
+                  },
+                  {
+                      "root":  "backend/experiments/results/experiment-1-19/core/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "EXECUTION_FAILED",
+                      "sizeBytes":  0,
+                      "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                  },
+                  {
+                      "root":  "backend/experiments/results/experiment-1-19/core/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "failure-summary.json",
+                      "sizeBytes":  1612,
+                      "sha256":  "e1560a65a35f6fb7df227817f63c8282cba6c3be2603abbc64ed2c955afe8c6c"
+                  },
+                  {
+                      "root":  "backend/experiments/results/experiment-1-19/core/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "run-config.json",
+                      "sizeBytes":  4667,
+                      "sha256":  "e44396e0fcdbea2f64b30c20c762705575ed7a6cd33ccbaca98c1dba8753bd74"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "application-metrics.jsonl",
+                      "sizeBytes":  21507,
+                      "sha256":  "970f13b8ac9af7ae305b21b82c98ae1d5f39b40c318d0c36dc9cf804371ba108"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "client-progress.jsonl",
+                      "sizeBytes":  22437,
+                      "sha256":  "cfb8e37e676148adcc05956d51f8adfd44277d1d1531e7fe7fa70358e9d041ce"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "client-results.json",
+                      "sizeBytes":  16882591,
+                      "sha256":  "1b96d4adb8ec2a30bf9441ce6be65d2dcdd7e0f8b4b2433e05b1bae6ae31f846"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "client-summary.stdout.json",
+                      "sizeBytes":  6532,
+                      "sha256":  "1408ddece52ee2546540bb93517571ebbfee906c2bbd0261eaf36f84e8ea9aba"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "container-monitor-summary.json",
+                      "sizeBytes":  1520,
+                      "sha256":  "ee1be288494456c046ebbc7109a4adbcfb0a743840849785a5931be610ea89c6"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "container-stats.jsonl",
+                      "sizeBytes":  247966,
+                      "sha256":  "ae2c628179eff19afa03cec9d47670c384385b48ba1add2c9e650945eb0a5c11"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "database-metrics.jsonl",
+                      "sizeBytes":  27651,
+                      "sha256":  "6d429854514fa2459b14d440327985803b6d06d5e47ff62514b4f09f38b524ce"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "db-after.json",
+                      "sizeBytes":  87152,
+                      "sha256":  "1ae0d3d4baab282692cee4ffdc7c5ba124d77fa46f6770c6a08f188c7e507bdb"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "db-before.json",
+                      "sizeBytes":  50966,
+                      "sha256":  "f8fad230e4cfc1e24b25ccf983ad7d3b73378fcf2940d2d6b52311fed70b147d"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "environment.json",
+                      "sizeBytes":  98086,
+                      "sha256":  "7474145c2aa912deac04def4a59daf85cc97bfa80d36a5d9dfdca14824109cb3"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "load-stop-mock-metrics.json",
+                      "sizeBytes":  702,
+                      "sha256":  "68c7efeeb79f74970ddc097c9e4060663f4ccc56eb5f1376aba2aa5d779baf76"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "mission-completions.json",
+                      "sizeBytes":  53089,
+                      "sha256":  "b82bafdee5763504d642d3789e6372c0a98dd06b5f19086c9529a6aa4f895ec3"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "mock-control.json",
+                      "sizeBytes":  295,
+                      "sha256":  "567da9c974abf0f0720873e604a247f15ff5bb9205ff96782fb72b900ede4293"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "mock-drain.jsonl",
+                      "sizeBytes":  16075,
+                      "sha256":  "b84a55f14c9f8a347dc7dda852508d6950e2c01bd8388c3419056eed76a95df5"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "mock-drain-summary.json",
+                      "sizeBytes":  1685,
+                      "sha256":  "a391392202cec7856e2e14d254be1f877a744cea0c9083010611f48649a792a0"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "mock-metrics-after.json",
+                      "sizeBytes":  617,
+                      "sha256":  "d648cc713e8f8c0388a86b632b8452ebe903505cf7d831b1073ee0501682b9f6"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "mock-metrics-pre-run.json",
+                      "sizeBytes":  601,
+                      "sha256":  "65f5998614a05b6d2a71220230577e971963ad8b0511a66d2a9522a670992e0f"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "mock-requests.json",
+                      "sizeBytes":  53770812,
+                      "sha256":  "505ad6effba3d54ca5ac2c6ce278b41edf050e3a2fe38eb97bd955970115dfd7"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "monitor.stderr.log",
+                      "sizeBytes":  792,
+                      "sha256":  "c626ea6778f922a20581daf8907601a824094244c92c0b645f853fcade50e835"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "monitor.stdout.log",
+                      "sizeBytes":  1520,
+                      "sha256":  "ee1be288494456c046ebbc7109a4adbcfb0a743840849785a5931be610ea89c6"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "monitor-process-status.json",
+                      "sizeBytes":  160,
+                      "sha256":  "25015b2521154259b08286291f93ef668718998620344b88928eb534ee7f31be"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "prepared-users.json",
+                      "sizeBytes":  40921,
+                      "sha256":  "81bd01b5f6afde5814e3b38a9aca4e99f87799ca3c9bbe7abab7ec6eced54431"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "run-config.json",
+                      "sizeBytes":  4667,
+                      "sha256":  "e44396e0fcdbea2f64b30c20c762705575ed7a6cd33ccbaca98c1dba8753bd74"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "storage-after.json",
+                      "sizeBytes":  55872,
+                      "sha256":  "2ee266e69eedf0613b754b22bc094db80ab44c6c1d0d73dd2cc6117fa861771a"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "storage-before.json",
+                      "sizeBytes":  73,
+                      "sha256":  "a2713893d86cc501734a0b7c8901d9dd01acfe539ce12d6e9c2531f687f03c4d"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "timeseries.csv",
+                      "sizeBytes":  5291,
+                      "sha256":  "0ee9d548da45ac510eb3ae41e2d770f525334621fef58ba5f58372f29431b7c5"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "timeseries.svg",
+                      "sizeBytes":  10316,
+                      "sha256":  "638c48b3f0513b701b2971c95f1edba8f8a8ae1aaf0a0a6b2adcfba749de7bd9"
+                  },
+                  {
+                      "root":  "experiment/results/RUN-20260803-EXP119-BASELINE-001",
+                      "relativePath":  "verification-summary.json",
+                      "sizeBytes":  160802,
+                      "sha256":  "a0a8ceb320a417e3d77d8a57cfe51c67cfc30e0c77f5534e2b3b5de620fc4b85"
+                  }
+              ]
+}
