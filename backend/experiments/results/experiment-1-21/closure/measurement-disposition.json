@@ -1,0 +1,15 @@
+﻿{
+    "experiment":  "Experiment 1-21",
+    "runId":  "RUN-20260803-EXP121-BASELINE-001",
+    "classification":  "MEASUREMENT_EXECUTED_APPLICATION_LOG_CAPTURE_INCOMPLETE",
+    "warmupStarted":  true,
+    "coreStarted":  true,
+    "k6Started":  true,
+    "failedStage":  "application log capture",
+    "eligibleForAggregate":  false,
+    "rerunAllowedUnderExperiment121":  false,
+    "remainingExperiment121RunsAllowed":  false,
+    "policyDecision":  "NOT_RUN",
+    "finalExperimentState":  "INVALID",
+    "rawOutcomeInspectedDuringClosure":  false
+}

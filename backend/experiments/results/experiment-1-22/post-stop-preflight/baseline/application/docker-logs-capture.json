@@ -1,0 +1,19 @@
+﻿{
+    "runId":  "PROBE-EXP122-BASELINE",
+    "containerId":  "1175d943046a3570bb7d88fa4ff5ad07f5588e0a991a887966b70476d00b09df",
+    "command":  "docker.exe logs --timestamps 1175d943046a3570bb7d88fa4ff5ad07f5588e0a991a887966b70476d00b09df",
+    "startedAt":  "2026-08-03T14:47:08.9403014Z",
+    "completedAt":  "2026-08-03T14:47:09.2257451Z",
+    "timeoutSeconds":  30,
+    "timedOut":  false,
+    "captureMode":  "POST_STOP_SNAPSHOT",
+    "containerStateAtCapture":  "exited",
+    "exitCode":  0,
+    "stdoutPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-22\\post-stop-preflight\\baseline\\application\\docker-logs.stdout.log",
+    "stderrPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-22\\post-stop-preflight\\baseline\\application\\docker-logs.stderr.log",
+    "stdoutBytes":  2305,
+    "stderrBytes":  92,
+    "combinedPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-22\\post-stop-preflight\\baseline\\application\\application.log",
+    "combinedBytes":  2465,
+    "captureStatus":  "APPLICATION_LOG_CAPTURE_PASSED"
+}

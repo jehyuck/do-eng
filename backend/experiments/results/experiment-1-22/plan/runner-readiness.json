@@ -1,0 +1,78 @@
+﻿{
+    "experiment":  "Experiment 1-22",
+    "executionMode":  "PLAN",
+    "runDate":  "PLAN-DATE",
+    "requestedRuns":  [
+                          "BASELINE-001",
+                          "REMEDIATION-001",
+                          "BASELINE-002",
+                          "REMEDIATION-002",
+                          "BASELINE-003",
+                          "REMEDIATION-003"
+                      ],
+    "startedRuns":  0,
+    "completedRuns":  0,
+    "failedRuns":  0,
+    "notStartedRuns":  [
+                           "RUN-PLAN-DATE-EXP122-BASELINE-001",
+                           "RUN-PLAN-DATE-EXP122-REMEDIATION-001",
+                           "RUN-PLAN-DATE-EXP122-BASELINE-002",
+                           "RUN-PLAN-DATE-EXP122-REMEDIATION-002",
+                           "RUN-PLAN-DATE-EXP122-BASELINE-003",
+                           "RUN-PLAN-DATE-EXP122-REMEDIATION-003"
+                       ],
+    "warmupInvocations":  0,
+    "coreInvocations":  0,
+    "executionStatus":  "NOT_RUN",
+    "stoppedAfterRun":  null,
+    "runStates":  [
+                      {
+                          "runId":  "RUN-PLAN-DATE-EXP122-BASELINE-001",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
+                      },
+                      {
+                          "runId":  "RUN-PLAN-DATE-EXP122-REMEDIATION-001",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
+                      },
+                      {
+                          "runId":  "RUN-PLAN-DATE-EXP122-BASELINE-002",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
+                      },
+                      {
+                          "runId":  "RUN-PLAN-DATE-EXP122-REMEDIATION-002",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
+                      },
+                      {
+                          "runId":  "RUN-PLAN-DATE-EXP122-BASELINE-003",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
+                      },
+                      {
+                          "runId":  "RUN-PLAN-DATE-EXP122-REMEDIATION-003",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
+                      }
+                  ]
+}

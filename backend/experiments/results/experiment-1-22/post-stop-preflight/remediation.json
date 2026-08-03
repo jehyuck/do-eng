@@ -1,0 +1,33 @@
+﻿{
+    "condition":  "REMEDIATION",
+    "status":  "POST_STOP_APPLICATION_LOG_CAPTURE_PROBE_READY",
+    "policy":  {
+                   "evictionIntervalMs":  "1000",
+                   "leasingStrategy":  "LIFO",
+                   "maxIdleTimeMs":  "3000"
+               },
+    "stopExitCode":  0,
+    "stateAfter":  "exited",
+    "capture":  {
+                    "runId":  "PROBE-EXP122-REMEDIATION",
+                    "containerId":  "79d53c712782cf461c81697c79c9f2bf0a8378bb1c2f36cace5c0038d220dfb2",
+                    "command":  "docker.exe logs --timestamps 79d53c712782cf461c81697c79c9f2bf0a8378bb1c2f36cace5c0038d220dfb2",
+                    "startedAt":  "2026-08-03T14:47:29.5238860Z",
+                    "completedAt":  "2026-08-03T14:47:29.7709841Z",
+                    "timeoutSeconds":  30,
+                    "timedOut":  false,
+                    "captureMode":  "POST_STOP_SNAPSHOT",
+                    "containerStateAtCapture":  "exited",
+                    "exitCode":  0,
+                    "stdoutPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-22\\post-stop-preflight\\remediation\\application\\docker-logs.stdout.log",
+                    "stderrPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-22\\post-stop-preflight\\remediation\\application\\docker-logs.stderr.log",
+                    "stdoutBytes":  2306,
+                    "stderrBytes":  92,
+                    "combinedPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-22\\post-stop-preflight\\remediation\\application\\application.log",
+                    "combinedBytes":  2466,
+                    "captureStatus":  "APPLICATION_LOG_CAPTURE_PASSED"
+                },
+    "warmup":  0,
+    "k6":  0,
+    "core":  0
+}

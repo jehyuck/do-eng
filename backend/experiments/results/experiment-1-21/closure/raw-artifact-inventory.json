@@ -1,0 +1,307 @@
+﻿{
+    "experiment":  "Experiment 1-21",
+    "runId":  "RUN-20260803-EXP121-BASELINE-001",
+    "generatedAt":  "2026-08-03T14:41:54.5701940Z",
+    "files":  [
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\failure-summary.json",
+                      "bytes":  978,
+                      "sha256":  "9F4EE6FD10F4ADC0554A4AA39E4ADA5EF07D63D705815F62B8E611C9D1D1381C"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\execution-summary.json",
+                      "bytes":  657,
+                      "sha256":  "091931636D3EF1F4274B88C5CB3CBC911CCD2AEE1B46456F769A6FB4DE555165"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\EXECUTION_FAILED",
+                      "bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\provenance\\execution-timeline.json",
+                      "bytes":  528,
+                      "sha256":  "007DB4BD2FE20CA07101ED4CA151151186603143F4AB503C6A12055F0B50A196"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\application\\docker-logs.stdout.log",
+                      "bytes":  203592435,
+                      "sha256":  "FE6AD8E3A7783D2E77908BE18CBF78166ECC7155E47F14EBA0E4C398C13A3CA6"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\application\\docker-logs.stderr.log",
+                      "bytes":  92,
+                      "sha256":  "4B3D1E26D049D6DAC20CD7524B4FE9F13C8B6DE649869308019B5CDBA6C79332"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\application\\application.log",
+                      "bytes":  203946123,
+                      "sha256":  "C1693A3EA6E7A08B11A70E0727F36B8E6E485F1B971B3C217C1C6AF58D9D6EBF"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\application\\docker-logs-capture.json",
+                      "bytes":  1226,
+                      "sha256":  "A83FFB605FD420729F7218DFFDF1ADBB907BC5E829303D3A3EAD98B5E523A130"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\pool\\pool-metrics.jsonl",
+                      "bytes":  397529,
+                      "sha256":  "C1B9D73C4B37B60A60DB882CF14F0FB5E637AC1552968465948DE05038B59821"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\pool\\pool-metrics.jsonl.summary.json",
+                      "bytes":  95,
+                      "sha256":  "BFE8F32B304F0DD6DD831927E669316EFF813AEADECB4D9BCBE414C2FC815B5E"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\core\\RUN-20260803-EXP121-BASELINE-001\\pool\\collector-coverage.json",
+                      "bytes":  821,
+                      "sha256":  "04AB151FEB7BD84A513F808A4A1AF03FC340075684BE7B327B210FBED7735A4F"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\collector-staging\\RUN-20260803-EXP121-BASELINE-001\\pool-metrics.jsonl",
+                      "bytes":  397529,
+                      "sha256":  "C1B9D73C4B37B60A60DB882CF14F0FB5E637AC1552968465948DE05038B59821"
+                  },
+                  {
+                      "path":  "backend\\experiments\\results\\experiment-1-21\\collector-staging\\RUN-20260803-EXP121-BASELINE-001\\pool-metrics.jsonl.summary.json",
+                      "bytes":  95,
+                      "sha256":  "BFE8F32B304F0DD6DD831927E669316EFF813AEADECB4D9BCBE414C2FC815B5E"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\environment.json",
+                      "bytes":  104688,
+                      "sha256":  "2CEAF077044F0AAD759DC2B1FA373856CDA56AD944952ABBE99365EA0E2147AF"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\run-config.json",
+                      "bytes":  4667,
+                      "sha256":  "CB14E1C86FA39D5BC206A4C4F066F0AF85B46AA069F564244966516030E7E20A"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\mock-metrics-pre-run.json",
+                      "bytes":  602,
+                      "sha256":  "862AADF6852201DE6AC9FE32E60B4C66DEB918560E6A3E0E2D9826E8748F2715"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\mock-control.json",
+                      "bytes":  295,
+                      "sha256":  "567DA9C974ABF0F0720873E604A247F15FF5BB9205FF96782FB72B900EDE4293"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\prepared-users.json",
+                      "bytes":  40921,
+                      "sha256":  "7EB16332DCED3CF4ECE84E052A18130B5642822D88ECBB8D54240E6A2D584287"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\db-before.json",
+                      "bytes":  50966,
+                      "sha256":  "B16C135FB0BED7834266C36D42A62A2BD0C1EEFD9D0788B2EA1386E1B8F2E316"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\storage-before.json",
+                      "bytes":  73,
+                      "sha256":  "A2713893D86CC501734A0B7C8901D9DD01ACFE539CE12D6E9C2531F687F03C4D"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\monitor.stdout.log",
+                      "bytes":  1520,
+                      "sha256":  "77ABC3532552816EF4248DBFB344D9AC889277713D534BD257F61E7E83855272"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\monitor.stderr.log",
+                      "bytes":  792,
+                      "sha256":  "C3B48E372E1C8FE6C82514C29A2E62955DC7B4D3ECFC5C9CEB30D4D7A8D27FF8"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\client-progress.jsonl",
+                      "bytes":  22602,
+                      "sha256":  "A6F068A6494F867724426FE372C84CA854DCC361AEDC1CE757F3EAEB835832FE"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\container-stats.jsonl",
+                      "bytes":  247975,
+                      "sha256":  "483CE52D3E3137A926A38A412983FCB8D29CFD636563D42E03184B79636F4416"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\application-metrics.jsonl",
+                      "bytes":  21507,
+                      "sha256":  "B7261D8D86C2229824728689D2514A7FEF948945675D9826A04621D37FD1D01C"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\database-metrics.jsonl",
+                      "bytes":  27648,
+                      "sha256":  "618B6760E4540BFE117928F0D6FCADDF3B965CB55213BFFC78BFA5DF61FCE18C"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\load-stop-mock-metrics.json",
+                      "bytes":  701,
+                      "sha256":  "C4BF4B401DE5394049F0AFC241019C5C814F777A07ADD8D1E06F819D7141A454"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\container-monitor-summary.json",
+                      "bytes":  1520,
+                      "sha256":  "77ABC3532552816EF4248DBFB344D9AC889277713D534BD257F61E7E83855272"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\monitor-process-status.json",
+                      "bytes":  160,
+                      "sha256":  "58B3B9DD8D209A12750EBCECFFB41DABD9983952D31FCA32198B2103FBAC975F"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\mock-drain.jsonl",
+                      "bytes":  16100,
+                      "sha256":  "F65901EF5B5D2DA9ED2D607DCDC3E4C5BDF4818ED04DB844F8040CED5BB36F90"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\mock-drain-summary.json",
+                      "bytes":  1685,
+                      "sha256":  "8953601DADFE6310DA8A1B606A4BE20F6904A709867BBDDDFE8C1A708B4F7CE7"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\client-results.json",
+                      "bytes":  11780338,
+                      "sha256":  "31672BD44021C6220B6FCF8246292FAF7CCCDF8B438B81A583A463CA6D6C9A99"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\client-summary.stdout.json",
+                      "bytes":  6512,
+                      "sha256":  "61BDD5F03F53B2D0B56995F08256502B0C3B97C637A80DA69DB2575688336FF2"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\timeseries.csv",
+                      "bytes":  5317,
+                      "sha256":  "DEB033D6D7D1D5063288903443AD11C9BC7A9979823501FC086334386EA55B16"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\timeseries.svg",
+                      "bytes":  10311,
+                      "sha256":  "47D35A2A3330C29CBC2506F2E7A04E6730AC5FA3C1236E974C57052A138502C2"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\db-after.json",
+                      "bytes":  87152,
+                      "sha256":  "3D3A950EF04EAB2BA9950F72579E05F4805BC18E51F033493F8C07983F0F707B"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\storage-after.json",
+                      "bytes":  55872,
+                      "sha256":  "D281A0DA220749F92331F455F6CD5846CD453C635475C91D4AF5471F6E7AD32C"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\mock-requests.json",
+                      "bytes":  73123689,
+                      "sha256":  "5A75461B185E7517196904FF978844855C2BB2A1A90A3478A999421C28A7D322"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\mock-metrics-after.json",
+                      "bytes":  618,
+                      "sha256":  "C86EDE75AB60D873D0DAFA281CB90A942870F13D86CF8BA5FF5A41F5FADA8A5D"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\mission-completions.json",
+                      "bytes":  53089,
+                      "sha256":  "4ADB41B8D1C45EA8413D4C75941D7F1E24C6AA66019BF778C9F635A347F71101"
+                  },
+                  {
+                      "path":  "experiment\\results\\RUN-20260803-EXP121-BASELINE-001\\verification-summary.json",
+                      "bytes":  160738,
+                      "sha256":  "B686160BFCF19B758DC73CA8BBF3E03B822ADE0A7663F60B7A41DB4D60770967"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\environment.json",
+                      "bytes":  104589,
+                      "sha256":  "6A563E836F7EDE4FC8A6E87136515C845931052239015D8D6F29CF78AEC25B6A"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\run-config.json",
+                      "bytes":  4668,
+                      "sha256":  "0C125301F908A32E30184D25033B9200B3BC7709CABC8A1233FF6BB7871BC561"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\mock-metrics-pre-run.json",
+                      "bytes":  434,
+                      "sha256":  "796A8D3451469CF43F4528547B5AC9F963B4137532BF84CB8485CC6E7477AC39"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\mock-control.json",
+                      "bytes":  295,
+                      "sha256":  "567DA9C974ABF0F0720873E604A247F15FF5BB9205FF96782FB72B900EDE4293"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\prepared-users.json",
+                      "bytes":  4570,
+                      "sha256":  "84E70C0020F753CDDF056B17F9849A9C12E8A305044EF196D44ABA460D6FF22F"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\db-before.json",
+                      "bytes":  5176,
+                      "sha256":  "A030784FF84630400C4E7D3A510785FED660B379A24FDBA261ECB0BB14B1A3A4"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\storage-before.json",
+                      "bytes":  73,
+                      "sha256":  "A2713893D86CC501734A0B7C8901D9DD01ACFE539CE12D6E9C2531F687F03C4D"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\client-progress.jsonl",
+                      "bytes":  2494,
+                      "sha256":  "89E7A069CBD631F232AAD294A8A97ABF6872626C354BEE3B0324ABDADDA6D718"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\load-stop-mock-metrics.json",
+                      "bytes":  684,
+                      "sha256":  "6FB05A2256EC66768E94932EEF182AD93B70C24C3F1736CAD9BC9F1C3F830B09"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\mock-drain.jsonl",
+                      "bytes":  5508,
+                      "sha256":  "A5D91B090515CF2642FA21323C8B9179391D54A55903ADA5A626CC42876012A5"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\mock-drain-summary.json",
+                      "bytes":  1652,
+                      "sha256":  "8841C6E87B71822626438340BFADD125C0BCC351386A4500F11CB1A4078FE977"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\client-results.json",
+                      "bytes":  48978,
+                      "sha256":  "ABF4EB970AA8005085587607660461EE91CB887B366B9606F7622A7D50F11CB2"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\client-summary.stdout.json",
+                      "bytes":  6322,
+                      "sha256":  "FD0B180D334B5DE175283FDA9DC0C5A73716F9C1718F5206681F2103D9CB2C82"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\db-after.json",
+                      "bytes":  8773,
+                      "sha256":  "1305D2DBBDAF8A393C7F11890174AEB843439B87569DBC283E150980E55A18D4"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\storage-after.json",
+                      "bytes":  5651,
+                      "sha256":  "8181A4668DCFF216863D12DC2EA4F62841ACD738A7DCEAEA238772121A99B087"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\mock-requests.json",
+                      "bytes":  1128492,
+                      "sha256":  "9E21744999FAE222554E926156A62A0247851529B8912E5582459D893C938296"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\mock-metrics-after.json",
+                      "bytes":  602,
+                      "sha256":  "4D5F77CF842CD579C246B06E17E7545844071818E344D3182504C86A80B8CC79"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\mission-completions.json",
+                      "bytes":  5319,
+                      "sha256":  "2E2EFAA0999928CC984D27A36673FC6CC262FDF4D203C51526FEF1B8112259E3"
+                  },
+                  {
+                      "path":  "experiment\\results\\SMOKE-20260803-EXP121-BASELINE-001\\verification-summary.json",
+                      "bytes":  41736,
+                      "sha256":  "325F5CF96A8918BB7188E094FA83EEECE3298FEE5CDB8881A067B254F3795285"
+                  }
+              ]
+}
