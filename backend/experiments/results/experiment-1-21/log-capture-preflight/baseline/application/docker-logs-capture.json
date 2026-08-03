@@ -1,15 +1,15 @@
 ﻿{
     "runId":  "PROBE-EXP121-BASELINE",
-    "containerId":  "b413cdd5398fa828c38721be8100065bda58fd47afa6b24fef1b7c28894e2444",
-    "command":  "docker logs --timestamps b413cdd5398fa828c38721be8100065bda58fd47afa6b24fef1b7c28894e2444",
-    "startedAt":  "2026-08-03T12:42:46.5420128Z",
-    "completedAt":  "2026-08-03T12:42:47.6974036Z",
+    "containerId":  "e79ccd082db6b68066e3b6489fe4d86256202ee187d28ff11b067369381890df",
+    "command":  "docker logs --timestamps e79ccd082db6b68066e3b6489fe4d86256202ee187d28ff11b067369381890df",
+    "startedAt":  "2026-08-03T13:06:57.9974204Z",
+    "completedAt":  "2026-08-03T13:06:59.1373939Z",
     "exitCode":  0,
     "stdoutPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\baseline\\application\\docker-logs.stdout.log",
     "stderrPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\baseline\\application\\docker-logs.stderr.log",
-    "stdoutBytes":  2306,
+    "stdoutBytes":  2305,
     "stderrBytes":  92,
     "combinedPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\baseline\\application\\application.log",
-    "combinedBytes":  2466,
+    "combinedBytes":  2465,
     "captureStatus":  "APPLICATION_LOG_CAPTURE_PASSED"
 }

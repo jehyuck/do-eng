@@ -1,9 +1,9 @@
 ﻿{
     "runId":  "PROBE-EXP121-REMEDIATION",
-    "containerId":  "a0d468032b9cb6ced1293c2c59959f8bb668b4cca335c445ea2bd989a01175c4",
-    "command":  "docker logs --timestamps a0d468032b9cb6ced1293c2c59959f8bb668b4cca335c445ea2bd989a01175c4",
-    "startedAt":  "2026-08-03T12:43:09.9512311Z",
-    "completedAt":  "2026-08-03T12:43:11.1055208Z",
+    "containerId":  "83a03b8b6b192fcd2b6021c4f7f293a17f0f2773b04c109d9e165e0f42460f24",
+    "command":  "docker logs --timestamps 83a03b8b6b192fcd2b6021c4f7f293a17f0f2773b04c109d9e165e0f42460f24",
+    "startedAt":  "2026-08-03T13:07:20.7402943Z",
+    "completedAt":  "2026-08-03T13:07:21.9355142Z",
     "exitCode":  0,
     "stdoutPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\remediation\\application\\docker-logs.stdout.log",
     "stderrPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\remediation\\application\\docker-logs.stderr.log",

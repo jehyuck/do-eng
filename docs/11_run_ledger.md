@@ -450,3 +450,5 @@ Common command form (run ID, implementation, target URL, server service, active 
 - 기존 smoke의 원시 JSON과 서버·DB 로그
 - 실행 당시 CPU·메모리·컨테이너 제한
 - 실행 순서 사이의 휴지 시간과 warm-up 조건
+
+| SETUP-20260803-EXP121-STRUCTURAL-COMMITTED | 2026-08-03 | Experiment 1-21 structural / committed validation split | WebFlux harness only | no-load contract correction; six-core not started | fixture 1-7 contract test, native capture preflight, Exp121 PLAN | experiment/scripts/test-experiment-1-21-finalization-contract.ps1; docs/187_experiment_1_21_structural_committed_validation_split_20260803.md | COMPLETE | excluded from performance aggregate | Structural validation is FINALIZING/PENDING before final timestamps; committed validation is COMPLETED/PASSED before COMPLETED marker. warm-up/k6/core = 0. Final state EXP121_READY_FOR_SIX_CORE_RUNS. |

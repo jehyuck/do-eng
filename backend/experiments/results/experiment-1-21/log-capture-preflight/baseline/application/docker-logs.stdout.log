@@ -1,18 +1,18 @@
-2026-08-03T12:42:38.259081348Z 
-2026-08-03T12:42:38.259142083Z   .   ____          _            __ _ _
-2026-08-03T12:42:38.259146361Z  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-2026-08-03T12:42:38.259149669Z ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
-2026-08-03T12:42:38.259152223Z  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-2026-08-03T12:42:38.259154194Z   '  |____| .__|_| |_|_| |_\__, | / / / /
-2026-08-03T12:42:38.259156026Z  =========|_|==============|___/=/_/_/_/
-2026-08-03T12:42:38.261439477Z  :: Spring Boot ::                (v2.7.9)
-2026-08-03T12:42:38.261461176Z 
-2026-08-03T12:42:38.452440327Z 2026-08-03 21:42:38.448  INFO 1 --- [           main] c.e.d.DoEngGameFluxApplication           : Starting DoEngGameFluxApplication using Java 11.0.31 on b413cdd5398f with PID 1 (/app/app.jar started by root in /app)
-2026-08-03T12:42:38.453099956Z 2026-08-03 21:42:38.452  INFO 1 --- [           main] c.e.d.DoEngGameFluxApplication           : The following 1 profile is active: "experiment"
-2026-08-03T12:42:40.082323029Z 2026-08-03 21:42:40.081  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2026-08-03T12:42:40.086343064Z 2026-08-03 21:42:40.085  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
-2026-08-03T12:42:40.380909896Z 2026-08-03 21:42:40.380  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 285 ms. Found 2 R2DBC repository interfaces.
-2026-08-03T12:42:44.529213054Z 2026-08-03 21:42:44.528  INFO 1 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8000
-2026-08-03T12:42:44.616256362Z 2026-08-03 21:42:44.615  INFO 1 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 6 endpoint(s) beneath base path '/actuator'
-2026-08-03T12:42:44.671637157Z 2026-08-03 21:42:44.670  INFO 1 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 9091
-2026-08-03T12:42:44.706622674Z 2026-08-03 21:42:44.705  INFO 1 --- [           main] c.e.d.DoEngGameFluxApplication           : Started DoEngGameFluxApplication in 7.723 seconds (JVM running for 8.793)
+2026-08-03T13:06:49.630851171Z 
+2026-08-03T13:06:49.630902370Z   .   ____          _            __ _ _
+2026-08-03T13:06:49.630905092Z  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+2026-08-03T13:06:49.630907053Z ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+2026-08-03T13:06:49.630908654Z  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+2026-08-03T13:06:49.630910325Z   '  |____| .__|_| |_|_| |_\__, | / / / /
+2026-08-03T13:06:49.630911929Z  =========|_|==============|___/=/_/_/_/
+2026-08-03T13:06:49.633244105Z  :: Spring Boot ::                (v2.7.9)
+2026-08-03T13:06:49.633271305Z 
+2026-08-03T13:06:49.851242545Z 2026-08-03 22:06:49.847  INFO 1 --- [           main] c.e.d.DoEngGameFluxApplication           : Starting DoEngGameFluxApplication using Java 11.0.31 on e79ccd082db6 with PID 1 (/app/app.jar started by root in /app)
+2026-08-03T13:06:49.852625190Z 2026-08-03 22:06:49.852  INFO 1 --- [           main] c.e.d.DoEngGameFluxApplication           : The following 1 profile is active: "experiment"
+2026-08-03T13:06:51.477441240Z 2026-08-03 22:06:51.476  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-08-03T13:06:51.481963547Z 2026-08-03 22:06:51.481  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-08-03T13:06:51.784997572Z 2026-08-03 22:06:51.784  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 293 ms. Found 2 R2DBC repository interfaces.
+2026-08-03T13:06:55.761779741Z 2026-08-03 22:06:55.761  INFO 1 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8000
+2026-08-03T13:06:55.865567237Z 2026-08-03 22:06:55.864  INFO 1 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 6 endpoint(s) beneath base path '/actuator'
+2026-08-03T13:06:55.909234901Z 2026-08-03 22:06:55.908  INFO 1 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 9091
+2026-08-03T13:06:55.926215772Z 2026-08-03 22:06:55.925  INFO 1 --- [           main] c.e.d.DoEngGameFluxApplication           : Started DoEngGameFluxApplication in 7.483 seconds (JVM running for 8.53)
