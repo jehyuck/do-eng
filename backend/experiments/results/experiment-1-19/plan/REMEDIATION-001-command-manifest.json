@@ -5,7 +5,9 @@
     "executionMode":  "PLAN",
     "sourceCommit":  "270349fa7937eb4486087d34184461ae6aaab10a",
     "applicationImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+    "mockImageTag":  "doeng-exp119-mock-frozen-20260803:latest",
     "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+    "mockImageBindingMode":  "EXPLICIT_FROZEN_TAG",
     "composeFiles":  [
                          "backend\\docker-compose.experiment.yaml",
                          "backend\\docker-compose.app-instance-t3-medium.yaml",

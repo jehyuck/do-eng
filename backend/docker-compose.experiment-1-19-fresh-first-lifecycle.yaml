@@ -3,6 +3,9 @@
 # admission setting.  This file is deliberately limited to the three
 # preregistered connection-lifecycle variables.
 services:
+  experiment-mock:
+    image: "${DOENG_EXP119_MOCK_IMAGE:-doeng-exp119-mock-frozen-20260803:latest}"
+    build: !reset null
   flux-corrected:
     image: "${DOENG_EXP119_APP_IMAGE:-doeng-flux-exp119-fresh-first-20260803:latest}"
     build: null

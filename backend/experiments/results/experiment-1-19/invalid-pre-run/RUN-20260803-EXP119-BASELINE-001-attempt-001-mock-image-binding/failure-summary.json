@@ -1,0 +1,29 @@
+﻿{
+    "runId":  "RUN-20260803-EXP119-BASELINE-001",
+    "condition":  "BASELINE",
+    "failedStep":  "pre-run",
+    "errorType":  "System.Management.Automation.RuntimeException",
+    "errorMessage":  "Fresh recreate failed",
+    "completedSteps":  [
+
+                       ],
+    "artifactPathsPresent":  [
+
+                             ],
+    "artifactPathsMissing":  [
+                                 "run-config.json",
+                                 "client-results.json",
+                                 "client-progress.jsonl",
+                                 "pool/pool-metrics.jsonl",
+                                 "application/application.log",
+                                 "database/database-metrics.jsonl",
+                                 "container/container-stats.jsonl",
+                                 "mock/load-stop-mock-metrics.json",
+                                 "drain/mock-drain-summary.json",
+                                 "verification-summary.json",
+                                 "provenance/runtime-provenance.json",
+                                 "execution-summary.json"
+                             ],
+    "cleanupResult":  "COMPLETED",
+    "timestamp":  "2026-08-03T09:54:46.0998850Z"
+}

@@ -13,6 +13,8 @@ $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $preflightRoot = Join-Path $repositoryRoot "backend\experiments\results\experiment-1-19\preflight"
 $sourceCommit = "270349fa7937eb4486087d34184461ae6aaab10a"
+$frozenMockImage = "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1"
+$mockTag = "doeng-exp119-mock-frozen-20260803:latest"
 $composeProject = "doeng-exp119-preflight"
 $mockBaseUrl = "http://127.0.0.1:9100"
 $managementUrl = "http://127.0.0.1:9001"
@@ -158,16 +160,12 @@ function Ensure-ImageFromSourceCommit {
 }
 
 function Ensure-MockImage {
-    $mockTag = "$composeProject-experiment-mock"
-    $mockId = ""
-    try {
-        $mockId = [string]::Join("`n", [string[]]@(& docker image inspect --format '{{.Id}}' $mockTag 2>$null)).Trim()
-    } catch { $mockId = "" }
-    if ([string]::IsNullOrWhiteSpace($mockId)) {
-        Invoke-Compose -ComposeCommand @("build", "experiment-mock") | Out-Null
-        $mockId = [string]::Join("`n", [string[]]@(& docker image inspect --format '{{.Id}}' $mockTag)).Trim()
-    }
-    if ([string]::IsNullOrWhiteSpace($mockId)) { throw "Experiment mock image could not be built or inspected" }
+    $sourceId = [string]::Join("`n", [string[]]@(& docker image inspect --format '{{.Id}}' $frozenMockImage 2>$null)).Trim()
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($sourceId) -or $sourceId -ne $frozenMockImage) { throw "Frozen mock digest unavailable or mismatched" }
+    & docker tag $frozenMockImage $mockTag
+    if ($LASTEXITCODE -ne 0) { throw "Frozen mock stable tag creation failed" }
+    $mockId = [string]::Join("`n", [string[]]@(& docker image inspect --format '{{.Id}}' $mockTag 2>$null)).Trim()
+    if ($LASTEXITCODE -ne 0 -or $mockId -ne $frozenMockImage) { throw "Frozen mock stable tag verification failed" }
     return $mockId
 }
 
@@ -250,6 +248,7 @@ $policy = if ($Condition -eq "BASELINE") {
 }
 
 $env:DOENG_EXP119_APP_IMAGE = $ImageTag
+$env:DOENG_EXP119_MOCK_IMAGE = $mockTag
 $env:DOENG_EXTERNAL_LEASING_STRATEGY = $policy.leasingStrategy
 $env:DOENG_EXTERNAL_MAX_IDLE_TIME_MS = $policy.maxIdleTimeMs
 $env:DOENG_EXTERNAL_EVICTION_INTERVAL_MS = $policy.evictionIntervalMs
@@ -353,7 +352,9 @@ try {
             appImageId = $appImageId
             appImageRepoDigests = $appImageRepoDigests
             appImageLocalDigest = $appImageId
+            mockImageTag = $mockTag
             mockImageId = $mockImageId
+            mockImageBindingMode = "EXPLICIT_FROZEN_TAG"
             runnerSha256 = Get-Sha256 -Path $PSCommandPath
             k6ScriptSha256 = Get-Sha256 -Path (Join-Path $repositoryRoot "experiment\load\mission-load.js")
             composeSources = @($composeFiles | ForEach-Object { [ordered]@{ path = $_.Substring($repositoryRoot.Length + 1); sha256 = Get-Sha256 -Path $_ } })

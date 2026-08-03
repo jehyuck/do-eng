@@ -12,6 +12,7 @@ $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $sourceCommit = "270349fa7937eb4486087d34184461ae6aaab10a"
 $frozenAppImage = "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168"
 $frozenMockImage = "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1"
+$mockTag = "doeng-exp119-mock-frozen-20260803:latest"
 $appTag = "doeng-flux-exp119-fresh-first-20260803:latest"
 $runId = "RUN-20260803-EXP119-$Condition-$RunIndex"
 $warmupId = "SMOKE-20260803-EXP119-$Condition-$RunIndex"
@@ -64,9 +65,8 @@ function Assert-Prerequisites {
     if ($LASTEXITCODE -ne 0) { throw "Harness base is not present in current HEAD" }
     if ((& git -C $root cat-file -t $sourceCommit).Trim() -ne "commit") { throw "Application source commit unavailable" }
     if ((Image-Id $appTag) -ne $frozenAppImage) { throw "Frozen application image mismatch" }
-    # The mock is compose-built locally; the exact frozen ID must remain present.
-    $mockPresent = & docker image inspect $frozenMockImage 2>$null
-    if ($LASTEXITCODE -ne 0 -or $null -eq $mockPresent) { throw "Frozen mock image unavailable" }
+    $mockId = Image-Id $mockTag
+    if ($mockId -ne $frozenMockImage) { throw "Frozen mock stable tag mismatch" }
     foreach ($relative in $composeFiles) { if (-not (Test-Path -LiteralPath (Join-Path $root $relative))) { throw "Compose file missing: $relative" } }
     foreach ($tool in $requiredTools) { if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot $tool))) { throw "Required helper missing: $tool" } }
     if (-not (Test-Path -LiteralPath (Join-Path $root "experiment\load\mission-load.js"))) { throw "k6 workload script missing" }
@@ -77,7 +77,7 @@ function Existing-RunArtifact {
 function Command-Manifest {
     return [ordered]@{
         runId = $runId; condition = $Condition; runIndex = $RunIndex; executionMode = $ExecutionMode
-        sourceCommit = $sourceCommit; applicationImageId = $frozenAppImage; mockImageId = $frozenMockImage
+        sourceCommit = $sourceCommit; applicationImageId = $frozenAppImage; mockImageTag = $mockTag; mockImageId = $frozenMockImage; mockImageBindingMode = "EXPLICIT_FROZEN_TAG"
         composeFiles = $composeFiles; environment = $policy; artifactRoot = $runRoot
         workload = [ordered]@{ vu = 200; initialVu = 200; durationMs = 105000; intervalMs = 1000; aiDelayMs = 2000; storageDelayMs = 100; requestTimeoutMs = 10000; drainSeconds = 30; appCpu = 2; appMemory = "3GiB"; poolMax = 400; poolPending = 800; dbPool = 10; admission = 320 }
         orderedSteps = @("provenance", "artifact gate", "rendered compose", "fresh recreate", "health", "idle", "reset", "fixture/auth", "runtime snapshot", "collector", "warm-up", "pre-core idle", "k6 core", "load-stop", "drain", "consistency", "artifact verification", "cleanup")
@@ -97,7 +97,7 @@ New-Item -ItemType Directory -Force -Path $runRoot | Out-Null
 New-Item -ItemType File -Path (Join-Path $runRoot "RUNNING") | Out-Null
 $composeArgs = Compose-Args
 $previousPolicy = @{}
-foreach ($entry in @{ DOENG_EXP119_APP_IMAGE = $appTag; DOENG_EXTERNAL_LEASING_STRATEGY = $policy.leasingStrategy; DOENG_EXTERNAL_MAX_IDLE_TIME_MS = $policy.maxIdleTimeMs; DOENG_EXTERNAL_EVICTION_INTERVAL_MS = $policy.evictionIntervalMs }.GetEnumerator()) { $previousPolicy[$entry.Key] = [Environment]::GetEnvironmentVariable($entry.Key, "Process"); [Environment]::SetEnvironmentVariable($entry.Key, $entry.Value, "Process") }
+foreach ($entry in @{ DOENG_EXP119_APP_IMAGE = $appTag; DOENG_EXP119_MOCK_IMAGE = $mockTag; DOENG_EXTERNAL_LEASING_STRATEGY = $policy.leasingStrategy; DOENG_EXTERNAL_MAX_IDLE_TIME_MS = $policy.maxIdleTimeMs; DOENG_EXTERNAL_EVICTION_INTERVAL_MS = $policy.evictionIntervalMs }.GetEnumerator()) { $previousPolicy[$entry.Key] = [Environment]::GetEnvironmentVariable($entry.Key, "Process"); [Environment]::SetEnvironmentVariable($entry.Key, $entry.Value, "Process") }
 $completedSteps = [System.Collections.Generic.List[string]]::new()
 $failure = $null
 $cleanupResult = "NOT_ATTEMPTED"
@@ -117,7 +117,7 @@ try {
     Copy-Exp119LegacyArtifacts -LegacyRunRoot $legacyRunRoot -RunRoot $runRoot
     $completedSteps.Add("artifact copy")
     New-Item -ItemType Directory -Force -Path (Join-Path $runRoot "provenance") | Out-Null
-    Write-Json ([ordered]@{ runId=$runId; sourceCommit=$sourceCommit; applicationImageId=$frozenAppImage; mockImageId=$frozenMockImage; condition=$Condition; policy=$policy }) (Join-Path $runRoot "provenance\runtime-provenance.json")
+    Write-Json ([ordered]@{ runId=$runId; sourceCommit=$sourceCommit; applicationImageId=$frozenAppImage; mockImageTag=$mockTag; mockImageId=$frozenMockImage; mockImageBindingMode="EXPLICIT_FROZEN_TAG"; condition=$Condition; policy=$policy }) (Join-Path $runRoot "provenance\runtime-provenance.json")
     $completedSteps.Add("runtime provenance")
 } catch {
     $failure = $_

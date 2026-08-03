@@ -11,10 +11,10 @@
                      "localDigest":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168"
                  },
     "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
-    "baselineRunnerSha256":  "d601dd5d0b543e5ffb99493bf4c6ef7bfb65569ad90f9b721d170a8f065f2782",
-    "remediationRunnerSha256":  "d601dd5d0b543e5ffb99493bf4c6ef7bfb65569ad90f9b721d170a8f065f2782",
-    "baselineRenderedComposeSha256":  "b79a5ff23b4931caca27ef31483d05034cbff1cd17d9359593d96da2af3e205f",
-    "remediationRenderedComposeSha256":  "9271b5c34c8e76d4893766e8d961bba45ac183ed01a10779156f6870388c7c54",
+    "baselineRunnerSha256":  "5cfde2e3ff54a47b87ef849a0d7e4dfa0080a0d600f4cae70c224444e1b48b39",
+    "remediationRunnerSha256":  "5cfde2e3ff54a47b87ef849a0d7e4dfa0080a0d600f4cae70c224444e1b48b39",
+    "baselineRenderedComposeSha256":  "5acf2d4e2411e580d603b6e9eaa26386679ec77887e99553d22fa218decadc11",
+    "remediationRenderedComposeSha256":  "1360ab68e9d60d74dbd0270b4f27f36e8453f42d021f0947cc560493553fad26",
     "k6ScriptSha256":  "e69ccaf51c8fee1cad2bb726669b93dcb363c9acecaa732f9f36277a10c43e63",
     "sameImageAcrossArms":  true,
     "sameMockAcrossArms":  true

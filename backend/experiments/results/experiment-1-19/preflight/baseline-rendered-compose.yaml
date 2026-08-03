@@ -59,9 +59,6 @@ services:
         source: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\backend\experiments\results\experiment-1-19\preflight\collector-probe/mock
         target: /capture
   experiment-mock:
-    build:
-      context: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\backend\experiment-mock
-      dockerfile: Dockerfile
     cpus: 4
     environment:
       MOCK_AI_DELAY_MS: "0"
@@ -81,6 +78,7 @@ services:
       timeout: 3s
       interval: 3s
       retries: 20
+    image: doeng-exp119-mock-frozen-20260803:latest
     mem_limit: "1073741824"
     networks:
       default: null

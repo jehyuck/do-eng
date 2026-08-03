@@ -1,0 +1,13 @@
+{
+  "runId": "RUN-20260803-EXP119-BASELINE-001",
+  "attempt": 1,
+  "classification": "PRE_MEASUREMENT_HARNESS_FAILURE",
+  "failedStage": "fresh recreate",
+  "measurementStarted": false,
+  "warmupStarted": false,
+  "coreStarted": false,
+  "k6Started": false,
+  "policyEvidenceProduced": false,
+  "reason": "Compose project-scoped mock image tag mismatch",
+  "disposition": "ARCHIVED_NOT_COUNTED_AS_CORE_RUN"
+}

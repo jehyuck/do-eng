@@ -33,8 +33,10 @@
                                                    "doeng-flux-exp119-fresh-first-20260803@sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168"
                                                ],
                        "appImageLocalDigest":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+                       "mockImageTag":  "doeng-exp119-mock-frozen-20260803:latest",
                        "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
-                       "runnerSha256":  "d601dd5d0b543e5ffb99493bf4c6ef7bfb65569ad90f9b721d170a8f065f2782",
+                       "mockImageBindingMode":  "EXPLICIT_FROZEN_TAG",
+                       "runnerSha256":  "5cfde2e3ff54a47b87ef849a0d7e4dfa0080a0d600f4cae70c224444e1b48b39",
                        "k6ScriptSha256":  "e69ccaf51c8fee1cad2bb726669b93dcb363c9acecaa732f9f36277a10c43e63",
                        "composeSources":  [
                                               {
@@ -63,10 +65,10 @@
                                               },
                                               {
                                                   "path":  "backend\\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml",
-                                                  "sha256":  "1b3f905004d4929d15eac5be005cb906e37e8c2eddbfa2dee3908401cf12292a"
+                                                  "sha256":  "2cf865405bf920a8caf88cce4ebd216f1fdf0801dab2cc2688406d4350a5de9f"
                                               }
                                           ],
-                       "renderedComposeSha256":  "b79a5ff23b4931caca27ef31483d05034cbff1cd17d9359593d96da2af3e205f"
+                       "renderedComposeSha256":  "5acf2d4e2411e580d603b6e9eaa26386679ec77887e99553d22fa218decadc11"
                    },
     "preflight":  {
                       "freshJvm":  true,

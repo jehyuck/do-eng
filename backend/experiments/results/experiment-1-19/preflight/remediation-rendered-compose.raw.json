@@ -95,10 +95,6 @@
       ]
     },
     "experiment-mock": {
-      "build": {
-        "context": "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiment-mock",
-        "dockerfile": "Dockerfile"
-      },
       "cpus": 4,
       "command": null,
       "entrypoint": null,
@@ -123,6 +119,7 @@
         "interval": "3s",
         "retries": 20
       },
+      "image": "doeng-exp119-mock-frozen-20260803:latest",
       "mem_limit": "1073741824",
       "networks": {
         "default": null
