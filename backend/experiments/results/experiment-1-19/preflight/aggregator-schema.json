@@ -1,0 +1,44 @@
+{
+  "experiment": "Experiment 1-19",
+  "purpose": "Fresh-First lifecycle-policy A/B core result schema",
+  "executionStatus": "NOT_RUN",
+  "arms": [
+    "BASELINE",
+    "REMEDIATION"
+  ],
+  "requiredValidCoreRunsPerArm": 3,
+  "requiredArtifactsPerRun": [
+    "run-config.json",
+    "client-results.json",
+    "client-progress.jsonl",
+    "pool/pool-metrics.jsonl",
+    "application/application.log",
+    "database/",
+    "container/",
+    "mock/load-stop-mock-metrics.json",
+    "drain/mock-drain-summary.json",
+    "verification-summary.json",
+    "provenance/"
+  ],
+  "comparisonMetrics": [
+    "successfulRps",
+    "acceptedP95Ms",
+    "acceptedP99Ms",
+    "controlled503",
+    "timeout",
+    "unfinishedBacklog",
+    "transportFailure",
+    "poolActive",
+    "poolPending",
+    "connectionLifecycleEvidence",
+    "cpu",
+    "memory",
+    "dbState"
+  ],
+  "decisionState": "NOT_RUN",
+  "forbiddenAtPreflight": [
+    "core performance result",
+    "policy effectiveness decision",
+    "aggregate outcome"
+  ]
+}

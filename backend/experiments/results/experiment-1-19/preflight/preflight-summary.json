@@ -1,0 +1,53 @@
+﻿{
+    "experiment":  "Experiment 1-19",
+    "phase":  "A/B harness provenance dry-run",
+    "coreRunsExecuted":  0,
+    "baseline":  {
+                     "freshJvm":  true,
+                     "managementHealth":  "UP",
+                     "applicationHealth":  "UP",
+                     "mockHealth":  "UP",
+                     "preRunMockIdle":  true,
+                     "mockReset":  true,
+                     "dbScopedReset":  true,
+                     "fixture":  {
+                                     "path":  "image/arc.jpg",
+                                     "bytes":  265745,
+                                     "sha256":  "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99"
+                                 },
+                     "authContract":  {
+                                          "vu":  200,
+                                          "strictAuth":  true,
+                                          "issuedTokens":  200,
+                                          "rawTokensPersisted":  false
+                                      },
+                     "collectorsReady":  true,
+                     "coreLoadCommandPreparedButNotExecuted":  "k6 run experiment/load/mission-load.js (VU=200, duration=105s, frame/reconnect=1s, timeout=10s)",
+                     "coreRunsExecuted":  0
+                 },
+    "remediation":  {
+                        "freshJvm":  true,
+                        "managementHealth":  "UP",
+                        "applicationHealth":  "UP",
+                        "mockHealth":  "UP",
+                        "preRunMockIdle":  true,
+                        "mockReset":  true,
+                        "dbScopedReset":  true,
+                        "fixture":  {
+                                        "path":  "image/arc.jpg",
+                                        "bytes":  265745,
+                                        "sha256":  "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99"
+                                    },
+                        "authContract":  {
+                                             "vu":  200,
+                                             "strictAuth":  true,
+                                             "issuedTokens":  200,
+                                             "rawTokensPersisted":  false
+                                         },
+                        "collectorsReady":  true,
+                        "coreLoadCommandPreparedButNotExecuted":  "k6 run experiment/load/mission-load.js (VU=200, duration=105s, frame/reconnect=1s, timeout=10s)",
+                        "coreRunsExecuted":  0
+                    },
+    "readiness":  "READY_FOR_SIX_CORE_RUNS",
+    "decisionState":  "NOT_RUN"
+}

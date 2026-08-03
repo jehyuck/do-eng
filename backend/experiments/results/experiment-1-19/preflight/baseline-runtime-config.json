@@ -1,0 +1,87 @@
+﻿{
+    "condition":  "BASELINE",
+    "executionStatus":  "NOT_RUN",
+    "policy":  {
+                   "leasingStrategy":  "FIFO",
+                   "maxIdleTimeMs":  "0",
+                   "evictionIntervalMs":  "0"
+               },
+    "runtimePropertyProof":  {
+                                 "source":  "docker inspect environment plus Spring @ConfigurationProperties unit test",
+                                 "containerEnvironment":  {
+                                                              "DOENG_EXTERNAL_LEASING_STRATEGY":  "FIFO",
+                                                              "DOENG_EXTERNAL_MAX_IDLE_TIME_MS":  "0",
+                                                              "DOENG_EXTERNAL_EVICTION_INTERVAL_MS":  "0",
+                                                              "DOENG_EXTERNAL_POOL_MODE":  "SHARED",
+                                                              "DOENG_SHARED_POOL_MAX_CONNECTIONS":  "400",
+                                                              "DOENG_SHARED_POOL_PENDING_MAX_COUNT":  "800",
+                                                              "DOENG_AI_ADMISSION_MAX_CONCURRENT":  "320"
+                                                          },
+                                 "actuatorPoolMode":  "SHARED",
+                                 "limitation":  "The existing pool endpoint exposes pool mode and pool gauges, not lifecycle property fields; direct runtime proof is the inspected container environment, with binding verified by the Java 11 property tests."
+                             },
+    "provenance":  {
+                       "sourceCommit":  "270349fa7937eb4486087d34184461ae6aaab10a",
+                       "worktreeDirtyAtBuild":  true,
+                       "dockerfileGitObjectSha256":  "2cd21f5140d807fa5f302bdd7acd21376f347cdffdc8ce29a9a713aecb52537f",
+                       "appImageTag":  "doeng-flux-exp119-fresh-first-20260803:latest",
+                       "appImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+                       "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+                       "runnerSha256":  "439f255a348a5cfb9cbc570558f02883674ab57a6dbb1a5827a0852ae1854f89",
+                       "k6ScriptSha256":  "e69ccaf51c8fee1cad2bb726669b93dcb363c9acecaa732f9f36277a10c43e63",
+                       "composeSources":  [
+                                              {
+                                                  "path":  "backend\\docker-compose.experiment.yaml",
+                                                  "sha256":  "2a63a2e6c352b0bd138179c2c427f3a7add65a55e76f3eac132427350af5d17f"
+                                              },
+                                              {
+                                                  "path":  "backend\\docker-compose.app-instance-t3-medium.yaml",
+                                                  "sha256":  "8659fa51f2003f5f34b350ec0432d8dbc7b4bf69814a3694c6de9728fc5672b4"
+                                              },
+                                              {
+                                                  "path":  "backend\\docker-compose.mock-headroom-4cpu.yaml",
+                                                  "sha256":  "eeb89c0f2d23cc1685e0b47b6bfea2f02606a39187b40ed075542c86cdefba5b"
+                                              },
+                                              {
+                                                  "path":  "backend\\docker-compose.http-pool-400.yaml",
+                                                  "sha256":  "025c216363b85e4ce47eea0d4eb0753022cc8a05d14b64de96261321249200d7"
+                                              },
+                                              {
+                                                  "path":  "backend\\docker-compose.mock-memory-headroom.yaml",
+                                                  "sha256":  "bc513adb59d2cc8cfa10ed95d25658a446af1c6145e4dcdb7df9d9900648ad1b"
+                                              },
+                                              {
+                                                  "path":  "backend\\docker-compose.experiment-1-12-connection-attribution.yaml",
+                                                  "sha256":  "8dea99622919e9c0b0756a0e30f45bdc0e89b32fb27fb6cb9dcacb810519dd23"
+                                              },
+                                              {
+                                                  "path":  "backend\\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml",
+                                                  "sha256":  "1b3f905004d4929d15eac5be005cb906e37e8c2eddbfa2dee3908401cf12292a"
+                                              }
+                                          ],
+                       "renderedComposeSha256":  "b79a5ff23b4931caca27ef31483d05034cbff1cd17d9359593d96da2af3e205f"
+                   },
+    "preflight":  {
+                      "freshJvm":  true,
+                      "managementHealth":  "UP",
+                      "applicationHealth":  "UP",
+                      "mockHealth":  "UP",
+                      "preRunMockIdle":  true,
+                      "mockReset":  true,
+                      "dbScopedReset":  true,
+                      "fixture":  {
+                                      "path":  "image/arc.jpg",
+                                      "bytes":  265745,
+                                      "sha256":  "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99"
+                                  },
+                      "authContract":  {
+                                           "vu":  200,
+                                           "strictAuth":  true,
+                                           "issuedTokens":  200,
+                                           "rawTokensPersisted":  false
+                                       },
+                      "collectorsReady":  true,
+                      "coreLoadCommandPreparedButNotExecuted":  "k6 run experiment/load/mission-load.js (VU=200, duration=105s, frame/reconnect=1s, timeout=10s)",
+                      "coreRunsExecuted":  0
+                  }
+}

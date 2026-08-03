@@ -1,0 +1,266 @@
+﻿name: doeng-exp119-preflight
+services:
+  camera-measure:
+    command:
+      - node
+      - server.js
+    environment:
+      CAPTURE_HOST: 0.0.0.0
+      CAPTURE_PORT: "9200"
+    image: node:20-alpine
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 9200
+        published: "9200"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\experiment\capture
+        target: /app
+        read_only: true
+        bind: {}
+    working_dir: /app
+  capture-application:
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    command:
+      - sh
+      - -lc
+      - exec tcpdump -i any -nn -s 96 -U -Z root -w /capture/application-control.pcap 'tcp port 9100 and (tcp[tcpflags] & (tcp-syn|tcp-fin|tcp-rst) != 0)'
+    depends_on:
+      flux-corrected:
+        condition: service_started
+        required: true
+    image: nicolaka/netshoot:v0.13
+    network_mode: service:flux-corrected
+    volumes:
+      - type: bind
+        source: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\backend\experiments\results\experiment-1-19\preflight\collector-probe/application
+        target: /capture
+  capture-mock:
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    command:
+      - sh
+      - -lc
+      - exec tcpdump -i any -nn -s 96 -U -Z root -w /capture/mock-control.pcap 'tcp port 9100 and (tcp[tcpflags] & (tcp-syn|tcp-fin|tcp-rst) != 0)'
+    depends_on:
+      experiment-mock:
+        condition: service_started
+        required: true
+    image: nicolaka/netshoot:v0.13
+    network_mode: service:experiment-mock
+    volumes:
+      - type: bind
+        source: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\backend\experiments\results\experiment-1-19\preflight\collector-probe/mock
+        target: /capture
+  experiment-mock:
+    build:
+      context: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\backend\experiment-mock
+      dockerfile: Dockerfile
+    cpus: 4
+    environment:
+      MOCK_AI_DELAY_MS: "0"
+      MOCK_AI_RESULT: "false"
+      MOCK_AI_STATUS: "200"
+      MOCK_MEMBER_ID: "15"
+      MOCK_PORT: "9100"
+      MOCK_STORAGE_DELAY_MS: "0"
+      MOCK_STORAGE_STATUS: "200"
+      NODE_OPTIONS: --max-old-space-size=768
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:9100/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))
+      timeout: 3s
+      interval: 3s
+      retries: 20
+    mem_limit: "1073741824"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 9100
+        published: "9100"
+        protocol: tcp
+  flux-baseline:
+    build:
+      context: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\.experiment-work\baseline-source-8e85646
+      dockerfile: ../../experiment/docker/Dockerfile.flux-java11
+    depends_on:
+      experiment-mock:
+        condition: service_healthy
+        required: true
+      mariadb:
+        condition: service_healthy
+        required: true
+    environment:
+      AWS_EC2_METADATA_DISABLED: "true"
+      DOENG_EXTERNAL_AI_BASE_URL: http://experiment-mock:9100/analyze
+      DOENG_EXTERNAL_TOKEN_VERIFICATION_URL: http://experiment-mock:9100/api/member/ai
+      SPRING_APPLICATION_JSON: '{"cloud":{"aws":{"credentials":{"accessKey":"REDACTED","secretKey":"REDACTED"},"region":{"static":"ap-northeast-2"},"s3":{"bucket":"set-me"}}}}'
+      SPRING_R2DBC_PASSWORD: doeng-experiment-pass
+      SPRING_R2DBC_URL: r2dbc:mariadb://mariadb:3306/doeng
+      SPRING_R2DBC_USERNAME: doeng
+      SPRING_SQL_INIT_MODE: never
+      TZ: Asia/Seoul
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8000
+        published: "8000"
+        protocol: tcp
+  flux-corrected:
+    build:
+      context: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\backend\doEngGameFlux
+      dockerfile: Dockerfile.experiment
+    cpus: 2
+    depends_on:
+      experiment-mock:
+        condition: service_healthy
+        required: true
+      mariadb:
+        condition: service_healthy
+        required: true
+    environment:
+      AWS_EC2_METADATA_DISABLED: "true"
+      DOENG_ADMISSION_MODE: ENFORCE
+      DOENG_ADMISSION_SCOPE: FULL_PATH
+      DOENG_AI_ADMISSION_ENABLED: "true"
+      DOENG_AI_ADMISSION_MAX_CONCURRENT: "320"
+      DOENG_DB_POOL_MAX_SIZE: "10"
+      DOENG_DIAGNOSTIC_ENABLED: "false"
+      DOENG_EXTERNAL_AI_BASE_URL: http://experiment-mock:9100/analyze
+      DOENG_EXTERNAL_EVICTION_INTERVAL_MS: "1000"
+      DOENG_EXTERNAL_LEASING_STRATEGY: LIFO
+      DOENG_EXTERNAL_MAX_IDLE_TIME_MS: "3000"
+      DOENG_EXTERNAL_POOL_MODE: SHARED
+      DOENG_EXTERNAL_STORAGE_BASE_URL: http://experiment-mock:9100
+      DOENG_EXTERNAL_TOKEN_VERIFICATION_URL: http://experiment-mock:9100/api/member/ai
+      DOENG_HTTP_CONNECT_TIMEOUT_MS: "2000"
+      DOENG_HTTP_MAX_CONNECTIONS: "400"
+      DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS: "10000"
+      DOENG_HTTP_RESPONSE_TIMEOUT_MS: "10000"
+      DOENG_MISSION_MAX_IN_MEMORY_SIZE: 2MB
+      DOENG_MISSION_MAX_REQUEST_BYTES: "2097152"
+      DOENG_POOL_OBSERVATION_ENABLED: "true"
+      DOENG_SHARED_POOL_MAX_CONNECTIONS: "400"
+      DOENG_SHARED_POOL_PENDING_MAX_COUNT: "800"
+      DOENG_STAGE_OBSERVATION_ENABLED: "true"
+      DOENG_STORAGE_MODE: http
+      DOENG_TRANSPORT_ATTRIBUTION_ENABLED: "true"
+      JAVA_TOOL_OPTIONS: -Xms512m -Xmx2048m -XX:+UseG1GC
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics,doengdiagnosticpool,doengstages,doengadmission
+      SPRING_APPLICATION_JSON: '{"cloud":{"aws":{"credentials":{"accessKey":"REDACTED","secretKey":"REDACTED"},"region":{"static":"ap-northeast-2"},"s3":{"bucket":"set-me"}}}}'
+      SPRING_PROFILES_ACTIVE: experiment
+      SPRING_R2DBC_PASSWORD: doeng-experiment-pass
+      SPRING_R2DBC_URL: r2dbc:mariadb://mariadb:3306/doeng
+      SPRING_R2DBC_USERNAME: doeng
+      SPRING_SQL_INIT_MODE: never
+      TZ: Asia/Seoul
+    image: doeng-flux-exp119-fresh-first-20260803:latest
+    mem_limit: "3221225472"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8000
+        published: "8001"
+        protocol: tcp
+      - mode: ingress
+        target: 9091
+        published: "9001"
+        protocol: tcp
+  mariadb:
+    cpus: 1
+    environment:
+      MARIADB_DATABASE: doeng
+      MARIADB_PASSWORD: doeng-experiment-pass
+      MARIADB_ROOT_PASSWORD: doeng-experiment-root
+      MARIADB_USER: doeng
+      TZ: Asia/Seoul
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mariadb-admin ping -h 127.0.0.1 -udoeng -pdoeng-experiment-pass --silent
+      timeout: 5s
+      interval: 5s
+      retries: 30
+    image: mariadb:10.11
+    mem_limit: "1073741824"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 3306
+        published: "3307"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: doeng-experiment-db-data
+        target: /var/lib/mysql
+        volume: {}
+      - type: bind
+        source: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\exec\3 (DB 덤프파일)\doEng.sql
+        target: /docker-entrypoint-initdb.d/01-doeng.sql
+        read_only: true
+        bind: {}
+      - type: bind
+        source: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\backend\experiment-db\02-mission-completion.sql
+        target: /docker-entrypoint-initdb.d/02-mission-completion.sql
+        read_only: true
+        bind: {}
+  mvc:
+    build:
+      context: D:\T7\workspace\_작업공간\50_로컬레포\active\projects\jehyuck\do-eng\backend\doEngGameMvc
+      dockerfile: Dockerfile.experiment
+    cpus: 2
+    depends_on:
+      experiment-mock:
+        condition: service_healthy
+        required: true
+      mariadb:
+        condition: service_healthy
+        required: true
+    environment:
+      DOENG_DB_POOL_MAX_SIZE: "10"
+      DOENG_EXTERNAL_AI_BASE_URL: http://experiment-mock:9100/analyze
+      DOENG_EXTERNAL_STORAGE_BASE_URL: http://experiment-mock:9100
+      DOENG_EXTERNAL_TOKEN_VERIFICATION_URL: http://experiment-mock:9100/api/member/ai
+      DOENG_HTTP_CONNECT_TIMEOUT_MS: "2000"
+      DOENG_HTTP_MAX_CONNECTIONS: "400"
+      DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS: "10000"
+      DOENG_HTTP_RESPONSE_TIMEOUT_MS: "10000"
+      DOENG_MISSION_MAX_REQUEST_BYTES: "2097152"
+      DOENG_MVC_MAX_THREADS: "200"
+      JAVA_TOOL_OPTIONS: -Xms512m -Xmx2048m -XX:+UseG1GC
+      SPRING_DATASOURCE_PASSWORD: doeng-experiment-pass
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/doeng
+      SPRING_DATASOURCE_USERNAME: doeng
+      SPRING_PROFILES_ACTIVE: experiment
+      TZ: Asia/Seoul
+    mem_limit: "3221225472"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8000
+        published: "8002"
+        protocol: tcp
+      - mode: ingress
+        target: 9091
+        published: "9002"
+        protocol: tcp
+networks:
+  default:
+    name: doeng-exp119-preflight_default
+volumes:
+  doeng-experiment-db-data:
+    name: doeng-exp119-preflight_doeng-experiment-db-data

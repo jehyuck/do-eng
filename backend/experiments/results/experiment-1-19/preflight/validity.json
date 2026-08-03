@@ -1,0 +1,11 @@
+﻿{
+    "experiment":  "Experiment 1-19",
+    "executionStatus":  "NOT_RUN",
+    "baselinePreflight":  "READY",
+    "remediationPreflight":  "READY",
+    "sameApplicationImage":  true,
+    "sameMockImage":  true,
+    "policyOnlyRenderedComposeDiff":  true,
+    "readyForSixCoreRuns":  true,
+    "decisionState":  "NOT_RUN"
+}

@@ -1,0 +1,12 @@
+# Experiment 1-19 policy-only overlay.
+# The base/capacity overlays provide every shared resource, mock, pool, and
+# admission setting.  This file is deliberately limited to the three
+# preregistered connection-lifecycle variables.
+services:
+  flux-corrected:
+    image: "${DOENG_EXP119_APP_IMAGE:-doeng-flux-exp119-fresh-first-20260803:latest}"
+    build: null
+    environment:
+      DOENG_EXTERNAL_LEASING_STRATEGY: "${DOENG_EXTERNAL_LEASING_STRATEGY:-FIFO}"
+      DOENG_EXTERNAL_MAX_IDLE_TIME_MS: "${DOENG_EXTERNAL_MAX_IDLE_TIME_MS:-0}"
+      DOENG_EXTERNAL_EVICTION_INTERVAL_MS: "${DOENG_EXTERNAL_EVICTION_INTERVAL_MS:-0}"

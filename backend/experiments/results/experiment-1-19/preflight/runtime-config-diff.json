@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-08-03T06:05:54.696Z",
+  "expected": {
+    "baseline": {
+      "DOENG_EXTERNAL_LEASING_STRATEGY": "FIFO",
+      "DOENG_EXTERNAL_MAX_IDLE_TIME_MS": "0",
+      "DOENG_EXTERNAL_EVICTION_INTERVAL_MS": "0"
+    },
+    "remediation": {
+      "DOENG_EXTERNAL_LEASING_STRATEGY": "LIFO",
+      "DOENG_EXTERNAL_MAX_IDLE_TIME_MS": "3000",
+      "DOENG_EXTERNAL_EVICTION_INTERVAL_MS": "1000"
+    }
+  },
+  "observed": {
+    "baseline": {
+      "DOENG_EXTERNAL_LEASING_STRATEGY": "FIFO",
+      "DOENG_EXTERNAL_MAX_IDLE_TIME_MS": "0",
+      "DOENG_EXTERNAL_EVICTION_INTERVAL_MS": "0"
+    },
+    "remediation": {
+      "DOENG_EXTERNAL_LEASING_STRATEGY": "LIFO",
+      "DOENG_EXTERNAL_MAX_IDLE_TIME_MS": "3000",
+      "DOENG_EXTERNAL_EVICTION_INTERVAL_MS": "1000"
+    }
+  },
+  "valuesMatch": true,
+  "canonicalComposeMatchAfterRemovingPolicyFields": true,
+  "controlledDiffValid": true
+}

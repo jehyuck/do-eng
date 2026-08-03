@@ -1,0 +1,11 @@
+Experiment 1-19 controlled Compose diff
+policy values match preregistration: true
+all remaining rendered Compose content identical: true
+baseline:
+  DOENG_EXTERNAL_LEASING_STRATEGY=FIFO
+  DOENG_EXTERNAL_MAX_IDLE_TIME_MS=0
+  DOENG_EXTERNAL_EVICTION_INTERVAL_MS=0
+remediation:
+  DOENG_EXTERNAL_LEASING_STRATEGY=LIFO
+  DOENG_EXTERNAL_MAX_IDLE_TIME_MS=3000
+  DOENG_EXTERNAL_EVICTION_INTERVAL_MS=1000

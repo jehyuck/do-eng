@@ -1,0 +1,10 @@
+﻿{
+    "executionStatus":  "NOT_RUN",
+    "poolCollectorScript":  "collect-diagnostic-pool.ps1",
+    "poolEndpointSnapshot":  "GET /actuator/doengdiagnosticpool succeeded during each preflight",
+    "containerMonitor":  "docker executable available",
+    "databaseMonitor":  "docker compose exec mariadb succeeded",
+    "nodeRuntime":  "C:\\Users\\KOSCOM\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "continuousApplicationSnapshot":  "OFF during the future core contract",
+    "continuousMockPolling":  "OFF during the future core contract"
+}

@@ -405,6 +405,10 @@ Common command form (run ID, implementation, target URL, server service, active 
 - 요약 문서만 있고 원시 결과가 없으면 `검증 필요`를 표시한다.
 - smoke test는 본 실험과 분리하고 성능 결론에 사용하지 않는다.
 
+### 2026-08-03 addendum
+
+| SETUP-20260803-EXP119-001 | 2026-08-03 | Experiment 1-19 Fresh-First A/B harness provenance dry-run | WebFlux setup only | source `270349fa`, VU 200 future contract, baseline FIFO/0/0, remediation LIFO/3000/1000; core/warm-up/k6 0회 | `run-experiment-1-19-preflight.ps1 -Condition BASELINE`, `-Condition REMEDIATION`, `-Finalize` | `backend/experiments/results/experiment-1-19/preflight/` | 완료 | 성능 결과 제외 | 두 arm health/mock idle/reset/scoped DB reset/200-token fixture/collector readiness 통과. 동일 app image `sha256:c287…d9168`, 동일 mock image `sha256:2492…29ac1`; controlled Compose diff valid. Java 11 policy/property tests 통과. `READY_FOR_SIX_CORE_RUNS`, policy effect `NOT_RUN`; docs 170~172 참조. |
+
 ## 실행 상세 템플릿
 
 ### RUN-YYYYMMDD-NNN
