@@ -1,6 +1,8 @@
 Experiment 1-19 controlled Compose diff
 policy values match preregistration: true
 all remaining rendered Compose content identical: true
+runtime lifecycle values match preregistration: true
+all remaining runtime values identical: true
 baseline:
   DOENG_EXTERNAL_LEASING_STRATEGY=FIFO
   DOENG_EXTERNAL_MAX_IDLE_TIME_MS=0

@@ -178,7 +178,7 @@ function Invoke-Finalize {
         if (-not (Test-Path -LiteralPath $required)) { throw "Cannot finalize: missing preflight artifact $required" }
     }
     $node = Get-NodeCommand
-    & $node (Join-Path $PSScriptRoot "verify-experiment-1-19-controlled-diff.js") $baselinePath $remediationPath (Join-Path $preflightRoot "runtime-config-diff.json") (Join-Path $preflightRoot "controlled-compose-diff.txt")
+    & $node (Join-Path $PSScriptRoot "verify-experiment-1-19-controlled-diff.js") $baselinePath $remediationPath (Join-Path $preflightRoot "baseline-runtime-config.json") (Join-Path $preflightRoot "remediation-runtime-config.json") (Join-Path $preflightRoot "runtime-config-diff.json") (Join-Path $preflightRoot "controlled-compose-diff.txt")
     if ($LASTEXITCODE -ne 0) { throw "Controlled Compose diff validation failed" }
     & $node (Join-Path $PSScriptRoot "aggregate-experiment-1-19.js") (Join-Path $preflightRoot "aggregator-schema.json")
     if ($LASTEXITCODE -ne 0) { throw "Aggregator schema generation failed" }
@@ -192,7 +192,7 @@ function Invoke-Finalize {
         sourceCommit = $baseline.provenance.sourceCommit
         worktreeDirtyAtImageBuild = $baseline.provenance.worktreeDirtyAtBuild
         dockerfileGitObjectSha256 = $baseline.provenance.dockerfileGitObjectSha256
-        appImage = [ordered]@{ tag = $baseline.provenance.appImageTag; id = $baseline.provenance.appImageId }
+        appImage = [ordered]@{ tag = $baseline.provenance.appImageTag; id = $baseline.provenance.appImageId; repoDigests = $baseline.provenance.appImageRepoDigests; localDigest = $baseline.provenance.appImageLocalDigest }
         mockImageId = $baseline.provenance.mockImageId
         baselineRunnerSha256 = $baseline.provenance.runnerSha256
         remediationRunnerSha256 = $remediation.provenance.runnerSha256
@@ -317,6 +317,8 @@ try {
     $appImageId = (& docker inspect --format '{{.Image}}' $appContainer.containerId).Trim()
     $mockImageId = (& docker inspect --format '{{.Image}}' $mockContainer.containerId).Trim()
     if ($mockImageId -ne $expectedMockImageId) { throw "Running mock image does not match the preflight mock image" }
+    $appImageMetadata = ((& docker image inspect $ImageTag) -join "`n" | ConvertFrom-Json)[0]
+    $appImageRepoDigests = @($appImageMetadata.RepoDigests)
     $poolSnapshot = Invoke-RestMethod -Uri "$managementUrl/actuator/doengdiagnosticpool" -TimeoutSec 5
     $collectorPath = Join-Path $PSScriptRoot "collect-diagnostic-pool.ps1"
     $collectorReady = (Test-Path -LiteralPath $collectorPath) -and $null -ne (Get-Command docker -ErrorAction SilentlyContinue) -and -not [string]::IsNullOrWhiteSpace((Get-NodeCommand))
@@ -333,9 +335,12 @@ try {
                 DOENG_EXTERNAL_MAX_IDLE_TIME_MS = $appContainer.environment["DOENG_EXTERNAL_MAX_IDLE_TIME_MS"]
                 DOENG_EXTERNAL_EVICTION_INTERVAL_MS = $appContainer.environment["DOENG_EXTERNAL_EVICTION_INTERVAL_MS"]
                 DOENG_EXTERNAL_POOL_MODE = $appContainer.environment["DOENG_EXTERNAL_POOL_MODE"]
-                DOENG_SHARED_POOL_MAX_CONNECTIONS = $appContainer.environment["DOENG_SHARED_POOL_MAX_CONNECTIONS"]
-                DOENG_SHARED_POOL_PENDING_MAX_COUNT = $appContainer.environment["DOENG_SHARED_POOL_PENDING_MAX_COUNT"]
-                DOENG_AI_ADMISSION_MAX_CONCURRENT = $appContainer.environment["DOENG_AI_ADMISSION_MAX_CONCURRENT"]
+            DOENG_SHARED_POOL_MAX_CONNECTIONS = $appContainer.environment["DOENG_SHARED_POOL_MAX_CONNECTIONS"]
+            DOENG_SHARED_POOL_PENDING_MAX_COUNT = $appContainer.environment["DOENG_SHARED_POOL_PENDING_MAX_COUNT"]
+            DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS = $appContainer.environment["DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS"]
+            DOENG_HTTP_CONNECT_TIMEOUT_MS = $appContainer.environment["DOENG_HTTP_CONNECT_TIMEOUT_MS"]
+            DOENG_HTTP_RESPONSE_TIMEOUT_MS = $appContainer.environment["DOENG_HTTP_RESPONSE_TIMEOUT_MS"]
+            DOENG_AI_ADMISSION_MAX_CONCURRENT = $appContainer.environment["DOENG_AI_ADMISSION_MAX_CONCURRENT"]
             }
             actuatorPoolMode = $poolSnapshot.poolMode
             limitation = "The existing pool endpoint exposes pool mode and pool gauges, not lifecycle property fields; direct runtime proof is the inspected container environment, with binding verified by the Java 11 property tests."
@@ -346,6 +351,8 @@ try {
             dockerfileGitObjectSha256 = $dockerfileSha
             appImageTag = $ImageTag
             appImageId = $appImageId
+            appImageRepoDigests = $appImageRepoDigests
+            appImageLocalDigest = $appImageId
             mockImageId = $mockImageId
             runnerSha256 = Get-Sha256 -Path $PSCommandPath
             k6ScriptSha256 = Get-Sha256 -Path (Join-Path $repositoryRoot "experiment\load\mission-load.js")

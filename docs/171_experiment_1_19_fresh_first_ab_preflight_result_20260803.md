@@ -41,12 +41,15 @@ application의 기존 pool endpoint는 pool mode와 gauge만 노출하며 lifecy
 
 두 arm은 모두 shared pool mode `SHARED`, max connections `400`, pending max count `800`, admission `320`으로 확인됐다.
 
+또한 pending acquire timeout `10,000ms`, connect timeout `2,000ms`, response timeout `10,000ms`도 두 arm에서 동일함을 runtime snapshot으로 확인했다. `runtime-config-diff.json`은 lifecycle 세 값은 사전등록 값과 일치하고, 나머지 runtime 값은 동일하다고 판정한다.
+
 ## provenance
 
 - source commit: `270349fa7937eb4486087d34184461ae6aaab10a`
 - 작업 트리는 image build 당시 dirty였으나, image context는 Git object이므로 작업 트리 변경은 application image에 포함되지 않았다.
 - frozen Dockerfile Git object SHA-256: `2cd21f5140d807fa5f302bdd7acd21376f347cdffdc8ce29a9a713aecb52537f`
 - application image ID: `sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168`
+- local RepoDigest: `doeng-flux-exp119-fresh-first-20260803@sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168`
 - mock image ID: `sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1`
 - 두 arm의 application image ID, mock image ID, runner SHA-256은 동일하다.
 
@@ -57,12 +60,18 @@ application의 기존 pool endpoint는 pool mode와 gauge만 노출하며 lifecy
 - preregistered lifecycle 값: 일치
 - 세 lifecycle 환경 변수를 제거한 rendered Compose: 동일
 - same application image / same mock image: true
+- runtime lifecycle 값: 일치, 나머지 runtime 값: 동일
 
 ## 하지 않은 일
 
 - 105초 VU 200 core, warm-up, k6 부하 실행: 0회
 - policy effect, 성공 RPS, p95/p99, 503, timeout, transport failure의 비교·판정: 수행하지 않음
 - MVC 실행, 새 metric/observer, pool/admission/timeout/resource 조정: 수행하지 않음
+
+## 아직 없는 증거
+
+- core 6회가 아직 없으므로 AI premature close, reused-channel failure, HTTP 500, p95, completion, CPU/memory 등의 policy effect는 측정되지 않았다.
+- 기존 endpoint는 lifecycle property 자체를 노출하지 않는다. 이 항목은 container environment와 Java 11 property-binding test로만 증명했으며, endpoint 확장은 이번 범위에서 하지 않았다.
 
 ## artifact
 

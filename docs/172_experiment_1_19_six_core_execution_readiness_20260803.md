@@ -3,14 +3,49 @@
 작성일: 2026-08-03
 상태: 준비 완료, 실행 대기
 
-## 고정된 A/B arm
+## DECISION
 
-- BASELINE: FIFO / max idle 0ms / eviction 0ms
-- REMEDIATION: LIFO / max idle 3,000ms / eviction 1,000ms
-- application image: `sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168`
-- mock image: `sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1`
+`READY_FOR_SIX_CORE_RUNS`
+
+## SOURCE COMMIT
+
+`270349fa7937eb4486087d34184461ae6aaab10a`
+
+## HARNESS COMMIT
+
+`13ab71b` 이후 runtime controlled diff/schema 보완이 작업 트리에 존재한다. 이 보완은 core 실행 전에 별도 commit/push한다.
+
+## IMAGE ID
+
+- application: `sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168`
+- local RepoDigest: `doeng-flux-exp119-fresh-first-20260803@sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168`
+- mock: `sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1`
+
+## BASELINE CONFIG
+
+- FIFO / max idle 0ms / eviction 0ms
+
+## REMEDIATION CONFIG
+
+- LIFO / max idle 3,000ms / eviction 1,000ms
+
+## CONTROLLED DIFF
 
 정책 세 변수 외 rendered Compose 차이는 없으며, runtime container environment와 Java 11 property-binding test로 적용 경로를 확인했다. 근거는 `docs/171_experiment_1_19_fresh_first_ab_preflight_result_20260803.md`에 있다.
+
+Rendered Compose와 runtime snapshot은 lifecycle 세 값 외 차이가 없다. pool mode SHARED, pool 400/pending 800, pending acquire timeout 10,000ms, connect 2,000ms, response 10,000ms, admission 320은 두 arm에서 동일하다.
+
+## PREFLIGHT RESULT
+
+두 arm의 fresh recreate·health·mock/DB reset·fixture/auth·collector gate가 통과했고 core workload는 0회다.
+
+## COLLECTOR READINESS
+
+pool endpoint 단발 snapshot, DB collector, container collector, Node runtime을 확인했다. future core에서는 application continuous snapshot OFF, mock continuous polling OFF, JFR OFF를 유지한다.
+
+## AGGREGATOR READINESS
+
+schema는 validity, primary reliability(AI premature close·reused channel·HTTP 500 등), guardrail, 사전등록 decision enum을 준비했으며 `NOT_RUN` 상태다.
 
 ## 이후 core 계약
 
@@ -46,3 +81,11 @@ core를 시작하기 전에 다음 중 하나라도 달라지면 해당 run을 �
 `READY_FOR_SIX_CORE_RUNS`.
 
 이 상태는 A/B 실행의 시작 허가 전제이며, policy 채택·rollback·성능 우위의 판정은 아니다.
+
+## NEXT ALLOWED STEP
+
+승인 후 `PAIR-01: BASELINE-001 → REMEDIATION-001`만 시작할 수 있다. 이후 PAIR-02, PAIR-03도 같은 frozen contract를 사용한다.
+
+## HARD STOP
+
+이 문서 작성만으로 여섯 core, 105초 VU workload, policy 채택/rollback, 추가 가설, MVC 비교를 자동 실행하지 않는다.

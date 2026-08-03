@@ -15,6 +15,9 @@
                                                               "DOENG_EXTERNAL_POOL_MODE":  "SHARED",
                                                               "DOENG_SHARED_POOL_MAX_CONNECTIONS":  "400",
                                                               "DOENG_SHARED_POOL_PENDING_MAX_COUNT":  "800",
+                                                              "DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS":  "10000",
+                                                              "DOENG_HTTP_CONNECT_TIMEOUT_MS":  "2000",
+                                                              "DOENG_HTTP_RESPONSE_TIMEOUT_MS":  "10000",
                                                               "DOENG_AI_ADMISSION_MAX_CONCURRENT":  "320"
                                                           },
                                  "actuatorPoolMode":  "SHARED",
@@ -26,8 +29,12 @@
                        "dockerfileGitObjectSha256":  "2cd21f5140d807fa5f302bdd7acd21376f347cdffdc8ce29a9a713aecb52537f",
                        "appImageTag":  "doeng-flux-exp119-fresh-first-20260803:latest",
                        "appImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+                       "appImageRepoDigests":  [
+                                                   "doeng-flux-exp119-fresh-first-20260803@sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168"
+                                               ],
+                       "appImageLocalDigest":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
                        "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
-                       "runnerSha256":  "439f255a348a5cfb9cbc570558f02883674ab57a6dbb1a5827a0852ae1854f89",
+                       "runnerSha256":  "d601dd5d0b543e5ffb99493bf4c6ef7bfb65569ad90f9b721d170a8f065f2782",
                        "k6ScriptSha256":  "e69ccaf51c8fee1cad2bb726669b93dcb363c9acecaa732f9f36277a10c43e63",
                        "composeSources":  [
                                               {

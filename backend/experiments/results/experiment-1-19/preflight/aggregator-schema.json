@@ -20,6 +20,45 @@
     "verification-summary.json",
     "provenance/"
   ],
+  "validity": [
+    "measurementValidity",
+    "condition",
+    "runId",
+    "sourceCommit",
+    "imageIdOrDigest",
+    "configSnapshot",
+    "renderedComposeHash",
+    "fixtureAuthResetConsistency",
+    "collectorCompleteness",
+    "loadStopDrainCompleteness"
+  ],
+  "primaryReliability": [
+    "aiPrematureCloseTotal",
+    "reusedChannelPrematureClose",
+    "mockCloseBeforeAcquireReusedPrematureClose",
+    "aiTransportHttp500",
+    "duplicateMockHandlerCount",
+    "uncontrolledFailure"
+  ],
+  "guardrail": [
+    "http200Median",
+    "acceptedRequestP95Median",
+    "successfulCompletion",
+    "connectionCreation",
+    "activeIdlePending",
+    "connectFailure",
+    "pendingAcquireTimeout",
+    "fdOrEphemeralPortError",
+    "cpuMemory"
+  ],
+  "preregisteredDecisionStates": [
+    "ADOPT",
+    "NOT_EFFECTIVE",
+    "RELIABILITY_IMPROVED_BUT_TOO_COSTLY",
+    "BASELINE_NOT_REPRODUCED",
+    "INVALID",
+    "NOT_RUN"
+  ],
   "comparisonMetrics": [
     "successfulRps",
     "acceptedP95Ms",

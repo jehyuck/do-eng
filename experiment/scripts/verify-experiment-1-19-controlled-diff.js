@@ -9,7 +9,7 @@ const path = require("path")
 
 function usage() {
   throw new Error(
-    "Usage: node verify-experiment-1-19-controlled-diff.js <baseline.json> <remediation.json> <result.json> <diff.txt>"
+    "Usage: node verify-experiment-1-19-controlled-diff.js <baseline-compose.json> <remediation-compose.json> <baseline-runtime.json> <remediation-runtime.json> <result.json> <diff.txt>"
   )
 }
 
@@ -57,10 +57,29 @@ const expected = {
   },
 }
 
-if (process.argv.length !== 6) usage()
-const [, , baselinePath, remediationPath, resultPath, diffPath] = process.argv
+function runtimeSnapshot(input) {
+  const runtime = input.runtimePropertyProof || {}
+  const environment = runtime.containerEnvironment || {}
+  return {
+    poolMode: runtime.actuatorPoolMode ?? null,
+    DOENG_EXTERNAL_LEASING_STRATEGY: environment.DOENG_EXTERNAL_LEASING_STRATEGY ?? null,
+    DOENG_EXTERNAL_MAX_IDLE_TIME_MS: environment.DOENG_EXTERNAL_MAX_IDLE_TIME_MS ?? null,
+    DOENG_EXTERNAL_EVICTION_INTERVAL_MS: environment.DOENG_EXTERNAL_EVICTION_INTERVAL_MS ?? null,
+    DOENG_SHARED_POOL_MAX_CONNECTIONS: environment.DOENG_SHARED_POOL_MAX_CONNECTIONS ?? null,
+    DOENG_SHARED_POOL_PENDING_MAX_COUNT: environment.DOENG_SHARED_POOL_PENDING_MAX_COUNT ?? null,
+    DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS: environment.DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS ?? null,
+    DOENG_HTTP_CONNECT_TIMEOUT_MS: environment.DOENG_HTTP_CONNECT_TIMEOUT_MS ?? null,
+    DOENG_HTTP_RESPONSE_TIMEOUT_MS: environment.DOENG_HTTP_RESPONSE_TIMEOUT_MS ?? null,
+    DOENG_AI_ADMISSION_MAX_CONCURRENT: environment.DOENG_AI_ADMISSION_MAX_CONCURRENT ?? null,
+  }
+}
+
+if (process.argv.length !== 8) usage()
+const [, , baselinePath, remediationPath, baselineRuntimePath, remediationRuntimePath, resultPath, diffPath] = process.argv
 const baseline = readJson(baselinePath)
 const remediation = readJson(remediationPath)
+const baselineRuntime = runtimeSnapshot(readJson(baselineRuntimePath))
+const remediationRuntime = runtimeSnapshot(readJson(remediationRuntimePath))
 const baselineService = baseline.services && baseline.services["flux-corrected"]
 const remediationService = remediation.services && remediation.services["flux-corrected"]
 if (!baselineService || !remediationService) {
@@ -75,13 +94,24 @@ const observed = {
 }
 const valuesMatch = JSON.stringify(observed) === JSON.stringify(expected)
 const canonicalMatch = JSON.stringify(normalizedCompose(baseline)) === JSON.stringify(normalizedCompose(remediation))
+const normalizedBaselineRuntime = { ...baselineRuntime }
+const normalizedRemediationRuntime = { ...remediationRuntime }
+for (const key of Object.keys(expected.baseline)) {
+  delete normalizedBaselineRuntime[key]
+  delete normalizedRemediationRuntime[key]
+}
+const runtimePolicyValuesMatch = Object.entries(expected.baseline).every(([key, value]) =>
+  baselineRuntime[key] === value && remediationRuntime[key] === expected.remediation[key]
+)
+const runtimeFixedValuesMatch = JSON.stringify(normalizedBaselineRuntime) === JSON.stringify(normalizedRemediationRuntime)
 const result = {
   checkedAt: new Date().toISOString(),
   expected,
   observed,
   valuesMatch,
   canonicalComposeMatchAfterRemovingPolicyFields: canonicalMatch,
-  controlledDiffValid: valuesMatch && canonicalMatch,
+  runtime: { baseline: baselineRuntime, remediation: remediationRuntime, policyValuesMatch: runtimePolicyValuesMatch, fixedValuesMatch: runtimeFixedValuesMatch },
+  controlledDiffValid: valuesMatch && canonicalMatch && runtimePolicyValuesMatch && runtimeFixedValuesMatch,
 }
 
 fs.mkdirSync(path.dirname(resultPath), { recursive: true })
@@ -90,6 +120,8 @@ fs.writeFileSync(diffPath, [
   "Experiment 1-19 controlled Compose diff",
   `policy values match preregistration: ${valuesMatch}`,
   `all remaining rendered Compose content identical: ${canonicalMatch}`,
+  `runtime lifecycle values match preregistration: ${runtimePolicyValuesMatch}`,
+  `all remaining runtime values identical: ${runtimeFixedValuesMatch}`,
   "baseline:",
   ...Object.entries(observed.baseline).map(([key, value]) => `  ${key}=${value}`),
   "remediation:",

@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-08-03T06:05:54.696Z",
+  "checkedAt": "2026-08-03T06:32:14.306Z",
   "expected": {
     "baseline": {
       "DOENG_EXTERNAL_LEASING_STRATEGY": "FIFO",
@@ -26,5 +26,33 @@
   },
   "valuesMatch": true,
   "canonicalComposeMatchAfterRemovingPolicyFields": true,
+  "runtime": {
+    "baseline": {
+      "poolMode": "SHARED",
+      "DOENG_EXTERNAL_LEASING_STRATEGY": "FIFO",
+      "DOENG_EXTERNAL_MAX_IDLE_TIME_MS": "0",
+      "DOENG_EXTERNAL_EVICTION_INTERVAL_MS": "0",
+      "DOENG_SHARED_POOL_MAX_CONNECTIONS": "400",
+      "DOENG_SHARED_POOL_PENDING_MAX_COUNT": "800",
+      "DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS": "10000",
+      "DOENG_HTTP_CONNECT_TIMEOUT_MS": "2000",
+      "DOENG_HTTP_RESPONSE_TIMEOUT_MS": "10000",
+      "DOENG_AI_ADMISSION_MAX_CONCURRENT": "320"
+    },
+    "remediation": {
+      "poolMode": "SHARED",
+      "DOENG_EXTERNAL_LEASING_STRATEGY": "LIFO",
+      "DOENG_EXTERNAL_MAX_IDLE_TIME_MS": "3000",
+      "DOENG_EXTERNAL_EVICTION_INTERVAL_MS": "1000",
+      "DOENG_SHARED_POOL_MAX_CONNECTIONS": "400",
+      "DOENG_SHARED_POOL_PENDING_MAX_COUNT": "800",
+      "DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS": "10000",
+      "DOENG_HTTP_CONNECT_TIMEOUT_MS": "2000",
+      "DOENG_HTTP_RESPONSE_TIMEOUT_MS": "10000",
+      "DOENG_AI_ADMISSION_MAX_CONCURRENT": "320"
+    },
+    "policyValuesMatch": true,
+    "fixedValuesMatch": true
+  },
   "controlledDiffValid": true
 }
