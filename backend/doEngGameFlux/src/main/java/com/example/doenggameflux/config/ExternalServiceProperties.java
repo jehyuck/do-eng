@@ -21,6 +21,8 @@ public class ExternalServiceProperties {
     private int responseTimeoutMs = 10000;
     private int pendingAcquireTimeoutMs = 10000;
     private long maxIdleTimeMs = 0;
+    private ExternalLeasingStrategy leasingStrategy = ExternalLeasingStrategy.FIFO;
+    private long backgroundEvictionIntervalMs = 0;
     private ExternalPoolMode poolMode = ExternalPoolMode.SHARED;
     private PoolSettings sharedPool = new PoolSettings(200, 400);
     private PoolSettings tokenPool = new PoolSettings(40, 80);
@@ -28,8 +30,14 @@ public class ExternalServiceProperties {
     private PoolSettings storagePool = new PoolSettings(40, 80);
 
     public void validatePoolContract() {
+        if (leasingStrategy == null) {
+            throw new IllegalStateException("leasing-strategy must not be null");
+        }
         if (maxIdleTimeMs < 0) {
             throw new IllegalStateException("max-idle-time-ms must be zero or positive");
+        }
+        if (backgroundEvictionIntervalMs < 0) {
+            throw new IllegalStateException("eviction-interval-ms must be zero or positive");
         }
         validateSettings("shared-pool", sharedPool);
         validateSettings("token-pool", tokenPool);

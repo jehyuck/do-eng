@@ -12,7 +12,19 @@ class ExternalServicePropertiesTest {
     void maxIdleTimeDefaultsToDisabled() {
         ExternalServiceProperties properties = new ExternalServiceProperties();
 
+        assertEquals(ExternalLeasingStrategy.FIFO, properties.getLeasingStrategy());
         assertEquals(0L, properties.getMaxIdleTimeMs());
+        assertEquals(0L, properties.getBackgroundEvictionIntervalMs());
+        assertDoesNotThrow(properties::validatePoolContract);
+    }
+
+    @Test
+    void acceptsFreshFirstLifecyclePolicyValues() {
+        ExternalServiceProperties properties = new ExternalServiceProperties();
+        properties.setLeasingStrategy(ExternalLeasingStrategy.LIFO);
+        properties.setMaxIdleTimeMs(3000);
+        properties.setBackgroundEvictionIntervalMs(1000);
+
         assertDoesNotThrow(properties::validatePoolContract);
     }
 
@@ -20,6 +32,22 @@ class ExternalServicePropertiesTest {
     void rejectsNegativeMaxIdleTime() {
         ExternalServiceProperties properties = new ExternalServiceProperties();
         properties.setMaxIdleTimeMs(-1);
+
+        assertThrows(IllegalStateException.class, properties::validatePoolContract);
+    }
+
+    @Test
+    void rejectsNegativeBackgroundEvictionInterval() {
+        ExternalServiceProperties properties = new ExternalServiceProperties();
+        properties.setBackgroundEvictionIntervalMs(-1);
+
+        assertThrows(IllegalStateException.class, properties::validatePoolContract);
+    }
+
+    @Test
+    void rejectsNullLeasingStrategy() {
+        ExternalServiceProperties properties = new ExternalServiceProperties();
+        properties.setLeasingStrategy(null);
 
         assertThrows(IllegalStateException.class, properties::validatePoolContract);
     }

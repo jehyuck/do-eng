@@ -155,8 +155,15 @@ public class ExternalHttpClientConfig {
                 .pendingAcquireMaxCount(settings.getPendingAcquireMaxCount())
                 .pendingAcquireTimeout(Duration.ofMillis(
                         properties.getPendingAcquireTimeoutMs()));
+        if (properties.getLeasingStrategy() == ExternalLeasingStrategy.LIFO) {
+            builder.lifo();
+        }
         if (properties.getMaxIdleTimeMs() > 0) {
             builder.maxIdleTime(Duration.ofMillis(properties.getMaxIdleTimeMs()));
+        }
+        if (properties.getBackgroundEvictionIntervalMs() > 0) {
+            builder.evictInBackground(Duration.ofMillis(
+                    properties.getBackgroundEvictionIntervalMs()));
         }
         if (experimentMetricsEnabled || diagnosticProperties.isEnabled() || poolObservationEnabled) {
             builder.metrics(true);

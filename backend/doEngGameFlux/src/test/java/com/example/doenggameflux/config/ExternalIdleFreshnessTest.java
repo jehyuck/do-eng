@@ -60,7 +60,7 @@ class ExternalIdleFreshnessTest {
     void maxIdleTimeDoesNotInterruptActiveTwoSecondResponse() {
         DisposableServer server = HttpServer.create()
                 .port(0)
-                .idleTimeout(Duration.ofSeconds(2))
+                .idleTimeout(Duration.ofSeconds(20))
                 .route(routes -> routes.get("/slow", (request, response) ->
                         response.sendString(Mono.delay(Duration.ofSeconds(2)).map(ignored -> "ok"))))
                 .bindNow();

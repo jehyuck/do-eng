@@ -28,6 +28,7 @@ doeng:
     mode: ${DOENG_STORAGE_MODE:http}
   external:
     pool-mode: ${DOENG_EXTERNAL_POOL_MODE:SHARED}
+    leasing-strategy: ${DOENG_EXTERNAL_LEASING_STRATEGY:FIFO}
     shared-pool:
       max-connections: ${DOENG_SHARED_POOL_MAX_CONNECTIONS:${DOENG_HTTP_MAX_CONNECTIONS:200}}
       pending-acquire-max-count: ${DOENG_SHARED_POOL_PENDING_MAX_COUNT:${DOENG_HTTP_PENDING_MAX_COUNT:400}}
@@ -44,3 +45,4 @@ doeng:
     response-timeout-ms: ${DOENG_HTTP_RESPONSE_TIMEOUT_MS:10000}
     pending-acquire-timeout-ms: ${DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS:10000}
     max-idle-time-ms: ${DOENG_EXTERNAL_MAX_IDLE_TIME_MS:0}
+    eviction-interval-ms: ${DOENG_EXTERNAL_EVICTION_INTERVAL_MS:0}
