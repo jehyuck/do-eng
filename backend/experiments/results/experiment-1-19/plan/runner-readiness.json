@@ -1,0 +1,17 @@
+﻿{
+    "executionMode":  "PLAN",
+    "plannedRuns":  [
+                        "BASELINE-001",
+                        "REMEDIATION-001",
+                        "BASELINE-002",
+                        "REMEDIATION-002",
+                        "BASELINE-003",
+                        "REMEDIATION-003"
+                    ],
+    "warmupCount":  0,
+    "k6InvocationCount":  0,
+    "coreCount":  0,
+    "clientResultsCreated":  0,
+    "completedCoreDirectories":  0,
+    "state":  "CORE_RUNNER_READY"
+}

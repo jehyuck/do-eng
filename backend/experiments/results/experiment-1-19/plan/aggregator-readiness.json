@@ -1,0 +1,35 @@
+{
+  "executionStatus": "NOT_RUN",
+  "requiredRuns": [
+    "BASELINE-001",
+    "REMEDIATION-001",
+    "BASELINE-002",
+    "REMEDIATION-002",
+    "BASELINE-003",
+    "REMEDIATION-003"
+  ],
+  "completedRuns": [],
+  "missingRuns": [
+    "BASELINE-001",
+    "REMEDIATION-001",
+    "BASELINE-002",
+    "REMEDIATION-002",
+    "BASELINE-003",
+    "REMEDIATION-003"
+  ],
+  "requiredArtifacts": [
+    "run-config.json",
+    "client-results.json",
+    "client-progress.jsonl",
+    "pool/pool-metrics.jsonl",
+    "application/application.log",
+    "database/",
+    "container/",
+    "mock/load-stop-mock-metrics.json",
+    "drain/mock-drain-summary.json",
+    "verification-summary.json",
+    "provenance/"
+  ],
+  "aggregateReadiness": "INCOMPLETE",
+  "decisionState": "NOT_RUN"
+}

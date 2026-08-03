@@ -7,11 +7,10 @@
 const fs = require("fs")
 const path = require("path")
 
-if (process.argv.length !== 3) {
-  throw new Error("Usage: node aggregate-experiment-1-19.js <schema-output.json>")
+if (process.argv.length !== 3 && process.argv.length !== 5) {
+  throw new Error("Usage: node aggregate-experiment-1-19.js <schema-output.json> | --readiness <core-root> <output.json>")
 }
 
-const outputPath = process.argv[2]
 const schema = {
   experiment: "Experiment 1-19",
   purpose: "Fresh-First lifecycle-policy A/B core result schema",
@@ -53,6 +52,37 @@ const schema = {
   decisionState: "NOT_RUN",
   forbiddenAtPreflight: ["core performance result", "policy effectiveness decision", "aggregate outcome"],
 }
+
+if (process.argv[2] === "--readiness") {
+  const [, , , coreRoot, outputPath] = process.argv
+  const runs = ["BASELINE-001", "REMEDIATION-001", "BASELINE-002", "REMEDIATION-002", "BASELINE-003", "REMEDIATION-003"]
+  const required = schema.requiredArtifactsPerRun
+  const result = {
+    executionStatus: "NOT_RUN",
+    requiredRuns: runs,
+    completedRuns: [],
+    missingRuns: runs,
+    requiredArtifacts: required,
+    aggregateReadiness: "INCOMPLETE",
+    decisionState: "NOT_RUN",
+  }
+  if (fs.existsSync(coreRoot)) {
+    for (const run of runs) {
+      const directory = path.join(coreRoot, `RUN-20260803-EXP119-${run}`)
+      if (fs.existsSync(directory)) {
+        const complete = required.every((item) => fs.existsSync(path.join(directory, item)))
+        if (complete) result.completedRuns.push(run)
+      }
+    }
+    result.missingRuns = runs.filter((run) => !result.completedRuns.includes(run))
+    if (result.completedRuns.length === runs.length) result.aggregateReadiness = "READY_TO_AGGREGATE"
+  }
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true })
+  fs.writeFileSync(outputPath, `${JSON.stringify(result, null, 2)}\n`)
+  process.exit(0)
+}
+
+const outputPath = process.argv[2]
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true })
 fs.writeFileSync(outputPath, `${JSON.stringify(schema, null, 2)}\n`)

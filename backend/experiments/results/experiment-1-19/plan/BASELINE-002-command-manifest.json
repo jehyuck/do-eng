@@ -1,0 +1,92 @@
+﻿{
+    "runId":  "RUN-20260803-EXP119-BASELINE-002",
+    "condition":  "BASELINE",
+    "runIndex":  "002",
+    "executionMode":  "PLAN",
+    "sourceCommit":  "270349fa7937eb4486087d34184461ae6aaab10a",
+    "applicationImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+    "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+    "composeFiles":  [
+                         "backend\\docker-compose.experiment.yaml",
+                         "backend\\docker-compose.app-instance-t3-medium.yaml",
+                         "backend\\docker-compose.mock-headroom-4cpu.yaml",
+                         "backend\\docker-compose.http-pool-400.yaml",
+                         "backend\\docker-compose.mock-memory-headroom.yaml",
+                         "backend\\docker-compose.experiment-1-12-connection-attribution.yaml",
+                         "backend\\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml"
+                     ],
+    "environment":  {
+                        "leasingStrategy":  "FIFO",
+                        "maxIdleTimeMs":  "0",
+                        "evictionIntervalMs":  "0"
+                    },
+    "artifactRoot":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-19\\core\\RUN-20260803-EXP119-BASELINE-002",
+    "workload":  {
+                     "vu":  200,
+                     "initialVu":  200,
+                     "durationMs":  105000,
+                     "intervalMs":  1000,
+                     "aiDelayMs":  2000,
+                     "storageDelayMs":  100,
+                     "requestTimeoutMs":  10000,
+                     "drainSeconds":  30,
+                     "appCpu":  2,
+                     "appMemory":  "3GiB",
+                     "poolMax":  400,
+                     "poolPending":  800,
+                     "dbPool":  10,
+                     "admission":  320
+                 },
+    "orderedSteps":  [
+                         "provenance",
+                         "artifact gate",
+                         "rendered compose",
+                         "fresh recreate",
+                         "health",
+                         "idle",
+                         "reset",
+                         "fixture/auth",
+                         "runtime snapshot",
+                         "collector",
+                         "warm-up",
+                         "pre-core idle",
+                         "k6 core",
+                         "load-stop",
+                         "drain",
+                         "consistency",
+                         "artifact verification",
+                         "cleanup"
+                     ],
+    "commands":  [
+                     "docker compose ... up -d --force-recreate --no-build",
+                     "run-isolated-vu-success-smoke.ps1 warm-up",
+                     "node experiment/load/mission-load.js via smoke runner",
+                     "collect-diagnostic-pool.ps1",
+                     "docker compose ... down --remove-orphans"
+                 ],
+    "requiredArtifacts":  [
+                              "run-config.json",
+                              "client-results.json",
+                              "client-progress.jsonl",
+                              "pool/pool-metrics.jsonl",
+                              "application/application.log",
+                              "database/",
+                              "container/",
+                              "mock/load-stop-mock-metrics.json",
+                              "drain/mock-drain-summary.json",
+                              "verification-summary.json",
+                              "provenance/",
+                              "execution-summary.json"
+                          ],
+    "forbiddenCommandsInPlanMode":  [
+                                        "docker compose up",
+                                        "DB reset",
+                                        "mock reset",
+                                        "token fixture",
+                                        "warm-up",
+                                        "k6",
+                                        "collector process",
+                                        "drain",
+                                        "cleanup"
+                                    ]
+}

@@ -1,0 +1,33 @@
+﻿{
+    "executionStatus":  "NOT_RUN",
+    "orderedRuns":  [
+                        "BASELINE-001",
+                        "REMEDIATION-001",
+                        "BASELINE-002",
+                        "REMEDIATION-002",
+                        "BASELINE-003",
+                        "REMEDIATION-003"
+                    ],
+    "pairStructure":  [
+                          "PAIR-01",
+                          "PAIR-02",
+                          "PAIR-03"
+                      ],
+    "sourceCommit":  "270349fa7937eb4486087d34184461ae6aaab10a",
+    "harnessHead":  "bfe379e2fbadaed2e7dda383901a2ae0131c4af3",
+    "applicationImage":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+    "mockImage":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+    "workload":  {
+                     "intervalMs":  1000,
+                     "vu":  200,
+                     "storageDelayMs":  100,
+                     "timeoutMs":  10000,
+                     "aiDelayMs":  2000,
+                     "durationMs":  105000,
+                     "drainSeconds":  30
+                 },
+    "controlledDiff":  "FRESH_FIRST_LIFECYCLE_POLICY_V1",
+    "stopOnFirstFailure":  true,
+    "allowRerun":  false,
+    "allowAdditionalRun":  false
+}
