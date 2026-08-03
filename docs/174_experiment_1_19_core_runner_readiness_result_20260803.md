@@ -1,5 +1,7 @@
 # Experiment 1-19 core runner PLAN 결과
 
+> 2026-08-03 finalization gate 보완: `COMPLETED`는 전체 required artifact completeness 검증 뒤에만 생성한다. 상세 mapping·fixture 결과는 docs/176을 따른다.
+
 상태: `CORE_RUNNER_READY`
 
 ## 변경 파일

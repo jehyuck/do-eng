@@ -14,7 +14,7 @@
                           "PAIR-03"
                       ],
     "sourceCommit":  "270349fa7937eb4486087d34184461ae6aaab10a",
-    "harnessHead":  "bfe379e2fbadaed2e7dda383901a2ae0131c4af3",
+    "harnessHead":  "5948d2308251fca75008f3d4e5e55e6d64e121af",
     "applicationImage":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
     "mockImage":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
     "workload":  {

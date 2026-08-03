@@ -70,12 +70,12 @@
                               "client-progress.jsonl",
                               "pool/pool-metrics.jsonl",
                               "application/application.log",
-                              "database/",
-                              "container/",
+                              "database/database-metrics.jsonl",
+                              "container/container-stats.jsonl",
                               "mock/load-stop-mock-metrics.json",
                               "drain/mock-drain-summary.json",
                               "verification-summary.json",
-                              "provenance/",
+                              "provenance/runtime-provenance.json",
                               "execution-summary.json"
                           ],
     "forbiddenCommandsInPlanMode":  [

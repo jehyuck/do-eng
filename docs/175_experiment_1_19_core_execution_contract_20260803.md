@@ -1,5 +1,7 @@
 # Experiment 1-19 core execution contract
 
+> Terminal state 보완: success는 `COMPLETED` 단독, runner failure는 `EXECUTION_FAILED` 단독이다. required artifact contract와 finalization 순서는 docs/176을 따른다.
+
 ## DECISION
 
 `CORE_RUNNER_READY`

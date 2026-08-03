@@ -23,12 +23,13 @@ const schema = {
     "client-progress.jsonl",
     "pool/pool-metrics.jsonl",
     "application/application.log",
-    "database/",
-    "container/",
+    "database/database-metrics.jsonl",
+    "container/container-stats.jsonl",
     "mock/load-stop-mock-metrics.json",
     "drain/mock-drain-summary.json",
     "verification-summary.json",
-    "provenance/",
+    "provenance/runtime-provenance.json",
+    "execution-summary.json",
   ],
   validity: ["measurementValidity", "condition", "runId", "sourceCommit", "imageIdOrDigest", "configSnapshot", "renderedComposeHash", "fixtureAuthResetConsistency", "collectorCompleteness", "loadStopDrainCompleteness"],
   primaryReliability: ["aiPrematureCloseTotal", "reusedChannelPrematureClose", "mockCloseBeforeAcquireReusedPrematureClose", "aiTransportHttp500", "duplicateMockHandlerCount", "uncontrolledFailure"],
@@ -62,6 +63,7 @@ if (process.argv[2] === "--readiness") {
     requiredRuns: runs,
     completedRuns: [],
     missingRuns: runs,
+    runChecks: {},
     requiredArtifacts: required,
     aggregateReadiness: "INCOMPLETE",
     decisionState: "NOT_RUN",
@@ -70,8 +72,22 @@ if (process.argv[2] === "--readiness") {
     for (const run of runs) {
       const directory = path.join(coreRoot, `RUN-20260803-EXP119-${run}`)
       if (fs.existsSync(directory)) {
-        const complete = required.every((item) => fs.existsSync(path.join(directory, item)))
-        if (complete) result.completedRuns.push(run)
+        const artifactPaths = required.map((item) => path.join(directory, item))
+        const artifactsExist = artifactPaths.every((artifact) => fs.existsSync(artifact))
+        const completedMarker = fs.existsSync(path.join(directory, "COMPLETED"))
+        const failedMarker = fs.existsSync(path.join(directory, "EXECUTION_FAILED"))
+        let summaryCompleted = false
+        let validationPassed = false
+        try {
+          const summary = JSON.parse(fs.readFileSync(path.join(directory, "execution-summary.json"), "utf8").replace(/^\uFEFF/, ""))
+          summaryCompleted = summary.executionStatus === "COMPLETED" && summary.artifactValidation === "PASSED"
+          const pool = fs.readFileSync(path.join(directory, "pool", "pool-metrics.jsonl"), "utf8").split(/\r?\n/).find(Boolean)
+          validationPassed = Boolean(pool) && Boolean(JSON.parse(pool.replace(/^\uFEFF/, "")))
+        } catch (_) {
+          validationPassed = false
+        }
+        result.runChecks[run] = { artifactsExist, completedMarker, failedMarker, summaryCompleted, validationPassed }
+        if (artifactsExist && completedMarker && !failedMarker && summaryCompleted && validationPassed) result.completedRuns.push(run)
       }
     }
     result.missingRuns = runs.filter((run) => !result.completedRuns.includes(run))

@@ -8,6 +8,7 @@ param(
 # has no Docker/DB/mock/k6/warm-up/collector side effects.
 $ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+. (Join-Path $PSScriptRoot "experiment-1-19-artifact-contract.ps1")
 $sourceCommit = "270349fa7937eb4486087d34184461ae6aaab10a"
 $frozenAppImage = "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168"
 $frozenMockImage = "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1"
@@ -46,13 +47,7 @@ $policy = if ($Condition -eq "BASELINE") {
 } else {
     [ordered]@{ leasingStrategy = "LIFO"; maxIdleTimeMs = "3000"; evictionIntervalMs = "1000" }
 }
-$requiredArtifacts = @(
-    "run-config.json", "client-results.json", "client-progress.jsonl",
-    "pool/pool-metrics.jsonl", "application/application.log", "database/",
-    "container/", "mock/load-stop-mock-metrics.json",
-    "drain/mock-drain-summary.json", "verification-summary.json",
-    "provenance/", "execution-summary.json"
-)
+$requiredArtifacts = Get-Exp119RequiredArtifacts
 
 function Write-Json([object]$Value, [string]$Path) {
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $Path) | Out-Null
@@ -77,7 +72,7 @@ function Assert-Prerequisites {
     if (-not (Test-Path -LiteralPath (Join-Path $root "experiment\load\mission-load.js"))) { throw "k6 workload script missing" }
 }
 function Existing-RunArtifact {
-    return (Test-Path -LiteralPath $runRoot) -or (Test-Path -LiteralPath $legacyRunRoot) -or (Test-Path -LiteralPath (Join-Path $runRoot "RUNNING")) -or (Test-Path -LiteralPath (Join-Path $runRoot "COMPLETED"))
+    return (Test-Path -LiteralPath $runRoot) -or (Test-Path -LiteralPath $legacyRunRoot)
 }
 function Command-Manifest {
     return [ordered]@{
@@ -103,26 +98,53 @@ New-Item -ItemType File -Path (Join-Path $runRoot "RUNNING") | Out-Null
 $composeArgs = Compose-Args
 $previousPolicy = @{}
 foreach ($entry in @{ DOENG_EXP119_APP_IMAGE = $appTag; DOENG_EXTERNAL_LEASING_STRATEGY = $policy.leasingStrategy; DOENG_EXTERNAL_MAX_IDLE_TIME_MS = $policy.maxIdleTimeMs; DOENG_EXTERNAL_EVICTION_INTERVAL_MS = $policy.evictionIntervalMs }.GetEnumerator()) { $previousPolicy[$entry.Key] = [Environment]::GetEnvironmentVariable($entry.Key, "Process"); [Environment]::SetEnvironmentVariable($entry.Key, $entry.Value, "Process") }
+$completedSteps = [System.Collections.Generic.List[string]]::new()
+$failure = $null
+$cleanupResult = "NOT_ATTEMPTED"
 try {
     # The validated Experiment 1-13 execution primitives are reused below;
     # this wrapper supplies only the frozen 1-19 image, policy and run contract.
     docker compose -p $composeProject @composeArgs up -d --force-recreate --no-build mariadb experiment-mock flux-corrected
     if ($LASTEXITCODE -ne 0) { throw "Fresh recreate failed" }
+    $completedSteps.Add("fresh recreate")
     # run-isolated performs health/idle/reset/auth/DB/consistency/load-stop/drain.
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run-isolated-vu-success-smoke.ps1") -RunId $warmupId -Implementation "exp119-$Condition-warmup" -TargetUrl "http://127.0.0.1:8001/game/face" -ServerService flux-corrected -ComposeProject $composeProject -ComposeFiles ($composeFiles -join ",") -ActiveMissions 20 -AiDelayMs 2000 -StorageDelayMs 100 -IntervalMs 1000 -DurationMs 5000 -RequestTimeoutMs 10000 -TargetP95Ms 10000 -EnableObservability 0 -OutcomeMode controlled-admission -AccountingMode corrected -DrainObservationSeconds 10
     if ($LASTEXITCODE -ne 0) { throw "Warm-up failed" }
+    $completedSteps.Add("warm-up")
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run-isolated-vu-success-smoke.ps1") -RunId $runId -Implementation "exp119-$Condition-core" -TargetUrl "http://127.0.0.1:8001/game/face" -ServerService flux-corrected -ComposeProject $composeProject -ComposeFiles ($composeFiles -join ",") -ActiveMissions 200 -InitialActiveUsers 200 -ActivationStepUsers 200 -AiDelayMs 2000 -StorageDelayMs 100 -IntervalMs 1000 -DurationMs 105000 -RequestTimeoutMs 10000 -TargetP95Ms 10000 -EnableObservability 1 -EnableJfr 0 -EnableContainerMonitor 1 -SkipApplicationSnapshot 1 -SkipMockMetrics 1 -OutcomeMode controlled-admission -AccountingMode corrected -DrainObservationSeconds 30
     if ($LASTEXITCODE -ne 0) { throw "Core load/verification failed" }
-    Copy-Item -LiteralPath (Join-Path $legacyRunRoot "run-config.json") -Destination $runRoot
-    Copy-Item -LiteralPath (Join-Path $legacyRunRoot "client-results.json") -Destination $runRoot
-    Copy-Item -LiteralPath (Join-Path $legacyRunRoot "client-progress.jsonl") -Destination $runRoot
-    Copy-Item -LiteralPath (Join-Path $legacyRunRoot "verification-summary.json") -Destination $runRoot
+    $completedSteps.Add("k6 core, drain and verification")
+    Copy-Exp119LegacyArtifacts -LegacyRunRoot $legacyRunRoot -RunRoot $runRoot
+    $completedSteps.Add("artifact copy")
     New-Item -ItemType Directory -Force -Path (Join-Path $runRoot "provenance") | Out-Null
     Write-Json ([ordered]@{ runId=$runId; sourceCommit=$sourceCommit; applicationImageId=$frozenAppImage; mockImageId=$frozenMockImage; condition=$Condition; policy=$policy }) (Join-Path $runRoot "provenance\runtime-provenance.json")
-    Write-Json ([ordered]@{ runId=$runId; executionStatus="EXECUTED"; requiredArtifactContract=$requiredArtifacts }) (Join-Path $runRoot "execution-summary.json")
-    Remove-Item -LiteralPath (Join-Path $runRoot "RUNNING") -Force
-    New-Item -ItemType File -Path (Join-Path $runRoot "COMPLETED") | Out-Null
+    $completedSteps.Add("runtime provenance")
+} catch {
+    $failure = $_
 } finally {
-    docker compose -p $composeProject @composeArgs down --remove-orphans | Out-Null
+    try {
+        docker compose -p $composeProject @composeArgs down --remove-orphans | Out-Null
+        if ($LASTEXITCODE -ne 0) { throw "Container cleanup failed" }
+        $cleanupResult = "COMPLETED"
+    } catch {
+        $cleanupResult = "FAILED: $($_.Exception.Message)"
+        if ($null -eq $failure) { $failure = $_ }
+    }
     foreach ($entry in $previousPolicy.GetEnumerator()) { [Environment]::SetEnvironmentVariable($entry.Key, $entry.Value, "Process") }
+}
+if ($null -eq $failure) {
+    try {
+        Write-Json ([ordered]@{ runId=$runId; condition=$Condition; executionStatus="COMPLETED"; artifactValidation="PASSED"; completedSteps=@($completedSteps); cleanupResult=$cleanupResult; requiredArtifactContract=$requiredArtifacts; finalizedAt=(Get-Date).ToUniversalTime().ToString("o") }) (Join-Path $runRoot "execution-summary.json")
+        Assert-Exp119RequiredArtifactCompleteness -RunRoot $runRoot
+        Set-Exp119TerminalState -RunRoot $runRoot -State "COMPLETED"
+    } catch {
+        $failure = $_
+    }
+}
+if ($null -ne $failure) {
+    $present = @(Get-Exp119RequiredArtifacts | Where-Object { Test-Path -LiteralPath (Join-Path $runRoot $_) })
+    $missing = @(Get-Exp119RequiredArtifacts | Where-Object { -not (Test-Path -LiteralPath (Join-Path $runRoot $_)) })
+    Write-Json ([ordered]@{ runId=$runId; condition=$Condition; failedStep=if($completedSteps.Count -gt 0){$completedSteps[$completedSteps.Count-1]}else{"pre-run"}; errorType=$failure.Exception.GetType().FullName; errorMessage=$failure.Exception.Message; completedSteps=@($completedSteps); artifactPathsPresent=$present; artifactPathsMissing=$missing; cleanupResult=$cleanupResult; timestamp=(Get-Date).ToUniversalTime().ToString("o") }) (Join-Path $runRoot "failure-summary.json")
+    Set-Exp119TerminalState -RunRoot $runRoot -State "EXECUTION_FAILED"
+    throw $failure
 }

@@ -8,10 +8,36 @@
                         "BASELINE-003",
                         "REMEDIATION-003"
                     ],
-    "warmupCount":  0,
+    "requestedRuns":  [
+                          "BASELINE-001",
+                          "REMEDIATION-001",
+                          "BASELINE-002",
+                          "REMEDIATION-002",
+                          "BASELINE-003",
+                          "REMEDIATION-003"
+                      ],
+    "startedRuns":  0,
+    "completedRuns":  0,
+    "failedRuns":  0,
+    "notStartedRuns":  [
+                           "BASELINE-001",
+                           "REMEDIATION-001",
+                           "BASELINE-002",
+                           "REMEDIATION-002",
+                           "BASELINE-003",
+                           "REMEDIATION-003"
+                       ],
+    "warmupInvocations":  0,
     "k6InvocationCount":  0,
+    "coreInvocations":  0,
+    "warmupCount":  0,
     "coreCount":  0,
-    "clientResultsCreated":  0,
     "completedCoreDirectories":  0,
-    "state":  "CORE_RUNNER_READY"
+    "clientResultsCreated":  0,
+    "executionStatus":  "NOT_RUN",
+    "stoppedAfterRun":  null,
+    "state":  "CORE_RUNNER_READY",
+    "runStates":  [
+
+                  ]
 }

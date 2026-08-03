@@ -2,6 +2,7 @@ param([ValidateSet("PLAN", "EXECUTE")][string]$ExecutionMode = "PLAN")
 $ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $planRoot = Join-Path $root "backend\experiments\results\experiment-1-19\plan"
+$coreRoot = Join-Path $root "backend\experiments\results\experiment-1-19\core"
 $coreRunner = Join-Path $PSScriptRoot "run-experiment-1-19-core.ps1"
 $runs = @(
     @{ Condition="BASELINE"; RunIndex="001" }, @{ Condition="REMEDIATION"; RunIndex="001" },
@@ -15,4 +16,17 @@ foreach ($run in $runs) {
     if ($LASTEXITCODE -ne 0) { throw "Run path failed: $($run.Condition)-$($run.RunIndex)" }
 }
 $plan | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $planRoot "six-core-execution-plan.json") -Encoding UTF8
-[ordered]@{ executionMode=$ExecutionMode; plannedRuns=$plan.orderedRuns; warmupCount=0; k6InvocationCount=0; coreCount=0; clientResultsCreated=0; completedCoreDirectories=0; state=if($ExecutionMode -eq "PLAN"){"CORE_RUNNER_READY"}else{"EXECUTE_REQUESTED"} } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $planRoot "runner-readiness.json") -Encoding UTF8
+$executionRuns = @()
+if ($ExecutionMode -eq "EXECUTE") {
+    foreach ($run in $runs) {
+        $runId = "RUN-20260803-EXP119-$($run.Condition)-$($run.RunIndex)"
+        $summaryPath = Join-Path $coreRoot "$runId\execution-summary.json"
+        $summary = if (Test-Path -LiteralPath $summaryPath) { Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json } else { $null }
+        $executionRuns += [ordered]@{ runId=$runId; started=(Test-Path -LiteralPath (Join-Path $coreRoot $runId)); completed=($null -ne $summary -and $summary.executionStatus -eq "COMPLETED" -and (Test-Path -LiteralPath (Join-Path $coreRoot "$runId\COMPLETED"))); failed=(Test-Path -LiteralPath (Join-Path $coreRoot "$runId\EXECUTION_FAILED")); clientResultsCreated=(Test-Path -LiteralPath (Join-Path $coreRoot "$runId\client-results.json")) }
+    }
+}
+$started = @($executionRuns | Where-Object { $_.started }).Count
+$completed = @($executionRuns | Where-Object { $_.completed }).Count
+$failed = @($executionRuns | Where-Object { $_.failed }).Count
+$clients = @($executionRuns | Where-Object { $_.clientResultsCreated }).Count
+[ordered]@{ executionMode=$ExecutionMode; plannedRuns=@($plan.orderedRuns); requestedRuns=@($plan.orderedRuns); startedRuns=$started; completedRuns=$completed; failedRuns=$failed; notStartedRuns=if($ExecutionMode -eq "PLAN"){@($plan.orderedRuns)}else{@($executionRuns | Where-Object {-not $_.started} | ForEach-Object {$_.runId})}; warmupInvocations=if($ExecutionMode -eq "PLAN"){0}else{$started}; k6InvocationCount=if($ExecutionMode -eq "PLAN"){0}else{$started}; coreInvocations=if($ExecutionMode -eq "PLAN"){0}else{$started}; warmupCount=if($ExecutionMode -eq "PLAN"){0}else{$started}; coreCount=if($ExecutionMode -eq "PLAN"){0}else{$started}; completedCoreDirectories=$completed; clientResultsCreated=$clients; executionStatus=if($ExecutionMode -eq "PLAN"){"NOT_RUN"}elseif($failed -gt 0){"FAILED"}elseif($completed -eq $runs.Count){"COMPLETED"}else{"INCOMPLETE"}; stoppedAfterRun=if($ExecutionMode -eq "PLAN"){$null}elseif($failed -gt 0){($executionRuns | Where-Object {$_.failed} | Select-Object -First 1 -ExpandProperty runId)}else{$null}; state=if($ExecutionMode -eq "PLAN"){"CORE_RUNNER_READY"}else{"EXECUTE_FINISHED"}; runStates=$executionRuns } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $planRoot "runner-readiness.json") -Encoding UTF8
