@@ -1,0 +1,27 @@
+{
+    "k6":  0,
+    "condition":  "BASELINE",
+    "policy":  {
+                   "e":  "0",
+                   "s":  "FIFO",
+                   "i":  "0"
+               },
+    "core":  0,
+    "capture":  {
+                    "runId":  "PROBE-EXP121-BASELINE",
+                    "containerId":  "1d8c921ee6ec7ba2252b7d6784fd8c4e646e3a3be8ec44260e90819cb56debc4",
+                    "command":  "docker logs --timestamps 1d8c921ee6ec7ba2252b7d6784fd8c4e646e3a3be8ec44260e90819cb56debc4",
+                    "startedAt":  "2026-08-03T11:56:06.8435080Z",
+                    "completedAt":  "2026-08-03T11:56:07.0712952Z",
+                    "exitCode":  0,
+                    "stdoutPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\baseline\\application\\docker-logs.stdout.log",
+                    "stderrPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\baseline\\application\\docker-logs.stderr.log",
+                    "stdoutBytes":  2306,
+                    "stderrBytes":  92,
+                    "combinedPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\baseline\\application\\application.log",
+                    "combinedBytes":  2446,
+                    "captureStatus":  "APPLICATION_LOG_CAPTURE_PASSED"
+                },
+    "captureStatus":  "APPLICATION_LOG_CAPTURE_PROBE_READY",
+    "warmup":  0
+}

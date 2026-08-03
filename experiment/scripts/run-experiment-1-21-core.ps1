@@ -1,0 +1,68 @@
+﻿param(
+    [Parameter(Mandatory)][ValidateSet('BASELINE','REMEDIATION')][string]$Condition,
+    [Parameter(Mandatory)][ValidateSet('001','002','003')][string]$RunIndex,
+    [string]$RunDate = 'PLAN-DATE',
+    [ValidateSet('PLAN','EXECUTE')][string]$ExecutionMode = 'PLAN'
+)
+$ErrorActionPreference = 'Stop'
+$root = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+. (Join-Path $PSScriptRoot 'experiment-1-21-artifact-contract.ps1')
+. (Join-Path $PSScriptRoot 'experiment-1-21-collector-coverage.ps1')
+. (Join-Path $PSScriptRoot 'experiment-1-21-native-log-capture.ps1')
+$app='doeng-flux-exp119-fresh-first-20260803:latest'; $appId='sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168'
+$mock='doeng-exp119-mock-frozen-20260803:latest'; $mockId='sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1'
+$id="RUN-$RunDate-EXP121-$Condition-$RunIndex"; $warm="SMOKE-$RunDate-EXP121-$Condition-$RunIndex"
+$result=Join-Path $root 'backend\experiments\results\experiment-1-21'; $target=Join-Path $result "core\$id"; $staging=Join-Path $result "collector-staging\$id"; $legacy=Join-Path $root "experiment\results\$id"; $plan=Join-Path $result "plan\$Condition-$RunIndex-command-manifest.json"
+$files=@('backend\docker-compose.experiment.yaml','backend\docker-compose.app-instance-t3-medium.yaml','backend\docker-compose.mock-headroom-4cpu.yaml','backend\docker-compose.http-pool-400.yaml','backend\docker-compose.mock-memory-headroom.yaml','backend\docker-compose.experiment-1-12-connection-attribution.yaml','backend\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml'); $args=@(); foreach($f in $files){$args+=@('-f',(Join-Path $root $f))}; $project='doeng-exp121-core'
+$policy=if($Condition -eq 'BASELINE'){@{leasingStrategy='FIFO';maxIdleTimeMs='0';evictionIntervalMs='0'}}else{@{leasingStrategy='LIFO';maxIdleTimeMs='3000';evictionIntervalMs='1000'}}
+function Write-Json($Value,$Path){ New-Item -ItemType Directory -Force -Path (Split-Path $Path)|Out-Null; $Value|ConvertTo-Json -Depth 12|Set-Content -LiteralPath $Path -Encoding UTF8 }
+function ImageId($tag){((& docker image inspect --format '{{.Id}}' $tag).Trim())}
+function Gate { if((ImageId $app) -ne $appId -or (ImageId $mock) -ne $mockId){throw 'Frozen image mismatch'}; foreach($p in @($target,$legacy,$staging)){if(Test-Path $p){throw "Artifact collision: $p"}} }
+function Copy-PoolArtifacts { New-Item -ItemType Directory -Force -Path (Join-Path $target 'pool')|Out-Null; foreach($name in @('pool-metrics.jsonl','pool-metrics.jsonl.summary.json')) { $source=Join-Path $staging $name; if(Test-Path $source){Copy-Item -LiteralPath $source -Destination (Join-Path $target "pool/$name") -Force} } }
+$manifest=[ordered]@{experiment='Experiment 1-21';runId=$id;runDate=$RunDate;condition=$Condition;executionMode=$ExecutionMode;applicationImageId=$appId;mockImageTag=$mock;mockImageId=$mockId;mockImageBindingMode='EXPLICIT_FROZEN_TAG';policy=$policy;collector=@{managementUrl='http://127.0.0.1:9001';intervalMilliseconds=1000;durationSeconds=150;readinessTimeoutSeconds=10;stagingPath=$staging;finalPaths=@('pool/pool-metrics.jsonl','pool/pool-metrics.jsonl.summary.json','pool/collector-coverage.json')};workload=@{vu=200;durationSeconds=105;intervalSeconds=1;aiDelayMs=2000;storageDelayMs=100;timeoutMs=10000;drainSeconds=30;appCpu=2;appMemory='3GiB';poolMax=400;pending=800;dbPool=10;admission=320};orderedSteps=@('fresh recreate','warm-up','collector process start timestamp','collector readiness','core invocation start timestamp','core invocation','core invocation complete timestamp','collector completion','collector coverage validation','artifact copy','finalization')}
+Write-Json $manifest $plan
+if($ExecutionMode -eq 'PLAN'){ "PLAN READY: $id"; exit 0 }
+if($RunDate -notmatch '^\d{8}$'){throw 'EXECUTE requires -RunDate YYYYMMDD'}
+Gate; New-Item -ItemType Directory -Force -Path $target|Out-Null; New-Item -ItemType File -Path (Join-Path $target 'RUNNING')|Out-Null
+$previous=@{}; foreach($e in @{DOENG_EXP119_APP_IMAGE=$app;DOENG_EXP119_MOCK_IMAGE=$mock;DOENG_EXTERNAL_LEASING_STRATEGY=$policy.leasingStrategy;DOENG_EXTERNAL_MAX_IDLE_TIME_MS=$policy.maxIdleTimeMs;DOENG_EXTERNAL_EVICTION_INTERVAL_MS=$policy.evictionIntervalMs}.GetEnumerator()){$previous[$e.Key]=[Environment]::GetEnvironmentVariable($e.Key,'Process');[Environment]::SetEnvironmentVariable($e.Key,$e.Value,'Process')}
+$steps=[System.Collections.Generic.List[string]]::new(); $failure=$null; $cleanup='NOT_ATTEMPTED'; $collector=$null; $collectorStartedAt=$null; $coreStartedAt=$null; $coreCompletedAt=$null; $collectorCompletedAt=$null
+try {
+    docker compose -p $project @args up -d --force-recreate --no-build mariadb experiment-mock flux-corrected; if($LASTEXITCODE){throw 'Fresh recreate failed'}; $steps.Add('fresh recreate')
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'run-isolated-vu-success-smoke.ps1') -RunId $warm -Implementation "exp120-$Condition-warmup" -TargetUrl http://127.0.0.1:8001/game/face -ServerService flux-corrected -ComposeProject $project -ComposeFiles ($files -join ',') -ActiveMissions 20 -AiDelayMs 2000 -StorageDelayMs 100 -IntervalMs 1000 -DurationMs 5000 -RequestTimeoutMs 10000 -TargetP95Ms 10000 -EnableObservability 0 -OutcomeMode controlled-admission -AccountingMode corrected -DrainObservationSeconds 10
+    if($LASTEXITCODE){throw 'Warm-up failed'}; $steps.Add('warm-up')
+    New-Item -ItemType Directory -Force -Path $staging|Out-Null
+    $collectorStartedAt=(Get-Date).ToUniversalTime().ToString('o')
+    $collector=Start-Process powershell.exe -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',(Join-Path $PSScriptRoot 'collect-diagnostic-pool.ps1'),'-ManagementUrl','http://127.0.0.1:9001','-OutputPath',(Join-Path $staging 'pool-metrics.jsonl'),'-DurationSeconds','150','-IntervalMilliseconds','1000') -WorkingDirectory $root -WindowStyle Hidden -PassThru
+    $steps.Add('collector process start timestamp')
+    $ready=Wait-Exp121CollectorReady -Process $collector -JsonlPath (Join-Path $staging 'pool-metrics.jsonl') -TimeoutSeconds 10; $steps.Add('collector readiness')
+    $coreStartedAt=(Get-Date).ToUniversalTime().ToString('o'); $steps.Add('core invocation start timestamp')
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'run-isolated-vu-success-smoke.ps1') -RunId $id -Implementation "exp120-$Condition-core" -TargetUrl http://127.0.0.1:8001/game/face -ServerService flux-corrected -ComposeProject $project -ComposeFiles ($files -join ',') -ActiveMissions 200 -InitialActiveUsers 200 -ActivationStepUsers 200 -AiDelayMs 2000 -StorageDelayMs 100 -IntervalMs 1000 -DurationMs 105000 -RequestTimeoutMs 10000 -TargetP95Ms 10000 -EnableObservability 1 -EnableJfr 0 -EnableContainerMonitor 1 -SkipApplicationSnapshot 1 -SkipMockMetrics 1 -OutcomeMode controlled-admission -AccountingMode corrected -DrainObservationSeconds 30
+    $coreCompletedAt=(Get-Date).ToUniversalTime().ToString('o'); if($LASTEXITCODE){throw 'Core process failed'}; $steps.Add('core invocation'); $steps.Add('core invocation complete timestamp')
+    New-Item -ItemType Directory -Force -Path (Join-Path $target 'provenance')|Out-Null; Write-Json ([ordered]@{collectorProcessStartedAt=$collectorStartedAt;collectorFirstValidSampleAt=$ready.collectorFirstValidSampleAt;coreInvocationStartedAt=$coreStartedAt;coreInvocationCompletedAt=$coreCompletedAt;applicationLogCaptureStartedAt=$null;applicationLogCaptureCompletedAt=$null;collectorProcessCompletedAt=$null;finalizationCompletedAt=$null}) (Join-Path $target 'provenance/execution-timeline.json'); $container=(docker compose -p $project @args ps -q flux-corrected).Trim(); if([string]::IsNullOrWhiteSpace($container)){throw 'Application container unavailable for application log capture'}; $timeline=Get-Content (Join-Path $target 'provenance/execution-timeline.json') -Raw|ConvertFrom-Json;$timeline.applicationLogCaptureStartedAt=(Get-Date).ToUniversalTime().ToString('o');Write-Json $timeline (Join-Path $target 'provenance/execution-timeline.json');$capture=Invoke-Exp121NativeLogCapture -RunId $id -ContainerId $container -ApplicationDirectory (Join-Path $target 'application');$timeline.applicationLogCaptureCompletedAt=$capture.completedAt;Write-Json $timeline (Join-Path $target 'provenance/execution-timeline.json')
+    $collector.WaitForExit(); $collectorCompletedAt=(Get-Date).ToUniversalTime().ToString('o'); if($collector.ExitCode -ne 0){throw 'Pool collector process failed'}; $steps.Add('collector completion')
+    Copy-PoolArtifacts
+    $coverage=New-Exp121CollectorCoverage -RunId $id -JsonlPath (Join-Path $staging 'pool-metrics.jsonl') -SummaryPath (Join-Path $staging 'pool-metrics.jsonl.summary.json') -CollectorDurationSeconds 150 -IntervalMilliseconds 1000 -CollectorProcessStartedAt $collectorStartedAt -CoreInvocationStartedAt $coreStartedAt -CoreInvocationCompletedAt $coreCompletedAt -CollectorProcessCompletedAt $collectorCompletedAt
+    Write-Json $coverage (Join-Path $target 'pool/collector-coverage.json'); Assert-Exp121CollectorCoverage (Join-Path $target 'pool/collector-coverage.json'); $steps.Add('collector coverage validation')
+    Copy-Exp121Artifacts $legacy $staging $target; $steps.Add('artifact copy')
+    $timeline.collectorProcessCompletedAt=$collectorCompletedAt;$timeline.finalizationCompletedAt=(Get-Date).ToUniversalTime().ToString('o');Write-Json $timeline (Join-Path $target 'provenance/execution-timeline.json'); Write-Json ([ordered]@{runId=$id;applicationImageId=$appId;mockImageTag=$mock;mockImageId=$mockId;mockImageBindingMode='EXPLICIT_FROZEN_TAG';policy=$policy;collectorReadyAt=$ready.collectorReadyAt}) (Join-Path $target 'provenance/runtime-provenance.json')
+} catch { $failure=$_ } finally {
+    if($collector -and -not $collector.HasExited){$collector.WaitForExit(); $collectorCompletedAt=(Get-Date).ToUniversalTime().ToString('o')}
+    try{docker compose -p $project @args down --remove-orphans|Out-Null; if($LASTEXITCODE){throw 'Cleanup failed'};$cleanup='COMPLETED'}catch{$cleanup="FAILED: $($_.Exception.Message)";if($null-eq$failure){$failure=$_}}
+    foreach($e in $previous.GetEnumerator()){[Environment]::SetEnvironmentVariable($e.Key,$e.Value,'Process')}
+}
+if($null-eq$failure){try{Write-Json ([ordered]@{runId=$id;executionStatus='COMPLETED';artifactValidation='PASSED';completedSteps=@($steps);cleanupResult=$cleanup}) (Join-Path $target 'execution-summary.json');Assert-Exp120Artifacts $target;Set-Exp120Terminal $target 'COMPLETED'}catch{$failure=$_}}
+if($null-ne$failure){
+    # A readiness failure is still an execution artifact: retain the collector raw files and a coverage failure record.
+    if($collectorStartedAt){
+        Copy-PoolArtifacts
+        $failureType=if($failure.Exception.Message -match 'COLLECTOR_NOT_READY'){'COLLECTOR_NOT_READY'}else{'COLLECTOR_REPORTED_FAILURE'}
+        $first=$null;$last=$null;$valid=0;$invalid=0
+        foreach($line in (Get-Exp121CollectorLines (Join-Path $staging 'pool-metrics.jsonl'))){try{$sample=($line -replace '^\uFEFF','')|ConvertFrom-Json -ErrorAction Stop;$at=ConvertTo-Exp121UtcIso $sample.timestamp;if($null-eq$sample.failure -or [string]::IsNullOrWhiteSpace([string]$sample.failure)){$valid++;if($null-eq$first){$first=$at};$last=$at}}catch{$invalid++}}
+        $summaryFailures=$null;try{$summaryFailures=[int](Get-Content -LiteralPath (Join-Path $staging 'pool-metrics.jsonl.summary.json') -Raw|ConvertFrom-Json).failures}catch{}
+        Write-Json ([ordered]@{runId=$id;collectorDurationSeconds=150;intervalMilliseconds=1000;collectorProcessStartedAt=$collectorStartedAt;collectorFirstValidSampleAt=if($first){$first.ToString('o')}else{$null};coreInvocationStartedAt=$coreStartedAt;coreInvocationCompletedAt=$coreCompletedAt;collectorProcessCompletedAt=$collectorCompletedAt;collectorLastValidSampleAt=if($last){$last.ToString('o')}else{$null};validSampleCount=$valid;invalidSampleCount=$invalid;collectorFailures=$summaryFailures;coversCoreStart=$false;coversCoreEnd=$false;timestampsNonDecreasing=$false;coverageStatus='COLLECTOR_COVERAGE_FAILED';failureType=$failureType}) (Join-Path $target 'pool/collector-coverage.json')
+    }
+    $preCoreFailure=($null-eq$coreStartedAt -and $failure.Exception.Message -match 'COLLECTOR_NOT_READY')
+    Write-Json ([ordered]@{runId=$id;condition=$Condition;executionStatus='EXECUTION_FAILED';runStatus=if($preCoreFailure){'CORE_NOT_STARTED_COLLECTOR_NOT_READY'}else{'EXECUTION_FAILED'};failedStep=if($steps.Count){$steps[$steps.Count-1]}else{'pre-run'};errorType=$failure.Exception.GetType().FullName;errorMessage=$failure.Exception.Message;completedSteps=@($steps);cleanupResult=$cleanup;timestamp=(Get-Date).ToUniversalTime().ToString('o')}) (Join-Path $target 'failure-summary.json'); Set-Exp120Terminal $target 'EXECUTION_FAILED'; throw $failure
+}
+
+

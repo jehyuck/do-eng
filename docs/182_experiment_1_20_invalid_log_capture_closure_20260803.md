@@ -1,0 +1,3 @@
+# Experiment 1-20 INVALID closure
+
+`RUN-20260803-EXP120-BASELINE-001` executed measurement work but failed during application-log finalization. The PowerShell native pipeline treated normal Docker stderr (`Picked up JAVA_TOOL_OPTIONS`) as a terminating error, so complete application-log evidence cannot be proven. The run is `INVALID`, is ineligible for aggregate, has no permitted rerun, and the remaining five Exp120 runs are not executed. Raw artifacts remain in place; closure inventory records only paths, sizes, SHA-256 values, and timestamps. No outcome values were inspected. Policy decision remains `NOT_RUN`.

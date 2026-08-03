@@ -1,0 +1,27 @@
+{
+    "k6":  0,
+    "condition":  "REMEDIATION",
+    "policy":  {
+                   "e":  "1000",
+                   "s":  "LIFO",
+                   "i":  "3000"
+               },
+    "core":  0,
+    "capture":  {
+                    "runId":  "PROBE-EXP121-REMEDIATION",
+                    "containerId":  "d746d658eb798b44ebcbf7fc43fcac0b669d4a39dfecbcd1a44edea5e8907814",
+                    "command":  "docker logs --timestamps d746d658eb798b44ebcbf7fc43fcac0b669d4a39dfecbcd1a44edea5e8907814",
+                    "startedAt":  "2026-08-03T11:56:30.5143531Z",
+                    "completedAt":  "2026-08-03T11:56:30.7103351Z",
+                    "exitCode":  0,
+                    "stdoutPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\remediation\\application\\docker-logs.stdout.log",
+                    "stderrPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\remediation\\application\\docker-logs.stderr.log",
+                    "stdoutBytes":  2305,
+                    "stderrBytes":  92,
+                    "combinedPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-21\\log-capture-preflight\\remediation\\application\\application.log",
+                    "combinedBytes":  2445,
+                    "captureStatus":  "APPLICATION_LOG_CAPTURE_PASSED"
+                },
+    "captureStatus":  "APPLICATION_LOG_CAPTURE_PROBE_READY",
+    "warmup":  0
+}

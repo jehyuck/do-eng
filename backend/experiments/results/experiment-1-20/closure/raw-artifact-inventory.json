@@ -1,0 +1,338 @@
+﻿{
+    "experiment":  "Experiment 1-20",
+    "runId":  "RUN-20260803-EXP120-BASELINE-001",
+    "inventoryScope":  "metadata-only",
+    "rawOutcomeInspectedDuringClosure":  false,
+    "files":  [
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\core\\RUN-20260803-EXP120-BASELINE-001\\failure-summary.json",
+                      "sizeBytes":  932,
+                      "sha256":  "5D8CF5658440502CFAC10F31ADCCBFB06D16F480DE0015C2E388378A0FB2C43D",
+                      "lastWriteTimeUtc":  "2026-08-03T11:30:16.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\core\\RUN-20260803-EXP120-BASELINE-001\\EXECUTION_FAILED",
+                      "sizeBytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                      "lastWriteTimeUtc":  "2026-08-03T11:30:15.2300000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\core\\RUN-20260803-EXP120-BASELINE-001\\pool\\pool-metrics.jsonl",
+                      "sizeBytes":  338021,
+                      "sha256":  "92CF0DDE0D78CCA36428B5F237B6FFDCE9BAF56C3204E0ABE1B1B0DD5E5519C1",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:52.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\core\\RUN-20260803-EXP120-BASELINE-001\\pool\\pool-metrics.jsonl.summary.json",
+                      "sizeBytes":  95,
+                      "sha256":  "BFE8F32B304F0DD6DD831927E669316EFF813AEADECB4D9BCBE414C2FC815B5E",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:52.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\core\\RUN-20260803-EXP120-BASELINE-001\\pool\\collector-coverage.json",
+                      "sizeBytes":  821,
+                      "sha256":  "D35129740FA6C515996913DE25980F1D293DE94E860769A607E94BE3E5C1CF2D",
+                      "lastWriteTimeUtc":  "2026-08-03T11:30:16.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\collector-staging\\RUN-20260803-EXP120-BASELINE-001\\pool-metrics.jsonl",
+                      "sizeBytes":  338021,
+                      "sha256":  "92CF0DDE0D78CCA36428B5F237B6FFDCE9BAF56C3204E0ABE1B1B0DD5E5519C1",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:52.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\experiments\\results\\experiment-1-20\\collector-staging\\RUN-20260803-EXP120-BASELINE-001\\pool-metrics.jsonl.summary.json",
+                      "sizeBytes":  95,
+                      "sha256":  "BFE8F32B304F0DD6DD831927E669316EFF813AEADECB4D9BCBE414C2FC815B5E",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:52.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\environment.json",
+                      "sizeBytes":  101206,
+                      "sha256":  "0E24BF90AE3A1174404E66F52789E0C5AAEA97F58271B8CF17728A93286AFC6F",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:28.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\run-config.json",
+                      "sizeBytes":  4667,
+                      "sha256":  "84FE37511B1A74240BD411BAE31709975EB4445634E39622E12B4604956C2B23",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:28.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\mock-metrics-pre-run.json",
+                      "sizeBytes":  601,
+                      "sha256":  "474DED7DEA794F049581FBC5E00E380CD59C27E7EF1C9C6B05C5819F4C219B73",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:28.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\mock-control.json",
+                      "sizeBytes":  295,
+                      "sha256":  "567DA9C974ABF0F0720873E604A247F15FF5BB9205FF96782FB72B900EDE4293",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:28.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\prepared-users.json",
+                      "sizeBytes":  40921,
+                      "sha256":  "3A4666C8525250336443358E17659052C5CF7D6A0AEB735DC2269B7121906087",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:32.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\db-before.json",
+                      "sizeBytes":  50966,
+                      "sha256":  "A95A3FEC5D9B078EC7BF553887A38CBD3ECD87FB28359FC490C4AD509E53BA7C",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:34.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\storage-before.json",
+                      "sizeBytes":  73,
+                      "sha256":  "A2713893D86CC501734A0B7C8901D9DD01ACFE539CE12D6E9C2531F687F03C4D",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:34.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\monitor.stdout.log",
+                      "sizeBytes":  1520,
+                      "sha256":  "AB416D5A4AEA7BD6C61C8C4FF83B909FAB144F5C6BB9D982A0A9496A8ED6C93C",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:24.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\monitor.stderr.log",
+                      "sizeBytes":  792,
+                      "sha256":  "3F38AB35C7EA268C4C5EA3E6142CC15BEB84297E67BBCD31312C1211DF2AB473",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:24.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\client-progress.jsonl",
+                      "sizeBytes":  22599,
+                      "sha256":  "8FBD8385FB61E3358CCD4740FC58D80AC35B8B0E926860019BD7D3A635F7B31E",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:50.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\container-stats.jsonl",
+                      "sizeBytes":  247690,
+                      "sha256":  "A22B25BFB70607513FAB469B834C0B6127C97209E8E9E5F687A357C3EAB75925",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\application-metrics.jsonl",
+                      "sizeBytes":  21507,
+                      "sha256":  "A4E3B9750A0DDDD08081169D23B9D89668B7CA809F760DAC0DEA4525F35954B4",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\database-metrics.jsonl",
+                      "sizeBytes":  27650,
+                      "sha256":  "5DC4DE8C808907A55A89DFBAC6B6308A076E81CDDEA3A5D7821882CBC02C47F4",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\load-stop-mock-metrics.json",
+                      "sizeBytes":  702,
+                      "sha256":  "25644D75155FC0FA7C8568F8CE62214500F91986F2C1F583BB3917A2DF7C903F",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:20.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\container-monitor-summary.json",
+                      "sizeBytes":  1520,
+                      "sha256":  "AB416D5A4AEA7BD6C61C8C4FF83B909FAB144F5C6BB9D982A0A9496A8ED6C93C",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\monitor-process-status.json",
+                      "sizeBytes":  160,
+                      "sha256":  "5B1EC45F6A8457485F7CA822526DC28650123ED17A691E6ACEBB9B613C27AE1D",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:24.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\mock-drain.jsonl",
+                      "sizeBytes":  16104,
+                      "sha256":  "88008EB73225FC8E88CB63D89561246F7B11C5E4D334DD8A3C1C66C2AD22D02E",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:50.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\mock-drain-summary.json",
+                      "sizeBytes":  1686,
+                      "sha256":  "A6C137A501DE09EBB8BD52388109C7CFCF16FB765FA3DDDC85BC03051C23B341",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:50.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\client-results.json",
+                      "sizeBytes":  16396323,
+                      "sha256":  "16A231345182C2334DA84CEE704900908C5221C6A501C2736A0E7A2368CA5941",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:50.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\client-summary.stdout.json",
+                      "sizeBytes":  6533,
+                      "sha256":  "4A3E9EDF42A16291C80A58756D501C64FD8F46C9556513F0423DE5A32EEF63DD",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:50.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\timeseries.csv",
+                      "sizeBytes":  5317,
+                      "sha256":  "826EE8ED947B1E7E76EEA97BE6D8610D13DE61C6F442ED7C866A9C6CF4DB0D16",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:50.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\timeseries.svg",
+                      "sizeBytes":  10316,
+                      "sha256":  "FFFC971A4F5FE05B7AF42CE5B5040CEDE376F35DD81B98C844812E707AC8D042",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:50.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\db-after.json",
+                      "sizeBytes":  87152,
+                      "sha256":  "A8466B2BDB8EF4053776077F0343BA715F5373D9C5F242819322AF9B3EEB3A57",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:52.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\storage-after.json",
+                      "sizeBytes":  55872,
+                      "sha256":  "A72D9C1495C695434AB9BA8D59B6A5023DD2B3DD4A0BD55BC0D8E1114A901858",
+                      "lastWriteTimeUtc":  "2026-08-03T11:29:52.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\mock-requests.json",
+                      "sizeBytes":  53166567,
+                      "sha256":  "1483A8F1A5C48F7FA53DDDFC439C83876D7DCE400B50B6052E4BC4EDC11229F8",
+                      "lastWriteTimeUtc":  "2026-08-03T11:30:06.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\mock-metrics-after.json",
+                      "sizeBytes":  618,
+                      "sha256":  "914E1EF5F42CB1C86AB5F00A505DA3C486CB4648B5468919F9A17D139754C053",
+                      "lastWriteTimeUtc":  "2026-08-03T11:30:06.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\mission-completions.json",
+                      "sizeBytes":  53089,
+                      "sha256":  "7D33FB46C0810F23F3C439E7277E236A5333AF3731146516089003EA18E78DB5",
+                      "lastWriteTimeUtc":  "2026-08-03T11:30:10.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\verification-summary.json",
+                      "sizeBytes":  160804,
+                      "sha256":  "B7373BA6143FC60CAE981A03DA5EE253FD643DC17C763775FB847BEEF4C4167E",
+                      "lastWriteTimeUtc":  "2026-08-03T11:30:12.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\RUN-20260803-EXP120-BASELINE-001\\application.log",
+                      "sizeBytes":  36,
+                      "sha256":  "E27E4132933CC9C5D34C40A90D762845D805156D999848E69F5B08E36D54C488",
+                      "lastWriteTimeUtc":  "2026-08-03T11:30:12.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\environment.json",
+                      "sizeBytes":  101107,
+                      "sha256":  "1312384C4DD75A9B84215CE0C7309FE95C86A8B7E9469EB1DB6D2A8B33033EAA",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:02.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\run-config.json",
+                      "sizeBytes":  4668,
+                      "sha256":  "90BDA72BC7433187BA884F8A0ABC46C20E1090121AFD230243C0F17A6CDE84B0",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:04.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\mock-metrics-pre-run.json",
+                      "sizeBytes":  434,
+                      "sha256":  "796A8D3451469CF43F4528547B5AC9F963B4137532BF84CB8485CC6E7477AC39",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:04.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\mock-control.json",
+                      "sizeBytes":  295,
+                      "sha256":  "567DA9C974ABF0F0720873E604A247F15FF5BB9205FF96782FB72B900EDE4293",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:04.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\prepared-users.json",
+                      "sizeBytes":  4570,
+                      "sha256":  "55F3A771BDA6746164F49C9C686AB2BCA632D74EA86D0187EC19869B30ADFDE5",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:04.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\db-before.json",
+                      "sizeBytes":  5176,
+                      "sha256":  "E27D4A2D1E94631F180E4D1CAC9E9C3C4CC6D8891B090150DF64B1D7E3C0D641",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:06.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\storage-before.json",
+                      "sizeBytes":  73,
+                      "sha256":  "A2713893D86CC501734A0B7C8901D9DD01ACFE539CE12D6E9C2531F687F03C4D",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:06.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\client-progress.jsonl",
+                      "sizeBytes":  2494,
+                      "sha256":  "F63CBEED754D2362A132D1E3A3FC363F12CD6A0CA773F0319CF9641628EFD3B8",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:20.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\load-stop-mock-metrics.json",
+                      "sizeBytes":  684,
+                      "sha256":  "60E909B27C6F36274A7E9721181EE1F46B97672CD496C87CF0A2EAD99B6A1A60",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:10.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\mock-drain.jsonl",
+                      "sizeBytes":  5505,
+                      "sha256":  "18A6D183AFF5EB25B0CF90CED21451E50E8B42FE97B6EE1EDA91E52DFD3079EE",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:20.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\mock-drain-summary.json",
+                      "sizeBytes":  1651,
+                      "sha256":  "1F331B655000D9986FC8C04098CDD7A07E204BB68A99A5CF082F1FBA65BC50BF",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:20.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\client-results.json",
+                      "sizeBytes":  48976,
+                      "sha256":  "79D16F52FC6E0AA5BAA70E9FC4849E47DD8C8C1B22228A5B6C60CB438ED995D4",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:20.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\client-summary.stdout.json",
+                      "sizeBytes":  6320,
+                      "sha256":  "F331A0BD8C5CEB82E4B8A48DDB29D9EA28B1626FC1C0FAEC4BB9EEC9F7CA1AE8",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:20.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\db-after.json",
+                      "sizeBytes":  8773,
+                      "sha256":  "872CCB6D1C5E769EB26EF193CD9819F6E6769DF8B5B3467B39616485F02DDB24",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\storage-after.json",
+                      "sizeBytes":  5651,
+                      "sha256":  "A3ABC4E197AD5298DE5F477B799CAF711506D8C127E0429D9D8098DEB86A08F3",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\mock-requests.json",
+                      "sizeBytes":  1005121,
+                      "sha256":  "63C969F9C51105783D0503C41A5E693F79064B9285EB85E140D79EEB4DA94BF3",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\mock-metrics-after.json",
+                      "sizeBytes":  601,
+                      "sha256":  "B688F12642EDE4B4F1CC101C0CDE0CF083790C68E72CCC9D1A0983203EE5F23F",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\mission-completions.json",
+                      "sizeBytes":  5319,
+                      "sha256":  "C8667B9D6C2F0D21BFB3E24D7F8547C346675EAB0FB531528A21F26265CB64E9",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:22.0000000Z"
+                  },
+                  {
+                      "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\SMOKE-20260803-EXP120-BASELINE-001\\verification-summary.json",
+                      "sizeBytes":  41732,
+                      "sha256":  "F97655A9A8B296EF618092A335CF563793210BD707922A788DE90709BA4A80DA",
+                      "lastWriteTimeUtc":  "2026-08-03T11:27:22.0000000Z"
+                  }
+              ]
+}
