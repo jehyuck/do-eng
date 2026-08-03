@@ -407,6 +407,8 @@ Common command form (run ID, implementation, target URL, server service, active 
 
 ### 2026-08-03 addendum
 
+| SETUP-20260803-EXP121-003 | 2026-08-03 | Experiment 1-21 terminal-commit Evidence gate | WebFlux harness only | frozen workload/policy/images/collector unchanged | residual scan, fixtures, capture probes, PLAN | `backend/experiments/results/experiment-1-21/` | 완료 | performance result 제외 | zero-byte raw stream rule, direct native redirect, pre-core timeline, FINALIZING/PENDING summary, structural/committed validation, failure-domain preservation, and aggregator alignment completed. Probe stdout/stderr 2306/92 bytes; warm-up/k6/core=0. |
+
 | SETUP-20260803-EXP121-002 | 2026-08-03 | Experiment 1-21 residual reference and finalization contract correction | WebFlux harness only | no workload or policy change | residual scan, fixture A-E, baseline/remediation capture probe, PLAN | `backend/experiments/results/experiment-1-21/` | 완료 | performance result 제외 | Exp121 terminal/provenance references are self-contained; native capture metadata/timeline and aggregator requirements aligned; warm-up/k6/core=0. |
 
 | SETUP-20260803-EXP121-001 | 2026-08-03 | Experiment 1-20 INVALID closure / Experiment 1-21 log-capture readiness | WebFlux harness only | Exp120 raw preserved without outcome inspection; Exp121 uses frozen images and unchanged policy/workload | native stderr fixtures, baseline/remediation log-capture probes, PLAN | `backend/experiments/results/experiment-1-20/closure/`, `backend/experiments/results/experiment-1-21/` | 완료 | performance result 제외 | Exp120 is INVALID because complete application log cannot be proven after finalization failure. Exp121 native stdout/stderr capture probes passed, PLAN warm-up/k6/core=0; six core not executed. |
