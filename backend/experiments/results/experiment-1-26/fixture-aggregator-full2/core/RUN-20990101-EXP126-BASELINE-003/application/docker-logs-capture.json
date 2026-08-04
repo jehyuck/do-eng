@@ -1,0 +1,18 @@
+{
+    "runId":  "RUN-20990101-EXP126-BASELINE-003",
+    "containerId":  "fixture-container",
+    "captureMode":  "POST_STOP_SNAPSHOT",
+    "containerStateAtCapture":  "exited",
+    "timeoutSeconds":  30,
+    "timedOut":  false,
+    "exitCode":  0,
+    "captureStatus":  "APPLICATION_LOG_CAPTURE_PASSED",
+    "startedAt":  "2026-08-04T00:00:04.200Z",
+    "completedAt":  "2026-08-04T00:00:04.300Z",
+    "stdoutPath":  "/repo/backend/experiments/results/experiment-1-26/fixture-aggregator-full2/core/RUN-20990101-EXP126-BASELINE-003/application/docker-logs.stdout.log",
+    "stderrPath":  "/repo/backend/experiments/results/experiment-1-26/fixture-aggregator-full2/core/RUN-20990101-EXP126-BASELINE-003/application/docker-logs.stderr.log",
+    "combinedPath":  "/repo/backend/experiments/results/experiment-1-26/fixture-aggregator-full2/core/RUN-20990101-EXP126-BASELINE-003/application/application.log",
+    "stdoutBytes":  6,
+    "stderrBytes":  0,
+    "combinedBytes":  11
+}

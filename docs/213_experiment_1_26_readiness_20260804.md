@@ -20,8 +20,8 @@
 
 - Exp125 closure/raw inventory: 통과
 - Z1~Z8 reliability fixture: 통과
-- BASELINE idle production-path probe: 통과, 300초, collector failures 0
-- REMEDIATION idle production-path probe: 통과, 300초, collector failures 0
+- BASELINE idle production-path probe: 통과, 300초, FIFO/0/0, collector failures 0
+- REMEDIATION idle production-path probe: 통과, 300초, LIFO/3000/1000, collector failures 0
 - synthetic six-run aggregator fixture: 통과
 - Exp126 six-core PLAN: 통과
 - startedRuns: 0

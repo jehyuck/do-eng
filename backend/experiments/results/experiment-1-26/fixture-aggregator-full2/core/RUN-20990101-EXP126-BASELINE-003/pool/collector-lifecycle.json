@@ -1,0 +1,14 @@
+{
+    "mode":  "CORE_BOUND_STOP_SIGNAL",
+    "lifecycleStatus":  "COLLECTOR_LIFECYCLE_PASSED",
+    "failureType":  null,
+    "stopSignalObserved":  true,
+    "processExitCode":  0,
+    "summaryCollectorStatus":  "COLLECTOR_STOPPED_BY_SIGNAL",
+    "summaryFailures":  0,
+    "summaryStopSignalObserved":  true,
+    "collectorFirstSampleCoveringCoreEndAt":  "2026-08-04T00:00:03.100Z",
+    "postCoreCoverageConfirmedAt":  "2026-08-04T00:00:03.100Z",
+    "collectorStopSignalIssuedAt":  "2026-08-04T00:00:03.200Z",
+    "collectorProcessCompletedAt":  "2026-08-04T00:00:03.300Z"
+}

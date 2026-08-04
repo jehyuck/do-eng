@@ -1,0 +1,17 @@
+{
+    "runId":  "RUN-20990101-EXP126-REMEDIATION-003",
+    "containerId":  "fixture-container",
+    "command":  "docker compose stop",
+    "startedAt":  "2026-08-04T00:00:04.000Z",
+    "completedAt":  "2026-08-04T00:00:04.100Z",
+    "gracePeriodSeconds":  15,
+    "processTimeoutSeconds":  30,
+    "timedOut":  false,
+    "exitCode":  0,
+    "stateBefore":  "running",
+    "stateAfter":  "exited",
+    "containerStillExists":  true,
+    "inspectExitCodeBefore":  0,
+    "inspectExitCodeAfter":  0,
+    "stopStatus":  "APPLICATION_CONTAINER_STOPPED"
+}

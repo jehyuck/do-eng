@@ -2,14 +2,7 @@
   "experiment": "Experiment 1-26",
   "runDate": "20260804",
   "executionMode": "PLAN",
-  "requestedRuns": [
-    "BASELINE-001",
-    "REMEDIATION-001",
-    "BASELINE-002",
-    "REMEDIATION-002",
-    "BASELINE-003",
-    "REMEDIATION-003"
-  ],
+  "requestedRuns": ["BASELINE-001", "REMEDIATION-001", "BASELINE-002", "REMEDIATION-002", "BASELINE-003", "REMEDIATION-003"],
   "startedRuns": 0,
   "completedRuns": 0,
   "failedRuns": 0,
@@ -19,17 +12,7 @@
   "executionStatus": "NOT_RUN",
   "policyDecision": "NOT_RUN",
   "readiness": "EXP126_READY_FOR_SIX_CORE_RUNS",
-  "gates": {
-    "exp125Closure": "PASSED",
-    "collectorIdleBaseline": "PASSED",
-    "collectorIdleRemediation": "PASSED",
-    "reliabilityFixtures": "PASSED",
-    "aggregatorFixture": "PASSED",
-    "sixCorePlan": "PASSED"
-  },
-  "probeArtifacts": [
-    "backend/experiments/results/experiment-1-26/probes-recovery2/BASELINE/probe-summary.json",
-    "backend/experiments/results/experiment-1-26/probes-recovery2/REMEDIATION/probe-summary.json"
-  ],
+  "gates": {"exp125Closure":"PASSED", "collectorIdleBaseline":"PASSED", "collectorIdleRemediation":"PASSED", "reliabilityFixtures":"PASSED", "aggregatorFixture":"PASSED", "sixCorePlan":"PASSED"},
+  "probeArtifacts": ["backend/experiments/results/experiment-1-26/probes-recovery3/BASELINE/probe-summary.json", "backend/experiments/results/experiment-1-26/probes-recovery3/REMEDIATION/probe-summary.json"],
   "warmupCoreLoadExecuted": false
 }

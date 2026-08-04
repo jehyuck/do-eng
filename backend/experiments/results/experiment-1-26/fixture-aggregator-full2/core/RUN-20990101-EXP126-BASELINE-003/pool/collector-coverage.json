@@ -1,0 +1,16 @@
+{
+    "coverageStatus":  "COLLECTOR_COVERAGE_PASSED",
+    "coversCoreStart":  true,
+    "coversCoreEnd":  true,
+    "timestampsNonDecreasing":  true,
+    "invalidSampleCount":  0,
+    "collectorFailures":  0,
+    "validSampleCount":  3,
+    "collectorFirstSampleCoveringCoreEndAt":  "2026-08-04T00:00:03.100Z",
+    "waitReturnedFirstCoveringSampleAt":  "2026-08-04T00:00:03.100Z",
+    "coreInvocationCompletedAt":  "2026-08-04T00:00:03.000Z",
+    "collectorProcessStartedAt":  "2026-08-04T00:00:01.000Z",
+    "collectorFirstValidSampleAt":  "2026-08-04T00:00:01.100Z",
+    "coreInvocationStartedAt":  "2026-08-04T00:00:02.000Z",
+    "collectorProcessCompletedAt":  "2026-08-04T00:00:03.300Z"
+}

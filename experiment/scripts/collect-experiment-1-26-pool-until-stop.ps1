@@ -40,9 +40,11 @@ function Invoke-Exp126PoolPoll {
         }
     } catch {
         $completed = [DateTimeOffset]::UtcNow
+        $statusCode = $null
+        try { if ($null -ne $_.Exception.Response -and $null -ne $_.Exception.Response.StatusCode) { $statusCode = [int]$_.Exception.Response.StatusCode } } catch { }
         [ordered]@{
             ok = $false; timestamp = $requestStarted.ToString('o'); requestStartedAt = $requestStarted.ToString('o'); requestCompletedAt = $completed.ToString('o')
-            elapsedMilliseconds = [math]::Round(($completed - $requestStarted).TotalMilliseconds, 3); httpStatus = $null; payloadParse = $false
+            elapsedMilliseconds = [math]::Round(($completed - $requestStarted).TotalMilliseconds, 3); httpStatus = $statusCode; payloadParse = $false
             metricCount = $null; providerCount = $null; poolMode = $null; providers = @(); metrics = @()
             failure = [ordered]@{ exceptionType = $_.Exception.GetType().FullName; message = $_.Exception.Message }
         }
@@ -79,7 +81,7 @@ function Invoke-Exp126CollectorLoop {
         }
     } finally {
         $completed = [DateTimeOffset]::UtcNow
-        [ordered]@{ collectorStatus = $status; collectorProcessStartedAt = $started.ToString('o'); collectorProcessCompletedAt = $completed.ToString('o'); intervalMilliseconds = $IntervalMilliseconds; requestTimeoutSeconds = $RequestTimeoutSeconds; maxDurationSeconds = $MaxDurationSeconds; attempts = $attempt; samples = $samples; failures = $failures; skippedPolls = $skipped; maxConsecutiveFailures = $maxConsecutive; maximumValidSampleGapMilliseconds = $maxGap; stopSignalObserved = $stopObserved } | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $SummaryPath -Encoding UTF8
+        [ordered]@{ collectorStatus = $status; collectorProcessStartedAt = $started.ToString('o'); collectorProcessCompletedAt = $completed.ToString('o'); intervalMilliseconds = $IntervalMilliseconds; requestTimeoutSeconds = $RequestTimeoutSeconds; maxDurationSeconds = $MaxDurationSeconds; attempts = $attempt; samples = $samples; failures = $failures; skippedPolls = $skipped; maxConsecutiveFailures = $maxConsecutive; maximumValidSampleGapMilliseconds = $maxGap; invalidJsonlRowCount = 0; processExitCode = if($stopObserved){0}else{1}; stopSignalObserved = $stopObserved } | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $SummaryPath -Encoding UTF8
     }
     if (-not $stopObserved) { return 1 }
     return 0

@@ -1,0 +1,5 @@
+{
+    "collectorStatus":  "COLLECTOR_STOPPED_BY_SIGNAL",
+    "stopSignalObserved":  true,
+    "failures":  0
+}
