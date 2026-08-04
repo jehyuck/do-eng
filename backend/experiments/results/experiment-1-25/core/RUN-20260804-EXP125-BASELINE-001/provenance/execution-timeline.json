@@ -1,0 +1,18 @@
+{
+    "artifactPathPreflightStartedAt":  "2026-08-04T10:56:23.2968343Z",
+    "artifactPathPreflightCompletedAt":  "2026-08-04T10:56:23.5870801Z",
+    "collectorProcessStartedAt":  "2026-08-04T10:56:59.3522792Z",
+    "collectorFirstValidSampleAt":  "2026-08-04T10:57:00.0737028+00:00",
+    "coreInvocationStartedAt":  "2026-08-04T10:57:00.4417816Z",
+    "coreInvocationCompletedAt":  "2026-08-04T10:59:56.3902449Z",
+    "collectorFirstSampleCoveringCoreEndAt":  null,
+    "postCoreCoverageConfirmedAt":  null,
+    "collectorStopSignalIssuedAt":  null,
+    "collectorProcessCompletedAt":  null,
+    "applicationStopStartedAt":  null,
+    "applicationStopCompletedAt":  null,
+    "applicationLogCaptureStartedAt":  null,
+    "applicationLogCaptureCompletedAt":  null,
+    "artifactValidationCompletedAt":  null,
+    "finalizationCompletedAt":  null
+}

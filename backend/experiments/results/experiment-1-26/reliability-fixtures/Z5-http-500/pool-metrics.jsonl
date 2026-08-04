@@ -1,0 +1,3 @@
+{"ok":false,"timestamp":"2026-08-04T11:10:48.0087570+00:00","failure":{"exceptionType":"HttpException","message":"HTTP 500"},"attemptNumber":1,"processId":45196,"consecutiveFailures":1}
+{"ok":false,"timestamp":"2026-08-04T11:10:48.0423823+00:00","failure":{"exceptionType":"HttpException","message":"HTTP 500"},"attemptNumber":2,"processId":45196,"consecutiveFailures":2}
+{"ok":false,"timestamp":"2026-08-04T11:10:48.0674023+00:00","failure":{"exceptionType":"HttpException","message":"HTTP 500"},"attemptNumber":3,"processId":45196,"consecutiveFailures":3}

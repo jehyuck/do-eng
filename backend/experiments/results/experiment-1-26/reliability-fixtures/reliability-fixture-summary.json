@@ -1,0 +1,66 @@
+﻿[
+    {
+        "fixture":  "Z1-normal",
+        "attempts":  3,
+        "samples":  3,
+        "failures":  0,
+        "maximumValidSampleGapMilliseconds":  280.073,
+        "expectedValid":  true
+    },
+    {
+        "fixture":  "Z2-single-timeout",
+        "attempts":  3,
+        "samples":  2,
+        "failures":  1,
+        "maximumValidSampleGapMilliseconds":  63.602,
+        "expectedValid":  false
+    },
+    {
+        "fixture":  "Z3-consecutive-timeout",
+        "attempts":  3,
+        "samples":  0,
+        "failures":  3,
+        "maximumValidSampleGapMilliseconds":  0,
+        "expectedValid":  false
+    },
+    {
+        "fixture":  "Z4-malformed-json",
+        "attempts":  3,
+        "samples":  0,
+        "failures":  3,
+        "maximumValidSampleGapMilliseconds":  0,
+        "expectedValid":  false
+    },
+    {
+        "fixture":  "Z5-http-500",
+        "attempts":  3,
+        "samples":  0,
+        "failures":  3,
+        "maximumValidSampleGapMilliseconds":  0,
+        "expectedValid":  false
+    },
+    {
+        "fixture":  "Z6-stop-during-pending",
+        "attempts":  3,
+        "samples":  3,
+        "failures":  0,
+        "maximumValidSampleGapMilliseconds":  31.856,
+        "expectedValid":  true
+    },
+    {
+        "fixture":  "Z7-boundary-coverage",
+        "attempts":  3,
+        "samples":  3,
+        "failures":  0,
+        "maximumValidSampleGapMilliseconds":  28.318,
+        "expectedValid":  true
+    },
+    {
+        "fixture":  "Z8-gap-rejection",
+        "attempts":  3,
+        "samples":  3,
+        "failures":  0,
+        "maximumValidSampleGapMilliseconds":  24.924,
+        "expectedValid":  true
+    }
+]

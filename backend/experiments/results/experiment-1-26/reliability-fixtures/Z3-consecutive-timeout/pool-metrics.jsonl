@@ -1,0 +1,3 @@
+{"ok":false,"timestamp":"2026-08-04T11:10:47.8111898+00:00","failure":{"exceptionType":"TimeoutException","message":"timeout"},"attemptNumber":1,"processId":45196,"consecutiveFailures":1}
+{"ok":false,"timestamp":"2026-08-04T11:10:47.8377360+00:00","failure":{"exceptionType":"TimeoutException","message":"timeout"},"attemptNumber":2,"processId":45196,"consecutiveFailures":2}
+{"ok":false,"timestamp":"2026-08-04T11:10:47.8609619+00:00","failure":{"exceptionType":"TimeoutException","message":"timeout"},"attemptNumber":3,"processId":45196,"consecutiveFailures":3}

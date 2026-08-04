@@ -1,7 +1,7 @@
 ﻿{
     "experiment":  "Experiment 1-25",
     "runDate":  "20260804",
-    "executionMode":  "PLAN",
+    "executionMode":  "EXECUTE",
     "requestedRuns":  [
                           "BASELINE-001",
                           "REMEDIATION-001",
@@ -10,19 +10,74 @@
                           "BASELINE-003",
                           "REMEDIATION-003"
                       ],
-    "startedRuns":  0,
+    "startedRuns":  1,
     "completedRuns":  0,
-    "failedRuns":  0,
+    "failedRuns":  1,
     "notStartedRuns":  [
-                           "RUN-20260804-EXP125-BASELINE-001",
                            "RUN-20260804-EXP125-REMEDIATION-001",
                            "RUN-20260804-EXP125-BASELINE-002",
                            "RUN-20260804-EXP125-REMEDIATION-002",
                            "RUN-20260804-EXP125-BASELINE-003",
                            "RUN-20260804-EXP125-REMEDIATION-003"
                        ],
-    "warmupInvocations":  0,
-    "coreInvocations":  0,
-    "k6Invocations":  0,
-    "executionStatus":  "NOT_RUN"
+    "warmupInvocations":  1,
+    "coreInvocations":  1,
+    "k6Invocations":  1,
+    "executionStatus":  "FAILED",
+    "runStates":  [
+                      {
+                          "runId":  "RUN-20260804-EXP125-BASELINE-001",
+                          "started":  true,
+                          "warmupInvoked":  true,
+                          "coreInvoked":  true,
+                          "k6Invoked":  true,
+                          "completed":  false,
+                          "failed":  true
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP125-REMEDIATION-001",
+                          "started":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false,
+                          "k6Invoked":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP125-BASELINE-002",
+                          "started":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false,
+                          "k6Invoked":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP125-REMEDIATION-002",
+                          "started":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false,
+                          "k6Invoked":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP125-BASELINE-003",
+                          "started":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false,
+                          "k6Invoked":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP125-REMEDIATION-003",
+                          "started":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false,
+                          "k6Invoked":  false,
+                          "completed":  false,
+                          "failed":  false
+                      }
+                  ]
 }

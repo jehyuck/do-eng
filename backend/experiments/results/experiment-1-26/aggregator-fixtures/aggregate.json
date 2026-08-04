@@ -1,0 +1,23 @@
+{
+  "experiment": "Experiment 1-26",
+  "runDate": "20990101",
+  "completedRuns": [],
+  "missingRuns": [
+    "BASELINE-001",
+    "REMEDIATION-001",
+    "BASELINE-002",
+    "REMEDIATION-002",
+    "BASELINE-003",
+    "REMEDIATION-003"
+  ],
+  "reasons": {
+    "BASELINE-001": "Unexpected token '﻿', \"﻿{\r\n    \"r\"... is not valid JSON",
+    "REMEDIATION-001": "Unexpected token '﻿', \"﻿{\r\n    \"r\"... is not valid JSON",
+    "BASELINE-002": "Unexpected token '﻿', \"﻿{\r\n    \"r\"... is not valid JSON",
+    "REMEDIATION-002": "Unexpected token '﻿', \"﻿{\r\n    \"r\"... is not valid JSON",
+    "BASELINE-003": "Unexpected token '﻿', \"﻿{\r\n    \"r\"... is not valid JSON",
+    "REMEDIATION-003": "Unexpected token '﻿', \"﻿{\r\n    \"r\"... is not valid JSON"
+  },
+  "aggregateReadiness": "INCOMPLETE",
+  "decisionState": "NOT_RUN"
+}

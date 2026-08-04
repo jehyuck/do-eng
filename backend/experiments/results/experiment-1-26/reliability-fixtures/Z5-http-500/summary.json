@@ -1,0 +1,15 @@
+﻿{
+    "collectorStatus":  "COLLECTOR_STOPPED_BY_SIGNAL",
+    "collectorProcessStartedAt":  "2026-08-04T11:10:48.0087570+00:00",
+    "collectorProcessCompletedAt":  "2026-08-04T11:10:48.0755125+00:00",
+    "intervalMilliseconds":  20,
+    "requestTimeoutSeconds":  1,
+    "maxDurationSeconds":  1,
+    "attempts":  3,
+    "samples":  0,
+    "failures":  3,
+    "skippedPolls":  0,
+    "maxConsecutiveFailures":  3,
+    "maximumValidSampleGapMilliseconds":  0,
+    "stopSignalObserved":  true
+}

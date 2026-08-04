@@ -1,0 +1,15 @@
+﻿{
+    "collectorStatus":  "COLLECTOR_MAX_DURATION_EXCEEDED",
+    "collectorProcessStartedAt":  "2026-08-04T11:11:54.4802074+00:00",
+    "collectorProcessCompletedAt":  "2026-08-04T11:11:56.0398672+00:00",
+    "intervalMilliseconds":  20,
+    "requestTimeoutSeconds":  1,
+    "maxDurationSeconds":  1,
+    "attempts":  1,
+    "samples":  0,
+    "failures":  1,
+    "skippedPolls":  0,
+    "maxConsecutiveFailures":  1,
+    "maximumValidSampleGapMilliseconds":  0,
+    "stopSignalObserved":  false
+}

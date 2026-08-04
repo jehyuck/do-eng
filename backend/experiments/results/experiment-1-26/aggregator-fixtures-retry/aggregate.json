@@ -1,0 +1,16 @@
+{
+  "experiment": "Experiment 1-26",
+  "runDate": "20990101",
+  "completedRuns": [
+    "BASELINE-001",
+    "REMEDIATION-001",
+    "BASELINE-002",
+    "REMEDIATION-002",
+    "BASELINE-003",
+    "REMEDIATION-003"
+  ],
+  "missingRuns": [],
+  "reasons": {},
+  "aggregateReadiness": "READY_TO_AGGREGATE",
+  "decisionState": "NOT_RUN"
+}

@@ -1,0 +1,12 @@
+{
+    "runId":  "RUN-20260804-EXP125-BASELINE-001",
+    "executionStatus":  "EXECUTION_FAILED",
+    "artifactValidation":  "FAILED",
+    "cleanupResult":  "FAILED_OR_NOT_ATTEMPTED",
+    "completedSteps":  [
+                           "fresh recreate",
+                           "warm-up",
+                           "collector readiness",
+                           "core invocation"
+                       ]
+}
