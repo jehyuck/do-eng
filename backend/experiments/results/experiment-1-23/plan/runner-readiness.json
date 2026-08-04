@@ -1,0 +1,66 @@
+﻿{
+    "experiment":  "Experiment 1-23",
+    "runDate":  "20260804",
+    "executionMode":  "PLAN",
+    "requestedRuns":  [
+                          "BASELINE-001",
+                          "REMEDIATION-001",
+                          "BASELINE-002",
+                          "REMEDIATION-002",
+                          "BASELINE-003",
+                          "REMEDIATION-003"
+                      ],
+    "startedRuns":  0,
+    "completedRuns":  0,
+    "failedRuns":  0,
+    "notStartedRuns":  [
+                           "RUN-20260804-EXP123-BASELINE-001",
+                           "RUN-20260804-EXP123-REMEDIATION-001",
+                           "RUN-20260804-EXP123-BASELINE-002",
+                           "RUN-20260804-EXP123-REMEDIATION-002",
+                           "RUN-20260804-EXP123-BASELINE-003",
+                           "RUN-20260804-EXP123-REMEDIATION-003"
+                       ],
+    "warmup":  0,
+    "k6":  0,
+    "core":  0,
+    "executionStatus":  "NOT_RUN",
+    "runStates":  [
+                      {
+                          "runId":  "RUN-20260804-EXP123-BASELINE-001",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP123-REMEDIATION-001",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP123-BASELINE-002",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP123-REMEDIATION-002",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP123-BASELINE-003",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false
+                      },
+                      {
+                          "runId":  "RUN-20260804-EXP123-REMEDIATION-003",
+                          "started":  false,
+                          "completed":  false,
+                          "failed":  false
+                      }
+                  ]
+}

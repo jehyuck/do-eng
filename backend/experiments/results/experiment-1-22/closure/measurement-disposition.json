@@ -1,0 +1,17 @@
+{
+  "experiment": "Experiment 1-22",
+  "runId": "RUN-20260804-EXP122-BASELINE-001",
+  "classification": "MEASUREMENT_EXECUTED_REQUIRED_COLLECTOR_ENDED_BEFORE_CORE_COMPLETION",
+  "warmupStarted": true,
+  "coreStarted": true,
+  "coreCompleted": true,
+  "failedStage": "collector coverage validation",
+  "collectorFailureType": "COLLECTOR_ENDED_EARLY",
+  "coversCoreEnd": false,
+  "eligibleForAggregate": false,
+  "rerunAllowedUnderExperiment122": false,
+  "remainingExperiment122RunsAllowed": false,
+  "policyDecision": "NOT_RUN",
+  "finalExperimentState": "INVALID",
+  "rawOutcomeInspectedDuringClosure": false
+}

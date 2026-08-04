@@ -1,0 +1,23 @@
+{
+  "experiment": "Experiment 1-22",
+  "runId": "RUN-20260804-EXP122-BASELINE-001",
+  "inventoryGeneratedAt": "2026-08-04",
+  "rawOutcomeInspected": false,
+  "files": [
+    {"path":"backend/experiments/results/experiment-1-22/core/RUN-20260804-EXP122-BASELINE-001/failure-summary.json","size":1002,"sha256":"e6de88dcb6012317fb73bc3cd8e76c05350fcb78f46ac8cabc6e77f5fa2e3951"},
+    {"path":"backend/experiments/results/experiment-1-22/core/RUN-20260804-EXP122-BASELINE-001/execution-summary.json","size":695,"sha256":"d081729f5b071adbbe042f751a5d3c662d4d34ee60772a5e7e7d685c8d4ad943"},
+    {"path":"backend/experiments/results/experiment-1-22/core/RUN-20260804-EXP122-BASELINE-001/pool/pool-metrics.jsonl","size":261737,"sha256":"d1b612a35f487ff8e8f5f3594fd49a582a55f6302c821610a23b9cf12d572a67"},
+    {"path":"backend/experiments/results/experiment-1-22/core/RUN-20260804-EXP122-BASELINE-001/pool/pool-metrics.jsonl.summary.json","size":95,"sha256":"bfe8f32b304f0dd6dd831927e669316eff813aeadecb4d9bcbe414c2fc815b5e"},
+    {"path":"backend/experiments/results/experiment-1-22/core/RUN-20260804-EXP122-BASELINE-001/pool/collector-coverage.json","size":859,"sha256":"b22331b07774ffd0e36751de077d1a23a68641f82f8eb5ef62b06ac24ca1b1c3"},
+    {"path":"backend/experiments/results/experiment-1-22/core/RUN-20260804-EXP122-BASELINE-001/provenance/execution-timeline.json","size":610,"sha256":"86359df6d8634a44e3d08db490a35aaabaf767339006f609188081326868bff3"},
+    {"path":"experiment/results/RUN-20260804-EXP122-BASELINE-001/run-config.json","size":4667,"sha256":"9e1a17896ecdf244a9e40462dce37a804449833d7ed098b27d14c8b2c3afd6bf"},
+    {"path":"experiment/results/RUN-20260804-EXP122-BASELINE-001/client-results.json","size":12846408,"sha256":"a0dd5f4b813e1c6e320f7cadfc1698fb3c4badd074dd208ff29e0525419659d3"},
+    {"path":"experiment/results/RUN-20260804-EXP122-BASELINE-001/verification-summary.json","size":160809,"sha256":"90800112d208b0250b535772232fc7ab220f01ff44e828312200afa9a6e3b91c"},
+    {"path":"experiment/results/SMOKE-20260804-EXP122-BASELINE-001/environment.json","size":69283,"sha256":"202aa120fbb4dfdffab684c7e0a9bff0eea87081f1d2194f7c6033856a61da0c"}
+  ],
+  "additionalRawRoots": [
+    "backend/experiments/results/experiment-1-22/collector-staging/RUN-20260804-EXP122-BASELINE-001/",
+    "experiment/results/RUN-20260804-EXP122-BASELINE-001/",
+    "experiment/results/SMOKE-20260804-EXP122-BASELINE-001/"
+  ]
+}
