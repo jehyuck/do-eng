@@ -1,0 +1,17 @@
+function Invoke-Exp125PostStopLogCapture {
+    param([Parameter(Mandatory)][string]$RunId,[Parameter(Mandatory)][string]$ContainerId,[Parameter(Mandatory)][string]$ApplicationDirectory,[int]$TimeoutSeconds=30,[string]$ContainerStateAtCapture='stopped',[string]$Executable='docker.exe',[string[]]$Arguments=@(),[string]$StartedAt)
+    $started=if([string]::IsNullOrWhiteSpace($StartedAt)){(Get-Date).ToUniversalTime().ToString('o')}else{$StartedAt};$parsed=[DateTimeOffset]::MinValue;if(-not[DateTimeOffset]::TryParse($started,[ref]$parsed)-or$parsed.UtcDateTime -gt (Get-Date).ToUniversalTime()){throw 'APPLICATION_LOG_CAPTURE_STARTED_AT_INVALID'}
+    New-Item -ItemType Directory -Force -Path $ApplicationDirectory|Out-Null;$stdout=Join-Path $ApplicationDirectory 'docker-logs.stdout.log';$stderr=Join-Path $ApplicationDirectory 'docker-logs.stderr.log';$combined=Join-Path $ApplicationDirectory 'application.log';$meta=Join-Path $ApplicationDirectory 'docker-logs-capture.json';$metaTmp=$meta+'.tmp';if($Arguments.Count-eq0){$Arguments=@('logs','--timestamps',$ContainerId)};$quote={param($v);if($v-match'[\s"]'){('"'+($v-replace'"','\"')+'"')}else{$v}};$argString=($Arguments|ForEach-Object{&$quote $_})-join ' ';$cmd='/c "'+$Executable+' '+$argString+' > "'+$stdout+'" 2> "'+$stderr+'""'
+    $psi=New-Object System.Diagnostics.ProcessStartInfo;$psi.FileName='cmd.exe';$psi.Arguments=$cmd;$psi.UseShellExecute=$false;$psi.CreateNoWindow=$true;$proc=New-Object System.Diagnostics.Process;$proc.StartInfo=$psi;$null=$proc.Start();$timedOut=$false;$attempted=$false;$confirmed=$false;if(-not$proc.WaitForExit($TimeoutSeconds*1000)){$timedOut=$true;$attempted=$true;try{& taskkill.exe /PID $proc.Id /T /F|Out-Null;$proc.WaitForExit();$confirmed=$proc.HasExited}catch{}};$proc.WaitForExit();$proc.Refresh();$exitCode=if($timedOut){$null}else{$proc.ExitCode};$stdoutBytes=[IO.FileInfo]::new($stdout).Length;$stderrBytes=[IO.FileInfo]::new($stderr).Length;Set-Content $combined '=== DOCKER STDOUT ===' -Encoding UTF8;Get-Content $stdout|Add-Content $combined -Encoding UTF8;Add-Content $combined '=== DOCKER STDERR ===' -Encoding UTF8;Get-Content $stderr|Add-Content $combined -Encoding UTF8;$completed=(Get-Date).ToUniversalTime().ToString('o');$combinedBytes=[IO.FileInfo]::new($combined).Length;$status=if($timedOut){'APPLICATION_LOG_CAPTURE_TIMEOUT'}elseif($exitCode-eq0-and(($stdoutBytes+$stderrBytes)-gt0)-and$combinedBytes-gt0){'APPLICATION_LOG_CAPTURE_PASSED'}else{'APPLICATION_LOG_CAPTURE_FAILED'};[ordered]@{runId=$RunId;containerId=$ContainerId;command=($Executable+' '+$argString);startedAt=$started;completedAt=$completed;timeoutSeconds=$TimeoutSeconds;timedOut=$timedOut;processTerminationAttempted=$attempted;processTerminationConfirmed=$confirmed;captureMode='POST_STOP_SNAPSHOT';containerStateAtCapture=$ContainerStateAtCapture;exitCode=$exitCode;stdoutPath=$stdout;stderrPath=$stderr;stdoutBytes=$stdoutBytes;stderrBytes=$stderrBytes;combinedPath=$combined;combinedBytes=$combinedBytes;captureStatus=$status}|ConvertTo-Json -Depth 6|ForEach-Object{[IO.File]::WriteAllText($metaTmp,$_,(New-Object Text.UTF8Encoding($true)))};if((Get-Content $metaTmp -Raw|ConvertFrom-Json).runId -ne $RunId){throw 'APPLICATION_LOG_CAPTURE_METADATA_INVALID'};Move-Item -LiteralPath $metaTmp -Destination $meta -Force;if($status-ne'APPLICATION_LOG_CAPTURE_PASSED'){throw $status};Get-Content $meta -Raw|ConvertFrom-Json
+}
+
+
+
+
+
+
+
+
+
+
+
