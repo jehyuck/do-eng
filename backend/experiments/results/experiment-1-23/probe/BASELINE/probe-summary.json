@@ -1,17 +1,38 @@
 ﻿{
     "condition":  "BASELINE",
     "status":  "CORE_BOUND_COLLECTOR_PROBE_READY",
+    "composeFiles":  [
+                         "backend\\docker-compose.experiment.yaml",
+                         "backend\\docker-compose.app-instance-t3-medium.yaml",
+                         "backend\\docker-compose.mock-headroom-4cpu.yaml",
+                         "backend\\docker-compose.http-pool-400.yaml",
+                         "backend\\docker-compose.mock-memory-headroom.yaml",
+                         "backend\\docker-compose.experiment-1-12-connection-attribution.yaml",
+                         "backend\\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml"
+                     ],
+    "applicationImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+    "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+    "policy":  {
+                   "evictionIntervalMs":  0,
+                   "leasingStrategy":  "FIFO",
+                   "maxIdleTimeMs":  0
+               },
+    "collectorStartedAt":  "2026-08-04T03:23:40.4841105Z",
+    "collectorReady":  {
+                           "collectorReadyAt":  "2026-08-04T03:23:40.7076092Z",
+                           "collectorFirstValidSampleAt":  "2026-08-04T01:45:23.6460242+00:00"
+                       },
     "collector":  {
                       "collectorStatus":  "COLLECTOR_STOPPED_BY_SIGNAL",
-                      "collectorProcessStartedAt":  "2026-08-04T02:56:08.0865735Z",
-                      "collectorProcessCompletedAt":  "2026-08-04T02:56:10.2968401Z",
+                      "collectorProcessStartedAt":  "2026-08-04T03:23:41.0288421Z",
+                      "collectorProcessCompletedAt":  "2026-08-04T03:23:41.1896692Z",
                       "intervalMilliseconds":  1000,
                       "maxDurationSeconds":  300,
-                      "samples":  0,
-                      "failures":  1,
+                      "samples":  1,
+                      "failures":  0,
                       "stopSignalObserved":  true
                   },
-    "warmup":  0,
-    "k6":  0,
-    "core":  0
+    "warmupInvocations":  0,
+    "k6Invocations":  0,
+    "coreInvocations":  0
 }

@@ -3,12 +3,16 @@
   "previousReadiness": "EXP123_READINESS_REJECT",
   "runtimeContractCorrected": true,
   "exp122Closure": "INVALID",
-  "collectorLifecycleFixtures": "PASS",
+  "collectorLifecycleFixtures": "PASS_A_TO_S",
+  "productionRunnerContract": "RESTORED",
+  "productionPathProbe": "PASS_BASELINE_REMEDIATION",
   "baselineCollectorProbe": "CORE_BOUND_COLLECTOR_PROBE_READY",
   "remediationCollectorProbe": "CORE_BOUND_COLLECTOR_PROBE_READY",
   "plan": "EXP123_PLAN_READY",
   "warmup": 0,
   "k6": 0,
   "core": 0,
-  "controlledDiff": ["experimentId", "runId", "resultRoot", "collectorMode", "postCoreSampleGate", "collectorLifecycleEvidence", "terminalFailureTransition"]
+  "cleanupBeforeTerminal": true,
+  "aggregatorContract": "FULL_EXP123_CONTRACT",
+  "controlledDiff": ["experimentId", "runId", "resultRoot", "collectorMode", "postCoreSampleGate", "collectorLifecycleEvidence", "terminalFailureTransition", "cleanupBeforeTerminal"]
 }

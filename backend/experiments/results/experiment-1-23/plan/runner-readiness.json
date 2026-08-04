@@ -21,8 +21,8 @@
                            "RUN-20260804-EXP123-BASELINE-003",
                            "RUN-20260804-EXP123-REMEDIATION-003"
                        ],
-    "warmup":  0,
-    "k6":  0,
-    "core":  0,
+    "warmupInvocations":  0,
+    "k6Invocations":  0,
+    "coreInvocations":  0,
     "executionStatus":  "NOT_RUN"
 }
