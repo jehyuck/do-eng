@@ -1,0 +1,28 @@
+﻿{
+    "experiment":  "Experiment 1-25",
+    "runDate":  "20260804",
+    "executionMode":  "PLAN",
+    "requestedRuns":  [
+                          "BASELINE-001",
+                          "REMEDIATION-001",
+                          "BASELINE-002",
+                          "REMEDIATION-002",
+                          "BASELINE-003",
+                          "REMEDIATION-003"
+                      ],
+    "startedRuns":  0,
+    "completedRuns":  0,
+    "failedRuns":  0,
+    "notStartedRuns":  [
+                           "RUN-20260804-EXP125-BASELINE-001",
+                           "RUN-20260804-EXP125-REMEDIATION-001",
+                           "RUN-20260804-EXP125-BASELINE-002",
+                           "RUN-20260804-EXP125-REMEDIATION-002",
+                           "RUN-20260804-EXP125-BASELINE-003",
+                           "RUN-20260804-EXP125-REMEDIATION-003"
+                       ],
+    "warmupInvocations":  0,
+    "coreInvocations":  0,
+    "k6Invocations":  0,
+    "executionStatus":  "NOT_RUN"
+}

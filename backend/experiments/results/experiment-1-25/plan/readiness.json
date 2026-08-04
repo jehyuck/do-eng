@@ -1,0 +1,17 @@
+{
+  "experiment": "Experiment 1-25",
+  "status": "EXP125_READY_FOR_SIX_CORE_RUNS",
+  "exp124Closure": "INVALID_CLOSED",
+  "captureInvocation": "CORRECT_NAMED_SPLATTING",
+  "fixtures": "Y1_Y5_AND_CAPTURE_PRODUCTION_PASS",
+  "aggregatorFixture": "X10_X18_PASS",
+  "baselineProbe": "PASSED",
+  "remediationProbe": "PASSED",
+  "planStatus": "EXP125_PLAN_READY",
+  "startedRuns": 0,
+  "warmupInvocations": 0,
+  "k6Invocations": 0,
+  "coreInvocations": 0,
+  "performanceExecuted": false,
+  "policyDecision": "NOT_RUN"
+}

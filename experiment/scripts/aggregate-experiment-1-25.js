@@ -1,0 +1,44 @@
+const fs=require('fs'),path=require('path'),crypto=require('crypto');
+if(process.argv.length!==6||process.argv[2]!=='--readiness')throw Error('usage');
+const date=process.argv[3],root=path.resolve(process.argv[4]),out=process.argv[5];
+const arms=['BASELINE-001','REMEDIATION-001','BASELINE-002','REMEDIATION-002','BASELINE-003','REMEDIATION-003'];
+const composeExpected=['backend/docker-compose.experiment.yaml','backend/docker-compose.app-instance-t3-medium.yaml','backend/docker-compose.mock-headroom-4cpu.yaml','backend/docker-compose.http-pool-400.yaml','backend/docker-compose.mock-memory-headroom.yaml','backend/docker-compose.experiment-1-12-connection-attribution.yaml','backend/docker-compose.experiment-1-19-fresh-first-lifecycle.yaml'];
+const required=['run-config.json','client-results.json','client-progress.jsonl','pool/pool-metrics.jsonl','pool/pool-metrics.jsonl.summary.json','pool/collector-coverage.json','pool/collector-lifecycle.json','application/container-stop.json','application/docker-logs.stdout.log','application/docker-logs.stderr.log','application/docker-logs-capture.json','application/application.log','database/database-metrics.jsonl','container/container-stats.jsonl','mock/load-stop-mock-metrics.json','drain/mock-drain-summary.json','verification-summary.json','provenance/artifact-path-preflight.json','provenance/runtime-provenance.json','provenance/execution-timeline.json','execution-summary.json'];
+const read=p=>JSON.parse(fs.readFileSync(p,'utf8')),time=x=>{const n=Date.parse(x||'');if(Number.isNaN(n))throw Error('invalid timestamp');return n};const valid=[],reasons={};
+for(const arm of arms){const expectedRunId=`RUN-${date}-EXP125-${arm}`,condition=arm.startsWith('BASELINE')?'BASELINE':'REMEDIATION',dir=path.join(root,expectedRunId);try{
+ for(const rel of required){const p=path.join(dir,rel);if(!fs.existsSync(p))throw Error(`missing ${rel}`);if(!['application/docker-logs.stdout.log','application/docker-logs.stderr.log'].includes(rel)&&fs.statSync(p).size<=0)throw Error(`empty ${rel}`)}
+ if(fs.existsSync(path.join(dir,'RUNNING'))||fs.existsSync(path.join(dir,'EXECUTION_FAILED'))||!fs.existsSync(path.join(dir,'COMPLETED')))throw Error('terminal exclusivity');
+ const preflight=read(path.join(dir,'provenance/artifact-path-preflight.json'));const runConfig=read(path.join(dir,'run-config.json'));const executionSummary=read(path.join(dir,'execution-summary.json'));const collectorSummary=read(path.join(dir,'pool/pool-metrics.jsonl.summary.json'));const lifecycle=read(path.join(dir,'pool/collector-lifecycle.json'));const coverage=read(path.join(dir,'pool/collector-coverage.json'));const runtimeProvenance=read(path.join(dir,'provenance/runtime-provenance.json'));const timeline=read(path.join(dir,'provenance/execution-timeline.json'));const containerStop=read(path.join(dir,'application/container-stop.json'));const logCapture=read(path.join(dir,'application/docker-logs-capture.json'));
+ if(preflight.preflightStatus!=='ARTIFACT_PATH_PREFLIGHT_PASSED'||!Array.isArray(preflight.requiredDirectories)||preflight.requiredDirectories.length!==7||preflight.requiredDirectories.some(x=>x.directoryExistsAfterInitialization!==true||x.pathContained!==true||x.writeProbeCreated!==true||x.writeProbeContentVerified!==true||x.deleteProbePassed!==true||x.probeFileAbsentAfterDelete!==true))throw Error('artifact path preflight'); if(runConfig.experiment!=='Experiment 1-25'||runConfig.runId!==expectedRunId||runConfig.runDate!==date||runConfig.condition!==condition||runConfig.executionMode!=='EXECUTE'||runtimeProvenance.runId!==expectedRunId||runtimeProvenance.runDate!==date||runtimeProvenance.condition!==condition)throw Error('run identity');
+ const pol=condition==='BASELINE'?{leasingStrategy:'FIFO',maxIdleTimeMs:0,evictionIntervalMs:0}:{leasingStrategy:'LIFO',maxIdleTimeMs:3000,evictionIntervalMs:1000};for(const k of Object.keys(pol))if(runConfig.policy[k]!==pol[k]||runtimeProvenance.policy[k]!==pol[k])throw Error('policy');
+ if(collectorSummary.collectorStatus!=='COLLECTOR_STOPPED_BY_SIGNAL'||collectorSummary.stopSignalObserved!==true||collectorSummary.failures!==0||lifecycle.summaryCollectorStatus!==collectorSummary.collectorStatus||lifecycle.summaryStopSignalObserved!==collectorSummary.stopSignalObserved||lifecycle.summaryFailures!==collectorSummary.failures)throw Error('collector summary');
+ if(coverage.coverageStatus!=='COLLECTOR_COVERAGE_PASSED'||!coverage.coversCoreStart||!coverage.coversCoreEnd||!coverage.timestampsNonDecreasing||coverage.invalidSampleCount!==0||coverage.collectorFailures!==0||coverage.validSampleCount<=1)throw Error('coverage');
+ for(const k of ['collectorProcessStartedAt','collectorFirstValidSampleAt','coreInvocationStartedAt','coreInvocationCompletedAt','collectorProcessCompletedAt'])if(coverage[k]!==timeline[k])throw Error('coverage timeline');
+ const samples=fs.readFileSync(path.join(dir,'pool/pool-metrics.jsonl'),'utf8').split(/\r?\n/).filter(Boolean).map(JSON.parse),first=samples.find(x=>(x.failure==null||x.failure==='')&&time(x.timestamp)>=time(coverage.coreInvocationCompletedAt));if(!first||first.timestamp!==coverage.waitReturnedFirstCoveringSampleAt||first.timestamp!==coverage.collectorFirstSampleCoveringCoreEndAt||first.timestamp!==lifecycle.collectorFirstSampleCoveringCoreEndAt||first.timestamp!==timeline.collectorFirstSampleCoveringCoreEndAt)throw Error('first covering');
+ if(runConfig.composeFiles.length!==7||runtimeProvenance.composeFiles.length!==7||new Set(runConfig.composeFiles.map(x=>x.path.replace(/\\/g,'/'))).size!==7||new Set(runtimeProvenance.composeFiles.map(x=>x.path.replace(/\\/g,'/'))).size!==7)throw Error('compose set');for(const expected of composeExpected){const rf=runConfig.composeFiles.find(x=>x.path.replace(/\\/g,'/')===expected),pf=runtimeProvenance.composeFiles.find(x=>x.path.replace(/\\/g,'/')===expected);if(!rf||!pf||rf.sha256!==pf.sha256||!/^[0-9a-f]{64}$/.test(rf.sha256))throw Error('compose identity');const actual=crypto.createHash('sha256').update(fs.readFileSync(path.resolve(__dirname,'..','..',expected))).digest('hex');if(actual!==rf.sha256)throw Error('compose hash')}
+ if(containerStop.runId!==expectedRunId||!containerStop.containerId||!containerStop.command||containerStop.gracePeriodSeconds!==15||containerStop.processTimeoutSeconds!==30||containerStop.timedOut!==false||containerStop.exitCode!==0||containerStop.stateBefore!=='running'||!['exited','stopped'].includes(containerStop.stateAfter)||containerStop.containerStillExists!==true||containerStop.inspectExitCodeBefore!==0||containerStop.inspectExitCodeAfter!==0||containerStop.stopStatus!=='APPLICATION_CONTAINER_STOPPED'||time(containerStop.completedAt)<time(containerStop.startedAt)||timeline.applicationStopStartedAt!==containerStop.startedAt||timeline.applicationStopCompletedAt!==containerStop.completedAt)throw Error('stop');
+ if(logCapture.runId!==expectedRunId||logCapture.containerId!==containerStop.containerId||logCapture.captureMode!=='POST_STOP_SNAPSHOT'||!['exited','stopped'].includes(logCapture.containerStateAtCapture)||logCapture.timeoutSeconds!==30||logCapture.timedOut!==false||logCapture.exitCode!==0||logCapture.captureStatus!=='APPLICATION_LOG_CAPTURE_PASSED'||time(logCapture.completedAt)<time(logCapture.startedAt)||timeline.applicationLogCaptureStartedAt!==logCapture.startedAt||timeline.applicationLogCaptureCompletedAt!==logCapture.completedAt)throw Error('capture');
+ const appDir=path.resolve(dir,'application');for(const [key,name] of Object.entries({stdoutPath:'docker-logs.stdout.log',stderrPath:'docker-logs.stderr.log',combinedPath:'application.log'})){const candidate=path.resolve(logCapture[key]),rel=path.relative(appDir,candidate);if(path.isAbsolute(rel)||rel==='..'||rel.startsWith(`..${path.sep}`)||candidate!==path.join(appDir,name)||Number(logCapture[key.replace('Path','Bytes')])!==fs.statSync(candidate).size)throw Error('capture path/bytes')};if(logCapture.stdoutBytes+logCapture.stderrBytes<=0||logCapture.combinedBytes<=0)throw Error('capture empty');
+ if(executionSummary.executionStatus!=='COMPLETED'||executionSummary.artifactValidation!=='PASSED'||executionSummary.cleanupResult!=='COMPLETED')throw Error('summary');valid.push(arm);
+}catch(e){reasons[arm]=e.message}}
+fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify({experiment:'Experiment 1-25',runDate:date,completedRuns:valid,missingRuns:arms.filter(x=>!valid.includes(x)),reasons,aggregateReadiness:valid.length===6?'READY_TO_AGGREGATE':'INCOMPLETE',decisionState:'NOT_RUN'},null,2)+'\n');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+{
+    "experiment":  "Experiment 1-25",
+    "runId":  "RUN-20260804-EXP125-REMEDIATION-002",
+    "runDate":  "20260804",
+    "condition":  "REMEDIATION",
+    "executionMode":  "PLAN",
+    "applicationImageTag":  "doeng-flux-exp119-fresh-first-20260803:latest",
+    "applicationImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+    "mockImageTag":  "doeng-exp119-mock-frozen-20260803:latest",
+    "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+    "policy":  {
+                   "evictionIntervalMs":  1000,
+                   "leasingStrategy":  "LIFO",
+                   "maxIdleTimeMs":  3000
+               },
+    "composeFiles":  [
+                         {
+                             "path":  "backend\\docker-compose.experiment.yaml",
+                             "sha256":  "33f7da5246f96dc465b44f11469adbd4bda7b52ea4963bfc084f4fb23c05e549"
+                         },
+                         {
+                             "path":  "backend\\docker-compose.app-instance-t3-medium.yaml",
+                             "sha256":  "ca40fa99de7d7f318f1ace99bd72a3530de8a172c0ce724d1cd963d20821c67e"
+                         },
+                         {
+                             "path":  "backend\\docker-compose.mock-headroom-4cpu.yaml",
+                             "sha256":  "08314ec7f27cc60558f4eb9a90e3b27ea88489ca1b4b51cd5ef734f84118a87b"
+                         },
+                         {
+                             "path":  "backend\\docker-compose.http-pool-400.yaml",
+                             "sha256":  "79073a89f5bb49981bded87fec122cd3320a2c6ae6e43784817b92881ccbb5e2"
+                         },
+                         {
+                             "path":  "backend\\docker-compose.mock-memory-headroom.yaml",
+                             "sha256":  "8176dd56d44bdefb45639ec170fc83ced49f7deb8fbb7f829ad0fda2cdd3efa4"
+                         },
+                         {
+                             "path":  "backend\\docker-compose.experiment-1-12-connection-attribution.yaml",
+                             "sha256":  "399d553a0d8a1072a9052475c68b6069d299d0a277603953d248e775ebe03167"
+                         },
+                         {
+                             "path":  "backend\\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml",
+                             "sha256":  "2376e61eaf92be7081dea53a88c14eef0692fc1e25e84583cbc73d8ae8624c1b"
+                         }
+                     ],
+    "workload":  {
+                     "dbPool":  10,
+                     "durationSeconds":  105,
+                     "frameIntervalSeconds":  1,
+                     "drainSeconds":  30,
+                     "appMemory":  "3GiB",
+                     "appCpu":  2,
+                     "aiDelayMs":  2000,
+                     "admission":  320,
+                     "vu":  200,
+                     "storageDelayMs":  100,
+                     "pending":  800,
+                     "httpPool":  400,
+                     "timeoutMs":  10000
+                 },
+    "collector":  {
+                      "intervalMilliseconds":  1000,
+                      "gracefulStopTimeoutSeconds":  10,
+                      "maxDurationSeconds":  300,
+                      "postCoreSampleTimeoutSeconds":  10,
+                      "readinessTimeoutSeconds":  10,
+                      "mode":  "CORE_BOUND_STOP_SIGNAL"
+                  }
+}
