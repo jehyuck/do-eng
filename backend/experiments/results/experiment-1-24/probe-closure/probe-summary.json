@@ -1,0 +1,24 @@
+﻿{
+    "experiment":  "Experiment 1-24",
+    "executionMode":  "PLAN",
+    "conditions":  [
+                       {
+                           "condition":  "BASELINE",
+                           "preflightStatus":  "ARTIFACT_PATH_PREFLIGHT_PASSED",
+                           "composeCount":  7,
+                           "warmupInvoked":  0,
+                           "k6Invoked":  0,
+                           "coreInvoked":  0
+                       },
+                       {
+                           "condition":  "REMEDIATION",
+                           "preflightStatus":  "ARTIFACT_PATH_PREFLIGHT_PASSED",
+                           "composeCount":  7,
+                           "warmupInvoked":  0,
+                           "k6Invoked":  0,
+                           "coreInvoked":  0
+                       }
+                   ],
+    "status":  "PRODUCTION_PATH_PROBE_PASSED",
+    "performanceExecuted":  false
+}
