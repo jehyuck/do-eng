@@ -1,18 +1,29 @@
-{
-  "experiment": "Experiment 1-26",
-  "runDate": "20260804",
-  "executionMode": "PLAN",
-  "requestedRuns": ["BASELINE-001", "REMEDIATION-001", "BASELINE-002", "REMEDIATION-002", "BASELINE-003", "REMEDIATION-003"],
-  "startedRuns": 0,
-  "completedRuns": 0,
-  "failedRuns": 0,
-  "warmupInvocations": 0,
-  "coreInvocations": 0,
-  "k6Invocations": 0,
-  "executionStatus": "NOT_RUN",
-  "policyDecision": "NOT_RUN",
-  "readiness": "EXP126_READY_FOR_SIX_CORE_RUNS",
-  "gates": {"exp125Closure":"PASSED", "collectorIdleBaseline":"PASSED", "collectorIdleRemediation":"PASSED", "reliabilityFixtures":"PASSED", "aggregatorFixture":"PASSED", "sixCorePlan":"PASSED"},
-  "probeArtifacts": ["backend/experiments/results/experiment-1-26/probes-recovery3/BASELINE/probe-summary.json", "backend/experiments/results/experiment-1-26/probes-recovery3/REMEDIATION/probe-summary.json"],
-  "warmupCoreLoadExecuted": false
+﻿{
+    "experiment":  "Experiment 1-26",
+    "runDate":  "20260804",
+    "executionMode":  "PLAN",
+    "requestedRuns":  [
+                          "BASELINE-001",
+                          "REMEDIATION-001",
+                          "BASELINE-002",
+                          "REMEDIATION-002",
+                          "BASELINE-003",
+                          "REMEDIATION-003"
+                      ],
+    "manifests":  [
+                      "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp125-capture-recovery-20260804\\backend\\experiments\\results\\experiment-1-26\\plan\\BASELINE-001-command-manifest.json",
+                      "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp125-capture-recovery-20260804\\backend\\experiments\\results\\experiment-1-26\\plan\\REMEDIATION-001-command-manifest.json",
+                      "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp125-capture-recovery-20260804\\backend\\experiments\\results\\experiment-1-26\\plan\\BASELINE-002-command-manifest.json",
+                      "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp125-capture-recovery-20260804\\backend\\experiments\\results\\experiment-1-26\\plan\\REMEDIATION-002-command-manifest.json",
+                      "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp125-capture-recovery-20260804\\backend\\experiments\\results\\experiment-1-26\\plan\\BASELINE-003-command-manifest.json",
+                      "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp125-capture-recovery-20260804\\backend\\experiments\\results\\experiment-1-26\\plan\\REMEDIATION-003-command-manifest.json"
+                  ],
+    "startedRuns":  0,
+    "completedRuns":  0,
+    "failedRuns":  0,
+    "warmupInvocations":  0,
+    "coreInvocations":  0,
+    "k6Invocations":  0,
+    "executionStatus":  "NOT_RUN",
+    "policyDecision":  "NOT_RUN"
 }

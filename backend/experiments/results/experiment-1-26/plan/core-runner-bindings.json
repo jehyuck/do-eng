@@ -1,0 +1,7 @@
+﻿{
+    "runner":  "run-experiment-1-26-core.ps1",
+    "dynamicReplacement":  false,
+    "requiredCommandsResolved":  12,
+    "undefinedExp126Commands":  0,
+    "status":  "EXP126_CORE_RUNNER_BINDINGS_PASS"
+}
