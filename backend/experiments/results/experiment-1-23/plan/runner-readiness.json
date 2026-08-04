@@ -22,7 +22,7 @@
                            "RUN-20260804-EXP123-REMEDIATION-003"
                        ],
     "warmupInvocations":  0,
-    "k6Invocations":  0,
     "coreInvocations":  0,
+    "k6Invocations":  0,
     "executionStatus":  "NOT_RUN"
 }
