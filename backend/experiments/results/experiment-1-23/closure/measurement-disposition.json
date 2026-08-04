@@ -1,0 +1,22 @@
+{
+  "experiment": "Experiment 1-23",
+  "runId": "RUN-20260804-EXP123-BASELINE-001",
+  "classification": "MEASUREMENT_EXECUTED_ARTIFACT_FINALIZATION_FAILED",
+  "warmupStarted": true,
+  "warmupCompleted": true,
+  "coreStarted": true,
+  "coreCompleted": true,
+  "collectorReadinessPassed": true,
+  "collectorCoveragePassed": true,
+  "failedStage": "application container stop metadata persistence",
+  "failureDomain": "ARTIFACT_FINALIZATION",
+  "failureType": "CONTAINER_STOP_METADATA_PARENT_DIRECTORY_MISSING",
+  "containerStopCompleted": false,
+  "postStopCaptureCompleted": false,
+  "eligibleForAggregate": false,
+  "rerunAllowedUnderExperiment123": false,
+  "remainingExperiment123RunsAllowed": false,
+  "policyDecision": "NOT_RUN",
+  "finalExperimentState": "INVALID",
+  "rawOutcomeInspectedDuringClosure": false
+}

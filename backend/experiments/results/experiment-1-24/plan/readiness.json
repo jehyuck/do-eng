@@ -1,0 +1,22 @@
+{
+  "experiment": "Experiment 1-24",
+  "status": "EXP124_READY_FOR_SIX_CORE_RUNS",
+  "exp123Closure": "INVALID_CLOSED",
+  "rawOutcomeInspected": false,
+  "artifactInventoryComplete": true,
+  "artifactPathPreflight": "PASSED",
+  "containerStopParentDefense": "IMPLEMENTED",
+  "captureDirectoryDefense": "IMPLEMENTED",
+  "atomicMetadataWrite": true,
+  "fixtureStatus": "X1_X9_PASS",
+  "baselineProductionProbe": "PASSED",
+  "remediationProductionProbe": "PASSED",
+  "planStatus": "EXP124_PLAN_READY",
+  "requestedRuns": 6,
+  "startedRuns": 0,
+  "warmupInvocations": 0,
+  "k6Invocations": 0,
+  "coreInvocations": 0,
+  "performanceExecuted": false,
+  "controlledDiffOnly": true
+}

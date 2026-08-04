@@ -1,0 +1,72 @@
+﻿{
+    "runId":  "PROBE-REMEDIATION",
+    "startedAt":  "2026-08-04T09:19:55.0947954Z",
+    "completedAt":  "2026-08-04T09:19:55.2351869Z",
+    "requiredDirectories":  [
+                                {
+                                    "name":  "application",
+                                    "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\application",
+                                    "canonicalPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\application",
+                                    "created":  true,
+                                    "pathContained":  true,
+                                    "writeProbePassed":  true,
+                                    "deleteProbePassed":  true
+                                },
+                                {
+                                    "name":  "pool",
+                                    "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\pool",
+                                    "canonicalPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\pool",
+                                    "created":  true,
+                                    "pathContained":  true,
+                                    "writeProbePassed":  true,
+                                    "deleteProbePassed":  true
+                                },
+                                {
+                                    "name":  "database",
+                                    "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\database",
+                                    "canonicalPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\database",
+                                    "created":  true,
+                                    "pathContained":  true,
+                                    "writeProbePassed":  true,
+                                    "deleteProbePassed":  true
+                                },
+                                {
+                                    "name":  "container",
+                                    "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\container",
+                                    "canonicalPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\container",
+                                    "created":  true,
+                                    "pathContained":  true,
+                                    "writeProbePassed":  true,
+                                    "deleteProbePassed":  true
+                                },
+                                {
+                                    "name":  "mock",
+                                    "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\mock",
+                                    "canonicalPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\mock",
+                                    "created":  true,
+                                    "pathContained":  true,
+                                    "writeProbePassed":  true,
+                                    "deleteProbePassed":  true
+                                },
+                                {
+                                    "name":  "drain",
+                                    "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\drain",
+                                    "canonicalPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\drain",
+                                    "created":  true,
+                                    "pathContained":  true,
+                                    "writeProbePassed":  true,
+                                    "deleteProbePassed":  true
+                                },
+                                {
+                                    "name":  "provenance",
+                                    "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\provenance",
+                                    "canonicalPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\execution\\do-eng-exp124-harness-20260804\\backend\\experiments\\results\\experiment-1-24\\probe\\REMEDIATION\\provenance",
+                                    "created":  true,
+                                    "pathContained":  true,
+                                    "writeProbePassed":  true,
+                                    "deleteProbePassed":  true
+                                }
+                            ],
+    "preflightStatus":  "ARTIFACT_PATH_PREFLIGHT_PASSED",
+    "failureType":  null
+}
