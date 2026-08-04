@@ -466,6 +466,15 @@ async function fetchMockMetrics() {
   }
 }
 
+async function fetchMockMetricsWithRetry(maxAttempts = 3) {
+  let snapshot = await fetchMockMetrics()
+  for (let attempt = 1; attempt < maxAttempts && !snapshot.ok; attempt += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    snapshot = await fetchMockMetrics()
+  }
+  return snapshot
+}
+
 function isMockIdle(snapshot) {
   return snapshot.ok &&
     snapshot.metrics &&
@@ -479,7 +488,7 @@ async function observeMockDrain(loadStoppedAt) {
     phase: "load-stop",
     capturedAt: new Date().toISOString(),
     elapsedMs: 0,
-    ...(await fetchMockMetrics()),
+    ...(await fetchMockMetricsWithRetry()),
   }
   if (loadStopMockMetricsPath) {
     fs.writeFileSync(
