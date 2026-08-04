@@ -1,7 +1,6 @@
 ﻿{
     "experiment":  "Experiment 1-23",
     "runId":  "RUN-20260804-EXP123-REMEDIATION-003",
-    "runDate":  "20260804",
     "condition":  "REMEDIATION",
     "executionMode":  "PLAN",
     "applicationImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
@@ -11,26 +10,31 @@
                    "leasingStrategy":  "LIFO",
                    "maxIdleTimeMs":  3000
                },
-    "collectorMode":  "CORE_BOUND_STOP_SIGNAL",
-    "collector":  {
-                      "postCoreSampleTimeoutSeconds":  10,
-                      "gracefulStopTimeoutSeconds":  10,
-                      "maxDurationSeconds":  300,
-                      "intervalMilliseconds":  1000,
-                      "readinessTimeoutSeconds":  10
-                  },
+    "composeFiles":  [
+                         "backend\\docker-compose.experiment.yaml",
+                         "backend\\docker-compose.app-instance-t3-medium.yaml",
+                         "backend\\docker-compose.mock-headroom-4cpu.yaml",
+                         "backend\\docker-compose.http-pool-400.yaml",
+                         "backend\\docker-compose.mock-memory-headroom.yaml",
+                         "backend\\docker-compose.experiment-1-12-connection-attribution.yaml",
+                         "backend\\docker-compose.experiment-1-19-fresh-first-lifecycle.yaml"
+                     ],
     "workload":  {
                      "aiDelayMs":  2000,
+                     "httpPool":  400,
                      "vu":  200,
-                     "admission":  320,
                      "storageDelayMs":  100,
                      "appMemory":  "3GiB",
                      "dbPool":  10,
                      "timeoutMs":  10000,
                      "durationSeconds":  105,
-                     "pending":  800,
                      "drainSeconds":  30,
                      "appCpu":  2,
-                     "poolMax":  400
-                 }
+                     "frameIntervalSeconds":  1
+                 },
+    "collector":  {
+                      "maxDurationSeconds":  300,
+                      "intervalMilliseconds":  1000,
+                      "mode":  "CORE_BOUND_STOP_SIGNAL"
+                  }
 }
