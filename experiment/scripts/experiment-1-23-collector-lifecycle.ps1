@@ -18,7 +18,7 @@ function Wait-Exp123CollectorCoversCoreEnd([string]$JsonlPath,[string]$CoreCompl
     $end=ConvertTo-Exp123Timestamp $CoreCompletedAt;$deadline=(Get-Date).ToUniversalTime().AddSeconds($TimeoutSeconds)
     while((Get-Date).ToUniversalTime()-lt$deadline){
         foreach($line in @(Get-Content $JsonlPath -ErrorAction SilentlyContinue|Where-Object{$_.Trim()})){
-            try{$s=$line|ConvertFrom-Json;$at=ConvertTo-Exp123Timestamp $s.timestamp;if(($null-eq$s.failure-or[string]::IsNullOrWhiteSpace([string]$s.failure))-and$at-ge$end){return $at.ToString('o')}}catch{}
+            try{$s=$line|ConvertFrom-Json;$at=ConvertTo-Exp123Timestamp $s.timestamp;if(($null-eq$s.failure-or[string]::IsNullOrWhiteSpace([string]$s.failure))-and$at-ge$end){$script:Exp123LastCoveringSampleAt=$at.ToString('o');return $script:Exp123LastCoveringSampleAt}}catch{}
         }
         Start-Sleep -Milliseconds 100
     }

@@ -17,15 +17,15 @@
                    "leasingStrategy":  "FIFO",
                    "maxIdleTimeMs":  0
                },
-    "collectorStartedAt":  "2026-08-04T03:23:40.4841105Z",
+    "collectorStartedAt":  "2026-08-04T03:46:39.2430574Z",
     "collectorReady":  {
-                           "collectorReadyAt":  "2026-08-04T03:23:40.7076092Z",
+                           "collectorReadyAt":  "2026-08-04T03:46:39.5019214Z",
                            "collectorFirstValidSampleAt":  "2026-08-04T01:45:23.6460242+00:00"
                        },
     "collector":  {
                       "collectorStatus":  "COLLECTOR_STOPPED_BY_SIGNAL",
-                      "collectorProcessStartedAt":  "2026-08-04T03:23:41.0288421Z",
-                      "collectorProcessCompletedAt":  "2026-08-04T03:23:41.1896692Z",
+                      "collectorProcessStartedAt":  "2026-08-04T03:46:39.7855842Z",
+                      "collectorProcessCompletedAt":  "2026-08-04T03:46:40.0359395Z",
                       "intervalMilliseconds":  1000,
                       "maxDurationSeconds":  300,
                       "samples":  1,
