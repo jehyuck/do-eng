@@ -1,5 +1,7 @@
 {
   "state": "EXP123_READY_FOR_SIX_CORE_RUNS",
+  "previousReadiness": "EXP123_READINESS_REJECT",
+  "runtimeContractCorrected": true,
   "exp122Closure": "INVALID",
   "collectorLifecycleFixtures": "PASS",
   "baselineCollectorProbe": "CORE_BOUND_COLLECTOR_PROBE_READY",

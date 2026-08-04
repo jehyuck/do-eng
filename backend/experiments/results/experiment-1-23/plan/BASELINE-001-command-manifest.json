@@ -4,9 +4,14 @@
     "runDate":  "20260804",
     "condition":  "BASELINE",
     "executionMode":  "PLAN",
-    "applicationImageTag":  "doeng-flux-exp119-fresh-first-20260803:latest",
-    "mockImageTag":  "doeng-exp119-mock-frozen-20260803:latest",
-    "mode":  "CORE_BOUND_STOP_SIGNAL",
+    "applicationImageId":  "sha256:c2878d2847f80f3396a5cee5f02f1ec1ca3f7c14ceb8f49ea610d6e5fb6d9168",
+    "mockImageId":  "sha256:2492f942c3931aa607293cf3da940e0e5aac0cfae91cbfe0ea88a893f0829ac1",
+    "policy":  {
+                   "evictionIntervalMs":  0,
+                   "leasingStrategy":  "FIFO",
+                   "maxIdleTimeMs":  0
+               },
+    "collectorMode":  "CORE_BOUND_STOP_SIGNAL",
     "collector":  {
                       "postCoreSampleTimeoutSeconds":  10,
                       "gracefulStopTimeoutSeconds":  10,
@@ -14,11 +19,6 @@
                       "intervalMilliseconds":  1000,
                       "readinessTimeoutSeconds":  10
                   },
-    "policy":  {
-                   "evictionIntervalMs":  0,
-                   "leasingStrategy":  "FIFO",
-                   "maxIdleTimeMs":  0
-               },
     "workload":  {
                      "aiDelayMs":  2000,
                      "vu":  200,
@@ -32,19 +32,5 @@
                      "drainSeconds":  30,
                      "appCpu":  2,
                      "poolMax":  400
-                 },
-    "orderedSteps":  [
-                         "fresh recreate",
-                         "warm-up",
-                         "collector readiness",
-                         "core invocation",
-                         "post-core covering sample",
-                         "stop signal",
-                         "collector graceful exit",
-                         "coverage validation",
-                         "container stop",
-                         "post-stop capture",
-                         "artifact validation",
-                         "terminal"
-                     ]
+                 }
 }

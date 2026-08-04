@@ -3,11 +3,11 @@
     "status":  "CORE_BOUND_COLLECTOR_PROBE_READY",
     "collector":  {
                       "collectorStatus":  "COLLECTOR_STOPPED_BY_SIGNAL",
-                      "collectorProcessStartedAt":  "2026-08-04T01:45:42.6066248Z",
-                      "collectorProcessCompletedAt":  "2026-08-04T01:45:45.0838324Z",
+                      "collectorProcessStartedAt":  "2026-08-04T02:39:11.7858759Z",
+                      "collectorProcessCompletedAt":  "2026-08-04T02:39:12.2476717Z",
                       "intervalMilliseconds":  1000,
                       "maxDurationSeconds":  300,
-                      "samples":  3,
+                      "samples":  1,
                       "failures":  0,
                       "stopSignalObserved":  true
                   },

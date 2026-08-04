@@ -30,37 +30,49 @@
                           "runId":  "RUN-20260804-EXP123-BASELINE-001",
                           "started":  false,
                           "completed":  false,
-                          "failed":  false
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
                       },
                       {
                           "runId":  "RUN-20260804-EXP123-REMEDIATION-001",
                           "started":  false,
                           "completed":  false,
-                          "failed":  false
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
                       },
                       {
                           "runId":  "RUN-20260804-EXP123-BASELINE-002",
                           "started":  false,
                           "completed":  false,
-                          "failed":  false
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
                       },
                       {
                           "runId":  "RUN-20260804-EXP123-REMEDIATION-002",
                           "started":  false,
                           "completed":  false,
-                          "failed":  false
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
                       },
                       {
                           "runId":  "RUN-20260804-EXP123-BASELINE-003",
                           "started":  false,
                           "completed":  false,
-                          "failed":  false
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
                       },
                       {
                           "runId":  "RUN-20260804-EXP123-REMEDIATION-003",
                           "started":  false,
                           "completed":  false,
-                          "failed":  false
+                          "failed":  false,
+                          "warmupInvoked":  false,
+                          "coreInvoked":  false
                       }
                   ]
 }
