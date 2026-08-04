@@ -50,6 +50,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+. (Join-Path $PSScriptRoot "experiment-1-28-load-stop-contract.ps1")
 if ($null -eq $ComposeFiles -or $ComposeFiles.Count -eq 0) {
     $ComposeFiles = @("backend\docker-compose.experiment.yaml")
 }
@@ -483,11 +484,17 @@ try {
     $mockDrainSummaryPath = Join-Path $runDirectory "mock-drain-summary.json"
     $loadStopMockMetrics = if (Test-Path -LiteralPath $loadStopMockMetricsPath) { Get-Content -Raw -LiteralPath $loadStopMockMetricsPath | ConvertFrom-Json } else { $null }
     $mockDrain = if (Test-Path -LiteralPath $mockDrainSummaryPath) { Get-Content -Raw -LiteralPath $mockDrainSummaryPath | ConvertFrom-Json } else { $null }
-    $drainArtifactsPresent = $DrainObservationSeconds -eq 0 -or (
-        $null -ne $loadStopMockMetrics -and $loadStopMockMetrics.ok -and
-        $null -ne $mockDrain -and $mockDrain.sampleCount -eq ($DrainObservationSeconds + 1) -and
-        (Test-Path -LiteralPath $mockDrainPath)
-    )
+    $mockDrainSamples = if (Test-Path -LiteralPath $mockDrainPath) {
+        @(Get-Content -LiteralPath $mockDrainPath | Where-Object { $_.Trim() } | ForEach-Object { $_ | ConvertFrom-Json })
+    } else { @() }
+    $drainContract = Get-Exp128LoadStopContract `
+        -DrainObservationSeconds $DrainObservationSeconds `
+        -LoadStopMockMetrics $loadStopMockMetrics `
+        -MockDrain $mockDrain `
+        -MockDrainSamples $mockDrainSamples `
+        -DrainJsonlPresent (Test-Path -LiteralPath $mockDrainPath) `
+        -DrainSummaryPresent (Test-Path -LiteralPath $mockDrainSummaryPath)
+    $drainArtifactsPresent = $drainContract.drainArtifactsPresent
 
     $databaseAfter = Get-DatabaseState -Users @($preparedUsers.users)
     $databaseAfter | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "db-after.json")
@@ -562,7 +569,7 @@ try {
         )
     }
     $valid = -not (@($assertions.Values) -contains $false)
-    $endOfLoadInFlight = if ($null -ne $loadStopMockMetrics -and $null -ne $loadStopMockMetrics.metrics) {
+    $endOfLoadInFlight = if ($drainContract.loadStopSnapshotObserved -and $null -ne $loadStopMockMetrics.metrics) {
         [ordered]@{
             aiInFlight = $loadStopMockMetrics.metrics.aiInFlight
             storageInFlight = $loadStopMockMetrics.metrics.storageInFlight
@@ -590,6 +597,20 @@ try {
             status503 = @($requests | Where-Object { $_.status -eq 503 }).Count
         }
         observability = $observability
+        measurementEvidence = [ordered]@{
+            loadStopSnapshot = [ordered]@{
+                status = if ($drainContract.loadStopSnapshotObserved) { 'OBSERVED' } elseif ($drainContract.loadStopSnapshotTimeoutRecorded) { 'TIMEOUT_RECORDED' } else { 'INVALID' }
+                exactEndOfLoadBacklogAvailable = $drainContract.loadStopSnapshotObserved
+                error = if ($null -ne $loadStopMockMetrics) { $loadStopMockMetrics.error } else { $null }
+            }
+            drain = [ordered]@{
+                sampleCount = $mockDrainSamples.Count
+                sequenceValid = $drainContract.drainSequenceValid
+                timestampsValid = $drainContract.drainTimestampsValid
+                observationsValid = $drainContract.drainObservationsValid
+                summaryIdentityValid = $drainContract.drainSummaryIdentityValid
+            }
+        }
     }
     $verification | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "verification-summary.json")
     $verification | ConvertTo-Json -Depth 8
