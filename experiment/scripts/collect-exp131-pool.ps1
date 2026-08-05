@@ -23,14 +23,14 @@ try {
       $lastValid=$requestStarted; $samples++
       Write-Utf8Json $OutputPath ([ordered]@{ok=$true;attempt=$attempt;timestamp=$requestStarted.ToString('o');requestStartedAt=$requestStarted.ToString('o');requestCompletedAt=$completed.ToString('o');elapsedMilliseconds=[math]::Round(($completed-$requestStarted).TotalMilliseconds,3);httpStatus=200;poolMode=$payload.poolMode;providers=@($payload.providers);metrics=@($payload.metrics);failure=$null})
     } catch {
-      $failures++; $completed=[DateTimeOffset]::UtcNow; $errorRecord=[ordered]@{ok=$false;attempt=$attempt;timestamp=$requestStarted.ToString('o');endpoint=($ManagementUrl.TrimEnd('/')+'/actuator/doengdiagnosticpool');requestStartedAt=$requestStarted.ToString('o');requestCompletedAt=$completed.ToString('o');elapsedMilliseconds=[math]::Round(($completed-$requestStarted).TotalMilliseconds,3);httpStatus=$null;exceptionClass=$_.Exception.GetType().FullName;exceptionMessage=$_.Exception.Message;retryAttempted=$false;failure='POOL_ENDPOINT_REQUEST_FAILED'}
+      $failures++; $completed=[DateTimeOffset]::UtcNow; $errorRecord=[ordered]@{ok=$false;attempt=$attempt;timestamp=$requestStarted.ToString('o');endpoint=($ManagementUrl.TrimEnd('/')+'/actuator/doengdiagnosticpool');requestStartedAt=$requestStarted.ToString('o');requestCompletedAt=$completed.ToString('o');elapsedMilliseconds=[math]::Round(($completed-$requestStarted).TotalMilliseconds,3);httpStatus=$null;timeout=$true;applicationContainerRunning='NOT_AVAILABLE';previousSuccessfulSampleAt=if($null -ne $lastValid){$lastValid.ToString('o')}else{$null};nextSuccessfulSampleAt=$null;exceptionClass=$_.Exception.GetType().FullName;exceptionMessage=$_.Exception.Message;retryAttempted=$false;failure='POOL_ENDPOINT_REQUEST_FAILED'}
       Write-Utf8Json $OutputPath $errorRecord; Write-Utf8Json $FailurePath $errorRecord
     }
     if(Test-Path -LiteralPath $StopSignalPath){$stop=$true;break}
     $sleep=[int][math]::Max(0,($requestStarted.AddMilliseconds($IntervalMilliseconds)-[DateTimeOffset]::UtcNow).TotalMilliseconds);if($sleep -gt 0){Start-Sleep -Milliseconds $sleep}
   }
 } finally {
-  $status=if($stop){'COLLECTOR_STOPPED_BY_SIGNAL'}else{'COLLECTOR_MAX_DURATION_EXCEEDED'}
+  $status=if($stop){'COLLECTOR_STOPPED_BY_SIGNAL'}else{'STOP_SIGNAL_MISSED'}
   $summary=[ordered]@{collectorStatus=$status;collectorProcessStartedAt=$started.ToString('o');collectorProcessCompletedAt=[DateTimeOffset]::UtcNow.ToString('o');intervalMilliseconds=$IntervalMilliseconds;requestTimeoutSeconds=$RequestTimeoutSeconds;attempts=$attempt;samples=$samples;failures=$failures;maximumValidSampleGapMilliseconds=$maxGap;invalidJsonlRowCount=0;stopSignalObserved=$stop;processExitCode=if($stop){0}else{1}}
   [IO.File]::WriteAllText($SummaryPath,($summary|ConvertTo-Json -Depth 10),(New-Object Text.UTF8Encoding($false)))
 }
