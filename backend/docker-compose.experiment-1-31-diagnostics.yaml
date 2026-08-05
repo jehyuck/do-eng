@@ -1,0 +1,8 @@
+services:
+  flux-corrected:
+    environment:
+      DOENG_IDENTITY_PROBE_ENABLED: "true"
+      DOENG_POOL_OBSERVATION_ENABLED: "true"
+      DOENG_STAGE_OBSERVATION_ENABLED: "true"
+      DOENG_TRANSPORT_ATTRIBUTION_ENABLED: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info,metrics,doengdiagnosticpool,doengstages,doengadmission,doengidentity"

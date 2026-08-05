@@ -13,6 +13,8 @@ doeng:
     enabled: ${DOENG_DIAGNOSTIC_ENABLED:false}
   pool-observation:
     enabled: ${DOENG_POOL_OBSERVATION_ENABLED:false}
+  identity-probe:
+    enabled: ${DOENG_IDENTITY_PROBE_ENABLED:false}
   stage-observation:
     enabled: ${DOENG_STAGE_OBSERVATION_ENABLED:false}
   admission:

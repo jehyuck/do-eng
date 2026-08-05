@@ -25,7 +25,7 @@ public class ExternalHttpClientConfig {
             DiagnosticProperties diagnosticProperties) {
         TransportAttributionProperties transportProperties = new TransportAttributionProperties();
         return tokenWebClient(properties, sharedProvider, isolatedProvider, diagnosticProperties,
-                transportProperties, new TransportDiagnosticLogger(transportProperties));
+                transportProperties, new TransportDiagnosticLogger(transportProperties), null);
     }
 
     public WebClient aiWebClient(
@@ -35,7 +35,7 @@ public class ExternalHttpClientConfig {
             DiagnosticProperties diagnosticProperties) {
         TransportAttributionProperties transportProperties = new TransportAttributionProperties();
         return aiWebClient(properties, sharedProvider, isolatedProvider, diagnosticProperties,
-                transportProperties, new TransportDiagnosticLogger(transportProperties));
+                transportProperties, new TransportDiagnosticLogger(transportProperties), null);
     }
 
     public WebClient storageWebClient(
@@ -45,7 +45,7 @@ public class ExternalHttpClientConfig {
             DiagnosticProperties diagnosticProperties) {
         TransportAttributionProperties transportProperties = new TransportAttributionProperties();
         return storageWebClient(properties, sharedProvider, isolatedProvider, diagnosticProperties,
-                transportProperties, new TransportDiagnosticLogger(transportProperties));
+                transportProperties, new TransportDiagnosticLogger(transportProperties), null);
     }
 
     @Value("${doeng.experiment.metrics.enabled:false}")
@@ -106,10 +106,11 @@ public class ExternalHttpClientConfig {
             @Qualifier("tokenConnectionProvider") ConnectionProvider isolatedProvider,
             DiagnosticProperties diagnosticProperties,
             TransportAttributionProperties transportProperties,
-            TransportDiagnosticLogger transportLogger) {
+            TransportDiagnosticLogger transportLogger,
+            ExternalClientIdentityRegistry identityRegistry) {
         return buildClient(properties, selectProvider(properties, sharedProvider, isolatedProvider),
                 properties.getTokenVerificationUrl(), diagnosticProperties, "TOKEN",
-                transportProperties, transportLogger);
+                transportProperties, transportLogger, identityRegistry);
     }
 
     @Bean("aiWebClient")
@@ -119,16 +120,21 @@ public class ExternalHttpClientConfig {
             @Qualifier("aiConnectionProvider") ConnectionProvider isolatedProvider,
             DiagnosticProperties diagnosticProperties,
             TransportAttributionProperties transportProperties,
-            TransportDiagnosticLogger transportLogger) {
-        WebClient.Builder builder = buildClientBuilder(
-                properties,
-                selectProvider(properties, sharedProvider, isolatedProvider),
-                diagnosticProperties, "AI", transportProperties, transportLogger);
-        return builder
+            TransportDiagnosticLogger transportLogger,
+            ExternalClientIdentityRegistry identityRegistry) {
+        ConnectionProvider provider = selectProvider(properties, sharedProvider, isolatedProvider);
+        HttpClient httpClient = buildHttpClient(properties, provider, diagnosticProperties, "AI",
+                transportProperties, transportLogger);
+        WebClient client = WebClient.builder()
+                .defaultHeader("X-Experiment-Stage", "AI")
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .baseUrl(properties.getAiBaseUrl())
                 .codecs(configurer ->
                         configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024))
                 .build();
+        registerIdentity(identityRegistry, "AI", client, httpClient, provider,
+                properties.getAiBaseUrl());
+        return client;
     }
 
     @Bean("storageWebClient")
@@ -138,10 +144,11 @@ public class ExternalHttpClientConfig {
             @Qualifier("storageConnectionProvider") ConnectionProvider isolatedProvider,
             DiagnosticProperties diagnosticProperties,
             TransportAttributionProperties transportProperties,
-            TransportDiagnosticLogger transportLogger) {
+            TransportDiagnosticLogger transportLogger,
+            ExternalClientIdentityRegistry identityRegistry) {
         return buildClient(properties, selectProvider(properties, sharedProvider, isolatedProvider),
                 properties.getStorageBaseUrl(), diagnosticProperties, "STORAGE",
-                transportProperties, transportLogger);
+                transportProperties, transportLogger, identityRegistry);
     }
 
     private ConnectionProvider buildProvider(
@@ -187,14 +194,20 @@ public class ExternalHttpClientConfig {
             DiagnosticProperties diagnosticProperties,
             String stage,
             TransportAttributionProperties transportProperties,
-            TransportDiagnosticLogger transportLogger) {
-        return buildClientBuilder(properties, provider, diagnosticProperties, stage,
-                transportProperties, transportLogger)
+            TransportDiagnosticLogger transportLogger,
+            ExternalClientIdentityRegistry identityRegistry) {
+        HttpClient httpClient = buildHttpClient(properties, provider, diagnosticProperties, stage,
+                transportProperties, transportLogger);
+        WebClient client = WebClient.builder()
+                .defaultHeader("X-Experiment-Stage", stage)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .baseUrl(baseUrl)
                 .build();
+        registerIdentity(identityRegistry, stage, client, httpClient, provider, baseUrl);
+        return client;
     }
 
-    private WebClient.Builder buildClientBuilder(
+    private HttpClient buildHttpClient(
             ExternalServiceProperties properties,
             ConnectionProvider provider,
             DiagnosticProperties diagnosticProperties,
@@ -214,8 +227,13 @@ public class ExternalHttpClientConfig {
         httpClient = TransportHttpClientObservation.instrument(
                 httpClient, stage, provider.name(), transportLogger,
                 transportProperties.isEnabled());
-        return WebClient.builder()
-                .defaultHeader("X-Experiment-Stage", stage)
-                .clientConnector(new ReactorClientHttpConnector(httpClient));
+        return httpClient;
+    }
+
+    private void registerIdentity(ExternalClientIdentityRegistry registry, String stage,
+            WebClient client, HttpClient httpClient, ConnectionProvider provider, String baseUrl) {
+        if (registry != null) {
+            registry.register(stage, client, httpClient, provider, provider.name(), baseUrl);
+        }
     }
 }
