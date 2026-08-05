@@ -1,0 +1,12 @@
+{
+  "experiment": "Exp136",
+  "contract": "Pool-1000 canonical, Admission OFF, observation disabled",
+  "runs": [
+    {"runId":"RUN-20260806-EXP136-POOL1000-001","validity":"PRIMARY_VALID","requestRaw":true,"resourceRaw":true,"drain":true,"dbConsistency":true,"containerAfterInspect":true,"restart":0,"oomKilled":false},
+    {"runId":"RUN-20260806-EXP136-POOL1000-002","validity":"INVALID_HARNESS_ARTIFACT_CAPTURE","requestRaw":true,"resourceRaw":true,"drain":true,"dbConsistency":true,"containerAfterInspect":false,"restart":"NOT_AVAILABLE_AFTER_CAPTURE","oomKilled":"NOT_AVAILABLE_AFTER_CAPTURE","childExitCode":1,"reason":"existing smoke runner terminated before post-run artifact capture; system outcome is preserved but primary validity contract is incomplete"},
+    {"runId":"RUN-20260806-EXP136-POOL1000-003","validity":"PRIMARY_VALID","requestRaw":true,"resourceRaw":true,"drain":true,"dbConsistency":true,"containerAfterInspect":true,"restart":0,"oomKilled":false}
+  ],
+  "primaryValidCount": 2,
+  "requiredPrimaryValidCount": 3,
+  "finalValidity": "INCONCLUSIVE"
+}

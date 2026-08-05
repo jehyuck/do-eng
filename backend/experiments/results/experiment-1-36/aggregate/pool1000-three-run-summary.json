@@ -1,0 +1,10 @@
+{
+  "experiment": "Exp136",
+  "condition": "POOL1000",
+  "runs": [
+    {"runId":"RUN-20260806-EXP136-POOL1000-001","http200":134,"attempts":20367,"successRatePercent":0.66,"http500":8325,"clientTimeout":11770,"connectionFailure":138,"successfulRps":1.28,"p50":6158,"p95":9129,"p99":9827,"drainCompleted":true,"timeToZeroMs":0,"applicationCpuPeak":226.03,"applicationMemoryPeakMiB":988.8,"mockCpuPeak":163.76,"mockMemoryPeakMiB":581.8,"dbCpuPeak":22.23,"dbMemoryPeakMiB":88.02},
+    {"runId":"RUN-20260806-EXP136-POOL1000-002","http200":1749,"attempts":17415,"successRatePercent":10.04,"http500":60,"clientTimeout":7554,"connectionFailure":8052,"successfulRps":16.66,"p50":7183,"p95":9817,"p99":10028,"drainCompleted":true,"timeToZeroMs":8009,"applicationCpuPeak":244.41,"applicationMemoryPeakMiB":990.6,"mockCpuPeak":230.49,"mockMemoryPeakMiB":424.5,"dbCpuPeak":53.73,"dbMemoryPeakMiB":88.86,"validity":"INVALID_HARNESS_ARTIFACT_CAPTURE"},
+    {"runId":"RUN-20260806-EXP136-POOL1000-003","http200":289,"attempts":20002,"successRatePercent":1.44,"http500":3236,"clientTimeout":15265,"connectionFailure":1212,"successfulRps":2.75,"p50":6161,"p95":9489,"p99":9930,"drainCompleted":true,"timeToZeroMs":4007,"applicationCpuPeak":228.55,"applicationMemoryPeakMiB":943.0,"mockCpuPeak":163.83,"mockMemoryPeakMiB":798.3,"dbCpuPeak":22.84,"dbMemoryPeakMiB":90.47}],
+  "primaryValidAggregate": {"runIds":["RUN-20260806-EXP136-POOL1000-001","RUN-20260806-EXP136-POOL1000-003"],"count":2,"medianHttp200":211.5,"medianSuccessRatePercent":1.05,"medianP95":9309,"medianP99":9878.5},
+  "decision": "POOL1000 SUFFICIENCY INCONCLUSIVE"
+}
