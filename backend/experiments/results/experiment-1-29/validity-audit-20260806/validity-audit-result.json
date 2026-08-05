@@ -1,0 +1,59 @@
+{
+  "experiment": "Experiment 1-29",
+  "runDateLabel": "20260806",
+  "selectionIntegrity": "PASS",
+  "selectedBaselineCount": 3,
+  "selectedRemediationCount": 3,
+  "duplicateRunIdCount": 0,
+  "failedSelectedRunCount": 0,
+  "missingSelectedRunCount": 0,
+  "excludedCompletedRunCount": 0,
+  "excludedRun": {
+    "runId": "RUN-20260806-EXP129-REMEDIATION-003",
+    "classification": "INVALID",
+    "reason": "COLLECTOR_COVERAGE_INVALID",
+    "executionStatus": "EXECUTION_FAILED",
+    "observedMaximumGapMilliseconds": 8861.206,
+    "allowedMaximumGapMilliseconds": 8000
+  },
+  "configurationEquivalence": {
+    "applicationImageIdentity": "PASS",
+    "mockImageIdentity": "PASS",
+    "workloadIdentity": "PASS",
+    "collectorConfigurationIdentity": "PASS",
+    "composeCountAndHashIdentity": "PASS",
+    "baselinePolicyIdentity": "PASS",
+    "remediationPolicyIdentity": "PASS",
+    "replacementEquivalence": "PASS"
+  },
+  "runValidity": {
+    "RUN-20260806-EXP129-BASELINE-001": { "measurementValidity": "VALID", "observationQuality": "COMPLETE", "collectorCoverage": "PASSED", "collectorLifecycle": "PASSED", "artifactValidation": "PASSED", "cleanup": "COMPLETED", "timeline": "PASS" },
+    "RUN-20260806-EXP129-BASELINE-002": { "measurementValidity": "VALID", "observationQuality": "COMPLETE", "collectorCoverage": "PASSED", "collectorLifecycle": "PASSED", "artifactValidation": "PASSED", "cleanup": "COMPLETED", "timeline": "PASS" },
+    "RUN-20260806-EXP129-BASELINE-003": { "measurementValidity": "VALID", "observationQuality": "COMPLETE", "collectorCoverage": "PASSED", "collectorLifecycle": "PASSED", "artifactValidation": "PASSED", "cleanup": "COMPLETED", "timeline": "PASS" },
+    "RUN-20260806-EXP129-REMEDIATION-001": { "measurementValidity": "VALID", "observationQuality": "BOUNDED_TRANSIENT_LOSS", "collectorCoverage": "PASSED", "collectorLifecycle": "PASSED", "artifactValidation": "PASSED", "cleanup": "COMPLETED", "timeline": "PASS" },
+    "RUN-20260806-EXP129-REMEDIATION-002": { "measurementValidity": "VALID", "observationQuality": "COMPLETE", "collectorCoverage": "PASSED", "collectorLifecycle": "PASSED", "artifactValidation": "PASSED", "cleanup": "COMPLETED", "timeline": "PASS" },
+    "RUN-20260806-EXP129-REMEDIATION-004": { "measurementValidity": "VALID", "observationQuality": "COMPLETE", "collectorCoverage": "PASSED", "collectorLifecycle": "PASSED", "artifactValidation": "PASSED", "cleanup": "COMPLETED", "timeline": "PASS" }
+  },
+  "artifactIntegrity": {
+    "requiredArtifacts": "PASS",
+    "jsonParse": "PASS",
+    "sha256Inventory": "PASS",
+    "rawSelectedArtifactsModified": false,
+    "excludedRawArtifactModified": false
+  },
+  "executionProvenance": {
+    "branch": "experiment/doeng-fresh-first-lifecycle-policy",
+    "firstFiveExecutionHead": "8385854d1121e89b54d7969a28eb04b062ed29db",
+    "replacementExecutionHead": "8385854d1121e89b54d7969a28eb04b062ed29db",
+    "currentHead": "8385854d1121e89b54d7969a28eb04b062ed29db",
+    "workingTree": "DIRTY_RAW_ARTIFACTS_AND_ALLOWED_HARNESS_DIFF",
+    "allowedDiffOnly": true,
+    "executionAffectingDiff": "RunIndex 004 acceptance only"
+  },
+  "classification": "VALID_WITH_LIMITATION",
+  "limitation": "Replacement execution used the same committed HEAD plus an uncommitted harness-only RunIndex 004 acceptance change; the raw run artifact does not independently encode the dirty working-tree state.",
+  "aggregateAuthorization": "AUTHORIZED",
+  "performanceAnalysis": "NOT_RUN",
+  "policyDecision": "NOT_RUN",
+  "remainingLoadExecutions": 0
+}

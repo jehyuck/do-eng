@@ -1,0 +1,31 @@
+{
+  "experiment": "Experiment 1-29",
+  "runDateLabel": "20260806",
+  "selectionRule": "Three valid completed runs per condition",
+  "baselineRuns": [
+    "RUN-20260806-EXP129-BASELINE-001",
+    "RUN-20260806-EXP129-BASELINE-002",
+    "RUN-20260806-EXP129-BASELINE-003"
+  ],
+  "remediationRuns": [
+    "RUN-20260806-EXP129-REMEDIATION-001",
+    "RUN-20260806-EXP129-REMEDIATION-002",
+    "RUN-20260806-EXP129-REMEDIATION-004"
+  ],
+  "excludedRuns": [
+    {
+      "runId": "RUN-20260806-EXP129-REMEDIATION-003",
+      "reason": [
+        "COLLECTOR_COVERAGE_INVALID",
+        "EXECUTION_FAILED",
+        "MAX_VALID_SAMPLE_GAP_EXCEEDED"
+      ],
+      "observedMaximumGapMilliseconds": 8861.206,
+      "allowedMaximumGapMilliseconds": 8000
+    }
+  ],
+  "executionHead": "8385854d1121e89b54d7969a28eb04b062ed29db",
+  "replacementExecutionHead": "8385854d1121e89b54d7969a28eb04b062ed29db",
+  "performanceAnalysis": "NOT_RUN",
+  "policyDecision": "NOT_RUN"
+}

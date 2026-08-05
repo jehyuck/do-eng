@@ -1,0 +1,90 @@
+{
+  "experiment": "Experiment 1-29",
+  "runDateLabel": "20260806",
+  "files": [
+    "run-config.json",
+    "verification-summary.json",
+    "pool/pool-metrics.jsonl.summary.json",
+    "pool/collector-coverage.json",
+    "pool/collector-lifecycle.json",
+    "application/container-stop.json",
+    "application/docker-logs-capture.json",
+    "provenance/runtime-provenance.json",
+    "provenance/execution-timeline.json",
+    "execution-summary.json"
+  ],
+  "runs": {
+    "RUN-20260806-EXP129-BASELINE-001": {
+      "run-config.json": "e9045e94fe4a5b33d35b138dd794eba26f08d2b3ac47d0c15ef32e62231d85c6",
+      "verification-summary.json": "8e764b7ef2620c65d113631b5c91e50f8c92439501593c636a15c42260985b17",
+      "pool/pool-metrics.jsonl.summary.json": "2b69023ddc87bb528931a1e6273ce7669a04871bc348b081339702d2726751e5",
+      "pool/collector-coverage.json": "c79a29889e9d27e4480e426a331e379e97ca9828fc4254c3876f4dc8aa1a7f46",
+      "pool/collector-lifecycle.json": "eaa70bd0faed3cf9c8ece7c9b0ab5180d0dfc949cdfacf93b4aceb63f3e55dce",
+      "application/container-stop.json": "c8fd87e68768f554a30c3e2e9dc5fc8647b62a59718f4dd1f1c198cc76683b87",
+      "application/docker-logs-capture.json": "4175f8b6c1e1fbea2dd299c3bd78af3a26dccf66c6b7a4698d023e30e7bf01e0",
+      "provenance/runtime-provenance.json": "b71512fdba292b15a4c8927cdd65f193aa29452b152ec773208a09e42efeba0c",
+      "provenance/execution-timeline.json": "2cdbba06a57a24e50ff15073dc045971ea7276dd70faf4a7c94d42841c9d37a2",
+      "execution-summary.json": "c456e52730f6d964b8b4e3c683c6b9c32a6e74b675d8e23d5d08295c8d61ee7b"
+    },
+    "RUN-20260806-EXP129-BASELINE-002": {
+      "run-config.json": "bf646b98125c35ea21436ae62055afeae079f630c0377524e9e4763d20be6c50",
+      "verification-summary.json": "1caa9c91a5ea8c94456247fa205f407e5ba1f0e81a9365789a4400991cd77ab9",
+      "pool/pool-metrics.jsonl.summary.json": "e75a6830c12ffce47e44f725957ec72e7438bdc30702b1d6b36015bac6e3488c",
+      "pool/collector-coverage.json": "7ecc66c8f044fc2865034e426cdb2c36d764e3df72139dd9f83a6b05a9b4e2b5",
+      "pool/collector-lifecycle.json": "eea851287536b687de9ab550802dbd496fdbe6888da6aefbec07ab61967698eb",
+      "application/container-stop.json": "f42ed4dc3902a9334da5e0edbda284d1732ce97d9c47c8f3708ff89699cbf293",
+      "application/docker-logs-capture.json": "5facb6e0c001a30fd284d1f434293b73901113ac1ca7694237250920b7f2b257",
+      "provenance/runtime-provenance.json": "081ce1652a74ad00220b1f243d9fbba04e9578a41a958d1cc1c06f549ebef397",
+      "provenance/execution-timeline.json": "94422d5f280b3d3794b7f97f937d08f0679380f962fcd6e08fe3ddd47544ab91",
+      "execution-summary.json": "83c8cc0b5f17d0e14b4ac986d01a397db7eb7e5d0854687e17da59995afc7c27"
+    },
+    "RUN-20260806-EXP129-BASELINE-003": {
+      "run-config.json": "18bee919785bd3204a69804cb7716d1b22d988075e9472165d1fab228cdb6ebb",
+      "verification-summary.json": "ecee420f38e8324badc5b49229b7da26aa90cd197296b17b2c57d938488e9845",
+      "pool/pool-metrics.jsonl.summary.json": "d953c59ad0816f8c02ae76f4166215c0f885ef2b7a85b17e3a8327dd50f624d2",
+      "pool/collector-coverage.json": "d3c0d5e539e0af1235f2851c2eab29ed2fe3ccb47c4a3270671391edaceaa222",
+      "pool/collector-lifecycle.json": "3c9dd4255f6c4a21deca10223f02d94a24b616b79b7beb602dbc7090ba8f6fb2",
+      "application/container-stop.json": "843ab604ea055ff60d2b2db7bdd21ffee536539376e04fe94f83a1298a20e928",
+      "application/docker-logs-capture.json": "10a595e029d4c2964d16419f9f204d5c317ccbe3e9cd851c619b65420f9e67b3",
+      "provenance/runtime-provenance.json": "afde06b2d5394c6ff5019d9291abbfb3e09580b8986457fcd0c9f3d6f9fd7c1b",
+      "provenance/execution-timeline.json": "75e00038d9f1b50219c71594d19ce97aa914769561719daa59ae4ba3b3afdbe7",
+      "execution-summary.json": "1b4e68a9d21954ddf5cc858d782d9c6d592b7d9b6ae4faa832b9c661851313e3"
+    },
+    "RUN-20260806-EXP129-REMEDIATION-001": {
+      "run-config.json": "80fd89eef8dcc13ff62504ebe606b283c7dbb4d0d1a691065dfd49786ee25e70",
+      "verification-summary.json": "7d620048ee0383d7883de3e630e66ab50ed58e4d52de16588db3f9dcafbd471b",
+      "pool/pool-metrics.jsonl.summary.json": "6bcd925265b7e24df3e6cf7a25b60573ddc92fbc9beb1e803eb14976a8756492",
+      "pool/collector-coverage.json": "edffdf9aee0fab594b0ad6c84979988e09529e07f1e1dffd32c0352241e40fb7",
+      "pool/collector-lifecycle.json": "76a8981fa3d5e67df84c25d3610662e1b8d08521d793b1e8eede28ac91cde4da",
+      "application/container-stop.json": "fcf578edb6fffd734984c556e1e2d85aa7b2199b50cfef14acf097e3a9b9e7db",
+      "application/docker-logs-capture.json": "adfe3a2100fa24fcdddc82e7057038e2a9334c176fca30339e29df3b9c5fa132",
+      "provenance/runtime-provenance.json": "9d8411e884f212a93ac4e713b450885a8d4a45d362653eb3bda16af0d7e55db4",
+      "provenance/execution-timeline.json": "42dff2aaf135332bd8914b4e75f2fa7521e2f0318c150deaaffa3d07a68aad8d",
+      "execution-summary.json": "3f646f70791b8b825143f67d3e4f76eeca04c8aa212baa3f17450b38ee4dc036"
+    },
+    "RUN-20260806-EXP129-REMEDIATION-002": {
+      "run-config.json": "68e1d730d081671cdacec4ddb4bad8d0f4f5636039f5788fd6cd06977c2f90f7",
+      "verification-summary.json": "611b976084e97b9ef05a2266414f3a1fd25457a9c8c1f773ca541282d9aee648",
+      "pool/pool-metrics.jsonl.summary.json": "b1f780ce3f1b5859bd50eacc54b092b99c55ea1b26f0d45cb4c30c2ddeef800d",
+      "pool/collector-coverage.json": "3ffa88ca5461ca058668260cf376724ecfb1e7e02f26f78779f5f7026aa37ecc",
+      "pool/collector-lifecycle.json": "60ee455e26de05e8e5cbcfed735467b151243a39b0b619114abb0d66a9b08826",
+      "application/container-stop.json": "314c360434d8ec1d8ae4ba2cbb4ef0147bafb6d27649d97cd61bffa8f4be49e4",
+      "application/docker-logs-capture.json": "1d7dea4813c1522161be0bf56a1b34c935eab6bc64e1a037ffdbefbbf4a60fd6",
+      "provenance/runtime-provenance.json": "5281ed680e8f45fb9fa9953d68c8fee1e1d9a0f85dfe5d4a43163d4ae4147293",
+      "provenance/execution-timeline.json": "58d39decb94a76c5206156724235274c4093088a397f501e30a71275dde51659",
+      "execution-summary.json": "11070eb88a50eb27c69c8dd54f252410d1d652e3d4f3351e5629e3c6ec0dda38"
+    },
+    "RUN-20260806-EXP129-REMEDIATION-004": {
+      "run-config.json": "d8abd7dc226116bbd0dcaf3a7ba837b921790d924401c58e1a142a3633036f9a",
+      "verification-summary.json": "772c57e2c3882a23c9edc0e7babc7794e147a6884ec36faddeb0bec7c5f6232c",
+      "pool/pool-metrics.jsonl.summary.json": "417abd154e7196c1b40e6fcb9f277da8f4fade20f47762fc3fdb2bf0e8bbba5a",
+      "pool/collector-coverage.json": "50d4cc6d94fe9b7282d5d6619d0bb58355f97be2821d6313d32c6270eb63a471",
+      "pool/collector-lifecycle.json": "8487184a6936235adbd873af36035107415d98366b2aafbc29edb32d21ad45a3",
+      "application/container-stop.json": "7acf3eddccbdbe7d8b36a0af1c2cf88141d1a47233310c31c84e8751d0a68e3d",
+      "application/docker-logs-capture.json": "9892cba0d3e73cde86442230efafadddb1e1cc89270c1291f89e9cec15538d03",
+      "provenance/runtime-provenance.json": "58de59e6736763f9ee66afc4475410f96486a0f59d4643cb59be1948bf5406ca",
+      "provenance/execution-timeline.json": "ef6627cc61c3f8d991c3efe5d54261a4574c2a48e2353c3544cf0bf0f3b93e39",
+      "execution-summary.json": "72db5f98e32f898fe22156e958dd0489743508ce268100159915af6444ce302c"
+    }
+  }
+}
