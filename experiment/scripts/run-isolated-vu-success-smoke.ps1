@@ -25,7 +25,7 @@ param(
     [string]$ArrivalMode = "aligned",
     [ValidateSet("single-success", "reconnect-ramp")]
     [string]$LoadScenario = "single-success",
-    [ValidateSet("standard", "controlled-admission")]
+    [ValidateSet("standard", "controlled-admission", "natural-capacity")]
     [string]$OutcomeMode = "standard",
     [ValidateSet("legacy", "corrected")]
     [string]$AccountingMode = "legacy",
@@ -545,11 +545,11 @@ try {
         strictAuthEnabled = $mockMetrics.strictAuth -and $mockMetrics.authIssuedTokens -eq $ActiveMissions
         distinctAuthorizations = $clientResult.summary.authorizationMode -eq "per-vu-token-file" -and $clientResult.summary.distinctAuthorizationCount -eq $ActiveMissions
         accountingContract = if ($AccountingMode -eq "corrected") { $clientResult.summary.accounting.valid -eq $true } else { $true }
-        oneTrueResponsePerVu = if ($AccountingMode -eq "corrected" -or $OutcomeMode -eq "controlled-admission") { $trueResponseCount -ge 0 } elseif ($LoadScenario -eq "single-success") { $requests.Count -eq $ActiveMissions -and $trueResponses.Count -eq $ActiveMissions } else { $trueResponseCount -ge $ActiveMissions }
-        oneProgressAndPicturePerVu = if ($OutcomeMode -eq "controlled-admission") { $allPicturesStored } elseif ($LoadScenario -eq "single-success") { $allUsersCreatedOneProgressAndPicture } else { $allUsersCompletedAtLeastOneMission }
-        oneStoredObjectPerVu = if ($OutcomeMode -eq "controlled-admission") { $storageKeysMatchCompletions } elseif ($LoadScenario -eq "single-success") { $storedObjectIncrease -eq $ActiveMissions } else { $storageKeysMatchCompletions }
-        pictureKeysMatchStorage = if ($OutcomeMode -eq "controlled-admission") { $allPicturesStored -and $pictureKeysMatchCompletions } elseif ($LoadScenario -eq "single-success") { $pictureKeys.Count -eq $ActiveMissions -and $allPicturesStored } else { $pictureKeysMatchCompletions -and $allPicturesStored }
-        reconnectRamp = if ($OutcomeMode -eq "controlled-admission") { $allPicturesStored -and $storageKeysMatchCompletions } elseif ($LoadScenario -eq "reconnect-ramp") { -not (@($reconnectRampAssertions.Values) -contains $false) } else { $true }
+        oneTrueResponsePerVu = if ($OutcomeMode -eq "natural-capacity") { $true } elseif ($AccountingMode -eq "corrected" -or $OutcomeMode -eq "controlled-admission") { $trueResponseCount -ge 0 } elseif ($LoadScenario -eq "single-success") { $requests.Count -eq $ActiveMissions -and $trueResponses.Count -eq $ActiveMissions } else { $trueResponseCount -ge $ActiveMissions }
+        oneProgressAndPicturePerVu = if ($OutcomeMode -eq "natural-capacity") { $true } elseif ($OutcomeMode -eq "controlled-admission") { $allPicturesStored } elseif ($LoadScenario -eq "single-success") { $allUsersCreatedOneProgressAndPicture } else { $allUsersCompletedAtLeastOneMission }
+        oneStoredObjectPerVu = if ($OutcomeMode -eq "natural-capacity") { $true } elseif ($OutcomeMode -eq "controlled-admission") { $storageKeysMatchCompletions } elseif ($LoadScenario -eq "single-success") { $storedObjectIncrease -eq $ActiveMissions } else { $storageKeysMatchCompletions }
+        pictureKeysMatchStorage = if ($OutcomeMode -eq "natural-capacity") { $true } elseif ($OutcomeMode -eq "controlled-admission") { $allPicturesStored -and $pictureKeysMatchCompletions } elseif ($LoadScenario -eq "single-success") { $pictureKeys.Count -eq $ActiveMissions -and $allPicturesStored } else { $pictureKeysMatchCompletions }
+        reconnectRamp = if ($OutcomeMode -eq "natural-capacity") { $true } elseif ($OutcomeMode -eq "controlled-admission") { $allPicturesStored -and $storageKeysMatchCompletions } elseif ($LoadScenario -eq "reconnect-ramp") { -not (@($reconnectRampAssertions.Values) -contains $false) } else { $true }
         storedObjectsMatchFixture = $allObjectsMatchFixture
         observabilityArtifactsPresent = -not $observabilityEnabled -or (
             (
