@@ -1,0 +1,7 @@
+{
+  "applicationSourceCommit": "a530aa6593dc967f82b68cc56b12fef7adcb5539",
+  "exp133HarnessRepairCommit": "f0588ce",
+  "mockSourceFile": "backend/experiment-mock/server.js",
+  "mockSourceChange": "observation gate only; response and delay semantics unchanged",
+  "branch": "experiment/exp136-pool1000-sufficiency"
+}

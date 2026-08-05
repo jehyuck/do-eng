@@ -1,5 +1,8 @@
 const http = require("http")
 const crypto = require("crypto")
+const mockLifecycleObservationEnabled =
+  String(process.env.MOCK_LIFECYCLE_OBSERVATION_ENABLED || "true").toLowerCase() ===
+  "true"
 
 const port = Number(process.env.MOCK_PORT || 9100)
 const defaultMemberId = Number(process.env.MOCK_MEMBER_ID || 15)
@@ -80,6 +83,7 @@ function snapshotSocket(socket) {
 }
 
 function observeConnection(event, socket, extra = {}) {
+  if (!mockLifecycleObservationEnabled) return
   aiLifecycleEvents.push({
     event,
     observedAt: new Date().toISOString(),
@@ -93,6 +97,7 @@ function observeConnection(event, socket, extra = {}) {
 }
 
 function observeAiLifecycle(event, request, state, extra = {}) {
+  if (!mockLifecycleObservationEnabled) return
   const { socket: connectionSocket, ...details } = extra
   const socket = request?.socket || connectionSocket
   aiLifecycleEvents.push({

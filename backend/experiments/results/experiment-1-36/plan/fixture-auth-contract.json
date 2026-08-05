@@ -1,0 +1,12 @@
+{
+  "fixture": "image/arc.jpg",
+  "answer": "happy",
+  "sceneId": 2,
+  "authMode": "per-vu-token-file",
+  "strictAuth": true,
+  "preparedUsers": 200,
+  "memberActorMapping": "prepared user memberId",
+  "missionRunId": "per-user mission identity from load driver",
+  "dbReset": "runner reset before each run",
+  "mockResult": true
+}

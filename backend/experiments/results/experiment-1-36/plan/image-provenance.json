@@ -1,0 +1,8 @@
+{
+  "applicationImage": "doeng-exp133-admission-off:a530aa6",
+  "applicationImageIdAtPreflight": "sha256:b9ad608564d7dce6342ca343ae31b6208754aded8f952ba4e16e9366daef27f3",
+  "mockImage": "doeng-exp136-mock-canonical:latest",
+  "mockImageBuild": "sha256:6b5da69e3a73d94cdafd5df2e5d0db49554618257142e61a0959c7efb5b81eba",
+  "rebuildRequired": false,
+  "reason": "The frozen Exp119 mock has no lifecycle observation flag; Exp136 requires an observation-disabled mock image."
+}

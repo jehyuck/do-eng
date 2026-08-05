@@ -1,0 +1,13 @@
+{
+  "experiment": "Exp136",
+  "applicationSourceCommit": "a530aa6593dc967f82b68cc56b12fef7adcb5539",
+  "applicationImage": "doeng-exp133-admission-off:a530aa6",
+  "mockSourceChange": "MOCK_LIFECYCLE_OBSERVATION_ENABLED gate only",
+  "pool": {"mode":"SHARED","provider":"doeng-external","maxConnections":1000,"pendingAcquireMaxCount":800,"pendingAcquireTimeoutMs":10000,"leasing":"FIFO","maxIdleTimeMs":0,"evictionIntervalMs":0},
+  "admission": {"mode":"OFF","enabled":false},
+  "workload": {"vu":200,"durationMs":105000,"intervalMs":1000,"requestTimeoutMs":10000,"aiDelayMs":2000,"storageDelayMs":100},
+  "resources": {"cpu":"2","memory":"3GiB","dbPool":10},
+  "mock": {"result":true,"aiStatus":200,"storageStatus":200,"closeBeforeResponse":false,"strictAuth":true},
+  "observation": {"transport":false,"stage":false,"pool":false,"identityProbe":false,"diagnostic":false,"mockLifecycle":false,"jfr":false,"continuousApplicationSnapshot":false},
+  "validity": {"requestRaw":true,"resourceRaw":true,"terminalDrain":true,"dbConsistency":true,"restartZero":true,"oomKilledFalse":true}
+}

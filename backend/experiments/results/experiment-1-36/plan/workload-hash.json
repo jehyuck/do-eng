@@ -1,0 +1,12 @@
+{
+  "missionLoadPath": "experiment/load/mission-load.js",
+  "missionLoadSha256": "e9b6ad68043826ea3195db2ef116fc7cd9b86c1f318374c4e6d557d329ef8154",
+  "fixturePath": "image/arc.jpg",
+  "fixtureSha256": "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99",
+  "accountingMode": "corrected",
+  "arrivalMode": "aligned",
+  "loadScenario": "single-success",
+  "expectedUsers": 200,
+  "expectedIntervalMs": 1000,
+  "expectedDurationMs": 105000
+}

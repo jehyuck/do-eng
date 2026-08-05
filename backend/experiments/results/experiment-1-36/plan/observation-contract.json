@@ -1,0 +1,7 @@
+{
+  "primaryEvidence": ["client request outcome raw","client latency raw","container CPU/memory raw","mock terminal metrics","DB consistency","container inspect","restart/OOM state","terminal drain","Admission OFF proof","canonical provenance"],
+  "disabled": ["DOENG_TRANSPORT_ATTRIBUTION_ENABLED","DOENG_STAGE_OBSERVATION_ENABLED","DOENG_POOL_OBSERVATION_ENABLED","DOENG_IDENTITY_PROBE_ENABLED","DOENG_DIAGNOSTIC_ENABLED","MOCK_LIFECYCLE_OBSERVATION_ENABLED","JFR","continuous application snapshot"],
+  "poolMetricCollector": "not required for primary validity",
+  "logging": "raw stdout/stderr preserved; no per-request tail parser",
+  "requiredResources": ["application CPU/memory","mock CPU/memory","DB CPU/memory","restart count","OOMKilled"]
+}
