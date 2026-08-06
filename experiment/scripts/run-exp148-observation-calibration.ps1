@@ -53,7 +53,7 @@ $delta = [ordered]@{
     pendingLimit = Delta $performance.exceptions.poolAcquirePendingLimit $diagnostic.exceptions.poolAcquirePendingLimit
     r2dbcPending = $null
 }
-$rpsP = if ($performance.client.mockDrain) { [double]$performance.client.http200 / 30.0 } else { $null }
+$rpsP = [double]$performance.client.http200 / 30.0
 $rpsD = [double]$diagnostic.client.http200 / 30.0
 $delta.successfulRps = $rpsD - $rpsP
 $classification = if ([math]::Abs((PctDelta $performance.client.http200 $diagnostic.client.http200)) -le 0.05 -and [math]::Abs((PctDelta $performance.client.p95Ms $diagnostic.client.p95Ms)) -le 0.05) { "OBSERVATION_OVERHEAD_LOW" } elseif ([math]::Abs((PctDelta $performance.client.http200 $diagnostic.client.http200)) -gt 0.15 -or [math]::Abs((PctDelta $performance.client.p95Ms $diagnostic.client.p95Ms)) -gt 0.15) { "OBSERVATION_OVERHEAD_SEVERE" } else { "OBSERVATION_OVERHEAD_MATERIAL" }
