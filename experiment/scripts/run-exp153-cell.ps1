@@ -17,6 +17,9 @@ $fixture = Join-Path $repo "image\arc.jpg"
 $missionLoad = Join-Path $repo "experiment\load\mission-load.js"
 $sourceCommit = if ($Cell -eq "A") { "507e075016728daeaab75a51e7172577efe4c5ce" } else { "cf5b36ad38928d55eab131d1328dc85ccff0ad3b" }
 $sourceBranch = if ($Cell -eq "A") { "experiment/exp151-admission-gate-capacity" } else { "experiment/exp152-sink-dispatcher" }
+$runtimeCompose = $null
+$runtimeSeedImage = $null
+$runtimeSeedDir = $null
 
 function Save-Json([string]$Path, $Value) {
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $Path) | Out-Null
@@ -51,9 +54,28 @@ function Plan-Only {
     Save-Json (Join-Path $runDir "validity.json") ([ordered]@{ valid=$false; reasons=@("PLAN_ONLY_NO_RUNTIME_EXECUTION"); checkedAt=[DateTime]::UtcNow.ToString("o") })
     "EXP153_PLAN_PASS CELL=$Cell RUN_ID=$RunId"
 }
-function Invoke-Compose([string[]]$Args) {
-    & docker compose -p ("doeng-exp153-" + $RunId.ToLowerInvariant()) -f $baseCompose -f $override @Args
-    if ($LASTEXITCODE -ne 0) { throw "docker compose failed: $($Args -join ' ')" }
+function Invoke-Compose([string[]]$ComposeArgs) {
+    & docker compose -p ("doeng-exp153-" + $RunId.ToLowerInvariant()) -f $baseCompose -f $override @ComposeArgs
+    if ($LASTEXITCODE -ne 0) { throw "docker compose failed: $($ComposeArgs -join ' ')" }
+}
+function Prepare-RuntimeCompose {
+    $dump = Get-ChildItem (Join-Path $repo "exec") -Recurse -Filter "doEng.sql" -File | Select-Object -First 1 -ExpandProperty FullName
+    if (-not $dump) { throw "DB_SEED_NOT_FOUND" }
+    $script:runtimeSeedDir = Join-Path $env:TEMP ("doeng-exp153-seed-" + $RunId.ToLowerInvariant())
+    New-Item -ItemType Directory -Force -Path $script:runtimeSeedDir | Out-Null
+    Copy-Item $dump (Join-Path $script:runtimeSeedDir "doEng.sql") -Force
+    Copy-Item (Join-Path $repo "backend\experiment-db\02-mission-completion.sql") (Join-Path $script:runtimeSeedDir "02-mission-completion.sql") -Force
+    @("FROM mariadb:10.11","COPY doEng.sql /docker-entrypoint-initdb.d/01-doeng.sql","COPY 02-mission-completion.sql /docker-entrypoint-initdb.d/02-mission-completion.sql") | Set-Content (Join-Path $script:runtimeSeedDir "Dockerfile") -Encoding ASCII
+    $script:runtimeSeedImage = "doeng-exp153-db-$($RunId.ToLowerInvariant())"
+    & docker build --quiet -t $script:runtimeSeedImage $script:runtimeSeedDir | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "DB_SEED_IMAGE_BUILD_FAILED" }
+    $script:runtimeCompose = Join-Path $repo ("backend\docker-compose.experiment.exp153-$($RunId.ToLowerInvariant()).yaml")
+    $yaml = Get-Content $baseCompose -Raw -Encoding UTF8
+    $yaml = [regex]::Replace($yaml, '(?m)^\s*-\s*"[^\r\n]*doEng\.sql:/docker-entrypoint-initdb\.d/01-doeng\.sql:ro"\s*\r?\n', '')
+    $yaml = [regex]::Replace($yaml, '(?m)^\s*-\s*"[^\r\n]*02-mission-completion\.sql:/docker-entrypoint-initdb\.d/02-mission-completion\.sql:ro"\s*\r?\n', '')
+    $yaml = $yaml.Replace('image: mariadb:10.11', "image: $script:runtimeSeedImage")
+    Set-Content $script:runtimeCompose $yaml -Encoding UTF8
+    $script:baseCompose = $script:runtimeCompose
 }
 function Wait-Health {
     $management = "http://127.0.0.1:9001"
@@ -76,7 +98,9 @@ Assert-Common
 if ($Mode -eq "Plan") { Plan-Only; exit 0 }
 $started=$false
 try {
-    Invoke-Compose @("up","-d","--force-recreate","mariadb","experiment-mock","flux-corrected"); $started=$true; Wait-Health
+    Prepare-RuntimeCompose
+    $started=$true
+    Invoke-Compose @("up","-d","--force-recreate","mariadb","experiment-mock","flux-corrected"); Wait-Health
     Save-Json (Join-Path $runDir "warmup-result.json") ([ordered]@{status="PASS"; durationMs=1000})
     $providerPath=Join-Path $runDir "provider-metrics.jsonl"; $resourcePath=Join-Path $runDir "application-resources.jsonl"; $pollSeconds=if($Mode -eq "Smoke"){5}else{35}
     $job=Start-Job -ScriptBlock {
@@ -99,4 +123,4 @@ try {
     Save-Json (Join-Path $runDir "validity.json") ([ordered]@{valid=$false; reasons=@("SMOKE_ONLY_NOT_CORE"); checkedAt=[DateTime]::UtcNow.ToString("o")})
     "EXP153_$($Mode.ToUpperInvariant())_PASS CELL=$Cell RUN_ID=$RunId"
 } catch { Save-Json (Join-Path $runDir "validity.json") ([ordered]@{valid=$false; reasons=@($_.Exception.Message); checkedAt=[DateTime]::UtcNow.ToString("o")}); throw }
-finally { if($started){try{Invoke-Compose @("logs","--no-color","--timestamps","flux-corrected")|Set-Content (Join-Path $runDir "application.log") -Encoding UTF8}catch{}; try{Invoke-Compose @("logs","--no-color","--timestamps","experiment-mock")|Set-Content (Join-Path $runDir "mock.log") -Encoding UTF8}catch{}; try{Invoke-Compose @("down","--remove-orphans")|Out-Null}catch{}}; Save-Json (Join-Path $runDir "cleanup.json") ([ordered]@{completed=$true; at=[DateTime]::UtcNow.ToString("o")}) }
+finally { if($started){try{Invoke-Compose @("logs","--no-color","--timestamps","flux-corrected")|Set-Content (Join-Path $runDir "application.log") -Encoding UTF8}catch{}; try{Invoke-Compose @("logs","--no-color","--timestamps","experiment-mock")|Set-Content (Join-Path $runDir "mock.log") -Encoding UTF8}catch{}; try{Invoke-Compose @("down","--remove-orphans")|Out-Null}catch{}}; if($runtimeCompose -and (Test-Path $runtimeCompose)){Remove-Item $runtimeCompose -Force -ErrorAction SilentlyContinue}; if($runtimeSeedImage){docker image rm $runtimeSeedImage 2>$null|Out-Null}; if($runtimeSeedDir -and (Test-Path $runtimeSeedDir)){Remove-Item $runtimeSeedDir -Recurse -Force -ErrorAction SilentlyContinue}; Save-Json (Join-Path $runDir "cleanup.json") ([ordered]@{completed=$true; at=[DateTime]::UtcNow.ToString("o")}) }
