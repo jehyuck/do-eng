@@ -28,7 +28,7 @@ public class MissionDatabaseService {
             String missionRunId) {
         LocalDateTime completedAt = LocalDateTime.now();
 
-        Mono<Long> claim = databaseClient.sql(
+        Mono<Integer> claim = databaseClient.sql(
                         "INSERT IGNORE INTO mission_completion "
                                 + "(member_id, scene_id, mission_run_id, object_key, completed_at) "
                                 + "VALUES (:memberId, :sceneId, :missionRunId, :objectKey, :completedAt)")
