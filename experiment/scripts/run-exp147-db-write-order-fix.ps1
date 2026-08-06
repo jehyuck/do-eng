@@ -251,7 +251,8 @@ if ($dirty.Count -gt 0) {
         $candidate = [string]$entry
         if ($candidate.Length -gt 3) { $candidate = $candidate.Substring(3) }
         $candidatePath = Join-Path $repo $candidate
-        if (-not ((Resolve-Path $candidatePath -ErrorAction SilentlyContinue).Path.StartsWith($allowedResultPrefix, [System.StringComparison]::OrdinalIgnoreCase))) {
+        $resolvedCandidate = (Resolve-Path $candidatePath -ErrorAction SilentlyContinue).Path
+        if ($null -eq $resolvedCandidate -or (-not $allowedResultPrefix.StartsWith($resolvedCandidate, [System.StringComparison]::OrdinalIgnoreCase) -and -not $resolvedCandidate.StartsWith($allowedResultPrefix, [System.StringComparison]::OrdinalIgnoreCase))) {
             throw "Unexpected working tree change before EXECUTE: $entry"
         }
     }
