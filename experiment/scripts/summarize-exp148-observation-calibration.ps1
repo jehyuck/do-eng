@@ -95,7 +95,10 @@ $firstPendingLimit = First-AtOrAbove $pending 800
 
 $stageRows = @()
 if (Test-Path -LiteralPath $StageTimelinePath) {
-    $stageRows = @(Get-Content -LiteralPath $StageTimelinePath -Encoding UTF8 | Where-Object { $_ } | ForEach-Object { $_ | ConvertFrom-Json } | Where-Object { $null -ne $_.stages })
+    $stageRows = @(Get-Content -LiteralPath $StageTimelinePath -Encoding UTF8 | Where-Object { $_ } | ForEach-Object {
+        $row = $_ | ConvertFrom-Json
+        if ($null -ne $row.PSObject.Properties['stages']) { $row }
+    })
 }
 $stageSummary = [ordered]@{}
 foreach ($row in $stageRows | Select-Object -Last 1) {

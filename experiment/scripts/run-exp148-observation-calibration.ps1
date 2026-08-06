@@ -13,10 +13,11 @@ if ($head -ne $ExpectedCommit) { throw "Commit mismatch: expected $ExpectedCommi
 if (-not (Test-Path -LiteralPath $cell)) { throw "Calibration cell runner not found" }
 
 foreach ($mode in @("P", "D")) {
-    if ($ExecutionMode -eq "EXECUTE" -and $mode -eq "P") {
-        $existingPerformanceSummary = Join-Path $resultRoot "performance-001\analysis\run-summary.json"
-        if (Test-Path -LiteralPath $existingPerformanceSummary) {
-            Write-Output "EXP148_A1B0_P_EXISTING_ARTIFACT_REUSED"
+    if ($ExecutionMode -eq "EXECUTE") {
+        $existingSummary = if ($mode -eq "P") { Join-Path $resultRoot "performance-001\analysis\run-summary.json" } else { Join-Path $resultRoot "diagnostic-001\analysis\run-summary.json" }
+        if (Test-Path -LiteralPath $existingSummary) {
+            $reuseMarker = if ($mode -eq "P") { "EXP148_A1B0_P_EXISTING_ARTIFACT_REUSED" } else { "EXP148_A1B0_D_EXISTING_ARTIFACT_REUSED" }
+            Write-Output $reuseMarker
             continue
         }
     }
