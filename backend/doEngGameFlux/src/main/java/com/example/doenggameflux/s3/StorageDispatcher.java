@@ -17,7 +17,7 @@ public final class StorageDispatcher extends AbstractSinkDispatcher<StorageDispa
             MissionImageStorage missionImageStorage,
             DispatcherMetrics metrics,
             @Value("${doeng.dispatcher.storage.concurrency:100}") int concurrency,
-            @Value("${doeng.dispatcher.storage.queue-capacity:2000}") int queueCapacity) {
+            @Value("${doeng.dispatcher.storage.queue-capacity:200}") int queueCapacity) {
         super(new DispatcherSpec("storage", concurrency, queueCapacity), metrics);
         this.missionImageStorage = missionImageStorage;
     }
