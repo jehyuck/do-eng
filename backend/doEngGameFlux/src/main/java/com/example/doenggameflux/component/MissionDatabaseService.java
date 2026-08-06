@@ -18,6 +18,7 @@ public class MissionDatabaseService {
     private final ProgressRepository progressRepository;
     private final PictureRepository pictureRepository;
     private final DatabaseClient databaseClient;
+    private final StageObservation stageObservation;
 
     @Transactional
     public Mono<Boolean> saveCompletionIfFirst(
@@ -27,7 +28,7 @@ public class MissionDatabaseService {
             String missionRunId) {
         LocalDateTime completedAt = LocalDateTime.now();
 
-        return databaseClient.sql(
+        Mono<Long> claim = databaseClient.sql(
                         "INSERT IGNORE INTO mission_completion "
                                 + "(member_id, scene_id, mission_run_id, object_key, completed_at) "
                                 + "VALUES (:memberId, :sceneId, :missionRunId, :objectKey, :completedAt)")
@@ -37,7 +38,9 @@ public class MissionDatabaseService {
                 .bind("objectKey", objectKey)
                 .bind("completedAt", completedAt)
                 .fetch()
-                .rowsUpdated()
+                .rowsUpdated();
+
+        return stageObservation.observe("DB_CLAIM", claim)
                 .flatMap(claimed -> claimed == 0
                         ? Mono.just(false)
                         : saveClaimedCompletion(
@@ -52,22 +55,30 @@ public class MissionDatabaseService {
             long sceneId,
             long memberId,
             LocalDateTime completedAt) {
-        return progressRepository.getByMemberIdAndSceneId(memberId, sceneId)
+        Mono<Progress> progressLookupOrCreate = progressRepository
+                .getByMemberIdAndSceneId(memberId, sceneId)
                 .switchIfEmpty(progressRepository.save(
                         Progress.builder()
                                 .memberId(memberId)
                                 .sceneId(sceneId)
                                 .playedAt(completedAt)
-                                .build()))
-                .flatMap(progress -> pictureRepository.save(
-                                Picture.builder()
-                                        .progressId(progress.getId())
-                                        .image(objectKey)
-                                        .createdAt(completedAt)
-                                        .build())
-                        .then(progressRepository.updateProgress(
-                                completedAt,
-                                progress.getId()))
-                        .thenReturn(true));
+                                .build()));
+
+        return stageObservation.observe("DB_PROGRESS_LOOKUP_OR_CREATE", progressLookupOrCreate)
+                .flatMap(progress -> {
+                    Mono<Picture> pictureInsert = pictureRepository.save(
+                            Picture.builder()
+                                    .progressId(progress.getId())
+                                    .image(objectKey)
+                                    .createdAt(completedAt)
+                                    .build());
+                    Mono<Integer> progressUpdate = progressRepository.updateProgress(
+                            completedAt,
+                            progress.getId());
+
+                    return stageObservation.observe("DB_PICTURE_INSERT", pictureInsert)
+                            .then(stageObservation.observe("DB_PROGRESS_UPDATE", progressUpdate))
+                            .thenReturn(true);
+                });
     }
 }
