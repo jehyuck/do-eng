@@ -93,6 +93,10 @@ function Wait-Health {
         }
         Start-Sleep -Seconds 1
     }
+    try {
+        Invoke-Compose @("logs", "--no-color", "--timestamps", "flux-corrected") |
+            Set-Content -LiteralPath (Join-Path $planDir "application-startup.log") -Encoding UTF8
+    } catch { }
     throw "Management health did not become UP within 60 seconds"
 }
 
