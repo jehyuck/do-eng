@@ -6,9 +6,10 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import java.time.Duration;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.ToDoubleFunction;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Sinks;
 
 @Component
 public class DispatcherMetrics {
@@ -19,9 +20,8 @@ public class DispatcherMetrics {
         this.registry = Objects.requireNonNull(registry, "registry");
     }
 
-    void bind(String dispatcher, Object queueOwner, ToDoubleFunction<Object> queueDepth,
-              AtomicInteger active) {
-        Gauge.builder("doeng.dispatcher.queue.depth", queueOwner, queueDepth)
+    void bind(String dispatcher, Queue<?> queue, AtomicInteger active) {
+        Gauge.builder("doeng.dispatcher.queue.depth", queue, Queue::size)
                 .tag("dispatcher", dispatcher)
                 .description("Current bounded dispatcher queue depth")
                 .register(registry);
