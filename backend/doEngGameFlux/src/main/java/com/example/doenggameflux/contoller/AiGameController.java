@@ -113,11 +113,11 @@ public class AiGameController {
                     .body("Invalid X-Mission-Run-Id"));
         }
 
-        MissionExecutionContext executionContext =
-                MissionExecutionContext.start(missionRunId, globalDeadline);
-
         Mono<ResponseEntity<String>> pipeline = Mono.deferContextual(contextView -> {
+            MissionExecutionContext executionContext =
+                    MissionExecutionContext.start(missionRunId, globalDeadline);
             RequestIdentity requestIdentity = RequestIdentity.from(contextView);
+
             return Mono.zip(
                             image,
                             stageObservation.observe("TOKEN", aiAdmissionGate.executeStage(
