@@ -403,8 +403,10 @@ try {
                     maxPending = Metric-Value $snapshot "reactor.netty.connection.provider.max.pending.connections" $provider
                 }
             }
-            $ready = ($snapshot.poolMode -eq "ISOLATED") -and (@($snapshot.providers) | Where-Object { $_ -in $providers }).Count -eq 3 -and
-                (@($providerReadiness.Values) | Where-Object { $null -eq $_.maxConnections -or $null -eq $_.maxPending }).Count -eq 0 -and
+            $providerNamesPresent = @(@($snapshot.providers) | Where-Object { $_ -in $providers }).Count
+            $missingBudgetCount = @(@($providerReadiness.Values) | Where-Object { $null -eq $_.maxConnections -or $null -eq $_.maxPending }).Count
+            $ready = ($snapshot.poolMode -eq "ISOLATED") -and $providerNamesPresent -eq 3 -and
+                $missingBudgetCount -eq 0 -and
                 $providerReadiness["doeng-token"].maxConnections -eq 50 -and $providerReadiness["doeng-token"].maxPending -eq 80 -and
                 $providerReadiness["doeng-ai"].maxConnections -eq 400 -and $providerReadiness["doeng-ai"].maxPending -eq 640 -and
                 $providerReadiness["doeng-storage"].maxConnections -eq 50 -and $providerReadiness["doeng-storage"].maxPending -eq 80
