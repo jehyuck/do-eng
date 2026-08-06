@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.AfterEach;
@@ -27,8 +29,11 @@ class AbstractSinkDispatcherTest {
     @Test
     void limitsConcurrentExecutionToConfiguredConcurrency() {
         TestDispatcher dispatcher = dispatcher(2, 8);
-        Sinks.Many<Integer> releases = Sinks.many().multicast().onBackpressureBuffer();
-        dispatcher.invoker = value -> releases.asFlux().next().thenReturn(value);
+        Map<Integer, Sinks.One<Integer>> releases = new HashMap<>();
+        for (int i = 0; i < 5; i++) {
+            releases.put(i, Sinks.one());
+        }
+        dispatcher.invoker = value -> releases.get(value).asMono();
 
         List<Integer> values = new CopyOnWriteArrayList<>();
         List<Disposable> subscriptions = new ArrayList<>();
@@ -41,9 +46,9 @@ class AbstractSinkDispatcherTest {
         assertEquals(2, dispatcher.maxActive.get());
 
         for (int i = 0; i < 5; i++) {
-            releases.tryEmitNext(i);
-            int expected = Math.min(i + 3, 5);
-            await(() -> dispatcher.started.get() >= expected || values.size() == 5);
+            releases.get(i).tryEmitValue(i);
+            int expectedStarted = Math.min(i + 3, 5);
+            await(() -> dispatcher.started.get() >= expectedStarted || values.size() == 5);
         }
 
         await(() -> values.size() == 5);
@@ -58,7 +63,9 @@ class AbstractSinkDispatcherTest {
 
         Disposable first = dispatcher.dispatch(context("first"), 1).subscribe();
         await(() -> dispatcher.started.get() == 1);
-        Disposable second = dispatcher.dispatch(context("second"), 2).subscribe();
+        Disposable second = dispatcher.dispatch(context("second"), 2).subscribe(
+                ignored -> { },
+                ignored -> { });
 
         StepVerifier.create(dispatcher.dispatch(context("third"), 3))
                 .expectError(DispatcherQueueRejectedException.class)
@@ -127,6 +134,17 @@ class AbstractSinkDispatcherTest {
         StepVerifier.create(dispatcher.dispatch(context("next"), 2))
                 .expectNext(2)
                 .verifyComplete();
+    }
+
+    @Test
+    void stoppedDispatcherRejectsNewWork() {
+        TestDispatcher dispatcher = dispatcher(1, 1);
+        dispatcher.destroy();
+
+        StepVerifier.create(dispatcher.dispatch(context("stopped"), 1))
+                .expectErrorMatches(error -> error instanceof IllegalStateException
+                        && error.getMessage().contains("stopped"))
+                .verify();
     }
 
     private TestDispatcher dispatcher(int concurrency, int queueCapacity) {
