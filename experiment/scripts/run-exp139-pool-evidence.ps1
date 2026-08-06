@@ -18,6 +18,8 @@ $planDir = Join-Path $resultRoot "plan"
 $warmupDir = Join-Path $resultRoot "WARMUP\WARMUP-EXP139-POOL-METER-001"
 $highDir = Join-Path $resultRoot "HIGH\RUN-EXP139-POOL400-HIGH-001"
 $analysisDir = Join-Path $resultRoot "analysis"
+$runtimeCompose = $null
+$runtimeDbDumpDir = $null
 $project = "doeng-exp139"
 $applicationUrl = "http://127.0.0.1:8001"
 $managementUrl = "http://127.0.0.1:9001"
@@ -34,6 +36,25 @@ function Invoke-Compose([string[]]$Arguments) {
     if ($LASTEXITCODE -ne 0) {
         throw "docker compose failed ($LASTEXITCODE): $($Arguments -join ' ')"
     }
+}
+
+function Prepare-RuntimeCompose {
+    $sourceDump = Join-Path $repo "exec\3 (DB 덤프파일)\doEng.sql"
+    if (-not (Test-Path -LiteralPath $sourceDump)) { throw "DB dump not found: $sourceDump" }
+
+    $script:runtimeDbDumpDir = Join-Path $env:TEMP "doeng-exp139-db-dump"
+    New-Item -ItemType Directory -Force -Path $script:runtimeDbDumpDir | Out-Null
+    $runtimeDump = Join-Path $script:runtimeDbDumpDir "doEng.sql"
+    Copy-Item -LiteralPath $sourceDump -Destination $runtimeDump -Force
+
+    $script:runtimeCompose = Join-Path $repo "backend\docker-compose.experiment.exp139-runtime.yaml"
+    $yaml = Get-Content -LiteralPath $baseCompose -Raw -Encoding UTF8
+    $mount = ('- "{0}:/docker-entrypoint-initdb.d/01-doeng.sql:ro"' -f ($runtimeDump -replace '\\', '/'))
+    $pattern = '(?m)^\s*-\s*"\.\./exec/3 \(DB .*?\)/doEng\.sql:/docker-entrypoint-initdb\.d/01-doeng\.sql:ro"\s*$'
+    $updated = [regex]::Replace($yaml, $pattern, "      $mount")
+    if ($updated -eq $yaml) { throw "Could not normalize DB dump mount in runtime compose" }
+    Set-Content -LiteralPath $script:runtimeCompose -Value $updated -Encoding UTF8
+    $script:baseCompose = $script:runtimeCompose
 }
 
 function Wait-Health {
@@ -251,6 +272,7 @@ $started = $false
 $poolJob = $null
 $resourceJob = $null
 try {
+    Prepare-RuntimeCompose
     Invoke-Compose @("build", "flux-corrected", "experiment-mock")
     Invoke-Compose @("up", "-d", "--force-recreate", "mariadb", "experiment-mock", "flux-corrected")
     $started = $true
@@ -416,5 +438,11 @@ try {
                 Set-Content -LiteralPath (Join-Path $planDir "compose-ps-final.txt") -Encoding UTF8
         } catch { }
         try { Invoke-Compose @("down", "--remove-orphans") } catch { }
+    }
+    if ($runtimeCompose -and (Test-Path -LiteralPath $runtimeCompose)) {
+        Remove-Item -LiteralPath $runtimeCompose -Force -ErrorAction SilentlyContinue
+    }
+    if ($runtimeDbDumpDir -and (Test-Path -LiteralPath $runtimeDbDumpDir)) {
+        Remove-Item -LiteralPath $runtimeDbDumpDir -Recurse -Force -ErrorAction SilentlyContinue
     }
 }
