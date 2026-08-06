@@ -20,7 +20,7 @@ doeng:
       queue-capacity: 2000
     ai:
       concurrency: 400
-      queue-capacity: 4000
+      queue-capacity: 800
     storage:
       concurrency: 100
-      queue-capacity: 2000
+      queue-capacity: 200
