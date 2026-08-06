@@ -1,0 +1,36 @@
+name: Exp152 Sink Dispatcher Validation
+
+on:
+  push:
+    branches:
+      - experiment/exp152-sink-dispatcher
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/doEngGameFlux
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: gradle
+
+      - name: Grant Gradle wrapper permission
+        run: chmod +x gradlew
+
+      - name: Run tests
+        run: ./gradlew clean test --no-daemon
+
+      - name: Build boot jar
+        run: ./gradlew bootJar --no-daemon
