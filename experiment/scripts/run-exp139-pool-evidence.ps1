@@ -108,7 +108,7 @@ function Wait-NativeProcess([System.Diagnostics.Process]$Process, [int]$Watchdog
         throw "Node watchdog exceeded $WatchdogSeconds seconds"
     }
     $Process.WaitForExit()
-    return $Process.ExitCode
+    return [int]$Process.ExitCode
 }
 
 function Invoke-NodeLoad(
