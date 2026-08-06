@@ -39,8 +39,11 @@ function Invoke-Compose([string[]]$Arguments) {
 }
 
 function Prepare-RuntimeCompose {
-    $sourceDump = Join-Path $repo "exec\3 (DB 덤프파일)\doEng.sql"
-    if (-not (Test-Path -LiteralPath $sourceDump)) { throw "DB dump not found: $sourceDump" }
+    $sourceDump = Get-ChildItem -LiteralPath (Join-Path $repo "exec") -Recurse -File -Filter "doEng.sql" |
+        Select-Object -First 1 -ExpandProperty FullName
+    if ([string]::IsNullOrWhiteSpace($sourceDump) -or -not (Test-Path -LiteralPath $sourceDump)) {
+        throw "DB dump not found below exec directory"
+    }
 
     $script:runtimeDbDumpDir = Join-Path $env:TEMP "doeng-exp139-db-dump"
     New-Item -ItemType Directory -Force -Path $script:runtimeDbDumpDir | Out-Null
