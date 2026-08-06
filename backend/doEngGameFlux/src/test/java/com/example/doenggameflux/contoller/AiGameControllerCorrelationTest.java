@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.example.doenggameflux.component.AiDispatchRequest;
 import com.example.doenggameflux.component.AiDispatcher;
 import com.example.doenggameflux.component.RequestIdentity;
+import com.example.doenggameflux.dispatcher.DispatcherMetrics;
 import com.example.doenggameflux.dispatcher.MissionExecutionContext;
 import com.example.doenggameflux.dto.request.ImageRequestDto;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Test;
@@ -30,8 +32,7 @@ class AiGameControllerCorrelationTest {
                     .body("{\"result\":false,\"image\":null}")
                     .build());
         }).build();
-        AiDispatcher dispatcher = new AiDispatcher(client, 1, 1);
-        dispatcher.afterPropertiesSet();
+        AiDispatcher dispatcher = dispatcher(client);
         RequestIdentity identity = new RequestIdentity("request-1", "run-1", "mission-1");
 
         try {
@@ -66,8 +67,7 @@ class AiGameControllerCorrelationTest {
                     .body("{\"result\":false}")
                     .build());
         }).build();
-        AiDispatcher dispatcher = new AiDispatcher(client, 1, 1);
-        dispatcher.afterPropertiesSet();
+        AiDispatcher dispatcher = dispatcher(client);
 
         try {
             StepVerifier.create(dispatcher.dispatch(
@@ -93,8 +93,7 @@ class AiGameControllerCorrelationTest {
         WebClient client = WebClient.builder()
                 .exchangeFunction(request -> Mono.error(failure))
                 .build();
-        AiDispatcher dispatcher = new AiDispatcher(client, 1, 1);
-        dispatcher.afterPropertiesSet();
+        AiDispatcher dispatcher = dispatcher(client);
 
         try {
             StepVerifier.create(dispatcher.dispatch(
@@ -109,5 +108,15 @@ class AiGameControllerCorrelationTest {
         } finally {
             dispatcher.destroy();
         }
+    }
+
+    private AiDispatcher dispatcher(WebClient client) throws Exception {
+        AiDispatcher dispatcher = new AiDispatcher(
+                client,
+                new DispatcherMetrics(new SimpleMeterRegistry()),
+                1,
+                1);
+        dispatcher.afterPropertiesSet();
+        return dispatcher;
     }
 }
