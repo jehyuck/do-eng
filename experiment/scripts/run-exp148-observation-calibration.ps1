@@ -13,6 +13,13 @@ if ($head -ne $ExpectedCommit) { throw "Commit mismatch: expected $ExpectedCommi
 if (-not (Test-Path -LiteralPath $cell)) { throw "Calibration cell runner not found" }
 
 foreach ($mode in @("P", "D")) {
+    if ($ExecutionMode -eq "EXECUTE" -and $mode -eq "P") {
+        $existingPerformanceSummary = Join-Path $resultRoot "performance-001\analysis\run-summary.json"
+        if (Test-Path -LiteralPath $existingPerformanceSummary) {
+            Write-Output "EXP148_A1B0_P_EXISTING_ARTIFACT_REUSED"
+            continue
+        }
+    }
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $cell -ExpectedCommit $ExpectedCommit -ExecutionMode $ExecutionMode -ObservationMode $mode
     if ($LASTEXITCODE -ne 0) { throw "Exp148 cell $mode failed" }
 }

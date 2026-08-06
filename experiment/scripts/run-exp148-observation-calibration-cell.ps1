@@ -537,7 +537,8 @@ try {
         mvcExecuted = $false
         productionJavaModified = $false
     })
-    Write-Output (if ($ObservationMode -eq "P") { "EXP148_A1B0_P_COMPLETE" } else { "EXP148_A1B0_D_COMPLETE" })
+    $completionMarker = if ($ObservationMode -eq "P") { "EXP148_A1B0_P_COMPLETE" } else { "EXP148_A1B0_D_COMPLETE" }
+    Write-Output $completionMarker
 } catch {
     Save-Json (Join-Path $planDir "execution-status.json") ([ordered]@{
         status = "EXP148_EXECUTION_STOPPED"
