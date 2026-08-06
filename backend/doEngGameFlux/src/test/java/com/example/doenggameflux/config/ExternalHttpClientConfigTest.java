@@ -1,6 +1,8 @@
 package com.example.doenggameflux.config;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,6 +27,12 @@ class ExternalHttpClientConfigTest {
             assertNotNull(config.aiWebClient(properties, shared, ai, diagnosticProperties));
             assertNotNull(config.storageWebClient(properties, shared, storage, diagnosticProperties));
             assertNotNull(shared);
+            assertEquals("doeng-token", token.name());
+            assertEquals("doeng-ai", ai.name());
+            assertEquals("doeng-storage", storage.name());
+            assertNotEquals(token.name(), ai.name());
+            assertNotEquals(token.name(), storage.name());
+            assertNotEquals(ai.name(), storage.name());
         } finally {
             shared.dispose();
             token.dispose();
