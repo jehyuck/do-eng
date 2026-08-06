@@ -4,7 +4,7 @@
 
 이 문서는 Exp152 Sink Dispatcher 구현 사실과 Exp153 Controlled A/B의 실행 종료 상태를 고정한다. 새로운 실험, 성능 분석, 설정 변경은 포함하지 않는다.
 
-기준 브랜치: `experiment/exp152-sink-dispatcher`  
+기준 브랜치: `experiment/exp152-sink-dispatcher`
 기준 시작 HEAD: `468005be13fee3ca8786d815b7a02b2720e14d68`
 
 ## 2. Exp152 Implementation
@@ -98,16 +98,16 @@
 
 ## 9. Interview Explanation
 
-1. 어떤 문제를 해결하려 했는가?  
+1. 어떤 문제를 해결하려 했는가?
 외부 TOKEN·AI·STORAGE 작업이 각자의 대기와 실행 자원을 공유하면서 요청 전체 deadline과 오류 경계를 분리하기 어려운 문제를 다루려 했다.
 
-2. 어떤 구조를 구현했는가?  
+2. 어떤 구조를 구현했는가?
 각 단계에 bounded queue와 concurrency 제한을 가진 장수 Sink consumer를 두고, 요청의 global deadline과 correlation identity를 단계 전체에 전달했다.
 
-3. 무엇을 검증했는가?  
+3. 무엇을 검증했는가?
 Gradle test, bootJar, Spring Context, 정상 요청 경로, queue-full 503, deadline 504, correlation header 전달을 검증했다.
 
-4. 무엇은 주장하지 않는가?  
+4. 무엇은 주장하지 않는가?
 Controlled A/B 부하가 실행되지 않았기 때문에 처리량, latency, provider pending, timeout 개선이나 기존 체인 대비 우수성은 주장하지 않는다.
 
 ## 10. Future Experiment Boundary
