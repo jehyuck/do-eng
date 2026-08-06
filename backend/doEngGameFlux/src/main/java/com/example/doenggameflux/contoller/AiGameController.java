@@ -1,20 +1,22 @@
 package com.example.doenggameflux.contoller;
 
+import com.example.doenggameflux.component.AiDispatchRequest;
+import com.example.doenggameflux.component.AiDispatcher;
 import com.example.doenggameflux.component.AiOutboundAdmissionGate;
 import com.example.doenggameflux.component.DBComponentHttp;
 import com.example.doenggameflux.component.DiagnosticErrorLogger;
-import com.example.doenggameflux.component.StageObservation;
-import com.example.doenggameflux.component.TokenComponent;
+import com.example.doenggameflux.component.OutboundStage;
 import com.example.doenggameflux.component.RequestIdentity;
+import com.example.doenggameflux.component.StageObservation;
+import com.example.doenggameflux.component.TokenDispatcher;
+import com.example.doenggameflux.dispatcher.MissionExecutionContext;
 import com.example.doenggameflux.dto.request.ImageRequestDto;
 import com.example.doenggameflux.dto.response.AiDecisionResultDto;
 import com.example.doenggameflux.util.ImagePayloadDecoder;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Duration;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -33,25 +34,28 @@ import reactor.core.scheduler.Schedulers;
 public class AiGameController {
 
     private final DBComponentHttp dbComponent;
-    private final TokenComponent tokenComponent;
-    private final WebClient aiWebClient;
+    private final TokenDispatcher tokenDispatcher;
+    private final AiDispatcher aiDispatcher;
     private final DiagnosticErrorLogger diagnosticErrorLogger;
     private final AiOutboundAdmissionGate aiAdmissionGate;
     private final StageObservation stageObservation;
+    private final Duration globalDeadline;
 
     public AiGameController(
             DBComponentHttp dbComponent,
-            TokenComponent tokenComponent,
+            TokenDispatcher tokenDispatcher,
+            AiDispatcher aiDispatcher,
             DiagnosticErrorLogger diagnosticErrorLogger,
             AiOutboundAdmissionGate aiAdmissionGate,
             StageObservation stageObservation,
-            @Qualifier("aiWebClient") WebClient aiWebClient) {
+            @Value("${doeng.dispatcher.global-deadline:10s}") Duration globalDeadline) {
         this.dbComponent = dbComponent;
-        this.tokenComponent = tokenComponent;
+        this.tokenDispatcher = tokenDispatcher;
+        this.aiDispatcher = aiDispatcher;
         this.diagnosticErrorLogger = diagnosticErrorLogger;
         this.aiAdmissionGate = aiAdmissionGate;
         this.stageObservation = stageObservation;
-        this.aiWebClient = aiWebClient;
+        this.globalDeadline = globalDeadline;
     }
 
     @GetMapping("/test")
@@ -109,27 +113,36 @@ public class AiGameController {
                     .body("Invalid X-Mission-Run-Id"));
         }
 
-        // The first remediation moves the existing admission boundary from the
-        // AI call to the complete token -> AI -> storage -> DB request path.
-        // The gate still fails fast and preserves the existing 503 mapping;
-        // only the scope of the observation/admission boundary changes.
-        Mono<ResponseEntity<String>> pipeline = Mono.zip(
-                        image,
-                        stageObservation.observe("TOKEN", aiAdmissionGate.executeStage(
-                                com.example.doenggameflux.component.OutboundStage.TOKEN,
-                                () -> tokenComponent.jwtConfirm(authorization))))
-                .flatMap(tuple -> stageObservation.observe("AI", aiAdmissionGate.executeStage(
-                        com.example.doenggameflux.component.OutboundStage.AI,
-                        () -> requestDecision(
-                        tuple.getT1(),
-                        answer,
-                        aiPath)))
-                        .flatMap(decision -> completeIfMatched(
-                                decision,
-                                tuple.getT1().getImage(),
-                                sceneId,
-                                tuple.getT2(),
-                                missionRunId)));
+        MissionExecutionContext executionContext =
+                MissionExecutionContext.start(missionRunId, globalDeadline);
+
+        Mono<ResponseEntity<String>> pipeline = Mono.deferContextual(contextView -> {
+            RequestIdentity requestIdentity = RequestIdentity.from(contextView);
+            return Mono.zip(
+                            image,
+                            stageObservation.observe("TOKEN", aiAdmissionGate.executeStage(
+                                    OutboundStage.TOKEN,
+                                    () -> tokenDispatcher.dispatch(
+                                            executionContext,
+                                            authorization))))
+                    .flatMap(tuple -> stageObservation.observe("AI", aiAdmissionGate.executeStage(
+                            OutboundStage.AI,
+                            () -> aiDispatcher.dispatch(
+                                    executionContext,
+                                    new AiDispatchRequest(
+                                            tuple.getT1(),
+                                            answer,
+                                            aiPath,
+                                            requestIdentity))))
+                            .flatMap(decision -> completeIfMatched(
+                                    executionContext,
+                                    decision,
+                                    tuple.getT1().getImage(),
+                                    sceneId,
+                                    tuple.getT2(),
+                                    missionRunId)));
+        });
+
         return (aiAdmissionGate.isPerOutboundCall() ? pipeline : aiAdmissionGate.execute(() -> pipeline))
                 .doOnError(error -> diagnosticErrorLogger.log(missionRunId, error))
                 .onErrorResume(
@@ -139,45 +152,8 @@ public class AiGameController {
                                 .body(error.getResponseBodyAsString())));
     }
 
-    Mono<AiDecisionResultDto> requestDecision(
-            ImageRequestDto image,
-            String answer,
-            String aiPath) {
-        Map<String, String> request = new HashMap<>();
-        request.put("answer", answer);
-        request.put("image", image.getImage());
-
-        return Mono.deferContextual(contextView -> {
-            RequestIdentity identity = RequestIdentity.from(contextView);
-            WebClient.RequestBodySpec requestSpec = aiWebClient.post()
-                    .uri(aiPath)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON);
-            if (identity.hasExperimentRequestId()) {
-                requestSpec.headers(headers -> {
-                    headers.set(RequestIdentity.EXPERIMENT_REQUEST_ID_HEADER,
-                            identity.getExperimentRequestId());
-                    if (identity.getExperimentRunId() != null) {
-                        headers.set(RequestIdentity.EXPERIMENT_RUN_ID_HEADER,
-                                identity.getExperimentRunId());
-                    }
-                    if (identity.getMissionRunId() != null) {
-                        headers.set(RequestIdentity.MISSION_RUN_ID_HEADER,
-                                identity.getMissionRunId());
-                    }
-                });
-            }
-            return requestSpec
-                    .bodyValue(request)
-                    .retrieve()
-                    // The deployed AI still returns an image echo. REST storage
-                    // intentionally consumes only its decision and retains the
-                    // original request image for a successful upload.
-                    .bodyToMono(AiDecisionResultDto.class);
-        });
-    }
-
     private Mono<ResponseEntity<String>> completeIfMatched(
+            MissionExecutionContext executionContext,
             AiDecisionResultDto decision,
             String originalImage,
             long sceneId,
@@ -192,6 +168,7 @@ public class AiGameController {
                 .subscribeOn(Schedulers.parallel())
                 .flatMap(decodedImage ->
                         dbComponent.saveData(
+                                executionContext,
                                 decodedImage,
                                 sceneId,
                                 memberId,
