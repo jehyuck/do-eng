@@ -23,7 +23,7 @@ public final class AiDispatcher extends AbstractSinkDispatcher<AiDispatchRequest
             @Qualifier("aiWebClient") WebClient aiWebClient,
             DispatcherMetrics metrics,
             @Value("${doeng.dispatcher.ai.concurrency:400}") int concurrency,
-            @Value("${doeng.dispatcher.ai.queue-capacity:4000}") int queueCapacity) {
+            @Value("${doeng.dispatcher.ai.queue-capacity:800}") int queueCapacity) {
         super(new DispatcherSpec("ai", concurrency, queueCapacity), metrics);
         this.aiWebClient = aiWebClient;
     }
