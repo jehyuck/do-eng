@@ -20,6 +20,7 @@ $highDir = Join-Path $resultRoot "HIGH\RUN-EXP139-POOL400-HIGH-001"
 $analysisDir = Join-Path $resultRoot "analysis"
 $runtimeCompose = $null
 $runtimeDbDumpDir = $null
+$runtimeSeedImage = $null
 $project = "doeng-exp139"
 $applicationUrl = "http://127.0.0.1:8001"
 $managementUrl = "http://127.0.0.1:9001"
@@ -45,10 +46,20 @@ function Prepare-RuntimeCompose {
         throw "DB dump not found below exec directory"
     }
 
-    $script:runtimeDbDumpDir = Join-Path $env:TEMP "doeng-exp139-db-dump"
+    $script:runtimeDbDumpDir = Join-Path $env:TEMP "doeng-exp139-db-seed"
     New-Item -ItemType Directory -Force -Path $script:runtimeDbDumpDir | Out-Null
     $runtimeDump = Join-Path $script:runtimeDbDumpDir "doEng.sql"
     Copy-Item -LiteralPath $sourceDump -Destination $runtimeDump -Force
+    Copy-Item -LiteralPath (Join-Path $repo "backend\experiment-db\02-mission-completion.sql") `
+        -Destination (Join-Path $script:runtimeDbDumpDir "02-mission-completion.sql") -Force
+    Set-Content -LiteralPath (Join-Path $script:runtimeDbDumpDir "Dockerfile") -Value @(
+        "FROM mariadb:10.11"
+        "COPY doEng.sql /docker-entrypoint-initdb.d/01-doeng.sql"
+        "COPY 02-mission-completion.sql /docker-entrypoint-initdb.d/02-mission-completion.sql"
+    ) -Encoding ASCII
+    $script:runtimeSeedImage = "doeng-exp139-mariadb-seeded:latest"
+    & docker build --tag $script:runtimeSeedImage $script:runtimeDbDumpDir
+    if ($LASTEXITCODE -ne 0) { throw "MariaDB seed image build failed ($LASTEXITCODE)" }
 
     $script:runtimeCompose = Join-Path $repo "backend\docker-compose.experiment.exp139-runtime.yaml"
     $yaml = Get-Content -LiteralPath $baseCompose -Raw -Encoding UTF8
@@ -56,6 +67,10 @@ function Prepare-RuntimeCompose {
     $pattern = '(?m)^\s*-\s*"\.\./exec/3 \(DB .*?\)/doEng\.sql:/docker-entrypoint-initdb\.d/01-doeng\.sql:ro"\s*$'
     $updated = [regex]::Replace($yaml, $pattern, "      $mount")
     if ($updated -eq $yaml) { throw "Could not normalize DB dump mount in runtime compose" }
+    $updated = $updated.Replace('image: mariadb:10.11', "image: $script:runtimeSeedImage")
+    $updated = [regex]::Replace($updated, '(?m)^\s*-\s*"\.?/?\.?/experiment/capture:/app"\s*$\r?\n?', '')
+    $updated = [regex]::Replace($updated, '(?m)^\s*-\s*"[^\r\n]*?/docker-entrypoint-initdb\.d/01-doeng\.sql:ro"\s*$\r?\n?', '')
+    $updated = [regex]::Replace($updated, '(?m)^\s*-\s*"[^\r\n]*?/docker-entrypoint-initdb\.d/02-mission-completion\.sql:ro"\s*$\r?\n?', '')
     Set-Content -LiteralPath $script:runtimeCompose -Value $updated -Encoding UTF8
     $script:baseCompose = $script:runtimeCompose
 }
@@ -447,5 +462,8 @@ try {
     }
     if ($runtimeDbDumpDir -and (Test-Path -LiteralPath $runtimeDbDumpDir)) {
         Remove-Item -LiteralPath $runtimeDbDumpDir -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    if ($runtimeSeedImage) {
+        & docker image rm $runtimeSeedImage 2>$null | Out-Null
     }
 }
