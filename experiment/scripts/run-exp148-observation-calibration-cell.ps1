@@ -252,8 +252,8 @@ if ($head -ne $ExpectedCommit) {
 }
 if ($dirty.Count -gt 0) {
     $allowedResultPrefix = ((Resolve-Path (Join-Path $repo "backend\experiments\results\experiment-1-48") -ErrorAction SilentlyContinue).Path)
-    if ($ExecutionMode -ne "EXECUTE" -or [string]::IsNullOrWhiteSpace($allowedResultPrefix)) {
-        throw "Working tree must be clean. Use a dedicated clean worktree for Exp147."
+    if ([string]::IsNullOrWhiteSpace($allowedResultPrefix)) {
+        throw "Working tree must be clean outside the Exp148 result root."
     }
     foreach ($entry in $dirty) {
         $candidate = [string]$entry
