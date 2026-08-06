@@ -1,0 +1,21 @@
+{
+  "experiment": "Exp149",
+  "baseCommit": "d8a863b467b6e98882270abc7fcce6791bb5024b",
+  "question": "Does separating TOKEN, AI, and STORAGE connection providers reduce shared-pool contention under the Exp148 workload?",
+  "selectedFactorB": "ISOLATED_PROVIDER_BUDGET",
+  "productionSourceChange": false,
+  "baseline": {"poolMode": "SHARED", "maxConnections": 500, "maxPending": 800},
+  "intervention": {
+    "poolMode": "ISOLATED",
+    "token": {"maxConnections": 50, "maxPending": 80},
+    "ai": {"maxConnections": 400, "maxPending": 640},
+    "storage": {"maxConnections": 50, "maxPending": 80}
+  },
+  "fixed": ["workload", "fixture", "token/scene/member", "AI delay", "storage delay", "timeouts", "CPU", "memory", "DB pool", "admission OFF", "R2DBC", "observers"],
+  "cells": ["A0B0", "A1B0", "A0B1", "A1B1"],
+  "runsPerCell": ["P", "D"],
+  "primaryComparison": "A1B0 vs A1B1",
+  "decisionRule": "Compare success/error/timeout, p95/p99, pool active/pending, stage occupancy, CPU/memory, drain and consistency; no statistical significance claim.",
+  "additionalLoadInThisStep": false,
+  "limitations": ["stage maxInFlight is not connection ownership", "HTTP 500 request-to-exception mapping incomplete", "single Exp148 calibration pair"]
+}
