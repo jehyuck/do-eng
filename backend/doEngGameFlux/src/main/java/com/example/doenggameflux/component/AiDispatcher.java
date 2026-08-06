@@ -1,6 +1,7 @@
 package com.example.doenggameflux.component;
 
 import com.example.doenggameflux.dispatcher.AbstractSinkDispatcher;
+import com.example.doenggameflux.dispatcher.DispatcherMetrics;
 import com.example.doenggameflux.dispatcher.DispatcherSpec;
 import com.example.doenggameflux.dispatcher.MissionExecutionContext;
 import com.example.doenggameflux.dto.response.AiDecisionResultDto;
@@ -20,9 +21,10 @@ public final class AiDispatcher extends AbstractSinkDispatcher<AiDispatchRequest
 
     public AiDispatcher(
             @Qualifier("aiWebClient") WebClient aiWebClient,
+            DispatcherMetrics metrics,
             @Value("${doeng.dispatcher.ai.concurrency:400}") int concurrency,
             @Value("${doeng.dispatcher.ai.queue-capacity:4000}") int queueCapacity) {
-        super(new DispatcherSpec("ai", concurrency, queueCapacity));
+        super(new DispatcherSpec("ai", concurrency, queueCapacity), metrics);
         this.aiWebClient = aiWebClient;
     }
 
