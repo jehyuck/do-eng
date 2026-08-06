@@ -1,0 +1,1 @@
+Same orchestrator command; the runner executes A1B0-P before A1B0-D. No standalone diagnostic load command was used.

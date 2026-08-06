@@ -1,0 +1,3 @@
+Expected difference: DOENG_STAGE_OBSERVATION_ENABLED=false for A1B0-P and true for A1B0-D.
+Expected difference: stage polling disabled for A1B0-P and enabled for A1B0-D.
+Unexpected differences: none identified in the rendered runtime contracts; both use the same A1B0 workload, fixture, token, resource, pool, timeout, and mock delays.

@@ -1,0 +1,90 @@
+﻿{
+    "AI":  {
+               "started":  3327,
+               "succeeded":  1536,
+               "failed":  247,
+               "cancelled":  1544,
+               "maxInFlight":  810,
+               "p50":  3814.958842,
+               "p95":  9005.812645,
+               "p99":  11506.601855,
+               "max":  17392.574759
+           },
+    "DB":  {
+               "started":  812,
+               "succeeded":  801,
+               "failed":  0,
+               "cancelled":  11,
+               "maxInFlight":  96,
+               "p50":  103.872251,
+               "p95":  406.240694,
+               "p99":  699.558322,
+               "max":  886.128289
+           },
+    "DB_CLAIM":  {
+                     "started":  806,
+                     "succeeded":  806,
+                     "failed":  0,
+                     "cancelled":  0,
+                     "maxInFlight":  6,
+                     "p50":  2.803397,
+                     "p95":  89.028848,
+                     "p99":  127.692143,
+                     "max":  223.345427
+                 },
+    "DB_PICTURE_INSERT":  {
+                              "started":  204,
+                              "succeeded":  201,
+                              "failed":  0,
+                              "cancelled":  3,
+                              "maxInFlight":  2,
+                              "p50":  3.374634,
+                              "p95":  94.571733,
+                              "p99":  109.205396,
+                              "max":  128.658572
+                          },
+    "DB_PROGRESS_LOOKUP_OR_CREATE":  {
+                                         "started":  205,
+                                         "succeeded":  205,
+                                         "failed":  0,
+                                         "cancelled":  0,
+                                         "maxInFlight":  5,
+                                         "p50":  9.629361,
+                                         "p95":  113.07408,
+                                         "p99":  137.376016,
+                                         "max":  157.487855
+                                     },
+    "DB_PROGRESS_UPDATE":  {
+                               "started":  205,
+                               "succeeded":  204,
+                               "failed":  0,
+                               "cancelled":  1,
+                               "maxInFlight":  8,
+                               "p50":  80.579637,
+                               "p95":  303.493016,
+                               "p99":  380.501756,
+                               "max":  385.751649
+                           },
+    "STORAGE":  {
+                    "started":  1533,
+                    "succeeded":  812,
+                    "failed":  45,
+                    "cancelled":  677,
+                    "maxInFlight":  233,
+                    "p50":  1424.97028,
+                    "p95":  7018.503714,
+                    "p99":  9594.155429,
+                    "max":  11707.141652
+                },
+    "TOKEN":  {
+                  "started":  4282,
+                  "succeeded":  3327,
+                  "failed":  175,
+                  "cancelled":  780,
+                  "maxInFlight":  849,
+                  "p50":  2699.069328,
+                  "p95":  9514.967302,
+                  "p99":  11235.972122,
+                  "max":  14604.94731
+              }
+}

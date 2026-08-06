@@ -1,0 +1,18 @@
+﻿{
+    "attempts":  4775,
+    "http200":  658,
+    "successRate":  0.13780104712041885,
+    "http500":  197,
+    "clientTimeout":  3422,
+    "connectionError":  498,
+    "p50Ms":  8559,
+    "p95Ms":  9814,
+    "p99Ms":  9958,
+    "maxInFlight":  1870,
+    "accountingValid":  true,
+    "drainCompleted":  true,
+    "remainingBacklog":  {
+                             "aiInFlight":  0,
+                             "storageInFlight":  0
+                         }
+}

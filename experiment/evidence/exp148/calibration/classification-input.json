@@ -1,0 +1,16 @@
+﻿{
+    "performanceHttp200":  535,
+    "diagnosticHttp200":  658,
+    "performanceP95":  9812,
+    "diagnosticP95":  9814,
+    "performanceCpuPeak":  228.08,
+    "diagnosticCpuPeak":  220.02,
+    "performancePending":  1343,
+    "diagnosticPending":  768,
+    "classificationRuleVersion":  "dd07a28",
+    "thresholds":  {
+                       "low":  "\u003c=5%",
+                       "material":  "\u003e5%",
+                       "severe":  "\u003e15% or new failure category"
+                   }
+}

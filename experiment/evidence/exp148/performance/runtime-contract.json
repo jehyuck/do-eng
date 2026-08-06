@@ -1,0 +1,14 @@
+﻿{
+    "health":  "UP",
+    "applicationCpu":  2,
+    "applicationMemoryBytes":  3221225472,
+    "mockCpu":  4,
+    "mockMemoryBytes":  1073741824,
+    "poolMode":  "SHARED",
+    "maxConnections":  "500",
+    "maxPending":  "800",
+    "pendingAcquireTimeoutMs":  "10000",
+    "poolObservation":  "true",
+    "stageObservation":  "false",
+    "exposure":  "health,metrics,doengexperiment,doengdiagnosticpool,doengdiagnosticstage"
+}
