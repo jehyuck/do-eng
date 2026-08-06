@@ -1,10 +1,10 @@
 ﻿{
     "package":  "Exp148",
-    "generatedAt":  "2026-08-06T05:55:46.4032639Z",
+    "generatedAt":  "2026-08-06T05:57:35.9033038Z",
     "files":  [
                   {
                       "relativePath":  "README.md",
-                      "sourcePath":  "generated-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "36e30a99a84e1a999137b59625f499dc338e42bb74ac6e30f1cd85b06e1e69c8",
                       "sizeBytes":  1954,
                       "generatedOrOriginal":  "generated-derived",
@@ -12,7 +12,7 @@
                   },
                   {
                       "relativePath":  "atomicity/MissionDatabaseServiceAtomicityIntegrationTest.java",
-                      "sourcePath":  "backend/doEngGameFlux/src/test/java/com/example/doenggameflux/component/MissionDatabaseServiceAtomicityIntegrationTest.java",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "42640b8f6288d2d114a2c448a2a297d64064322cfc9bc766a6c3140bda9cbd8a",
                       "sizeBytes":  4302,
                       "generatedOrOriginal":  "original-or-source",
@@ -20,7 +20,7 @@
                   },
                   {
                       "relativePath":  "atomicity/atomicity-test-result.txt",
-                      "sourcePath":  "generated-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "6241320126f0ec1da22cf540f6fbf2589bdfbda345438fe6ea279733b0686e78",
                       "sizeBytes":  942,
                       "generatedOrOriginal":  "generated-derived",
@@ -28,7 +28,7 @@
                   },
                   {
                       "relativePath":  "atomicity/full-test-result.txt",
-                      "sourcePath":  "generated-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "8c0aef9914ac5c0c182121f5a42e00539296b34b0986f283099eaad8bc80f8f4",
                       "sizeBytes":  450,
                       "generatedOrOriginal":  "generated-derived",
@@ -36,7 +36,7 @@
                   },
                   {
                       "relativePath":  "atomicity/close-acquire-race-failure.txt",
-                      "sourcePath":  "generated-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "f400758b70f875a26f01831be6d1cd35bb5d0b7899c7642910a154adc9101c6e",
                       "sizeBytes":  362,
                       "generatedOrOriginal":  "generated-derived",
@@ -44,7 +44,7 @@
                   },
                   {
                       "relativePath":  "performance/execution-status.original.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "92273dc467902be80b3d2e880a75b8e84a53c6d95294cc284a265571311ad718",
                       "sizeBytes":  314,
                       "generatedOrOriginal":  "original-or-source",
@@ -52,7 +52,7 @@
                   },
                   {
                       "relativePath":  "performance/core-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "a4e1cd9d65421363fa3f355d05a7527334d04927a4c866a58cb1f7176314b6af",
                       "sizeBytes":  44050,
                       "generatedOrOriginal":  "generated-derived",
@@ -60,7 +60,7 @@
                   },
                   {
                       "relativePath":  "performance/client-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "9844923635578f467209814e706511b32fec6b5af4b3d9b8f1118e7e0956a813",
                       "sizeBytes":  485,
                       "generatedOrOriginal":  "generated-derived",
@@ -68,7 +68,7 @@
                   },
                   {
                       "relativePath":  "performance/resource-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "e4232b985dcb5af69c2d8eed4be4d4ae3fdd3248482c370d32c00ae5820215b0",
                       "sizeBytes":  28539,
                       "generatedOrOriginal":  "generated-derived",
@@ -76,7 +76,7 @@
                   },
                   {
                       "relativePath":  "performance/pool-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "9d1f5e1cd4028a75b42de1f91f924e868569d62d3bf67f65bf9ad3c080545e11",
                       "sizeBytes":  1041,
                       "generatedOrOriginal":  "generated-derived",
@@ -84,7 +84,7 @@
                   },
                   {
                       "relativePath":  "performance/consistency-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "dd1e151144d157d0ae11ae0c4c3f92c4249ee87755a5b29e7878fc2c7b9083eb",
                       "sizeBytes":  204,
                       "generatedOrOriginal":  "generated-derived",
@@ -92,7 +92,7 @@
                   },
                   {
                       "relativePath":  "performance/runtime-contract.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "c0c1a933a5582872734ac8dd334a567b79ecb9ab6c52b6a910caa0b4c82a3001",
                       "sizeBytes":  447,
                       "generatedOrOriginal":  "generated-derived",
@@ -100,7 +100,7 @@
                   },
                   {
                       "relativePath":  "performance/consistency-raw.tsv",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "d012d79812e7614767bdb86d27a4bfa53d81d2e3ab2e62ca50ac8026cf6e6496",
                       "sizeBytes":  20,
                       "generatedOrOriginal":  "generated-derived",
@@ -108,7 +108,7 @@
                   },
                   {
                       "relativePath":  "performance/resource-samples.csv",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "f89ae589043f585370f9066379637dce82fcf8a979f810b5628fc07f73a05a65",
                       "sizeBytes":  6684,
                       "generatedOrOriginal":  "generated-derived",
@@ -116,7 +116,7 @@
                   },
                   {
                       "relativePath":  "performance/stage-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "1ce1fe73125916534f6439e08f436f97122510199ba09f13c525809409ce566f",
                       "sizeBytes":  57,
                       "generatedOrOriginal":  "generated-derived",
@@ -124,15 +124,15 @@
                   },
                   {
                       "relativePath":  "performance/client-errors.tsv",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
-                      "sha256":  "8772a1915c1f3ad61a3b72ab234496f0428c7cfcd2a597fd4e974192e68ee928",
-                      "sizeBytes":  424863,
+                      "sourcePath":  "Exp148 preserved raw or derived source",
+                      "sha256":  "3db0113b9526f30a705a7bbd56374de4c8e9802ff76d6e7a12d21560f30ee202",
+                      "sizeBytes":  407219,
                       "generatedOrOriginal":  "generated-derived",
                       "description":  "performance/client-errors.tsv"
                   },
                   {
                       "relativePath":  "performance/application-exceptions.txt",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/performance-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "48b395f36108cb2838cdd5c51265a0e0b41584fc635f4ec258e8802709099011",
                       "sizeBytes":  38989,
                       "generatedOrOriginal":  "generated-derived",
@@ -140,7 +140,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/execution-status.original.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "bd4fb006b3e533dfeb659ae318b0d4fd1bdf4a96cacdb212202f8250e65969be",
                       "sizeBytes":  194,
                       "generatedOrOriginal":  "original-or-source",
@@ -148,7 +148,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/core-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "dc540cba16ecd316be2ef6161bf0f2c166a913934ab5b2141bb783f62e1375ed",
                       "sizeBytes":  48530,
                       "generatedOrOriginal":  "generated-derived",
@@ -156,7 +156,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/client-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "38de3075d699e0c6c0314707b5ed29b04d9b1fe7625a858c548cdc1799eb5ed5",
                       "sizeBytes":  485,
                       "generatedOrOriginal":  "generated-derived",
@@ -164,7 +164,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/resource-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "a1598290941d7e4245f60735dc1963a4a28546f9c42d8233f9171397e95dd8f8",
                       "sizeBytes":  28530,
                       "generatedOrOriginal":  "generated-derived",
@@ -172,7 +172,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/pool-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "ea3699add8a874e8ea8a79ec0b4b9d02490a8052e68b34d801e22189cab26a9d",
                       "sizeBytes":  756,
                       "generatedOrOriginal":  "generated-derived",
@@ -180,7 +180,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/consistency-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "4b5827e5f903bcec71f76406763b6fb7803a74ede18a0d2935c7a149fd48d71a",
                       "sizeBytes":  204,
                       "generatedOrOriginal":  "generated-derived",
@@ -188,7 +188,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/runtime-contract.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "a45a4ce01c9a6de5c6e02b7a438a2a9dbbb09c39dd514e0af4b7596e87c834cd",
                       "sizeBytes":  446,
                       "generatedOrOriginal":  "generated-derived",
@@ -196,7 +196,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/consistency-raw.tsv",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "d2d6437684523d7dd47d583910bbb272b8a6b14af9927862d5c69f84b32894f8",
                       "sizeBytes":  20,
                       "generatedOrOriginal":  "generated-derived",
@@ -204,7 +204,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/resource-samples.csv",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "dd1ee44cb395daf462bb28558312c2239b7228171b4b25f1bdc99e704f381708",
                       "sizeBytes":  6675,
                       "generatedOrOriginal":  "generated-derived",
@@ -212,7 +212,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/stage-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "1dc11d5ed899f98e2fd366137b41a0ac17e4680333987753eb7ef67d28bb7dcf",
                       "sizeBytes":  3523,
                       "generatedOrOriginal":  "generated-derived",
@@ -220,7 +220,7 @@
                   },
                   {
                       "relativePath":  "diagnostic/stage-snapshots.jsonl",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "565a733eb753ee8b512024fa0938ed001c404d0612281cf322b724bc5712282b",
                       "sizeBytes":  160825,
                       "generatedOrOriginal":  "generated-derived",
@@ -228,15 +228,15 @@
                   },
                   {
                       "relativePath":  "diagnostic/client-errors.tsv",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
-                      "sha256":  "8923e406e24e473ee3af4b43ed984d2be757374131a3e9f026ffd9e90c90bc9e",
-                      "sizeBytes":  399126,
+                      "sourcePath":  "Exp148 preserved raw or derived source",
+                      "sha256":  "296d862723888e1c82ce61f86bbbfc945fb1d008b7bd675f7c6ffa72fbc9a476",
+                      "sizeBytes":  382654,
                       "generatedOrOriginal":  "generated-derived",
                       "description":  "diagnostic/client-errors.tsv"
                   },
                   {
                       "relativePath":  "diagnostic/application-exceptions.txt",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/diagnostic-001/raw-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "aaffc931f9f7bae44e27682a90e4c069eb245e99a63aeed326c7a6a0daaba003",
                       "sizeBytes":  40397,
                       "generatedOrOriginal":  "generated-derived",
@@ -244,7 +244,7 @@
                   },
                   {
                       "relativePath":  "calibration/exp148-observation-calibration-summary.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/analysis",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "77380bcd7f89342f41630d6d54095fcfdefd24ca3c847888c126a28e3d98f8d6",
                       "sizeBytes":  122005,
                       "generatedOrOriginal":  "generated-derived",
@@ -252,7 +252,7 @@
                   },
                   {
                       "relativePath":  "calibration/exp148-observation-calibration-report.md",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/analysis",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "061b8dc0515a051b76d84ed8298f5cb42916bd53e29828bef92f5eeb0e851e7e",
                       "sizeBytes":  505,
                       "generatedOrOriginal":  "generated-derived",
@@ -260,7 +260,7 @@
                   },
                   {
                       "relativePath":  "calibration/raw-delta-table.csv",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/analysis",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "95d03d2c7efa3318f61b86e210f08e1108d0d0ed24802943383a0f73ded615fd",
                       "sizeBytes":  664,
                       "generatedOrOriginal":  "generated-derived",
@@ -268,7 +268,7 @@
                   },
                   {
                       "relativePath":  "calibration/classification-input.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/analysis",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "c57906ffd57b1fb358ce01e1f886bf51d81c829e245b71ca6db87822e0aab878",
                       "sizeBytes":  525,
                       "generatedOrOriginal":  "generated-derived",
@@ -276,7 +276,7 @@
                   },
                   {
                       "relativePath":  "calibration/classification-output.json",
-                      "sourcePath":  "backend/experiments/results/experiment-1-48/a1b0-observation-calibration/analysis",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "3d2147bf63fc1f045a3cf8ea0d66d47719919bbe4fef7e18d86fd32ddd2e55f0",
                       "sizeBytes":  148,
                       "generatedOrOriginal":  "generated-derived",
@@ -284,7 +284,7 @@
                   },
                   {
                       "relativePath":  "harness/run-exp148-observation-calibration.ps1",
-                      "sourcePath":  "experiment/scripts/run-exp148-observation-calibration.ps1",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "324715baf7e994a29454751d426d1edaa7768a252c611e3a1f16615d4dc44228",
                       "sizeBytes":  5210,
                       "generatedOrOriginal":  "original-or-source",
@@ -292,7 +292,7 @@
                   },
                   {
                       "relativePath":  "harness/summarize-exp148-observation-calibration.ps1",
-                      "sourcePath":  "experiment/scripts/summarize-exp148-observation-calibration.ps1",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "ce7a629867e0fc63f9ba79c33c5c2c9ef0e64034a42bee53082b65b4a1c03a00",
                       "sizeBytes":  13994,
                       "generatedOrOriginal":  "original-or-source",
@@ -300,7 +300,7 @@
                   },
                   {
                       "relativePath":  "harness/performance-command.txt",
-                      "sourcePath":  "generated-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "a0c17d8866f5b8fc82c0ad91526552df6570cea62658358ba6dcf3cf55e295d5",
                       "sizeBytes":  194,
                       "generatedOrOriginal":  "generated-derived",
@@ -308,7 +308,7 @@
                   },
                   {
                       "relativePath":  "harness/diagnostic-command.txt",
-                      "sourcePath":  "generated-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "0c3528598c1bb58ce5b8853a1be884254766198334598bf255fb8c4d8db99753",
                       "sizeBytes":  117,
                       "generatedOrOriginal":  "generated-derived",
@@ -316,7 +316,7 @@
                   },
                   {
                       "relativePath":  "harness/environment-diff.txt",
-                      "sourcePath":  "generated-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "d5d9df5a021a93500537787b7a2151c2e0da498e5c505be98c65ced2726f421c",
                       "sizeBytes":  336,
                       "generatedOrOriginal":  "generated-derived",
@@ -324,7 +324,7 @@
                   },
                   {
                       "relativePath":  "harness/postprocess-errors.txt",
-                      "sourcePath":  "generated-derived",
+                      "sourcePath":  "Exp148 preserved raw or derived source",
                       "sha256":  "85893a77d056f324259ee185d38a91131f257d13c3726147874f5e2d9a9489a7",
                       "sizeBytes":  466,
                       "generatedOrOriginal":  "generated-derived",
