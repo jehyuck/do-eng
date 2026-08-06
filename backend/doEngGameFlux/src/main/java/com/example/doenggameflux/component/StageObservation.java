@@ -3,20 +3,24 @@ package com.example.doenggameflux.component;
 import com.example.doenggameflux.config.StageObservationProperties;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
-import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-/** Low-overhead, opt-in stage counters. It never changes publisher semantics. */
+/** Observation-only stage counters and bounded duration samples. */
 @Component
 public class StageObservation {
+
+    private static final int MAX_DURATION_SAMPLES_PER_STAGE = 20_000;
 
     private final StageObservationProperties properties;
     private final DiagnosticErrorLogger diagnosticLogger;
@@ -63,7 +67,10 @@ public class StageObservation {
                     })
                     .doFinally(signal -> {
                         long started = subscriptionStartedAt.get();
-                        if (started != 0) stats.durationNanos.add(System.nanoTime() - started);
+                        if (started != 0) {
+                            long durationNanos = System.nanoTime() - started;
+                            stats.recordDuration(durationNanos);
+                        }
                         stats.inFlight.decrementAndGet();
                         if (signal == reactor.core.publisher.SignalType.CANCEL) {
                             stats.cancelled.increment();
@@ -87,9 +94,17 @@ public class StageObservation {
             row.put("inFlight", stats.inFlight.get());
             row.put("maxInFlight", stats.maxInFlight.get());
             row.put("durationMsTotal", stats.durationNanos.sum() / 1_000_000.0);
+            row.put("durationSampleCount", stats.durationSampleCount.get());
+            row.put("durationSampleDropped", stats.durationSampleDropped.sum());
+            row.put("durationMsP50", stats.percentileMillis(0.50));
+            row.put("durationMsP95", stats.percentileMillis(0.95));
+            row.put("durationMsP99", stats.percentileMillis(0.99));
+            row.put("durationMsMax", stats.maxDurationNanos.get() / 1_000_000.0);
             row.put("lastThread", stats.lastThread);
             result.add(row);
         });
+        result.sort((left, right) -> String.valueOf(left.get("stage"))
+                .compareTo(String.valueOf(right.get("stage"))));
         return result;
     }
 
@@ -99,8 +114,34 @@ public class StageObservation {
         private final LongAdder failed = new LongAdder();
         private final LongAdder cancelled = new LongAdder();
         private final LongAdder durationNanos = new LongAdder();
+        private final AtomicLong maxDurationNanos = new AtomicLong();
         private final AtomicInteger inFlight = new AtomicInteger();
         private final AtomicInteger maxInFlight = new AtomicInteger();
+        private final AtomicInteger durationSampleCount = new AtomicInteger();
+        private final LongAdder durationSampleDropped = new LongAdder();
+        private final ConcurrentLinkedQueue<Long> durationSamplesNanos = new ConcurrentLinkedQueue<>();
         private volatile String lastThread = "";
+
+        private void recordDuration(long duration) {
+            durationNanos.add(duration);
+            maxDurationNanos.accumulateAndGet(duration, Math::max);
+            int sampleIndex = durationSampleCount.getAndIncrement();
+            if (sampleIndex < MAX_DURATION_SAMPLES_PER_STAGE) {
+                durationSamplesNanos.add(duration);
+            } else {
+                durationSampleDropped.increment();
+            }
+        }
+
+        private Double percentileMillis(double percentile) {
+            if (durationSamplesNanos.isEmpty()) {
+                return null;
+            }
+            List<Long> samples = new ArrayList<>(durationSamplesNanos);
+            Collections.sort(samples);
+            int index = (int) Math.ceil(percentile * samples.size()) - 1;
+            index = Math.max(0, Math.min(index, samples.size() - 1));
+            return samples.get(index) / 1_000_000.0;
+        }
     }
 }
