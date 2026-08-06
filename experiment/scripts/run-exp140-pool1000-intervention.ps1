@@ -8,7 +8,7 @@ Set-StrictMode -Version Latest
 
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $baseCompose = Join-Path $repo "backend\docker-compose.experiment.yaml"
-$overrideCompose = Join-Path $repo "experiment\compose\experiment-1-39-pool-evidence.override.yml"
+$overrideCompose = Join-Path $repo "experiment\compose\experiment-1-40-pool1000-intervention.override.yml"
 $missionLoad = Join-Path $repo "experiment\load\mission-load.js"
 $poolCollector = Join-Path $repo "experiment\scripts\collect-diagnostic-pool.ps1"
 $summarizer = Join-Path $repo "experiment\scripts\summarize-exp140-pool1000-intervention.ps1"
