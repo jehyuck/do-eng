@@ -1,6 +1,7 @@
 package com.example.doenggameflux.component;
 
 import com.example.doenggameflux.dispatcher.AbstractSinkDispatcher;
+import com.example.doenggameflux.dispatcher.DispatcherMetrics;
 import com.example.doenggameflux.dispatcher.DispatcherSpec;
 import com.example.doenggameflux.dispatcher.MissionExecutionContext;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +15,10 @@ public final class TokenDispatcher extends AbstractSinkDispatcher<String, Long> 
 
     public TokenDispatcher(
             TokenComponent tokenComponent,
+            DispatcherMetrics metrics,
             @Value("${doeng.dispatcher.token.concurrency:100}") int concurrency,
             @Value("${doeng.dispatcher.token.queue-capacity:2000}") int queueCapacity) {
-        super(new DispatcherSpec("token", concurrency, queueCapacity));
+        super(new DispatcherSpec("token", concurrency, queueCapacity), metrics);
         this.tokenComponent = tokenComponent;
     }
 
