@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -19,13 +20,23 @@ public abstract class AbstractSinkDispatcher<I, O>
     private final DispatcherSpec spec;
     private final Queue<DispatchWork<I, O>> queue;
     private final Sinks.Many<DispatchWork<I, O>> workSink;
+    private final DispatcherMetrics metrics;
+    private final AtomicInteger active = new AtomicInteger();
     private volatile Disposable subscription;
     private volatile boolean stopped;
 
     protected AbstractSinkDispatcher(DispatcherSpec spec) {
+        this(spec, null);
+    }
+
+    protected AbstractSinkDispatcher(DispatcherSpec spec, DispatcherMetrics metrics) {
         this.spec = Objects.requireNonNull(spec, "spec");
+        this.metrics = metrics;
         this.queue = new ArrayBlockingQueue<>(spec.getQueueCapacity());
         this.workSink = Sinks.many().unicast().onBackpressureBuffer(queue);
+        if (metrics != null) {
+            metrics.bind(spec.getName(), queue, active);
+        }
     }
 
     @Override
@@ -34,8 +45,6 @@ public abstract class AbstractSinkDispatcher<I, O>
             throw new IllegalStateException(spec.getName() + " dispatcher already started");
         }
         subscription = workSink.asFlux()
-                // prefetch=1 keeps waiting work in the explicitly bounded queue instead of
-                // allowing an additional opaque flatMap source buffer.
                 .flatMap(this::process, spec.getConcurrency(), 1)
                 .subscribe(
                         ignored -> { },
@@ -64,41 +73,75 @@ public abstract class AbstractSinkDispatcher<I, O>
             return Mono.error(new IllegalStateException(spec.getName() + " dispatcher is stopped"));
         }
         if (context.isExpired()) {
+            recordDeadline("BEFORE_ENQUEUE");
             return Mono.error(deadline(context, "BEFORE_ENQUEUE"));
         }
 
         DispatchWork<I, O> work = DispatchWork.create(context, input);
         Sinks.EmitResult emitResult = workSink.tryEmitNext(work);
         if (emitResult.isFailure()) {
+            if (metrics != null) metrics.rejected(spec.getName());
             return Mono.error(new DispatcherQueueRejectedException(
                     spec.getName(), context.getRequestId(), emitResult));
         }
+        if (metrics != null) metrics.enqueued(spec.getName());
 
         return work.awaitResult()
                 .timeout(
                         context.remaining(),
-                        Mono.error(deadline(context, "AWAITING_RESULT")));
+                        Mono.defer(() -> {
+                            recordDeadline("AWAITING_RESULT");
+                            return Mono.error(deadline(context, "AWAITING_RESULT"));
+                        }));
     }
 
     private Mono<Void> process(DispatchWork<I, O> work) {
         if (work.isCancelled()) {
+            if (metrics != null) metrics.cancelled(spec.getName());
             return Mono.empty();
         }
         if (work.getContext().isExpired()) {
-            work.fail(deadline(work.getContext(), "BEFORE_EXECUTION"));
+            recordDeadline("BEFORE_EXECUTION");
+            emitError(work, deadline(work.getContext(), "BEFORE_EXECUTION"));
             return Mono.empty();
         }
+
+        if (metrics != null) metrics.dequeued(spec.getName(), work.queueWait());
+        active.incrementAndGet();
 
         return Mono.defer(() -> invoke(work.getContext(), work.getInput()))
                 .timeout(work.getContext().remaining())
                 .switchIfEmpty(Mono.error(new IllegalStateException(
                         spec.getName() + " dispatcher returned an empty result")))
-                .doOnNext(work::complete)
+                .doOnNext(result -> {
+                    Sinks.EmitResult emitResult = work.complete(result);
+                    if (metrics == null) return;
+                    if (emitResult.isSuccess()) {
+                        metrics.completed(spec.getName());
+                    } else {
+                        metrics.resultEmissionFailure(spec.getName(), emitResult);
+                    }
+                })
                 .onErrorResume(error -> {
-                    work.fail(normalize(error, work.getContext()));
+                    Throwable normalized = normalize(error, work.getContext());
+                    if (normalized instanceof DispatcherDeadlineExceededException) {
+                        recordDeadline("DURING_EXECUTION");
+                    }
+                    emitError(work, normalized);
                     return Mono.empty();
                 })
+                .doFinally(ignored -> active.decrementAndGet())
                 .then();
+    }
+
+    private void emitError(DispatchWork<I, O> work, Throwable error) {
+        Sinks.EmitResult emitResult = work.fail(error);
+        if (metrics == null) return;
+        if (emitResult.isSuccess()) {
+            metrics.failed(spec.getName(), error);
+        } else {
+            metrics.resultEmissionFailure(spec.getName(), emitResult);
+        }
     }
 
     private Throwable normalize(Throwable error, MissionExecutionContext context) {
@@ -106,6 +149,10 @@ public abstract class AbstractSinkDispatcher<I, O>
             return deadline(context, "DURING_EXECUTION");
         }
         return error;
+    }
+
+    private void recordDeadline(String phase) {
+        if (metrics != null) metrics.deadline(spec.getName(), phase);
     }
 
     private DispatcherDeadlineExceededException deadline(
