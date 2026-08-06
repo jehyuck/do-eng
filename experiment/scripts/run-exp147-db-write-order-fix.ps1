@@ -243,9 +243,20 @@ if ($head -ne $ExpectedCommit) {
     throw "Commit mismatch: expected $ExpectedCommit, actual $head"
 }
 if ($dirty.Count -gt 0) {
+    $allowedResultPrefix = ((Resolve-Path $resultRoot -ErrorAction SilentlyContinue).Path)
+    if ($ExecutionMode -ne "EXECUTE" -or [string]::IsNullOrWhiteSpace($allowedResultPrefix)) {
         throw "Working tree must be clean. Use a dedicated clean worktree for Exp147."
+    }
+    foreach ($entry in $dirty) {
+        $candidate = [string]$entry
+        if ($candidate.Length -gt 3) { $candidate = $candidate.Substring(3) }
+        $candidatePath = Join-Path $repo $candidate
+        if (-not ((Resolve-Path $candidatePath -ErrorAction SilentlyContinue).Path.StartsWith($allowedResultPrefix, [System.StringComparison]::OrdinalIgnoreCase))) {
+            throw "Unexpected working tree change before EXECUTE: $entry"
+        }
+    }
 }
-if (Test-Path -LiteralPath $resultRoot) {
+if ((Test-Path -LiteralPath $resultRoot) -and $ExecutionMode -eq "PREFLIGHT") {
     throw "Result root already exists: $resultRoot"
 }
 
