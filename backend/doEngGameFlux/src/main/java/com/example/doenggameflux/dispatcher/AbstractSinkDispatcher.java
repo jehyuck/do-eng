@@ -20,6 +20,7 @@ public abstract class AbstractSinkDispatcher<I, O>
     private final Queue<DispatchWork<I, O>> queue;
     private final Sinks.Many<DispatchWork<I, O>> workSink;
     private volatile Disposable subscription;
+    private volatile boolean stopped;
 
     protected AbstractSinkDispatcher(DispatcherSpec spec) {
         this.spec = Objects.requireNonNull(spec, "spec");
@@ -33,7 +34,9 @@ public abstract class AbstractSinkDispatcher<I, O>
             throw new IllegalStateException(spec.getName() + " dispatcher already started");
         }
         subscription = workSink.asFlux()
-                .flatMap(this::process, spec.getConcurrency())
+                // prefetch=1 keeps waiting work in the explicitly bounded queue instead of
+                // allowing an additional opaque flatMap source buffer.
+                .flatMap(this::process, spec.getConcurrency(), 1)
                 .subscribe(
                         ignored -> { },
                         error -> log.error("{} dispatcher consumer terminated", spec.getName(), error));
@@ -57,6 +60,9 @@ public abstract class AbstractSinkDispatcher<I, O>
     }
 
     private Mono<O> enqueue(MissionExecutionContext context, I input) {
+        if (stopped) {
+            return Mono.error(new IllegalStateException(spec.getName() + " dispatcher is stopped"));
+        }
         if (context.isExpired()) {
             return Mono.error(deadline(context, "BEFORE_ENQUEUE"));
         }
@@ -111,6 +117,7 @@ public abstract class AbstractSinkDispatcher<I, O>
 
     @Override
     public final void destroy() {
+        stopped = true;
         workSink.tryEmitComplete();
         Disposable current = subscription;
         if (current != null) {
