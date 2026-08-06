@@ -1,0 +1,4 @@
+Failed test: CloseAcquireRaceAttributionTest.attributesEightCloseAcquireRacesWithoutChangingProductionLifecycle()
+Observed: org.opentest4j.AssertionFailedError at CloseAcquireRaceAttributionTest.java:111
+Full Gradle report: 47 tests completed, 1 failed, 2 skipped; exit code 1.
+Scope note: this failure was preserved and not used to alter Exp148 classification.

@@ -1,0 +1,200 @@
+﻿flux-corrected-1  | 2026-08-06T05:36:03.655307435Z 2026-08-06 14:36:03.654  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+flux-corrected-1  | 2026-08-06T05:36:03.876473221Z 2026-08-06 14:36:03.875  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 214 ms. Found 2 R2DBC repository interfaces.
+flux-corrected-1  | 2026-08-06T05:36:42.311927762Z 2026-08-06 14:36:42.300 ERROR 1 --- [or-http-epoll-4] a.w.r.e.AbstractErrorWebExceptionHandler : [ce6c808e-1410]  500 Server Error for HTTP POST "/game/face?answer=happy&sceneId=2"
+flux-corrected-1  | 2026-08-06T05:36:42.311993208Z org.springframework.web.reactive.function.client.WebClientRequestException: Pending acquire queue has reached its maximum size of 800; nested exception is reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.311995949Z 	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.311997985Z 	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+flux-corrected-1  | 2026-08-06T05:36:42.311999486Z Error has been observed at the following site(s):
+flux-corrected-1  | 2026-08-06T05:36:42.312010556Z 	*__checkpoint ⇢ HTTP POST "/game/face?answer=happy&sceneId=2" [ExceptionHandlingWebHandler]
+flux-corrected-1  | 2026-08-06T05:36:42.312013681Z 		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.312015279Z 		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312019150Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312020695Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312022120Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312023458Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312024748Z 		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312028611Z 		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:204) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312030261Z 		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312031721Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:225) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312033409Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:274) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312034843Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312046091Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:190) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312047594Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312048936Z 		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.312050331Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312051674Z 		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:160) ~[reactor-netty-core-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.312053060Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.312100535Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.315569747Z Caused by: reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.315613910Z 	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.399640451Z 2026-08-06 14:36:42.393  INFO 1 --- [or-http-epoll-4] c.e.d.c.ExperimentRequestLoggingFilter   : experiment_request runId=RUN-EXP148-A1B0-PERFORMANCE-001 requestId=RUN-EXP148-A1B0-PERFORMANCE-001-u37-f7 method=POST path=/game/face status=500 signal=onError latencyMs=293
+flux-corrected-1  | 2026-08-06T05:36:42.402269964Z 2026-08-06 14:36:42.397 ERROR 1 --- [or-http-epoll-4] a.w.r.e.AbstractErrorWebExceptionHandler : [622b3e89-1026]  500 Server Error for HTTP POST "/game/face?answer=happy&sceneId=2"
+flux-corrected-1  | 2026-08-06T05:36:42.402312055Z org.springframework.web.reactive.function.client.WebClientRequestException: Pending acquire queue has reached its maximum size of 800; nested exception is reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.402315409Z 	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.402346237Z 	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+flux-corrected-1  | 2026-08-06T05:36:42.402349726Z Error has been observed at the following site(s):
+flux-corrected-1  | 2026-08-06T05:36:42.402367147Z 	*__checkpoint ⇢ HTTP POST "/game/face?answer=happy&sceneId=2" [ExceptionHandlingWebHandler]
+flux-corrected-1  | 2026-08-06T05:36:42.402378564Z 		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.402381276Z 		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402386944Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402389453Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402391735Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402394259Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402396554Z 		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402398825Z 		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:204) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402401144Z 		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402403449Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:225) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402405802Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:274) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402413979Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402434399Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:190) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402436847Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402442103Z 		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.402444532Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402446884Z 		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:160) ~[reactor-netty-core-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.402449283Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402546271Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.402921423Z Caused by: reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.403000611Z 	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.407089499Z 2026-08-06 14:36:42.404  INFO 1 --- [or-http-epoll-4] c.e.d.c.ExperimentRequestLoggingFilter   : experiment_request runId=RUN-EXP148-A1B0-PERFORMANCE-001 requestId=RUN-EXP148-A1B0-PERFORMANCE-001-u180-f5 method=POST path=/game/face status=500 signal=onError latencyMs=3821
+flux-corrected-1  | 2026-08-06T05:36:42.410875072Z 2026-08-06 14:36:42.408 ERROR 1 --- [or-http-epoll-4] a.w.r.e.AbstractErrorWebExceptionHandler : [4c1ac9f7-1022]  500 Server Error for HTTP POST "/game/face?answer=happy&sceneId=2"
+flux-corrected-1  | 2026-08-06T05:36:42.410916837Z org.springframework.web.reactive.function.client.WebClientRequestException: Pending acquire queue has reached its maximum size of 800; nested exception is reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.410919190Z 	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.410921262Z 	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+flux-corrected-1  | 2026-08-06T05:36:42.410923116Z Error has been observed at the following site(s):
+flux-corrected-1  | 2026-08-06T05:36:42.410951095Z 	*__checkpoint ⇢ HTTP POST "/game/face?answer=happy&sceneId=2" [ExceptionHandlingWebHandler]
+flux-corrected-1  | 2026-08-06T05:36:42.410954528Z 		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.410956221Z 		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410964009Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410965820Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410967536Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410968994Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410970519Z 		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410972007Z 		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:204) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410973558Z 		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410975192Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:225) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410976854Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:274) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410978376Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410995472Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:190) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410997220Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.410998942Z 		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.411002346Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.411003903Z 		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:160) ~[reactor-netty-core-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.411005452Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.411097690Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.411280438Z Caused by: reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.411329498Z 	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.484211901Z 2026-08-06 14:36:42.483  INFO 1 --- [or-http-epoll-4] c.e.d.c.ExperimentRequestLoggingFilter   : experiment_request runId=RUN-EXP148-A1B0-PERFORMANCE-001 requestId=RUN-EXP148-A1B0-PERFORMANCE-001-u186-f5 method=POST path=/game/face status=500 signal=onError latencyMs=3958
+flux-corrected-1  | 2026-08-06T05:36:42.488744797Z 2026-08-06 14:36:42.486 ERROR 1 --- [or-http-epoll-4] a.w.r.e.AbstractErrorWebExceptionHandler : [c9706312-475]  500 Server Error for HTTP POST "/game/face?answer=happy&sceneId=2"
+flux-corrected-1  | 2026-08-06T05:36:42.488812521Z org.springframework.web.reactive.function.client.WebClientRequestException: Pending acquire queue has reached its maximum size of 800; nested exception is reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.488816232Z 	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.488818873Z 	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+flux-corrected-1  | 2026-08-06T05:36:42.488821159Z Error has been observed at the following site(s):
+flux-corrected-1  | 2026-08-06T05:36:42.488863653Z 	*__checkpoint ⇢ HTTP POST "/game/face?answer=happy&sceneId=2" [ExceptionHandlingWebHandler]
+flux-corrected-1  | 2026-08-06T05:36:42.488868211Z 		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.488870561Z 		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488876491Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488879018Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488881111Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488883156Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488885141Z 		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488887482Z 		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:204) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488889898Z 		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488892054Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:225) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488894226Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:274) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488896535Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488920522Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:190) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488922610Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488924681Z 		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.488926840Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.488928890Z 		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:160) ~[reactor-netty-core-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.488931122Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.489009695Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.489448038Z Caused by: reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.489521145Z 	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.491230995Z 2026-08-06 14:36:42.489  INFO 1 --- [or-http-epoll-4] c.e.d.c.ExperimentRequestLoggingFilter   : experiment_request runId=RUN-EXP148-A1B0-PERFORMANCE-001 requestId=RUN-EXP148-A1B0-PERFORMANCE-001-u93-f3 method=POST path=/game/face status=500 signal=onError latencyMs=7601
+flux-corrected-1  | 2026-08-06T05:36:42.531390839Z 2026-08-06 14:36:42.492 ERROR 1 --- [or-http-epoll-4] a.w.r.e.AbstractErrorWebExceptionHandler : [b4e57c76-1027]  500 Server Error for HTTP POST "/game/face?answer=happy&sceneId=2"
+flux-corrected-1  | 2026-08-06T05:36:42.531452406Z org.springframework.web.reactive.function.client.WebClientRequestException: Pending acquire queue has reached its maximum size of 800; nested exception is reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.531455671Z 	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.531458320Z 	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+flux-corrected-1  | 2026-08-06T05:36:42.531460688Z Error has been observed at the following site(s):
+flux-corrected-1  | 2026-08-06T05:36:42.531502857Z 	*__checkpoint ⇢ HTTP POST "/game/face?answer=happy&sceneId=2" [ExceptionHandlingWebHandler]
+flux-corrected-1  | 2026-08-06T05:36:42.531507539Z 		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.531509919Z 		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531515950Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531518450Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531520588Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531522682Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531524709Z 		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531526863Z 		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:204) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531529026Z 		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531531132Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:225) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531533283Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:274) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531535391Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531559382Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:190) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531561573Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531563768Z 		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.531566052Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531568174Z 		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:160) ~[reactor-netty-core-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.531570370Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531651040Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.531898233Z Caused by: reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.531970102Z 	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.583958179Z 2026-08-06 14:36:42.583  INFO 1 --- [or-http-epoll-4] c.e.d.c.ExperimentRequestLoggingFilter   : experiment_request runId=RUN-EXP148-A1B0-PERFORMANCE-001 requestId=RUN-EXP148-A1B0-PERFORMANCE-001-u184-f5 method=POST path=/game/face status=500 signal=onError latencyMs=3998
+flux-corrected-1  | 2026-08-06T05:36:42.594798710Z 2026-08-06 14:36:42.591 ERROR 1 --- [or-http-epoll-4] a.w.r.e.AbstractErrorWebExceptionHandler : [50abb774-1028]  500 Server Error for HTTP POST "/game/face?answer=happy&sceneId=2"
+flux-corrected-1  | 2026-08-06T05:36:42.594865466Z org.springframework.web.reactive.function.client.WebClientRequestException: Pending acquire queue has reached its maximum size of 800; nested exception is reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.594868442Z 	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.594871158Z 	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+flux-corrected-1  | 2026-08-06T05:36:42.594873228Z Error has been observed at the following site(s):
+flux-corrected-1  | 2026-08-06T05:36:42.594918409Z 	*__checkpoint ⇢ HTTP POST "/game/face?answer=happy&sceneId=2" [ExceptionHandlingWebHandler]
+flux-corrected-1  | 2026-08-06T05:36:42.594924272Z 		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.594926893Z 		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594932784Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594935140Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594937402Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594939399Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594941446Z 		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594943580Z 		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:204) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594945877Z 		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594947955Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:225) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594950121Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:274) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594952200Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594984896Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:190) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594987241Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594989382Z 		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.594991661Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.594993764Z 		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:160) ~[reactor-netty-core-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.594996018Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.595069624Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.595327316Z Caused by: reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.595400845Z 	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.595647535Z 2026-08-06 14:36:42.593  INFO 1 --- [or-http-epoll-4] c.e.d.c.ExperimentRequestLoggingFilter   : experiment_request runId=RUN-EXP148-A1B0-PERFORMANCE-001 requestId=RUN-EXP148-A1B0-PERFORMANCE-001-u190-f5 method=POST path=/game/face status=500 signal=onError latencyMs=4008
+flux-corrected-1  | 2026-08-06T05:36:42.597924605Z 2026-08-06 14:36:42.596 ERROR 1 --- [or-http-epoll-4] a.w.r.e.AbstractErrorWebExceptionHandler : [2c02314c-477]  500 Server Error for HTTP POST "/game/face?answer=happy&sceneId=2"
+flux-corrected-1  | 2026-08-06T05:36:42.597957994Z org.springframework.web.reactive.function.client.WebClientRequestException: Pending acquire queue has reached its maximum size of 800; nested exception is reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.597960422Z 	at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.597962470Z 	Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException: 
+flux-corrected-1  | 2026-08-06T05:36:42.597963889Z Error has been observed at the following site(s):
+flux-corrected-1  | 2026-08-06T05:36:42.597975801Z 	*__checkpoint ⇢ HTTP POST "/game/face?answer=happy&sceneId=2" [ExceptionHandlingWebHandler]
+flux-corrected-1  | 2026-08-06T05:36:42.598003813Z 		at org.springframework.web.reactive.function.client.ExchangeFunctions$DefaultExchangeFunction.lambda$wrapException$9(ExchangeFunctions.java:141) ~[spring-webflux-5.3.25.jar!/:5.3.25]
+flux-corrected-1  | 2026-08-06T05:36:42.598006542Z 		at reactor.core.publisher.MonoErrorSupplied.subscribe(MonoErrorSupplied.java:55) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598010801Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:103) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598012342Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598013720Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598015134Z 		at reactor.core.publisher.FluxPeek$PeekSubscriber.onError(FluxPeek.java:222) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598016541Z 		at reactor.core.publisher.MonoNext$NextSubscriber.onError(MonoNext.java:93) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598017911Z 		at reactor.core.publisher.MonoFlatMapMany$FlatMapManyMain.onError(MonoFlatMapMany.java:204) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598019253Z 		at reactor.core.publisher.SerializedSubscriber.onError(SerializedSubscriber.java:124) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598020651Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.whenError(FluxRetryWhen.java:225) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598022055Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenOtherSubscriber.onError(FluxRetryWhen.java:274) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598023452Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598038148Z 		at reactor.core.publisher.FluxRetryWhen$RetryWhenMainSubscriber.onError(FluxRetryWhen.java:190) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598039754Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598041276Z 		at reactor.netty.http.client.HttpClientConnect$MonoHttpConnect$ClientTransportSubscriber.onError(HttpClientConnect.java:311) ~[reactor-netty-http-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.598042669Z 		at reactor.core.publisher.MonoCreate$DefaultMonoSink.error(MonoCreate.java:201) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598044069Z 		at reactor.netty.resources.DefaultPooledConnectionProvider$DisposableAcquire.onError(DefaultPooledConnectionProvider.java:160) ~[reactor-netty-core-1.0.28.jar!/:1.0.28]
+flux-corrected-1  | 2026-08-06T05:36:42.598045488Z 		at reactor.core.publisher.FluxContextWrite$ContextWriteSubscriber.onError(FluxContextWrite.java:121) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598090866Z 		at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.598241836Z Caused by: reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800
+flux-corrected-1  | 2026-08-06T05:36:42.598293178Z 	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onNext(FluxOnErrorResume.java:79) ~[reactor-core-3.4.27.jar!/:3.4.27]
+flux-corrected-1  | 2026-08-06T05:36:42.602045040Z 2026-08-06 14:36:42.599  INFO 1 --- [or-http-epoll-4] c.e.d.c.ExperimentRequestLoggingFilter   : experiment_request runId=RUN-EXP148-A1B0-PERFORMANCE-001 requestId=RUN-EXP148-A1B0-PERFORMANCE-001-u96-f3 method=POST path=/game/face status=500 signal=onError latencyMs=7710
+flux-corrected-1  | 2026-08-06T05:36:42.751630544Z 2026-08-06 14:36:42.604 ERROR 1 --- [or-http-epoll-4] a.w.r.e.AbstractErrorWebExceptionHandler : [ea74fa18-1029]  500 Server Error for HTTP POST "/game/face?answer=happy&sceneId=2"
+flux-corrected-1  | 2026-08-06T05:36:42.751675569Z org.springframework.web.reactive.function.client.WebClientRequestException: Pending acquire queue has reached its maximum size of 800; nested exception is reactor.netty.internal.shaded.reactor.pool.PoolAcquirePendingLimitException: Pending acquire queue has reached its maximum size of 800

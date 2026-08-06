@@ -1,0 +1,1481 @@
+﻿{
+    "experiment":  "Exp148",
+    "performance":  {
+                        "status":  "COMPLETED",
+                        "provider":  "doeng-external",
+                        "poolContract":  {
+                                             "expectedMaxConnections":  500,
+                                             "expectedMaxPendingConnections":  800,
+                                             "observedMaxConnections":  500,
+                                             "observedMaxPendingConnections":  800,
+                                             "valid":  true
+                                         },
+                        "timeline":  {
+                                         "rawRows":  63,
+                                         "failedRows":  0,
+                                         "activeSampleCount":  63,
+                                         "pendingSampleCount":  63,
+                                         "peakActiveConnections":  500,
+                                         "peakPendingConnections":  1343,
+                                         "peakTotalConnections":  500,
+                                         "peakIdleConnections":  375,
+                                         "firstActiveLimit":  {
+                                                                  "timestamp":  "2026-08-06T05:36:37.8455961Z",
+                                                                  "epochMs":  1785994597845,
+                                                                  "value":  500
+                                                              },
+                                         "firstPending":  {
+                                                              "timestamp":  "2026-08-06T05:36:35.6065150Z",
+                                                              "epochMs":  1785994595606,
+                                                              "value":  201
+                                                          },
+                                         "firstPendingAtOrAboveConfiguredLimit":  {
+                                                                                      "timestamp":  "2026-08-06T05:36:42.3265380Z",
+                                                                                      "epochMs":  1785994602326,
+                                                                                      "value":  1049
+                                                                                  }
+                                     },
+                        "client":  {
+                                       "attempts":  4945,
+                                       "http200":  535,
+                                       "successRate":  0.10819009100101112,
+                                       "http500":  1535,
+                                       "clientTimeout":  2869,
+                                       "connectionError":  6,
+                                       "p50Ms":  7094,
+                                       "p95Ms":  9812,
+                                       "p99Ms":  10050,
+                                       "maxInFlight":  1773,
+                                       "accountingValid":  true,
+                                       "drainCompleted":  true,
+                                       "remainingBacklog":  {
+                                                                "aiInFlight":  0,
+                                                                "storageInFlight":  0
+                                                            }
+                                   },
+                        "stages":  {
+
+                                   },
+                        "consistency":  {
+                                            "status":  "PASS",
+                                            "missionCompletion":  197,
+                                            "progress":  111,
+                                            "picture":  221,
+                                            "orphanPicture":  0,
+                                            "duplicateMissionRunId":  0,
+                                            "atomicity":  "NOT_EXECUTED"
+                                        },
+                        "baselineA0B0":  {
+                                             "attempts":  5950,
+                                             "http200":  1100,
+                                             "http500":  2326,
+                                             "clientTimeout":  2524,
+                                             "successfulRps":  36.67,
+                                             "dbProgressUpdateFailed":  215,
+                                             "deadlockOccurrences":  860,
+                                             "rollbackOccurrences":  430,
+                                             "r2dbcPeakPending":  100,
+                                             "webClientPeakPending":  2039,
+                                             "webClientPendingLimitOccurrences":  4400,
+                                             "applicationCpuPercent":  209.18,
+                                             "applicationMemoryGiB":  2.295
+                                         },
+                        "r2dbcPool":  {
+                                          "available":  true,
+                                          "sampleCount":  50,
+                                          "status":  "AVAILABLE"
+                                      },
+                        "resources":  {
+                                          "sampleCount":  72,
+                                          "application":  [
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:29.8164189Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "206.00%",
+                                                                  "memoryUsage":  "512.8MiB / 3GiB",
+                                                                  "memoryPercent":  "16.69%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:33.0517537Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "200.37%",
+                                                                  "memoryUsage":  "735.8MiB / 3GiB",
+                                                                  "memoryPercent":  "23.95%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:36.2895401Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "228.08%",
+                                                                  "memoryUsage":  "878.3MiB / 3GiB",
+                                                                  "memoryPercent":  "28.59%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:39.5951210Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "199.78%",
+                                                                  "memoryUsage":  "1.239GiB / 3GiB",
+                                                                  "memoryPercent":  "41.31%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:42.6626292Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "200.50%",
+                                                                  "memoryUsage":  "1.367GiB / 3GiB",
+                                                                  "memoryPercent":  "45.57%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:45.9288925Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "207.57%",
+                                                                  "memoryUsage":  "1.837GiB / 3GiB",
+                                                                  "memoryPercent":  "61.22%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:49.2150218Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "204.45%",
+                                                                  "memoryUsage":  "1.879GiB / 3GiB",
+                                                                  "memoryPercent":  "62.65%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:52.2903304Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "201.62%",
+                                                                  "memoryUsage":  "2.121GiB / 3GiB",
+                                                                  "memoryPercent":  "70.70%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:55.5148601Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "212.34%",
+                                                                  "memoryUsage":  "2.194GiB / 3GiB",
+                                                                  "memoryPercent":  "73.14%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:36:58.7868370Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "202.01%",
+                                                                  "memoryUsage":  "2.266GiB / 3GiB",
+                                                                  "memoryPercent":  "75.54%",
+                                                                  "pids":  "33"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:01.8301441Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "202.92%",
+                                                                  "memoryUsage":  "2.264GiB / 3GiB",
+                                                                  "memoryPercent":  "75.46%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:05.0514786Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "188.83%",
+                                                                  "memoryUsage":  "2.299GiB / 3GiB",
+                                                                  "memoryPercent":  "76.64%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:08.2830124Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "118.65%",
+                                                                  "memoryUsage":  "2.284GiB / 3GiB",
+                                                                  "memoryPercent":  "76.12%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:11.3116861Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "15.48%",
+                                                                  "memoryUsage":  "2.285GiB / 3GiB",
+                                                                  "memoryPercent":  "76.16%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:14.5031174Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "15.19%",
+                                                                  "memoryUsage":  "2.282GiB / 3GiB",
+                                                                  "memoryPercent":  "76.06%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:17.7203264Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "3.14%",
+                                                                  "memoryUsage":  "2.282GiB / 3GiB",
+                                                                  "memoryPercent":  "76.07%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:20.7729806Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "2.48%",
+                                                                  "memoryUsage":  "2.283GiB / 3GiB",
+                                                                  "memoryPercent":  "76.09%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:23.9480604Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "5.48%",
+                                                                  "memoryUsage":  "2.283GiB / 3GiB",
+                                                                  "memoryPercent":  "76.09%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:27.1938217Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "2.61%",
+                                                                  "memoryUsage":  "2.283GiB / 3GiB",
+                                                                  "memoryPercent":  "76.08%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:30.2152685Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "3.47%",
+                                                                  "memoryUsage":  "2.282GiB / 3GiB",
+                                                                  "memoryPercent":  "76.07%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:33.4329003Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "3.03%",
+                                                                  "memoryUsage":  "2.283GiB / 3GiB",
+                                                                  "memoryPercent":  "76.09%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:36.6276271Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "2.87%",
+                                                                  "memoryUsage":  "2.283GiB / 3GiB",
+                                                                  "memoryPercent":  "76.10%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:39.7789167Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "3.91%",
+                                                                  "memoryUsage":  "2.282GiB / 3GiB",
+                                                                  "memoryPercent":  "76.08%",
+                                                                  "pids":  "34"
+                                                              },
+                                                              {
+                                                                  "timestampUtc":  "2026-08-06T05:37:42.9652832Z",
+                                                                  "name":  "doeng-exp148-p-flux-corrected-1",
+                                                                  "cpuPercent":  "3.41%",
+                                                                  "memoryUsage":  "2.283GiB / 3GiB",
+                                                                  "memoryPercent":  "76.09%",
+                                                                  "pids":  "34"
+                                                              }
+                                                          ],
+                                          "mock":  [
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:29.8164189Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.46%",
+                                                           "memoryUsage":  "57.37MiB / 1GiB",
+                                                           "memoryPercent":  "5.60%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:33.0517537Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "121.67%",
+                                                           "memoryUsage":  "219.8MiB / 1GiB",
+                                                           "memoryPercent":  "21.46%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:36.2895401Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "115.86%",
+                                                           "memoryUsage":  "289.2MiB / 1GiB",
+                                                           "memoryPercent":  "28.24%",
+                                                           "pids":  "14"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:39.5951210Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "88.62%",
+                                                           "memoryUsage":  "254MiB / 1GiB",
+                                                           "memoryPercent":  "24.81%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:42.6626292Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "41.98%",
+                                                           "memoryUsage":  "136.3MiB / 1GiB",
+                                                           "memoryPercent":  "13.32%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:45.9288925Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "25.31%",
+                                                           "memoryUsage":  "99.5MiB / 1GiB",
+                                                           "memoryPercent":  "9.72%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:49.2150218Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.79%",
+                                                           "memoryUsage":  "105.6MiB / 1GiB",
+                                                           "memoryPercent":  "10.31%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:52.2903304Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.02%",
+                                                           "memoryUsage":  "103.3MiB / 1GiB",
+                                                           "memoryPercent":  "10.09%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:55.5148601Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "75.13%",
+                                                           "memoryUsage":  "65.5MiB / 1GiB",
+                                                           "memoryPercent":  "6.40%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:36:58.7868370Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "102.26%",
+                                                           "memoryUsage":  "218.3MiB / 1GiB",
+                                                           "memoryPercent":  "21.32%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:01.8301441Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "65.52%",
+                                                           "memoryUsage":  "313.8MiB / 1GiB",
+                                                           "memoryPercent":  "30.65%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:05.0514786Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "117.05%",
+                                                           "memoryUsage":  "448.9MiB / 1GiB",
+                                                           "memoryPercent":  "43.83%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:08.2830124Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "40.53%",
+                                                           "memoryUsage":  "178.5MiB / 1GiB",
+                                                           "memoryPercent":  "17.43%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:11.3116861Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "1.45%",
+                                                           "memoryUsage":  "136.3MiB / 1GiB",
+                                                           "memoryPercent":  "13.31%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:14.5031174Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "40.20%",
+                                                           "memoryUsage":  "159.7MiB / 1GiB",
+                                                           "memoryPercent":  "15.60%",
+                                                           "pids":  "14"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:17.7203264Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "31.99%",
+                                                           "memoryUsage":  "135.7MiB / 1GiB",
+                                                           "memoryPercent":  "13.25%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:20.7729806Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "34.89%",
+                                                           "memoryUsage":  "128.9MiB / 1GiB",
+                                                           "memoryPercent":  "12.59%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:23.9480604Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.43%",
+                                                           "memoryUsage":  "128.5MiB / 1GiB",
+                                                           "memoryPercent":  "12.55%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:27.1938217Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "32.18%",
+                                                           "memoryUsage":  "173.9MiB / 1GiB",
+                                                           "memoryPercent":  "16.99%",
+                                                           "pids":  "14"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:30.2152685Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.72%",
+                                                           "memoryUsage":  "127.4MiB / 1GiB",
+                                                           "memoryPercent":  "12.45%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:33.4329003Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.00%",
+                                                           "memoryUsage":  "127.6MiB / 1GiB",
+                                                           "memoryPercent":  "12.46%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:36.6276271Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.02%",
+                                                           "memoryUsage":  "127.9MiB / 1GiB",
+                                                           "memoryPercent":  "12.49%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:39.7789167Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.03%",
+                                                           "memoryUsage":  "127.4MiB / 1GiB",
+                                                           "memoryPercent":  "12.44%",
+                                                           "pids":  "7"
+                                                       },
+                                                       {
+                                                           "timestampUtc":  "2026-08-06T05:37:42.9652832Z",
+                                                           "name":  "doeng-exp148-p-experiment-mock-1",
+                                                           "cpuPercent":  "0.00%",
+                                                           "memoryUsage":  "127.6MiB / 1GiB",
+                                                           "memoryPercent":  "12.46%",
+                                                           "pids":  "7"
+                                                       }
+                                                   ],
+                                          "database":  [
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:29.8164189Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.83%",
+                                                               "memoryUsage":  "83.48MiB / 1GiB",
+                                                               "memoryPercent":  "8.15%",
+                                                               "pids":  "15"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:33.0517537Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.03%",
+                                                               "memoryUsage":  "83.48MiB / 1GiB",
+                                                               "memoryPercent":  "8.15%",
+                                                               "pids":  "15"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:36.2895401Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "5.85%",
+                                                               "memoryUsage":  "84.96MiB / 1GiB",
+                                                               "memoryPercent":  "8.30%",
+                                                               "pids":  "24"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:39.5951210Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "4.88%",
+                                                               "memoryUsage":  "85.52MiB / 1GiB",
+                                                               "memoryPercent":  "8.35%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:42.6626292Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "5.51%",
+                                                               "memoryUsage":  "85.64MiB / 1GiB",
+                                                               "memoryPercent":  "8.36%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:45.9288925Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "3.44%",
+                                                               "memoryUsage":  "85.95MiB / 1GiB",
+                                                               "memoryPercent":  "8.39%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:49.2150218Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "2.13%",
+                                                               "memoryUsage":  "85.98MiB / 1GiB",
+                                                               "memoryPercent":  "8.40%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:52.2903304Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.04%",
+                                                               "memoryUsage":  "85.98MiB / 1GiB",
+                                                               "memoryPercent":  "8.40%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:55.5148601Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "2.26%",
+                                                               "memoryUsage":  "85.98MiB / 1GiB",
+                                                               "memoryPercent":  "8.40%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:36:58.7868370Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "16.40%",
+                                                               "memoryUsage":  "85.98MiB / 1GiB",
+                                                               "memoryPercent":  "8.40%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:01.8301441Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.02%",
+                                                               "memoryUsage":  "85.98MiB / 1GiB",
+                                                               "memoryPercent":  "8.40%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:05.0514786Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "22.77%",
+                                                               "memoryUsage":  "86.16MiB / 1GiB",
+                                                               "memoryPercent":  "8.41%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:08.2830124Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "4.37%",
+                                                               "memoryUsage":  "86.21MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:11.3116861Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.03%",
+                                                               "memoryUsage":  "86.22MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:14.5031174Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.02%",
+                                                               "memoryUsage":  "86.22MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:17.7203264Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.04%",
+                                                               "memoryUsage":  "86.21MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:20.7729806Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.02%",
+                                                               "memoryUsage":  "86.33MiB / 1GiB",
+                                                               "memoryPercent":  "8.43%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:23.9480604Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "3.37%",
+                                                               "memoryUsage":  "86.23MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:27.1938217Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.04%",
+                                                               "memoryUsage":  "86.21MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:30.2152685Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.03%",
+                                                               "memoryUsage":  "86.23MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:33.4329003Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.02%",
+                                                               "memoryUsage":  "86.23MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "25"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:36.6276271Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.03%",
+                                                               "memoryUsage":  "86.21MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "24"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:39.7789167Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "4.44%",
+                                                               "memoryUsage":  "86.19MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "24"
+                                                           },
+                                                           {
+                                                               "timestampUtc":  "2026-08-06T05:37:42.9652832Z",
+                                                               "name":  "doeng-exp148-p-mariadb-1",
+                                                               "cpuPercent":  "0.03%",
+                                                               "memoryUsage":  "86.19MiB / 1GiB",
+                                                               "memoryPercent":  "8.42%",
+                                                               "pids":  "24"
+                                                           }
+                                                       ]
+                                      },
+                        "exceptions":  {
+                                           "deadlockFound":  0,
+                                           "concurrencyFailure":  0,
+                                           "poolAcquirePendingLimit":  3994,
+                                           "poolAcquireTimeout":  0,
+                                           "webClientTimeout":  66,
+                                           "prematureClose":  93,
+                                           "r2dbcConcurrency":  0,
+                                           "r2dbcRollback":  0,
+                                           "outOfMemory":  0
+                                       },
+                        "classification":  "FIX_EFFECT_NOT_ISOLATED",
+                        "interpretationGuard":  [
+                                                    "pending.connections gauge may exceed max.pending.connections in Reactor Netty 1.0.28; do not infer queue internals from the gauge alone",
+                                                    "WEBCLIENT_POOL_DOMINANT requires active-at-limit, positive pending, and direct pending-limit failures",
+                                                    "This result does not prove that pool pressure is the only runtime bottleneck"
+                                                ]
+                    },
+    "diagnostic":  {
+                       "status":  "COMPLETED",
+                       "provider":  "doeng-external",
+                       "poolContract":  {
+                                            "expectedMaxConnections":  500,
+                                            "expectedMaxPendingConnections":  800,
+                                            "observedMaxConnections":  500,
+                                            "observedMaxPendingConnections":  800,
+                                            "valid":  true
+                                        },
+                       "timeline":  {
+                                        "rawRows":  52,
+                                        "failedRows":  1,
+                                        "activeSampleCount":  51,
+                                        "pendingSampleCount":  51,
+                                        "peakActiveConnections":  500,
+                                        "peakPendingConnections":  768,
+                                        "peakTotalConnections":  500,
+                                        "peakIdleConnections":  333,
+                                        "firstActiveLimit":  {
+                                                                 "timestamp":  "2026-08-06T05:41:04.3801811Z",
+                                                                 "epochMs":  1785994864380,
+                                                                 "value":  500
+                                                             },
+                                        "firstPending":  {
+                                                             "timestamp":  "2026-08-06T05:41:02.5877498Z",
+                                                             "epochMs":  1785994862587,
+                                                             "value":  83
+                                                         },
+                                        "firstPendingAtOrAboveConfiguredLimit":  null
+                                    },
+                       "client":  {
+                                      "attempts":  4775,
+                                      "http200":  658,
+                                      "successRate":  0.13780104712041885,
+                                      "http500":  197,
+                                      "clientTimeout":  3422,
+                                      "connectionError":  498,
+                                      "p50Ms":  8559,
+                                      "p95Ms":  9814,
+                                      "p99Ms":  9958,
+                                      "maxInFlight":  1870,
+                                      "accountingValid":  true,
+                                      "drainCompleted":  true,
+                                      "remainingBacklog":  {
+                                                               "aiInFlight":  0,
+                                                               "storageInFlight":  0
+                                                           }
+                                  },
+                       "stages":  {
+                                      "AI":  {
+                                                 "started":  3327,
+                                                 "succeeded":  1536,
+                                                 "failed":  247,
+                                                 "cancelled":  1544,
+                                                 "maxInFlight":  810,
+                                                 "p50":  3814.958842,
+                                                 "p95":  9005.812645,
+                                                 "p99":  11506.601855,
+                                                 "max":  17392.574759
+                                             },
+                                      "DB":  {
+                                                 "started":  812,
+                                                 "succeeded":  801,
+                                                 "failed":  0,
+                                                 "cancelled":  11,
+                                                 "maxInFlight":  96,
+                                                 "p50":  103.872251,
+                                                 "p95":  406.240694,
+                                                 "p99":  699.558322,
+                                                 "max":  886.128289
+                                             },
+                                      "DB_CLAIM":  {
+                                                       "started":  806,
+                                                       "succeeded":  806,
+                                                       "failed":  0,
+                                                       "cancelled":  0,
+                                                       "maxInFlight":  6,
+                                                       "p50":  2.803397,
+                                                       "p95":  89.028848,
+                                                       "p99":  127.692143,
+                                                       "max":  223.345427
+                                                   },
+                                      "DB_PICTURE_INSERT":  {
+                                                                "started":  204,
+                                                                "succeeded":  201,
+                                                                "failed":  0,
+                                                                "cancelled":  3,
+                                                                "maxInFlight":  2,
+                                                                "p50":  3.374634,
+                                                                "p95":  94.571733,
+                                                                "p99":  109.205396,
+                                                                "max":  128.658572
+                                                            },
+                                      "DB_PROGRESS_LOOKUP_OR_CREATE":  {
+                                                                           "started":  205,
+                                                                           "succeeded":  205,
+                                                                           "failed":  0,
+                                                                           "cancelled":  0,
+                                                                           "maxInFlight":  5,
+                                                                           "p50":  9.629361,
+                                                                           "p95":  113.07408,
+                                                                           "p99":  137.376016,
+                                                                           "max":  157.487855
+                                                                       },
+                                      "DB_PROGRESS_UPDATE":  {
+                                                                 "started":  205,
+                                                                 "succeeded":  204,
+                                                                 "failed":  0,
+                                                                 "cancelled":  1,
+                                                                 "maxInFlight":  8,
+                                                                 "p50":  80.579637,
+                                                                 "p95":  303.493016,
+                                                                 "p99":  380.501756,
+                                                                 "max":  385.751649
+                                                             },
+                                      "STORAGE":  {
+                                                      "started":  1533,
+                                                      "succeeded":  812,
+                                                      "failed":  45,
+                                                      "cancelled":  677,
+                                                      "maxInFlight":  233,
+                                                      "p50":  1424.97028,
+                                                      "p95":  7018.503714,
+                                                      "p99":  9594.155429,
+                                                      "max":  11707.141652
+                                                  },
+                                      "TOKEN":  {
+                                                    "started":  4282,
+                                                    "succeeded":  3327,
+                                                    "failed":  175,
+                                                    "cancelled":  780,
+                                                    "maxInFlight":  849,
+                                                    "p50":  2699.069328,
+                                                    "p95":  9514.967302,
+                                                    "p99":  11235.972122,
+                                                    "max":  14604.94731
+                                                }
+                                  },
+                       "consistency":  {
+                                           "status":  "PASS",
+                                           "missionCompletion":  201,
+                                           "progress":  111,
+                                           "picture":  224,
+                                           "orphanPicture":  0,
+                                           "duplicateMissionRunId":  0,
+                                           "atomicity":  "NOT_EXECUTED"
+                                       },
+                       "baselineA0B0":  {
+                                            "attempts":  5950,
+                                            "http200":  1100,
+                                            "http500":  2326,
+                                            "clientTimeout":  2524,
+                                            "successfulRps":  36.67,
+                                            "dbProgressUpdateFailed":  215,
+                                            "deadlockOccurrences":  860,
+                                            "rollbackOccurrences":  430,
+                                            "r2dbcPeakPending":  100,
+                                            "webClientPeakPending":  2039,
+                                            "webClientPendingLimitOccurrences":  4400,
+                                            "applicationCpuPercent":  209.18,
+                                            "applicationMemoryGiB":  2.295
+                                        },
+                       "r2dbcPool":  {
+                                         "available":  true,
+                                         "sampleCount":  44,
+                                         "status":  "AVAILABLE"
+                                     },
+                       "resources":  {
+                                         "sampleCount":  72,
+                                         "application":  [
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:40:55.1492293Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "16.46%",
+                                                                 "memoryUsage":  "367.2MiB / 3GiB",
+                                                                 "memoryPercent":  "11.95%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:40:58.3640414Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "207.27%",
+                                                                 "memoryUsage":  "585.6MiB / 3GiB",
+                                                                 "memoryPercent":  "19.06%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:01.4140619Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "200.10%",
+                                                                 "memoryUsage":  "823.8MiB / 3GiB",
+                                                                 "memoryPercent":  "26.82%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:04.6532734Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "196.28%",
+                                                                 "memoryUsage":  "930MiB / 3GiB",
+                                                                 "memoryPercent":  "30.27%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:07.8865598Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "205.10%",
+                                                                 "memoryUsage":  "1.383GiB / 3GiB",
+                                                                 "memoryPercent":  "46.11%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:11.2819322Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "220.02%",
+                                                                 "memoryUsage":  "1.639GiB / 3GiB",
+                                                                 "memoryPercent":  "54.65%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:15.0078215Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "211.75%",
+                                                                 "memoryUsage":  "1.896GiB / 3GiB",
+                                                                 "memoryPercent":  "63.19%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:18.4481682Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "196.92%",
+                                                                 "memoryUsage":  "1.871GiB / 3GiB",
+                                                                 "memoryPercent":  "62.36%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:21.5459534Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "207.67%",
+                                                                 "memoryUsage":  "2.06GiB / 3GiB",
+                                                                 "memoryPercent":  "68.66%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:24.8268328Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "200.06%",
+                                                                 "memoryUsage":  "2.16GiB / 3GiB",
+                                                                 "memoryPercent":  "72.01%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:28.0904889Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "196.91%",
+                                                                 "memoryUsage":  "2.201GiB / 3GiB",
+                                                                 "memoryPercent":  "73.35%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:31.2513011Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "199.22%",
+                                                                 "memoryUsage":  "2.264GiB / 3GiB",
+                                                                 "memoryPercent":  "75.46%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:34.4587721Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "101.18%",
+                                                                 "memoryUsage":  "2.228GiB / 3GiB",
+                                                                 "memoryPercent":  "74.28%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:37.6535189Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "9.54%",
+                                                                 "memoryUsage":  "2.227GiB / 3GiB",
+                                                                 "memoryPercent":  "74.22%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:40.8734512Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "7.03%",
+                                                                 "memoryUsage":  "2.217GiB / 3GiB",
+                                                                 "memoryPercent":  "73.90%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:44.0831366Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "6.04%",
+                                                                 "memoryUsage":  "2.217GiB / 3GiB",
+                                                                 "memoryPercent":  "73.92%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:47.2998652Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "4.47%",
+                                                                 "memoryUsage":  "2.217GiB / 3GiB",
+                                                                 "memoryPercent":  "73.91%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:50.5307887Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "2.38%",
+                                                                 "memoryUsage":  "2.217GiB / 3GiB",
+                                                                 "memoryPercent":  "73.91%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:53.7599742Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "8.56%",
+                                                                 "memoryUsage":  "2.218GiB / 3GiB",
+                                                                 "memoryPercent":  "73.92%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:41:56.9723046Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "7.80%",
+                                                                 "memoryUsage":  "2.217GiB / 3GiB",
+                                                                 "memoryPercent":  "73.91%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:42:00.1631873Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "3.02%",
+                                                                 "memoryUsage":  "2.218GiB / 3GiB",
+                                                                 "memoryPercent":  "73.92%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:42:03.1919965Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "3.32%",
+                                                                 "memoryUsage":  "2.218GiB / 3GiB",
+                                                                 "memoryPercent":  "73.93%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:42:06.4115942Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "9.76%",
+                                                                 "memoryUsage":  "2.218GiB / 3GiB",
+                                                                 "memoryPercent":  "73.92%",
+                                                                 "pids":  "33"
+                                                             },
+                                                             {
+                                                                 "timestampUtc":  "2026-08-06T05:42:09.6243759Z",
+                                                                 "name":  "doeng-exp148-d-flux-corrected-1",
+                                                                 "cpuPercent":  "0.57%",
+                                                                 "memoryUsage":  "2.218GiB / 3GiB",
+                                                                 "memoryPercent":  "73.93%",
+                                                                 "pids":  "33"
+                                                             }
+                                                         ],
+                                         "mock":  [
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:40:55.1492293Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "27.46%",
+                                                          "memoryUsage":  "28.89MiB / 1GiB",
+                                                          "memoryPercent":  "2.82%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:40:58.3640414Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "71.79%",
+                                                          "memoryUsage":  "110.8MiB / 1GiB",
+                                                          "memoryPercent":  "10.82%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:01.4140619Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "87.38%",
+                                                          "memoryUsage":  "182MiB / 1GiB",
+                                                          "memoryPercent":  "17.77%",
+                                                          "pids":  "14"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:04.6532734Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "122.67%",
+                                                          "memoryUsage":  "160.7MiB / 1GiB",
+                                                          "memoryPercent":  "15.69%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:07.8865598Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "86.05%",
+                                                          "memoryUsage":  "83.19MiB / 1GiB",
+                                                          "memoryPercent":  "8.12%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:11.2819322Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "23.68%",
+                                                          "memoryUsage":  "87.48MiB / 1GiB",
+                                                          "memoryPercent":  "8.54%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:15.0078215Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "57.03%",
+                                                          "memoryUsage":  "56.55MiB / 1GiB",
+                                                          "memoryPercent":  "5.52%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:18.4481682Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "95.41%",
+                                                          "memoryUsage":  "134.1MiB / 1GiB",
+                                                          "memoryPercent":  "13.09%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:21.5459534Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "93.87%",
+                                                          "memoryUsage":  "189.9MiB / 1GiB",
+                                                          "memoryPercent":  "18.54%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:24.8268328Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "121.02%",
+                                                          "memoryUsage":  "264.3MiB / 1GiB",
+                                                          "memoryPercent":  "25.81%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:28.0904889Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "107.23%",
+                                                          "memoryUsage":  "313.4MiB / 1GiB",
+                                                          "memoryPercent":  "30.60%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:31.2513011Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "115.73%",
+                                                          "memoryUsage":  "336.9MiB / 1GiB",
+                                                          "memoryPercent":  "32.90%",
+                                                          "pids":  "14"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:34.4587721Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "39.01%",
+                                                          "memoryUsage":  "214.1MiB / 1GiB",
+                                                          "memoryPercent":  "20.91%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:37.6535189Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "2.21%",
+                                                          "memoryUsage":  "213.6MiB / 1GiB",
+                                                          "memoryPercent":  "20.86%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:40.8734512Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "2.63%",
+                                                          "memoryUsage":  "213MiB / 1GiB",
+                                                          "memoryPercent":  "20.80%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:44.0831366Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "35.30%",
+                                                          "memoryUsage":  "213.5MiB / 1GiB",
+                                                          "memoryPercent":  "20.85%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:47.2998652Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "50.64%",
+                                                          "memoryUsage":  "206.3MiB / 1GiB",
+                                                          "memoryPercent":  "20.15%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:50.5307887Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "0.74%",
+                                                          "memoryUsage":  "205.8MiB / 1GiB",
+                                                          "memoryPercent":  "20.10%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:53.7599742Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "35.99%",
+                                                          "memoryUsage":  "206.1MiB / 1GiB",
+                                                          "memoryPercent":  "20.12%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:41:56.9723046Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "26.59%",
+                                                          "memoryUsage":  "205.9MiB / 1GiB",
+                                                          "memoryPercent":  "20.10%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:42:00.1631873Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "37.25%",
+                                                          "memoryUsage":  "206.3MiB / 1GiB",
+                                                          "memoryPercent":  "20.15%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:42:03.1919965Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "0.00%",
+                                                          "memoryUsage":  "206.1MiB / 1GiB",
+                                                          "memoryPercent":  "20.13%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:42:06.4115942Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "0.00%",
+                                                          "memoryUsage":  "205.7MiB / 1GiB",
+                                                          "memoryPercent":  "20.09%",
+                                                          "pids":  "7"
+                                                      },
+                                                      {
+                                                          "timestampUtc":  "2026-08-06T05:42:09.6243759Z",
+                                                          "name":  "doeng-exp148-d-experiment-mock-1",
+                                                          "cpuPercent":  "3.90%",
+                                                          "memoryUsage":  "207.8MiB / 1GiB",
+                                                          "memoryPercent":  "20.29%",
+                                                          "pids":  "8"
+                                                      }
+                                                  ],
+                                         "database":  [
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:40:55.1492293Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "3.94%",
+                                                              "memoryUsage":  "83.24MiB / 1GiB",
+                                                              "memoryPercent":  "8.13%",
+                                                              "pids":  "16"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:40:58.3640414Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "1.92%",
+                                                              "memoryUsage":  "83.26MiB / 1GiB",
+                                                              "memoryPercent":  "8.13%",
+                                                              "pids":  "17"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:01.4140619Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "8.46%",
+                                                              "memoryUsage":  "84.84MiB / 1GiB",
+                                                              "memoryPercent":  "8.29%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:04.6532734Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "12.41%",
+                                                              "memoryUsage":  "85.47MiB / 1GiB",
+                                                              "memoryPercent":  "8.35%",
+                                                              "pids":  "25"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:07.8865598Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "16.30%",
+                                                              "memoryUsage":  "85.88MiB / 1GiB",
+                                                              "memoryPercent":  "8.39%",
+                                                              "pids":  "25"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:11.2819322Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.88%",
+                                                              "memoryUsage":  "85.67MiB / 1GiB",
+                                                              "memoryPercent":  "8.37%",
+                                                              "pids":  "25"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:15.0078215Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "4.62%",
+                                                              "memoryUsage":  "85.73MiB / 1GiB",
+                                                              "memoryPercent":  "8.37%",
+                                                              "pids":  "25"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:18.4481682Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "1.87%",
+                                                              "memoryUsage":  "85.73MiB / 1GiB",
+                                                              "memoryPercent":  "8.37%",
+                                                              "pids":  "25"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:21.5459534Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.25%",
+                                                              "memoryUsage":  "85.75MiB / 1GiB",
+                                                              "memoryPercent":  "8.37%",
+                                                              "pids":  "25"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:24.8268328Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "5.68%",
+                                                              "memoryUsage":  "85.75MiB / 1GiB",
+                                                              "memoryPercent":  "8.37%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:28.0904889Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "12.64%",
+                                                              "memoryUsage":  "85.84MiB / 1GiB",
+                                                              "memoryPercent":  "8.38%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:31.2513011Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "14.66%",
+                                                              "memoryUsage":  "86.19MiB / 1GiB",
+                                                              "memoryPercent":  "8.42%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:34.4587721Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "4.20%",
+                                                              "memoryUsage":  "85.93MiB / 1GiB",
+                                                              "memoryPercent":  "8.39%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:37.6535189Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.01%",
+                                                              "memoryUsage":  "85.97MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:40.8734512Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.09%",
+                                                              "memoryUsage":  "86.27MiB / 1GiB",
+                                                              "memoryPercent":  "8.43%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:44.0831366Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.04%",
+                                                              "memoryUsage":  "85.98MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:47.2998652Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.02%",
+                                                              "memoryUsage":  "86MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:50.5307887Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "3.61%",
+                                                              "memoryUsage":  "86.08MiB / 1GiB",
+                                                              "memoryPercent":  "8.41%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:53.7599742Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.04%",
+                                                              "memoryUsage":  "86MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:41:56.9723046Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.01%",
+                                                              "memoryUsage":  "85.98MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:42:00.1631873Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.02%",
+                                                              "memoryUsage":  "85.98MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:42:03.1919965Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.03%",
+                                                              "memoryUsage":  "85.99MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:42:06.4115942Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.03%",
+                                                              "memoryUsage":  "85.98MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          },
+                                                          {
+                                                              "timestampUtc":  "2026-08-06T05:42:09.6243759Z",
+                                                              "name":  "doeng-exp148-d-mariadb-1",
+                                                              "cpuPercent":  "0.03%",
+                                                              "memoryUsage":  "85.98MiB / 1GiB",
+                                                              "memoryPercent":  "8.40%",
+                                                              "pids":  "24"
+                                                          }
+                                                      ]
+                                     },
+                       "exceptions":  {
+                                          "deadlockFound":  0,
+                                          "concurrencyFailure":  0,
+                                          "poolAcquirePendingLimit":  764,
+                                          "poolAcquireTimeout":  0,
+                                          "webClientTimeout":  0,
+                                          "prematureClose":  255,
+                                          "r2dbcConcurrency":  0,
+                                          "r2dbcRollback":  0,
+                                          "outOfMemory":  0
+                                      },
+                       "classification":  "DB_DEADLOCK_REDUCED_NOT_ELIMINATED",
+                       "interpretationGuard":  [
+                                                   "pending.connections gauge may exceed max.pending.connections in Reactor Netty 1.0.28; do not infer queue internals from the gauge alone",
+                                                   "WEBCLIENT_POOL_DOMINANT requires active-at-limit, positive pending, and direct pending-limit failures",
+                                                   "This result does not prove that pool pressure is the only runtime bottleneck"
+                                               ]
+                   },
+    "observationOnMinusOff":  {
+                                  "successfulRps":  4.1000000000000014,
+                                  "http200":  123,
+                                  "http500":  -1338,
+                                  "timeout":  553,
+                                  "connectionError":  492,
+                                  "successRate":  0.029610956119407728,
+                                  "p50":  1465,
+                                  "p95":  2,
+                                  "p99":  -92,
+                                  "appCpuPeak":  null,
+                                  "appMemoryPeak":  null,
+                                  "webClientPending":  -575,
+                                  "pendingLimit":  -3230,
+                                  "r2dbcPending":  null
+                              },
+    "classification":  "OBSERVATION_OVERHEAD_SEVERE",
+    "atomicityClassification":  "SEE_PHASE_1_TEST",
+    "additionalRuns":  0
+}

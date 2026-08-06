@@ -1,0 +1,5 @@
+Full test command: docker run --rm exp148-builder ./gradlew test --no-daemon
+Result: FAILED (47 tests completed, 1 failed, 2 skipped)
+Suite failure: CloseAcquireRaceAttributionTest > attributesEightCloseAcquireRacesWithoutChangingProductionLifecycle(), assertion failure at CloseAcquireRaceAttributionTest.java:111
+Exit code: 1
+This suite failure is preserved as an existing test-suite failure; it is not reclassified as an Exp148 atomicity failure.

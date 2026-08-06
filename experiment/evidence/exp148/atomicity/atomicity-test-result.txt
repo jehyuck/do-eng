@@ -1,0 +1,10 @@
+Exp148 Phase 1 atomicity test
+Command: docker run --rm --add-host=host.docker.internal:host-gateway -e DOENG_ATOMICITY_DB_URL=r2dbc:mariadb://host.docker.internal:13306/doeng -e DOENG_ATOMICITY_DB_USER=test -e DOENG_ATOMICITY_DB_PASSWORD=test exp148-builder ./gradlew test --no-daemon --tests com.example.doenggameflux.component.MissionDatabaseServiceAtomicityIntegrationTest
+Environment: Docker JDK 11 builder; MariaDB 10.11 external test container
+Test class: MissionDatabaseServiceAtomicityIntegrationTest
+Cases: pictureFailureRollsBackClaimProgressAndPicture; successfulCompletionAndDuplicateAreIdempotent
+Result: BUILD SUCCESSFUL; 2/2 test cases passed
+Failure path: publisher error, claim rollback, progress rollback, picture absence all PASS
+Success path: claim/progress/picture PASS; Mono<Boolean>=true
+Idempotency: first=true, second=false; completion=1; picture=1
+Executed SHA: ec4e5a5 (test commit; final execution source dd07a28)

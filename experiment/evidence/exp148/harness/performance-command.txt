@@ -1,0 +1,1 @@
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File experiment/scripts/run-exp148-observation-calibration.ps1 -ExpectedCommit dd07a28ece81574b4830fa1398eedc5e8b8bbc90 -ExecutionMode EXECUTE

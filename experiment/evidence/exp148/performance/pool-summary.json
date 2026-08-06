@@ -1,0 +1,25 @@
+﻿{
+    "rawRows":  63,
+    "failedRows":  0,
+    "activeSampleCount":  63,
+    "pendingSampleCount":  63,
+    "peakActiveConnections":  500,
+    "peakPendingConnections":  1343,
+    "peakTotalConnections":  500,
+    "peakIdleConnections":  375,
+    "firstActiveLimit":  {
+                             "timestamp":  "2026-08-06T05:36:37.8455961Z",
+                             "epochMs":  1785994597845,
+                             "value":  500
+                         },
+    "firstPending":  {
+                         "timestamp":  "2026-08-06T05:36:35.6065150Z",
+                         "epochMs":  1785994595606,
+                         "value":  201
+                     },
+    "firstPendingAtOrAboveConfiguredLimit":  {
+                                                 "timestamp":  "2026-08-06T05:36:42.3265380Z",
+                                                 "epochMs":  1785994602326,
+                                                 "value":  1049
+                                             }
+}

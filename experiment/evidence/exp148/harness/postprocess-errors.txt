@@ -1,0 +1,4 @@
+P: PowerShell completion-marker expression attempted to invoke `if` as a command after the core and cleanup had completed.
+D: summarizer strict-property access failed on a sparse stage snapshot without a stages property after the core and cleanup had completed.
+Recovery: summarizer was made tolerant of sparse rows; derived D summary was regenerated from preserved raw without additional load.
+Original execution-status files remain STOPPED and were not rewritten.
