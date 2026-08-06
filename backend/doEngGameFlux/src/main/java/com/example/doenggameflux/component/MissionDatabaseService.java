@@ -66,18 +66,22 @@ public class MissionDatabaseService {
 
         return stageObservation.observe("DB_PROGRESS_LOOKUP_OR_CREATE", progressLookupOrCreate)
                 .flatMap(progress -> {
+                    Mono<Integer> progressUpdate = progressRepository.updateProgress(
+                            completedAt,
+                            progress.getId());
                     Mono<Picture> pictureInsert = pictureRepository.save(
                             Picture.builder()
                                     .progressId(progress.getId())
                                     .image(objectKey)
                                     .createdAt(completedAt)
                                     .build());
-                    Mono<Integer> progressUpdate = progressRepository.updateProgress(
-                            completedAt,
-                            progress.getId());
 
-                    return stageObservation.observe("DB_PICTURE_INSERT", pictureInsert)
-                            .then(stageObservation.observe("DB_PROGRESS_UPDATE", progressUpdate))
+                    // Acquire the exclusive lock on the shared progress row before
+                    // inserting the child picture row. This preserves the existing
+                    // transaction boundary while avoiding the prior child-insert ->
+                    // parent-update lock conversion pattern under concurrent missions.
+                    return stageObservation.observe("DB_PROGRESS_UPDATE", progressUpdate)
+                            .then(stageObservation.observe("DB_PICTURE_INSERT", pictureInsert))
                             .thenReturn(true);
                 });
     }
