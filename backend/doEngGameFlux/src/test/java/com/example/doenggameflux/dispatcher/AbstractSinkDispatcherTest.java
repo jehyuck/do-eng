@@ -188,7 +188,8 @@ class AbstractSinkDispatcherTest {
                 int current = active.incrementAndGet();
                 maxActive.accumulateAndGet(current, Math::max);
                 return invoker.apply(input)
-                        .doFinally(signal -> active.decrementAndGet());
+                        .doOnTerminate(active::decrementAndGet)
+                        .doOnCancel(active::decrementAndGet);
             });
         }
     }

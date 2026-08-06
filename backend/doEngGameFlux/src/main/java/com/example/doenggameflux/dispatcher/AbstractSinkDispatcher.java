@@ -130,7 +130,11 @@ public abstract class AbstractSinkDispatcher<I, O>
                     emitError(work, normalized);
                     return Mono.empty();
                 })
-                .doFinally(ignored -> active.decrementAndGet())
+                // Decrement before the terminal signal reaches flatMap so the
+                // next slot cannot be observed while the previous work is
+                // still counted as active by downstream instrumentation.
+                .doOnTerminate(active::decrementAndGet)
+                .doOnCancel(active::decrementAndGet)
                 .then();
     }
 
