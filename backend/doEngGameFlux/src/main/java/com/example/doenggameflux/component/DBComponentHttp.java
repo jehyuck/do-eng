@@ -1,6 +1,8 @@
 package com.example.doenggameflux.component;
 
-import com.example.doenggameflux.s3.MissionImageStorage;
+import com.example.doenggameflux.dispatcher.MissionExecutionContext;
+import com.example.doenggameflux.s3.StorageDispatchRequest;
+import com.example.doenggameflux.s3.StorageDispatcher;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +12,13 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class DBComponentHttp {
-    private final MissionImageStorage missionImageStorage;
+    private final StorageDispatcher storageDispatcher;
     private final MissionDatabaseService missionDatabaseService;
     private final StageObservation stageObservation;
     private final AiOutboundAdmissionGate admissionGate;
 
     public Mono<String> saveData(
+            MissionExecutionContext context,
             byte[] image,
             long sceneId,
             long memberId,
@@ -27,7 +30,9 @@ public class DBComponentHttp {
 
         return stageObservation.observe("STORAGE", admissionGate.executeStage(
                         OutboundStage.STORAGE,
-                        () -> missionImageStorage.upload(objectKey, image)))
+                        () -> storageDispatcher.dispatch(
+                                context,
+                                new StorageDispatchRequest(objectKey, image))))
                 .flatMap(savedObjectKey ->
                         stageObservation.observe("DB", missionDatabaseService.saveCompletionIfFirst(
                                 savedObjectKey,
