@@ -13,3 +13,14 @@ doeng:
   experiment:
     metrics:
       enabled: true
+  dispatcher:
+    global-deadline: 10s
+    token:
+      concurrency: 100
+      queue-capacity: 2000
+    ai:
+      concurrency: 400
+      queue-capacity: 4000
+    storage:
+      concurrency: 100
+      queue-capacity: 2000
