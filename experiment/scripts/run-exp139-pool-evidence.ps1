@@ -191,9 +191,11 @@ if (-not (Test-Path -LiteralPath $summarizer)) { throw "Exp139 summarizer not fo
 if (-not (Test-Path -LiteralPath $fixture)) { throw "Fixture not found" }
 
 $gitSafe = "safe.directory=$($repo.Replace('\', '/'))"
-$head = (& git -c $gitSafe rev-parse HEAD).Trim()
-$branch = (& git -c $gitSafe branch --show-current).Trim()
-$dirty = @(& git -c $gitSafe status --porcelain)
+$headOutput = @(& git -C $repo -c $gitSafe rev-parse HEAD 2>$null)
+$branchOutput = @(& git -C $repo -c $gitSafe branch --show-current 2>$null)
+$head = if ($headOutput.Count -gt 0) { [string]$headOutput[0].Trim() } else { "" }
+$branch = if ($branchOutput.Count -gt 0) { [string]$branchOutput[0].Trim() } else { "DETACHED" }
+$dirty = @(& git -C $repo -c $gitSafe status --porcelain 2>$null)
 if ($head -ne $ExpectedCommit) {
     throw "Commit mismatch: expected $ExpectedCommit, actual $head"
 }
