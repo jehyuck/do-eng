@@ -1,0 +1,40 @@
+{
+  "experiment": "Exp154",
+  "generatedAt": "2026-08-07T04:12:17.218730Z",
+  "groups": [
+    {"cell":"A","run":"A1","concurrency":1,"operationCount":10,"successCount":10,"failureCount":0,"p50Nanos":2032431,"p95Nanos":2323616,"maxNanos":2323616,"throughputOpsPerSec":400.485},
+    {"cell":"A","run":"A1","concurrency":2,"operationCount":20,"successCount":20,"failureCount":0,"p50Nanos":1415474,"p95Nanos":2285137,"maxNanos":2398426,"throughputOpsPerSec":301.006},
+    {"cell":"A","run":"A1","concurrency":4,"operationCount":40,"successCount":40,"failureCount":0,"p50Nanos":1445742,"p95Nanos":2132360,"maxNanos":2139070,"throughputOpsPerSec":2008.903},
+    {"cell":"A","run":"A1","concurrency":8,"operationCount":80,"successCount":80,"failureCount":0,"p50Nanos":1154341,"p95Nanos":2294095,"maxNanos":2364103,"throughputOpsPerSec":3601.515},
+    {"cell":"A","run":"A2","concurrency":1,"operationCount":10,"successCount":10,"failureCount":0,"p50Nanos":286476,"p95Nanos":361542,"maxNanos":361542,"throughputOpsPerSec":2608.375},
+    {"cell":"A","run":"A2","concurrency":2,"operationCount":20,"successCount":20,"failureCount":0,"p50Nanos":303999,"p95Nanos":10915696,"maxNanos":10949154,"throughputOpsPerSec":1333.972},
+    {"cell":"A","run":"A2","concurrency":4,"operationCount":40,"successCount":40,"failureCount":0,"p50Nanos":283677,"p95Nanos":333807,"maxNanos":433154,"throughputOpsPerSec":8783.439},
+    {"cell":"A","run":"A2","concurrency":8,"operationCount":80,"successCount":80,"failureCount":0,"p50Nanos":297071,"p95Nanos":4106719,"maxNanos":4344630,"throughputOpsPerSec":7023.674},
+    {"cell":"A","run":"A3","concurrency":1,"operationCount":10,"successCount":10,"failureCount":0,"p50Nanos":280595,"p95Nanos":326564,"maxNanos":326564,"throughputOpsPerSec":2474.636},
+    {"cell":"A","run":"A3","concurrency":2,"operationCount":20,"successCount":20,"failureCount":0,"p50Nanos":289171,"p95Nanos":314362,"maxNanos":381644,"throughputOpsPerSec":4887.047},
+    {"cell":"A","run":"A3","concurrency":4,"operationCount":40,"successCount":40,"failureCount":0,"p50Nanos":288927,"p95Nanos":328047,"maxNanos":359123,"throughputOpsPerSec":8918.713},
+    {"cell":"A","run":"A3","concurrency":8,"operationCount":80,"successCount":80,"failureCount":0,"p50Nanos":285987,"p95Nanos":690751,"maxNanos":919118,"throughputOpsPerSec":9432.617},
+    {"cell":"B","run":"B1","concurrency":1,"operationCount":10,"successCount":10,"failureCount":0,"p50Nanos":363919,"p95Nanos":514551,"maxNanos":514551,"throughputOpsPerSec":1318.038},
+    {"cell":"B","run":"B1","concurrency":2,"operationCount":20,"successCount":20,"failureCount":0,"p50Nanos":397576,"p95Nanos":7184456,"maxNanos":7442555,"throughputOpsPerSec":1502.244},
+    {"cell":"B","run":"B1","concurrency":4,"operationCount":40,"successCount":40,"failureCount":0,"p50Nanos":401553,"p95Nanos":1424769,"maxNanos":1744564,"throughputOpsPerSec":2700.550},
+    {"cell":"B","run":"B1","concurrency":8,"operationCount":80,"successCount":80,"failureCount":0,"p50Nanos":485737,"p95Nanos":1331253,"maxNanos":5452070,"throughputOpsPerSec":3558.077},
+    {"cell":"B","run":"B2","concurrency":1,"operationCount":10,"successCount":10,"failureCount":0,"p50Nanos":711605,"p95Nanos":785242,"maxNanos":785242,"throughputOpsPerSec":823.709},
+    {"cell":"B","run":"B2","concurrency":2,"operationCount":20,"successCount":20,"failureCount":0,"p50Nanos":649588,"p95Nanos":717603,"maxNanos":720983,"throughputOpsPerSec":2279.481},
+    {"cell":"B","run":"B2","concurrency":4,"operationCount":40,"successCount":40,"failureCount":0,"p50Nanos":620811,"p95Nanos":774357,"maxNanos":803621,"throughputOpsPerSec":4624.454},
+    {"cell":"B","run":"B2","concurrency":8,"operationCount":80,"successCount":80,"failureCount":0,"p50Nanos":298147,"p95Nanos":568312,"maxNanos":1052395,"throughputOpsPerSec":9095.213},
+    {"cell":"B","run":"B3","concurrency":1,"operationCount":10,"successCount":10,"failureCount":0,"p50Nanos":276987,"p95Nanos":308595,"maxNanos":308595,"throughputOpsPerSec":1696.518},
+    {"cell":"B","run":"B3","concurrency":2,"operationCount":20,"successCount":20,"failureCount":0,"p50Nanos":296362,"p95Nanos":8627139,"maxNanos":8639510,"throughputOpsPerSec":1637.907},
+    {"cell":"B","run":"B3","concurrency":4,"operationCount":40,"successCount":40,"failureCount":0,"p50Nanos":275078,"p95Nanos":297796,"maxNanos":342514,"throughputOpsPerSec":11030.743},
+    {"cell":"B","run":"B3","concurrency":8,"operationCount":80,"successCount":80,"failureCount":0,"p50Nanos":289109,"p95Nanos":9046039,"maxNanos":9357790,"throughputOpsPerSec":5194.158}
+  ],
+  "batchWallClockMedianNanos": {
+    "A-1": 428176,
+    "A-2": 450161,
+    "A-4": 490469,
+    "A-8": 919559,
+    "B-1": 778118,
+    "B-2": 675140,
+    "B-4": 868001,
+    "B-8": 825149
+  }
+}
