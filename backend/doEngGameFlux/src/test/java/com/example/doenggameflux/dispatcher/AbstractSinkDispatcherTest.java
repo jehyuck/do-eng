@@ -9,6 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +59,38 @@ class AbstractSinkDispatcherTest {
         await(() -> values.size() == 5);
         assertEquals(2, dispatcher.maxActive.get());
         subscriptions.forEach(Disposable::dispose);
+    }
+
+    @Test
+    void serializesConcurrentProducerEmissions() throws Exception {
+        int producerCount = 32;
+        TestDispatcher dispatcher = dispatcher(producerCount, producerCount * 2);
+        ExecutorService executor = Executors.newFixedThreadPool(producerCount);
+        CountDownLatch ready = new CountDownLatch(producerCount);
+        CountDownLatch start = new CountDownLatch(1);
+        List<Future<Integer>> futures = new ArrayList<>();
+
+        try {
+            for (int i = 0; i < producerCount; i++) {
+                final int value = i;
+                futures.add(executor.submit(() -> {
+                    ready.countDown();
+                    if (!start.await(2, TimeUnit.SECONDS)) {
+                        throw new IllegalStateException("concurrent producer start timed out");
+                    }
+                    return dispatcher.dispatch(context("concurrent-" + value), value).block();
+                }));
+            }
+
+            assertTrue(ready.await(2, TimeUnit.SECONDS));
+            start.countDown();
+
+            for (int i = 0; i < producerCount; i++) {
+                assertEquals(i, futures.get(i).get(2, TimeUnit.SECONDS));
+            }
+        } finally {
+            executor.shutdownNow();
+        }
     }
 
     @Test
