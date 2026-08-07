@@ -141,3 +141,56 @@ ENVIRONMENT_BLOCKED
 PORTFOLIO_USAGE:
 NON_PERFORMANCE_CLAIMS_ONLY
 ```
+
+## 12. Canonical Override — Exp153 Final Result
+
+The earlier `NOT EXECUTED / ENVIRONMENT_BLOCKED` entry is superseded by the completed controlled A/B evidence.
+
+```text
+EXP153_CONTROLLED_AB:
+COMPLETED
+
+EXP153_VALID_A_RUNS:
+3
+
+EXP153_VALID_B_RUNS:
+3
+
+EXP153_SUCCESS_RATE:
+A 100% / B 100%
+
+EXP153_SUCCESSFUL_REQUEST_RATE:
+A 1 req/s / B 1 req/s
+
+EXP153_LATENCY_MEDIAN:
+A p50 2145 ms / p95 2214 ms / p99 3016 ms
+B p50 2149 ms / p95 2205 ms / p99 3253 ms
+
+EXP153_FINAL_DECISION:
+NO_CLEAR_BENEFIT
+
+EXP153_PERFORMANCE_CLAIM:
+NOT ESTABLISHED
+
+SINK_PRODUCTION_ADOPTION:
+DEFERRED
+
+PORTFOLIO_USAGE:
+IMPLEMENTATION_AND_DECISION_PROCESS_ONLY
+```
+
+## 13. Updated Claim-Evidence Matrix
+
+| Claim | Status | Usage |
+|---|---|---|
+| 동일 조건 A/B 실행 | PASS | INTERVIEW_ALLOWED |
+| A/B 각 3회 유효 run 확보 | PASS | INTERVIEW_ALLOWED |
+| 성공률 차이 | NO DIFFERENCE | FACT_ALLOWED |
+| 처리율 개선 | NOT ESTABLISHED | PROHIBITED |
+| p95 개선 | NOT ESTABLISHED | PROHIBITED |
+| tail latency 안정성 개선 | NOT ESTABLISHED | PROHIBITED |
+| 기존 reactive chain 대비 우수성 | NOT ESTABLISHED | PROHIBITED |
+| Sink Dispatcher 명확한 회귀 | NOT ESTABLISHED | PROHIBITED |
+| 최종 판단 | NO_CLEAR_BENEFIT | PORTFOLIO_ALLOWED |
+
+허용되는 결론은 bounded Sink Dispatcher 구현·검증, 동일 조건 A/B 3회 수행, 성공률·처리율 동일, 일관된 latency 개선 부재에 따른 production 채택 보류까지다. 처리량·응답 속도·tail 안정성 개선 또는 기존 reactive chain 대비 우수성은 주장하지 않는다.

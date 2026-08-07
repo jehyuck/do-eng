@@ -1,5 +1,11 @@
 # Exp153 Environment-Blocked Closure
 
+> SUPERSEDED FOR FINAL EXP153 STATUS
+>
+> 이 문서는 초기 실행 차단 이력이다. 최종 Exp153 상태는
+> `experiment/docs/experiment-1-53-controlled-ab-result.md` 및
+> `experiment/docs/experiment-1-52-153-canonical-result.md`를 따른다.
+
 ## 구현 상태
 
 - Sink Dispatcher 구현: PASS
