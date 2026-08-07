@@ -1,0 +1,19 @@
+{
+  "experiment": "Exp163",
+  "validRun": "SINK-C400-Q6-EDGE-R1",
+  "startHead": "188b0d32308771596993c893e4369871dc84d806",
+  "sourceProvenanceGate": "PASS",
+  "serializationUnitTest": "PASS",
+  "singleVariable": "TOKEN/STORAGE queue 300 -> 600",
+  "configuration": {"provider": {"token": "100/160", "ai": "600/960", "storage": "100/160"}, "concurrency": {"token": 100, "ai": 400, "storage": 100}, "queue": {"token": 600, "ai": 1200, "storage": 600}, "admission": "OFF"},
+  "baselineExp162": {"acceptedPerSecond": 79.33, "overflow": 2180, "tokenOverflow": 1869, "aiOverflow": 0, "storageOverflow": 311, "http504": 1016},
+  "outcome": {"attempts": 5964, "http200": 2682, "acceptedPerSecond": 89.4, "successRatePercent": 44.97, "http200P95": 11068, "overallP95": 12812, "http500": 71, "http503": 740, "http504": 2470, "clientDeadlineAbort": 1, "connectRefused": 0, "maxInFlight": 2094},
+  "emission": {"FAIL_NON_SERIALIZED": 0, "FAIL_OVERFLOW": 740, "token": 680, "ai": 60, "storage": 0, "other": 0},
+  "dispatcher": {"token": {"queuePeak": 600, "queueFinal": 0, "activePeak": 100}, "ai": {"queuePeak": 1200, "queueFinal": 0, "activePeak": 400}, "storage": {"queuePeak": 391, "queueFinal": 0, "activePeak": 100}, "queueWait": "NOT_AVAILABLE"},
+  "drain": {"completed": true, "timeToZeroMs": 10016},
+  "resources": {"cpuAvgPercent": 62.91, "cpuPeakPercent": 204.12, "memoryPeak": "2.323GiB / 3GiB", "oom": false, "restart": false},
+  "providerTimeline": "NOT_AVAILABLE",
+  "backlogRelocation": "SUPPORTED",
+  "edgeQueueCapacitySignal": "NOT_SUPPORTED",
+  "nextExperimentClass": "EDGE CONCURRENCY / SERVICE CAPACITY REVIEW"
+}
