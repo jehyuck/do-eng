@@ -1,0 +1,90 @@
+﻿{
+    "experiment":  "Exp160",
+    "controlReuse":  true,
+    "controlRun":  "C600-100-R1",
+    "control":  {
+                    "acceptedPerLoadSecond":  134.27,
+                    "http200P95":  13265,
+                    "http500":  1873,
+                    "timeout":  66,
+                    "connectionError":  0
+                },
+    "sink":  {
+                 "runId":  "SINK-C400-Q3",
+                 "attempts":  3146,
+                 "accepted":  144,
+                 "acceptedPerLoadSecond":  4.8,
+                 "successRate":  4.58,
+                 "http200P50":  11102,
+                 "http200P95":  14837,
+                 "http200P99":  14984,
+                 "http200Max":  15037,
+                 "http500":  19,
+                 "timeout":  575,
+                 "connectionError":  1654,
+                 "maxInFlight":  857,
+                 "dispatcher":  {
+                                    "token":  {
+                                                  "samples":  43,
+                                                  "queuePeak":  0,
+                                                  "queueFinal":  0.0,
+                                                  "activePeak":  35,
+                                                  "activeFinal":  0.0,
+                                                  "queueWaitP50":  "NOT_AVAILABLE",
+                                                  "queueWaitP95":  "NOT_AVAILABLE",
+                                                  "queueWaitP99":  "NOT_AVAILABLE",
+                                                  "queueWaitMaxSeconds":  3.668889493,
+                                                  "deadlinePhases":  "NOT_AVAILABLE",
+                                                  "errorSamples":  10
+                                              },
+                                    "ai":  {
+                                               "samples":  43,
+                                               "queuePeak":  0,
+                                               "queueFinal":  0.0,
+                                               "activePeak":  189,
+                                               "activeFinal":  0.0,
+                                               "queueWaitP50":  "NOT_AVAILABLE",
+                                               "queueWaitP95":  "NOT_AVAILABLE",
+                                               "queueWaitP99":  "NOT_AVAILABLE",
+                                               "queueWaitMaxSeconds":  0.252058076,
+                                               "deadlinePhases":  "NOT_AVAILABLE",
+                                               "errorSamples":  10
+                                           },
+                                    "storage":  {
+                                                    "samples":  43,
+                                                    "queuePeak":  0,
+                                                    "queueFinal":  0.0,
+                                                    "activePeak":  42,
+                                                    "activeFinal":  0.0,
+                                                    "queueWaitP50":  "NOT_AVAILABLE",
+                                                    "queueWaitP95":  "NOT_AVAILABLE",
+                                                    "queueWaitP99":  "NOT_AVAILABLE",
+                                                    "queueWaitMaxSeconds":  0.003638355,
+                                                    "deadlinePhases":  "NOT_AVAILABLE",
+                                                    "errorSamples":  10
+                                                }
+                                },
+                 "providerTimeline":  "NOT_AVAILABLE",
+                 "drainCompleted":  true,
+                 "drainTimeToZeroMs":  8000,
+                 "initialAiInFlight":  105,
+                 "finalAiInFlight":  0,
+                 "stageMaxInFlight":  [
+                                          {
+                                              "stage":  "AI",
+                                              "maxInFlight":  178,
+                                              "inFlight":  0
+                                          },
+                                          {
+                                              "stage":  "STORAGE",
+                                              "maxInFlight":  45,
+                                              "inFlight":  0
+                                          },
+                                          {
+                                              "stage":  "TOKEN",
+                                              "maxInFlight":  225,
+                                              "inFlight":  0
+                                          }
+                                      ]
+             }
+}
