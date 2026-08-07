@@ -1,0 +1,68 @@
+{
+  "loadStoppedAt": "2026-08-07T13:29:43.569Z",
+  "configuredSeconds": 15,
+  "sampleCount": 16,
+  "initial": {
+    "phase": "load-stop",
+    "capturedAt": "2026-08-07T13:29:43.569Z",
+    "elapsedMs": 0,
+    "ok": true,
+    "status": 200,
+    "metrics": {
+      "aiInFlight": 297,
+      "aiMaxInFlight": 400,
+      "aiCompleted": 3670,
+      "storageInFlight": 21,
+      "storageMaxInFlight": 46,
+      "storageCompleted": 2017,
+      "strictAuth": false,
+      "authRegisteredUsers": 0,
+      "authIssuedTokens": 0,
+      "authLoginCompleted": 0,
+      "authLoginFailures": 0,
+      "resetGeneration": 0,
+      "aiLifecycleEventCount": 28233,
+      "requestCounts": {
+        "GET /api/member/ai": 4711,
+        "POST /analyze/face": 3967,
+        "PUT /storage/object": 2092
+      }
+    },
+    "error": null
+  },
+  "timeToZeroMs": 7013,
+  "drainCompleted": true,
+  "remainingBacklog": {
+    "aiInFlight": 0,
+    "storageInFlight": 0
+  },
+  "terminal": {
+    "phase": "drain",
+    "sample": 15,
+    "capturedAt": "2026-08-07T13:29:58.571Z",
+    "elapsedMs": 15002,
+    "ok": true,
+    "status": 200,
+    "metrics": {
+      "aiInFlight": 0,
+      "aiMaxInFlight": 400,
+      "aiCompleted": 4805,
+      "storageInFlight": 0,
+      "storageMaxInFlight": 51,
+      "storageCompleted": 3487,
+      "strictAuth": false,
+      "authRegisteredUsers": 0,
+      "authIssuedTokens": 0,
+      "authLoginCompleted": 0,
+      "authLoginFailures": 0,
+      "resetGeneration": 0,
+      "aiLifecycleEventCount": 35282,
+      "requestCounts": {
+        "GET /api/member/ai": 4805,
+        "POST /analyze/face": 4805,
+        "PUT /storage/object": 3541
+      }
+    },
+    "error": null
+  }
+}

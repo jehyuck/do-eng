@@ -1,0 +1,275 @@
+﻿{
+    "capturedAt":  "2026-08-07T13:32:36.7235251Z",
+    "dispatchers":  {
+                        "token":  {
+                                      "queue.depth":  {
+                                                          "name":  "doeng.dispatcher.queue.depth",
+                                                          "description":  "Current bounded dispatcher queue depth",
+                                                          "baseUnit":  null,
+                                                          "measurements":  [
+                                                                               {
+                                                                                   "statistic":  "VALUE",
+                                                                                   "value":  0.0
+                                                                               }
+                                                                           ],
+                                                          "availableTags":  [
+
+                                                                            ]
+                                                      },
+                                      "active":  {
+                                                     "name":  "doeng.dispatcher.active",
+                                                     "description":  "Current downstream invocations owned by the dispatcher",
+                                                     "baseUnit":  null,
+                                                     "measurements":  [
+                                                                          {
+                                                                              "statistic":  "VALUE",
+                                                                              "value":  0.0
+                                                                          }
+                                                                      ],
+                                                     "availableTags":  [
+
+                                                                       ]
+                                                 },
+                                      "events":  {
+                                                     "name":  "doeng.dispatcher.events",
+                                                     "description":  null,
+                                                     "baseUnit":  null,
+                                                     "measurements":  [
+                                                                          {
+                                                                              "statistic":  "COUNT",
+                                                                              "value":  13986.0
+                                                                          }
+                                                                      ],
+                                                     "availableTags":  [
+                                                                           {
+                                                                               "tag":  "detail",
+                                                                               "values":  [
+                                                                                              "queue_full",
+                                                                                              "WebClientRequestException",
+                                                                                              "none"
+                                                                                          ]
+                                                                           },
+                                                                           {
+                                                                               "tag":  "event",
+                                                                               "values":  [
+                                                                                              "dequeued",
+                                                                                              "completed",
+                                                                                              "failed",
+                                                                                              "enqueued",
+                                                                                              "rejected"
+                                                                                          ]
+                                                                           }
+                                                                       ]
+                                                 },
+                                      "queue.wait":  {
+                                                         "name":  "doeng.dispatcher.queue.wait",
+                                                         "description":  null,
+                                                         "baseUnit":  "seconds",
+                                                         "measurements":  [
+                                                                              {
+                                                                                  "statistic":  "COUNT",
+                                                                                  "value":  4039.0
+                                                                              },
+                                                                              {
+                                                                                  "statistic":  "TOTAL_TIME",
+                                                                                  "value":  5042.625551108
+                                                                              },
+                                                                              {
+                                                                                  "statistic":  "MAX",
+                                                                                  "value":  6.400644714
+                                                                              }
+                                                                          ],
+                                                         "availableTags":  [
+
+                                                                           ]
+                                                     },
+                                      "deadline":  {
+                                                       "status":  "NOT_AVAILABLE",
+                                                       "error":  "원격 서버에서 (404) 찾을 수 없음 오류를 반환했습니다."
+                                                   }
+                                  },
+                        "ai":  {
+                                   "queue.depth":  {
+                                                       "name":  "doeng.dispatcher.queue.depth",
+                                                       "description":  "Current bounded dispatcher queue depth",
+                                                       "baseUnit":  null,
+                                                       "measurements":  [
+                                                                            {
+                                                                                "statistic":  "VALUE",
+                                                                                "value":  0.0
+                                                                            }
+                                                                        ],
+                                                       "availableTags":  [
+
+                                                                         ]
+                                                   },
+                                   "active":  {
+                                                  "name":  "doeng.dispatcher.active",
+                                                  "description":  "Current downstream invocations owned by the dispatcher",
+                                                  "baseUnit":  null,
+                                                  "measurements":  [
+                                                                       {
+                                                                           "statistic":  "VALUE",
+                                                                           "value":  0.0
+                                                                       }
+                                                                   ],
+                                                  "availableTags":  [
+
+                                                                    ]
+                                              },
+                                   "events":  {
+                                                  "name":  "doeng.dispatcher.events",
+                                                  "description":  null,
+                                                  "baseUnit":  null,
+                                                  "measurements":  [
+                                                                       {
+                                                                           "statistic":  "COUNT",
+                                                                           "value":  12171.0
+                                                                       }
+                                                                   ],
+                                                  "availableTags":  [
+                                                                        {
+                                                                            "tag":  "detail",
+                                                                            "values":  [
+                                                                                           "DURING_EXECUTION",
+                                                                                           "none",
+                                                                                           "DispatcherDeadlineExceededException",
+                                                                                           "AWAITING_RESULT",
+                                                                                           "WebClientRequestException"
+                                                                                       ]
+                                                                        },
+                                                                        {
+                                                                            "tag":  "event",
+                                                                            "values":  [
+                                                                                           "dequeued",
+                                                                                           "failed",
+                                                                                           "completed",
+                                                                                           "enqueued",
+                                                                                           "deadline"
+                                                                                       ]
+                                                                        }
+                                                                    ]
+                                              },
+                                   "queue.wait":  {
+                                                      "name":  "doeng.dispatcher.queue.wait",
+                                                      "description":  null,
+                                                      "baseUnit":  "seconds",
+                                                      "measurements":  [
+                                                                           {
+                                                                               "statistic":  "COUNT",
+                                                                               "value":  4034.0
+                                                                           },
+                                                                           {
+                                                                               "statistic":  "TOTAL_TIME",
+                                                                               "value":  5785.57887046
+                                                                           },
+                                                                           {
+                                                                               "statistic":  "MAX",
+                                                                               "value":  4.424858737
+                                                                           }
+                                                                       ],
+                                                      "availableTags":  [
+
+                                                                        ]
+                                                  },
+                                   "deadline":  {
+                                                    "status":  "NOT_AVAILABLE",
+                                                    "error":  "원격 서버에서 (404) 찾을 수 없음 오류를 반환했습니다."
+                                                }
+                               },
+                        "storage":  {
+                                        "queue.depth":  {
+                                                            "name":  "doeng.dispatcher.queue.depth",
+                                                            "description":  "Current bounded dispatcher queue depth",
+                                                            "baseUnit":  null,
+                                                            "measurements":  [
+                                                                                 {
+                                                                                     "statistic":  "VALUE",
+                                                                                     "value":  0.0
+                                                                                 }
+                                                                             ],
+                                                            "availableTags":  [
+
+                                                                              ]
+                                                        },
+                                        "active":  {
+                                                       "name":  "doeng.dispatcher.active",
+                                                       "description":  "Current downstream invocations owned by the dispatcher",
+                                                       "baseUnit":  null,
+                                                       "measurements":  [
+                                                                            {
+                                                                                "statistic":  "VALUE",
+                                                                                "value":  0.0
+                                                                            }
+                                                                        ],
+                                                       "availableTags":  [
+
+                                                                         ]
+                                                   },
+                                        "events":  {
+                                                       "name":  "doeng.dispatcher.events",
+                                                       "description":  null,
+                                                       "baseUnit":  null,
+                                                       "measurements":  [
+                                                                            {
+                                                                                "statistic":  "COUNT",
+                                                                                "value":  12522.0
+                                                                            }
+                                                                        ],
+                                                       "availableTags":  [
+                                                                             {
+                                                                                 "tag":  "detail",
+                                                                                 "values":  [
+                                                                                                "WebClientRequestException",
+                                                                                                "queue_full",
+                                                                                                "BEFORE_EXECUTION",
+                                                                                                "DURING_EXECUTION",
+                                                                                                "BEFORE_ENQUEUE",
+                                                                                                "none",
+                                                                                                "DispatcherDeadlineExceededException",
+                                                                                                "AWAITING_RESULT"
+                                                                                            ]
+                                                                             },
+                                                                             {
+                                                                                 "tag":  "event",
+                                                                                 "values":  [
+                                                                                                "enqueued",
+                                                                                                "rejected",
+                                                                                                "cancelled",
+                                                                                                "dequeued",
+                                                                                                "failed",
+                                                                                                "completed",
+                                                                                                "deadline"
+                                                                                            ]
+                                                                             }
+                                                                         ]
+                                                   },
+                                        "queue.wait":  {
+                                                           "name":  "doeng.dispatcher.queue.wait",
+                                                           "description":  null,
+                                                           "baseUnit":  "seconds",
+                                                           "measurements":  [
+                                                                                {
+                                                                                    "statistic":  "COUNT",
+                                                                                    "value":  3368.0
+                                                                                },
+                                                                                {
+                                                                                    "statistic":  "TOTAL_TIME",
+                                                                                    "value":  3665.709180565
+                                                                                },
+                                                                                {
+                                                                                    "statistic":  "MAX",
+                                                                                    "value":  4.181547143
+                                                                                }
+                                                                            ],
+                                                           "availableTags":  [
+
+                                                                             ]
+                                                       },
+                                        "deadline":  {
+                                                         "status":  "NOT_AVAILABLE",
+                                                         "error":  "원격 서버에서 (404) 찾을 수 없음 오류를 반환했습니다."
+                                                     }
+                                    }
+                    }
+}

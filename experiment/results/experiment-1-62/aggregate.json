@@ -1,0 +1,58 @@
+{
+  "experiment": "Exp162",
+  "validRun": "SINK-C400-Q3-SERIALIZED-R2",
+  "invalidPreservedRun": "SINK-C400-Q3-SERIALIZED-R1",
+  "newPerformanceRunCount": 1,
+  "applicationImage": {
+    "tag": "doeng-exp162-sink-serialized-flux-corrected:latest",
+    "imageId": "sha256:4f9188851b7005947784018a9a621c0e6e15f71f73dae4f59b67420a7b66f4b6"
+  },
+  "productionChange": "serialized workSink emission boundary",
+  "configuration": {
+    "provider": {"token": "100/160", "ai": "600/960", "storage": "100/160"},
+    "sinkConcurrency": {"token": 100, "ai": 400, "storage": 100},
+    "sinkQueue": {"token": 300, "ai": 1200, "storage": 300},
+    "admission": "OFF",
+    "activeMissions": 200,
+    "durationMs": 30000,
+    "requestTimeoutMs": 15000,
+    "drainSeconds": 15
+  },
+  "outcome": {
+    "attempts": 5908,
+    "http200": 2380,
+    "acceptedPerSecond": 79.3333333333,
+    "successRatePercent": 40.284,
+    "http500": 198,
+    "http503Downstream": 2180,
+    "http504": 1016,
+    "clientDeadlineAbort": 134,
+    "connectRefused": 0,
+    "connectTimeout": 0,
+    "socketReset": 0,
+    "p50Ms": 7908,
+    "p95Ms": 12634,
+    "p99Ms": 14497,
+    "maxMs": 15020,
+    "maxInFlight": 2168
+  },
+  "emission": {
+    "FAIL_NON_SERIALIZED": 0,
+    "FAIL_OVERFLOW": 2180,
+    "OTHER": 0,
+    "failOverflowByDispatcher": {"token": 1869, "storage": 311}
+  },
+  "dispatcher": {
+    "token": {"activePeak": 100, "queuePeak": 289, "queueFinal": 0, "queueWaitMax": "NOT_AVAILABLE"},
+    "ai": {"activePeak": 400, "queuePeak": 647, "queueFinal": 0, "queueWaitMax": "NOT_AVAILABLE"},
+    "storage": {"activePeak": 100, "queuePeak": 299, "queueFinal": 0, "queueWaitMax": "NOT_AVAILABLE"}
+  },
+  "drain": {"completed": true, "timeToZeroMs": 8001},
+  "resources": {"applicationCpuAvgPercent": 48.96, "applicationCpuP95Percent": 199.66, "applicationCpuPeakPercent": 205.8, "applicationMemoryPeak": "2.226GiB / 3GiB", "oom": false, "restart": false},
+  "providerTimeline": "NOT_AVAILABLE",
+  "dispatcherConsumerTermination": "NOT_SUPPORTED",
+  "sinkSerializationRepair": "PASS",
+  "ingressConnectRefusedAfterRepair": "RESOLVED",
+  "sinkE2eRecoverySignal": "SUPPORTED_SINGLE_RUN_DIRECTIONAL",
+  "nextExperimentClass": "BOUNDED QUEUE PRESSURE REVIEW"
+}

@@ -1,0 +1,20 @@
+﻿{
+    "aiInFlight":  0,
+    "aiMaxInFlight":  400,
+    "aiCompleted":  4805,
+    "storageInFlight":  0,
+    "storageMaxInFlight":  51,
+    "storageCompleted":  3487,
+    "strictAuth":  false,
+    "authRegisteredUsers":  0,
+    "authIssuedTokens":  0,
+    "authLoginCompleted":  0,
+    "authLoginFailures":  0,
+    "resetGeneration":  0,
+    "aiLifecycleEventCount":  35287,
+    "requestCounts":  {
+                          "GET /api/member/ai":  4805,
+                          "POST /analyze/face":  4805,
+                          "PUT /storage/object":  3541
+                      }
+}

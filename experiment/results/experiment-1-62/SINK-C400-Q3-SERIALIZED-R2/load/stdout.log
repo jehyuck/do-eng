@@ -1,0 +1,256 @@
+{
+  "experimentRunId": "SINK-C400-Q3-SERIALIZED-R2",
+  "implementation": "SINK",
+  "startedAt": "2026-08-07T13:31:50.934Z",
+  "finishedAt": "2026-08-07T13:32:36.058Z",
+  "targetUrl": "http://127.0.0.1:18560/game/face?answer=happy&sceneId=2",
+  "authorizationMode": "single-token",
+  "distinctAuthorizationCount": 1,
+  "arrivalMode": "staggered",
+  "loadScenario": "single-success",
+  "accountingMode": "corrected",
+  "activeMissions": 200,
+  "initialActiveUsers": 200,
+  "activationStepUsers": 200,
+  "activationIntervalMs": 3000,
+  "reconnectDelayMs": 3000,
+  "intervalMs": 1000,
+  "durationMs": 30000,
+  "loadStoppedAt": "2026-08-07T13:32:20.940Z",
+  "requestTimeoutMs": 15000,
+  "fixturePath": "D:\\T7\\workspace\\50_로컬레포\\worktrees\\exp152-sink-dispatcher\\image\\arc.jpg",
+  "fixtureSource": "file",
+  "fixtureBytes": 265745,
+  "fixtureSha256": "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99",
+  "requestBodyBytes": 354363,
+  "scheduledRequests": 5908,
+  "startedRequests": 5908,
+  "completedRequests": 5908,
+  "unfinishedRequests": 0,
+  "successfulRequests": 2380,
+  "failedRequests": 3528,
+  "errorRate": 0.5971563981042654,
+  "throughputRequestsPerSecond": 196.93333333333334,
+  "maxInFlight": 2168,
+  "completedClassifiedRequests": 5908,
+  "outcomeCounts": {
+    "HTTP_200_ACCEPTED": 2380,
+    "HTTP_503_ADMISSION": 0,
+    "HTTP_503_DOWNSTREAM": 2180,
+    "HTTP_4XX_DOWNSTREAM": 0,
+    "HTTP_5XX_DOWNSTREAM": 1016,
+    "HTTP_500_UNCONTROLLED": 198,
+    "HTTP_OTHER": 0,
+    "CLIENT_TIMEOUT": 134,
+    "CLIENT_ABORT": 0,
+    "CONNECTION_ERROR": 0,
+    "UNCLASSIFIED": 0
+  },
+  "latencyByOutcome": {
+    "HTTP_200_ACCEPTED": {
+      "count": 2380,
+      "p50": 8524,
+      "p95": 12545,
+      "p99": 13792,
+      "max": 14940
+    },
+    "HTTP_503_ADMISSION": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "HTTP_503_DOWNSTREAM": {
+      "count": 2180,
+      "p50": 2576,
+      "p95": 7601,
+      "p99": 8255,
+      "max": 10601
+    },
+    "HTTP_4XX_DOWNSTREAM": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "HTTP_5XX_DOWNSTREAM": {
+      "count": 1016,
+      "p50": 11573,
+      "p95": 14434,
+      "p99": 14948,
+      "max": 15020
+    },
+    "HTTP_500_UNCONTROLLED": {
+      "count": 198,
+      "p50": 10389,
+      "p95": 12086,
+      "p99": 13006,
+      "max": 13024
+    },
+    "HTTP_OTHER": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "CLIENT_TIMEOUT": {
+      "count": 134,
+      "p50": 15012,
+      "p95": 15052,
+      "p99": 15065,
+      "max": 15066
+    },
+    "CLIENT_ABORT": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "CONNECTION_ERROR": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "UNCLASSIFIED": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    }
+  },
+  "accounting": {
+    "mode": "corrected",
+    "completedClassifiedRequests": 5908,
+    "classifiedTotalMatchesCompleted": true,
+    "startedRequests": 5908,
+    "completedAtLoadStop": 4244,
+    "unfinishedAtLoadStop": 1664,
+    "inFlightAtLoadStop": 1664,
+    "finalUnfinishedRequests": 0,
+    "startedMatchesLoadStopAccounting": true,
+    "startedMatchesFinalAccounting": true,
+    "successTriggeredVuExits": 0,
+    "prematureVuExits": 0,
+    "noSuccessTriggeredVuExit": true,
+    "noPrematureVuExit": true,
+    "valid": true
+  },
+  "mockDrain": {
+    "loadStoppedAt": "2026-08-07T13:32:20.940Z",
+    "configuredSeconds": 15,
+    "sampleCount": 16,
+    "initial": {
+      "phase": "load-stop",
+      "capturedAt": "2026-08-07T13:32:20.940Z",
+      "elapsedMs": 0,
+      "ok": true,
+      "status": 200,
+      "metrics": {
+        "aiInFlight": 264,
+        "aiMaxInFlight": 390,
+        "aiCompleted": 2855,
+        "storageInFlight": 8,
+        "storageMaxInFlight": 61,
+        "storageCompleted": 1253,
+        "strictAuth": false,
+        "authRegisteredUsers": 0,
+        "authIssuedTokens": 0,
+        "authLoginCompleted": 0,
+        "authLoginFailures": 0,
+        "resetGeneration": 0,
+        "aiLifecycleEventCount": 23726,
+        "requestCounts": {
+          "GET /api/member/ai": 3853,
+          "POST /analyze/face": 3119,
+          "PUT /storage/object": 1292
+        }
+      },
+      "error": null
+    },
+    "timeToZeroMs": 8001,
+    "drainCompleted": true,
+    "remainingBacklog": {
+      "aiInFlight": 0,
+      "storageInFlight": 0
+    },
+    "terminal": {
+      "phase": "drain",
+      "sample": 15,
+      "capturedAt": "2026-08-07T13:32:35.944Z",
+      "elapsedMs": 15004,
+      "ok": true,
+      "status": 200,
+      "metrics": {
+        "aiInFlight": 0,
+        "aiMaxInFlight": 400,
+        "aiCompleted": 3959,
+        "storageInFlight": 0,
+        "storageMaxInFlight": 63,
+        "storageCompleted": 2730,
+        "strictAuth": false,
+        "authRegisteredUsers": 0,
+        "authIssuedTokens": 0,
+        "authLoginCompleted": 0,
+        "authLoginFailures": 0,
+        "resetGeneration": 0,
+        "aiLifecycleEventCount": 31021,
+        "requestCounts": {
+          "GET /api/member/ai": 4034,
+          "POST /analyze/face": 3959,
+          "PUT /storage/object": 2765
+        }
+      },
+      "error": null
+    }
+  },
+  "statusCounts": {
+    "200": 2380,
+    "500": 198,
+    "503": 2180,
+    "504": 1016,
+    "AbortError": 134
+  },
+  "latencyMs": {
+    "p50": 7908,
+    "p90": 11963,
+    "p95": 12634,
+    "p99": 14497,
+    "max": 15020
+  },
+  "phaseLatencyMs": {
+    "200": {
+      "count": 5774,
+      "p50": 7908,
+      "p95": 12634,
+      "p99": 14497,
+      "max": 15020
+    }
+  },
+  "loadGenerator": {
+    "cpuUserMs": 20125,
+    "cpuSystemMs": 8250,
+    "rssBytes": 212983808,
+    "heapUsedBytes": 40908760,
+    "eventLoopDelayMs": {
+      "mean": 27.40739432053626,
+      "p50": 24.936447,
+      "p95": 40.042495,
+      "p99": 62.193663,
+      "max": 231.604223
+    },
+    "runtime": {
+      "nodeVersion": "v24.14.0",
+      "undiciVersion": "7.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    }
+  },
+  "targetP95Ms": 3000
+}
