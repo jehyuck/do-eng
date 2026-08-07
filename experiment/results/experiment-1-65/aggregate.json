@@ -1,0 +1,62 @@
+{
+  "experiment": "Exp165",
+  "diagnosticOnly": true,
+  "sourceCommit": "2a0f35e2ee9e22330e315154e6f270db0dcbfad9",
+  "invalidDiagnosticRuns": [
+    {"runId": "DIAG-EXP165-FINITE-001", "reason": "transport attribution disabled; request-level DOENG_STAGE_EVENT unavailable"}
+  ],
+  "validRun": "DIAG-EXP165-FINITE-002",
+  "config": {
+    "batchSize": 300,
+    "dispatchMode": "one request per mission, staggered over 1s, no reconnect",
+    "clientDeadlineSeconds": 60,
+    "applicationGlobalDeadlineSeconds": 60,
+    "provider": {"token": "100/160", "ai": "600/960", "storage": "100/160"},
+    "concurrency": {"token": 100, "ai": 400, "storage": 100},
+    "queue": {"token": 300, "ai": 1200, "storage": 300},
+    "mock": {"aiDelayMs": 2000, "storageDelayMs": 100},
+    "resource": {"cpu": "2", "memory": "3GiB", "jvm": "-Xms512m -Xmx2g -XX:+UseG1GC"}
+  },
+  "httpOutcome": {
+    "total": 300,
+    "http200": 299,
+    "http500": 0,
+    "http503": 0,
+    "http504": 0,
+    "clientAbortDeadline": 1,
+    "connectRefused": 0,
+    "otherTransport": 0,
+    "latencyMs": {"p50": 7026, "p95": 7790, "p99": 7970, "max": 8100}
+  },
+  "stageSummary": {
+    "TOKEN": {"started": 300, "succeeded": 300, "failed": 0, "cancelled": 0, "maxInFlight": 195, "residenceMs": {"p50": 921.76, "p95": 1374.09, "p99": 1406.04, "max": 1501.0}, "peakQueue": 8, "timeToZero": "2026-08-07T15:37:55.2651005Z"},
+    "AI": {"started": 300, "succeeded": 300, "failed": 0, "cancelled": 0, "maxInFlight": 300, "residenceMs": {"p50": 3165.90, "p95": 3888.45, "p99": 3976.30, "max": 3983.54}, "peakQueue": 0, "timeToZero": "2026-08-07T15:38:00.3796523Z"},
+    "STORAGE": {"started": 300, "succeeded": 300, "failed": 0, "cancelled": 0, "maxInFlight": 188, "residenceMs": {"p50": 818.36, "p95": 1311.94, "p99": 1391.72, "max": 1400.79}, "peakQueue": 0, "timeToZero": "2026-08-07T15:38:00.3796523Z"},
+    "DB": {"started": 300, "succeeded": 299, "failed": 0, "cancelled": 1, "maxInFlight": 219, "residenceMs": {"p50": 1000.18, "p95": 1457.48, "p99": 1535.44, "max": 56239.98}, "peakQueue": "NOT_AVAILABLE", "timeToZero": "2026-08-07T15:38:52.1639392Z"}
+  },
+  "serviceRate": {
+    "TOKEN": {"peakCompletedPerSec": 245, "medianCompletedPerSec": 8.75},
+    "AI": {"peakCompletedPerSec": 288, "medianCompletedPerSec": 10.71},
+    "STORAGE": {"peakCompletedPerSec": 180, "medianCompletedPerSec": 6.67},
+    "DB": {"peakCompletedPerSec": 243, "medianCompletedPerSec": 9.0}
+  },
+  "requestPathMedianRatioApproximation": {
+    "token": "13.1%",
+    "ai": "45.1%",
+    "storage": "11.6%",
+    "db": "14.2%",
+    "unattributed": "15.9%",
+    "note": "Ratios use independent median stage residence divided by median total latency; they are not an exact per-request additive decomposition."
+  },
+  "bottleneckGates": {
+    "tokenBacklog": "YES_TRANSIENT",
+    "aiBacklog": "NO",
+    "storageBacklog": "NO",
+    "dbBacklog": "NOT_AVAILABLE",
+    "longestResidenceStage": "DB_MAX_OUTLIER",
+    "latestDrainStage": "DB",
+    "lowestCompletionRateStage": "DB (299/300; one mapping failure/cancellation)"
+  },
+  "primaryBottleneckCandidate": "INCONCLUSIVE",
+  "reason": "AI has the largest median stage residence, but no AI queue/backlog was observed. DB has one 56s outlier and a data-mapping failure/cancellation, which is not sufficient to establish DB service capacity."
+}
