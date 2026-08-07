@@ -1,0 +1,1132 @@
+﻿{
+    "experiment":  "Exp158",
+    "generatedAt":  "2026-08-07T09:29:52.2762313Z",
+    "invalidInitialRuns":  [
+                               "C600-100",
+                               "C600-200",
+                               "C600-150"
+                           ],
+    "invalidInitialRunReason":  "Harness template substitution left 200/700/200 in the rendered configuration; preserved and excluded.",
+    "runs":  [
+                 {
+                     "cell":  "C600-100",
+                     "runId":  "C600-100-R1",
+                     "valid":  true,
+                     "acceptedPerSecond":  134.26666666666668,
+                     "successRate":  0.6750460868107927,
+                     "http200P50":  3486,
+                     "http200P95":  13265,
+                     "http200P99":  14329,
+                     "http200Max":  14998,
+                     "http500":  1873,
+                     "http503":  0,
+                     "timeout":  66,
+                     "connectionError":  0,
+                     "completedPerSecond":  198.9,
+                     "maxInFlight":  1530,
+                     "resources":  {
+                                       "cpuAvg":  107.27235294117646,
+                                       "cpuP50":  195.02,
+                                       "cpuP95":  208.6,
+                                       "cpuPeak":  208.6,
+                                       "memoryAvg":  102.8784705882353,
+                                       "memoryP95":  885.2,
+                                       "memoryPeak":  885.2,
+                                       "pidsAvg":  33,
+                                       "pidsPeak":  33
+                                   },
+                     "provider":  {
+                                      "doeng-token":  {
+                                                          "activeAvg":  27.933333333333334,
+                                                          "activeP95":  88,
+                                                          "activePeak":  88,
+                                                          "pendingAvg":  120,
+                                                          "pendingP95":  429,
+                                                          "pendingPeak":  743,
+                                                          "pendingNonZero":  18
+                                                      },
+                                      "doeng-ai":  {
+                                                       "activeAvg":  232.6,
+                                                       "activeP95":  562,
+                                                       "activePeak":  562,
+                                                       "pendingAvg":  482.86666666666667,
+                                                       "pendingP95":  960,
+                                                       "pendingPeak":  960,
+                                                       "pendingNonZero":  16
+                                                   },
+                                      "doeng-storage":  {
+                                                            "activeAvg":  34.06666666666667,
+                                                            "activeP95":  100,
+                                                            "activePeak":  100,
+                                                            "pendingAvg":  93.833333333333329,
+                                                            "pendingP95":  160,
+                                                            "pendingPeak":  191,
+                                                            "pendingNonZero":  18
+                                                        }
+                                  },
+                     "buckets":  [
+                                     {
+                                         "bucket":  "T0",
+                                         "acceptedHttp200":  17,
+                                         "acceptedPerSecond":  3.4,
+                                         "http500":  0,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T1",
+                                         "acceptedHttp200":  201,
+                                         "acceptedPerSecond":  40.2,
+                                         "http500":  332,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T2",
+                                         "acceptedHttp200":  368,
+                                         "acceptedPerSecond":  73.6,
+                                         "http500":  732,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T3",
+                                         "acceptedHttp200":  629,
+                                         "acceptedPerSecond":  125.8,
+                                         "http500":  724,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T4",
+                                         "acceptedHttp200":  1133,
+                                         "acceptedPerSecond":  226.6,
+                                         "http500":  85,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T5",
+                                         "acceptedHttp200":  1101,
+                                         "acceptedPerSecond":  220.2,
+                                         "http500":  0,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     }
+                                 ],
+                     "bucketObservations":  [
+                                                {
+                                                    "bucket":  "T0",
+                                                    "cpu":  200.14,
+                                                    "tokenPending":  160,
+                                                    "aiPending":  960,
+                                                    "storagePending":  160,
+                                                    "inFlight":  525
+                                                },
+                                                {
+                                                    "bucket":  "T1",
+                                                    "cpu":  208.6,
+                                                    "tokenPending":  160,
+                                                    "aiPending":  960,
+                                                    "storagePending":  191,
+                                                    "inFlight":  305
+                                                },
+                                                {
+                                                    "bucket":  "T2",
+                                                    "cpu":  196.91000000000003,
+                                                    "tokenPending":  743,
+                                                    "aiPending":  960,
+                                                    "storagePending":  160,
+                                                    "inFlight":  770
+                                                },
+                                                {
+                                                    "bucket":  "T3",
+                                                    "cpu":  199.98,
+                                                    "tokenPending":  160,
+                                                    "aiPending":  960,
+                                                    "storagePending":  160,
+                                                    "inFlight":  690
+                                                },
+                                                {
+                                                    "bucket":  "T4",
+                                                    "cpu":  199.41500000000002,
+                                                    "tokenPending":  160,
+                                                    "aiPending":  960,
+                                                    "storagePending":  160,
+                                                    "inFlight":  559
+                                                },
+                                                {
+                                                    "bucket":  "T5",
+                                                    "cpu":  196.83,
+                                                    "tokenPending":  160,
+                                                    "aiPending":  960,
+                                                    "storagePending":  160,
+                                                    "inFlight":  461
+                                                }
+                                            ]
+                 },
+                 {
+                     "cell":  "C600-200",
+                     "runId":  "C600-200-R1",
+                     "valid":  true,
+                     "acceptedPerSecond":  134.83333333333334,
+                     "successRate":  0.67800871605766011,
+                     "http200P50":  7932,
+                     "http200P95":  11657,
+                     "http200P99":  14133,
+                     "http200Max":  14990,
+                     "http500":  1210,
+                     "http503":  0,
+                     "timeout":  711,
+                     "connectionError":  0,
+                     "completedPerSecond":  198.86666666666667,
+                     "maxInFlight":  2070,
+                     "resources":  {
+                                       "cpuAvg":  107.72999999999999,
+                                       "cpuP50":  151.88,
+                                       "cpuP95":  207.61,
+                                       "cpuPeak":  207.61,
+                                       "memoryAvg":  119.50186666666666,
+                                       "memoryP95":  836.1,
+                                       "memoryPeak":  836.1,
+                                       "pidsAvg":  33,
+                                       "pidsPeak":  33
+                                   },
+                     "provider":  {
+                                      "doeng-token":  {
+                                                          "activeAvg":  50.46153846153846,
+                                                          "activeP95":  200,
+                                                          "activePeak":  200,
+                                                          "pendingAvg":  227.07692307692307,
+                                                          "pendingP95":  646,
+                                                          "pendingPeak":  778,
+                                                          "pendingNonZero":  17
+                                                      },
+                                      "doeng-ai":  {
+                                                       "activeAvg":  253,
+                                                       "activeP95":  600,
+                                                       "activePeak":  600,
+                                                       "pendingAvg":  500.88461538461536,
+                                                       "pendingP95":  960,
+                                                       "pendingPeak":  960,
+                                                       "pendingNonZero":  16
+                                                   },
+                                      "doeng-storage":  {
+                                                            "activeAvg":  56.53846153846154,
+                                                            "activeP95":  200,
+                                                            "activePeak":  200,
+                                                            "pendingAvg":  165.03846153846155,
+                                                            "pendingP95":  320,
+                                                            "pendingPeak":  320,
+                                                            "pendingNonZero":  15
+                                                        }
+                                  },
+                     "buckets":  [
+                                     {
+                                         "bucket":  "T0",
+                                         "acceptedHttp200":  9,
+                                         "acceptedPerSecond":  1.8,
+                                         "http500":  0,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T1",
+                                         "acceptedHttp200":  273,
+                                         "acceptedPerSecond":  54.6,
+                                         "http500":  0,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T2",
+                                         "acceptedHttp200":  708,
+                                         "acceptedPerSecond":  141.6,
+                                         "http500":  2,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T3",
+                                         "acceptedHttp200":  604,
+                                         "acceptedPerSecond":  120.8,
+                                         "http500":  417,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T4",
+                                         "acceptedHttp200":  418,
+                                         "acceptedPerSecond":  83.6,
+                                         "http500":  770,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T5",
+                                         "acceptedHttp200":  560,
+                                         "acceptedPerSecond":  112,
+                                         "http500":  21,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     }
+                                 ],
+                     "bucketObservations":  [
+                                                {
+                                                    "bucket":  "T0",
+                                                    "cpu":  195.37,
+                                                    "tokenPending":  320,
+                                                    "aiPending":  960,
+                                                    "storagePending":  320,
+                                                    "inFlight":  515
+                                                },
+                                                {
+                                                    "bucket":  "T1",
+                                                    "cpu":  200.99,
+                                                    "tokenPending":  320,
+                                                    "aiPending":  960,
+                                                    "storagePending":  320,
+                                                    "inFlight":  304
+                                                },
+                                                {
+                                                    "bucket":  "T2",
+                                                    "cpu":  199.82,
+                                                    "tokenPending":  320,
+                                                    "aiPending":  960,
+                                                    "storagePending":  320,
+                                                    "inFlight":  643
+                                                },
+                                                {
+                                                    "bucket":  "T3",
+                                                    "cpu":  203.06,
+                                                    "tokenPending":  778,
+                                                    "aiPending":  960,
+                                                    "storagePending":  320,
+                                                    "inFlight":  882
+                                                },
+                                                {
+                                                    "bucket":  "T4",
+                                                    "cpu":  207.61,
+                                                    "tokenPending":  646,
+                                                    "aiPending":  960,
+                                                    "storagePending":  320,
+                                                    "inFlight":  707
+                                                },
+                                                {
+                                                    "bucket":  "T5",
+                                                    "cpu":  200.17,
+                                                    "tokenPending":  320,
+                                                    "aiPending":  960,
+                                                    "storagePending":  320,
+                                                    "inFlight":  827
+                                                }
+                                            ]
+                 },
+                 {
+                     "cell":  "C600-150",
+                     "runId":  "C600-150-R1",
+                     "valid":  true,
+                     "acceptedPerSecond":  82.9,
+                     "successRate":  0.4174219536757301,
+                     "http200P50":  9183,
+                     "http200P95":  13601,
+                     "http200P99":  14710,
+                     "http200Max":  15001,
+                     "http500":  2583,
+                     "http503":  0,
+                     "timeout":  888,
+                     "connectionError":  0,
+                     "completedPerSecond":  198.6,
+                     "maxInFlight":  2093,
+                     "resources":  {
+                                       "cpuAvg":  114.25499999999998,
+                                       "cpuP50":  138.85,
+                                       "cpuP95":  210.85,
+                                       "cpuPeak":  210.85,
+                                       "memoryAvg":  144.1117142857143,
+                                       "memoryP95":  1012,
+                                       "memoryPeak":  1012,
+                                       "pidsAvg":  33.928571428571431,
+                                       "pidsPeak":  34
+                                   },
+                     "provider":  {
+                                      "doeng-token":  {
+                                                          "activeAvg":  34.363636363636367,
+                                                          "activeP95":  140,
+                                                          "activePeak":  140,
+                                                          "pendingAvg":  162,
+                                                          "pendingP95":  252,
+                                                          "pendingPeak":  609,
+                                                          "pendingNonZero":  14
+                                                      },
+                                      "doeng-ai":  {
+                                                       "activeAvg":  191.54545454545453,
+                                                       "activeP95":  502,
+                                                       "activePeak":  502,
+                                                       "pendingAvg":  486.5,
+                                                       "pendingP95":  960,
+                                                       "pendingPeak":  960,
+                                                       "pendingNonZero":  13
+                                                   },
+                                      "doeng-storage":  {
+                                                            "activeAvg":  36.545454545454547,
+                                                            "activeP95":  150,
+                                                            "activePeak":  150,
+                                                            "pendingAvg":  137.59090909090909,
+                                                            "pendingP95":  240,
+                                                            "pendingPeak":  240,
+                                                            "pendingNonZero":  13
+                                                        }
+                                  },
+                     "buckets":  [
+                                     {
+                                         "bucket":  "T0",
+                                         "acceptedHttp200":  0,
+                                         "acceptedPerSecond":  0,
+                                         "http500":  0,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T1",
+                                         "acceptedHttp200":  147,
+                                         "acceptedPerSecond":  29.4,
+                                         "http500":  33,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T2",
+                                         "acceptedHttp200":  398,
+                                         "acceptedPerSecond":  79.6,
+                                         "http500":  355,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T3",
+                                         "acceptedHttp200":  458,
+                                         "acceptedPerSecond":  91.6,
+                                         "http500":  729,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T4",
+                                         "acceptedHttp200":  164,
+                                         "acceptedPerSecond":  32.8,
+                                         "http500":  233,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     },
+                                     {
+                                         "bucket":  "T5",
+                                         "acceptedHttp200":  332,
+                                         "acceptedPerSecond":  66.4,
+                                         "http500":  781,
+                                         "timeout":  0,
+                                         "connectionError":  0,
+                                         "inFlightAtSample":  "NOT_AVAILABLE",
+                                         "cpu":  "NOT_AVAILABLE",
+                                         "tokenPending":  "NOT_AVAILABLE",
+                                         "aiPending":  "NOT_AVAILABLE",
+                                         "storagePending":  "NOT_AVAILABLE"
+                                     }
+                                 ],
+                     "bucketObservations":  [
+                                                {
+                                                    "bucket":  "T0",
+                                                    "cpu":  199.07,
+                                                    "tokenPending":  240,
+                                                    "aiPending":  960,
+                                                    "storagePending":  240,
+                                                    "inFlight":  520
+                                                },
+                                                {
+                                                    "bucket":  "T1",
+                                                    "cpu":  199.42,
+                                                    "tokenPending":  240,
+                                                    "aiPending":  960,
+                                                    "storagePending":  240,
+                                                    "inFlight":  347
+                                                },
+                                                {
+                                                    "bucket":  "T2",
+                                                    "cpu":  197.09,
+                                                    "tokenPending":  252,
+                                                    "aiPending":  960,
+                                                    "storagePending":  240,
+                                                    "inFlight":  512
+                                                },
+                                                {
+                                                    "bucket":  "T3",
+                                                    "cpu":  199.89,
+                                                    "tokenPending":  609,
+                                                    "aiPending":  960,
+                                                    "storagePending":  240,
+                                                    "inFlight":  654
+                                                },
+                                                {
+                                                    "bucket":  "T4",
+                                                    "cpu":  206.08499999999998,
+                                                    "tokenPending":  240,
+                                                    "aiPending":  960,
+                                                    "storagePending":  240,
+                                                    "inFlight":  729
+                                                },
+                                                {
+                                                    "bucket":  "T5",
+                                                    "cpu":  "NOT_AVAILABLE",
+                                                    "tokenPending":  "NOT_AVAILABLE",
+                                                    "aiPending":  "NOT_AVAILABLE",
+                                                    "storagePending":  "NOT_AVAILABLE",
+                                                    "inFlight":  "NOT_AVAILABLE"
+                                                }
+                                            ]
+                 }
+             ],
+    "groups":  {
+                   "C600-100":  {
+                                    "acceptedPerSecond":  134.26666666666668,
+                                    "successRate":  0.6750460868107927,
+                                    "http200P95":  13265,
+                                    "http200P99":  14329,
+                                    "http500":  1873,
+                                    "timeout":  66,
+                                    "connectionError":  0,
+                                    "completedPerSecond":  198.9,
+                                    "maxInFlight":  1530,
+                                    "resources":  {
+                                                      "cpuAvg":  107.27235294117646,
+                                                      "cpuP50":  195.02,
+                                                      "cpuP95":  208.6,
+                                                      "cpuPeak":  208.6,
+                                                      "memoryAvg":  102.8784705882353,
+                                                      "memoryP95":  885.2,
+                                                      "memoryPeak":  885.2,
+                                                      "pidsAvg":  33,
+                                                      "pidsPeak":  33
+                                                  },
+                                    "provider":  {
+                                                     "doeng-token":  {
+                                                                         "activeAvg":  27.933333333333334,
+                                                                         "activeP95":  88,
+                                                                         "activePeak":  88,
+                                                                         "pendingAvg":  120,
+                                                                         "pendingP95":  429,
+                                                                         "pendingPeak":  743,
+                                                                         "pendingNonZero":  18
+                                                                     },
+                                                     "doeng-ai":  {
+                                                                      "activeAvg":  232.6,
+                                                                      "activeP95":  562,
+                                                                      "activePeak":  562,
+                                                                      "pendingAvg":  482.86666666666667,
+                                                                      "pendingP95":  960,
+                                                                      "pendingPeak":  960,
+                                                                      "pendingNonZero":  16
+                                                                  },
+                                                     "doeng-storage":  {
+                                                                           "activeAvg":  34.06666666666667,
+                                                                           "activeP95":  100,
+                                                                           "activePeak":  100,
+                                                                           "pendingAvg":  93.833333333333329,
+                                                                           "pendingP95":  160,
+                                                                           "pendingPeak":  191,
+                                                                           "pendingNonZero":  18
+                                                                       }
+                                                 },
+                                    "buckets":  [
+                                                    {
+                                                        "bucket":  "T0",
+                                                        "acceptedHttp200":  17,
+                                                        "acceptedPerSecond":  3.4,
+                                                        "http500":  0,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T1",
+                                                        "acceptedHttp200":  201,
+                                                        "acceptedPerSecond":  40.2,
+                                                        "http500":  332,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T2",
+                                                        "acceptedHttp200":  368,
+                                                        "acceptedPerSecond":  73.6,
+                                                        "http500":  732,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T3",
+                                                        "acceptedHttp200":  629,
+                                                        "acceptedPerSecond":  125.8,
+                                                        "http500":  724,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T4",
+                                                        "acceptedHttp200":  1133,
+                                                        "acceptedPerSecond":  226.6,
+                                                        "http500":  85,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T5",
+                                                        "acceptedHttp200":  1101,
+                                                        "acceptedPerSecond":  220.2,
+                                                        "http500":  0,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    }
+                                                ],
+                                    "bucketObservations":  [
+                                                               {
+                                                                   "bucket":  "T0",
+                                                                   "cpu":  200.14,
+                                                                   "tokenPending":  160,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  160,
+                                                                   "inFlight":  525
+                                                               },
+                                                               {
+                                                                   "bucket":  "T1",
+                                                                   "cpu":  208.6,
+                                                                   "tokenPending":  160,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  191,
+                                                                   "inFlight":  305
+                                                               },
+                                                               {
+                                                                   "bucket":  "T2",
+                                                                   "cpu":  196.91000000000003,
+                                                                   "tokenPending":  743,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  160,
+                                                                   "inFlight":  770
+                                                               },
+                                                               {
+                                                                   "bucket":  "T3",
+                                                                   "cpu":  199.98,
+                                                                   "tokenPending":  160,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  160,
+                                                                   "inFlight":  690
+                                                               },
+                                                               {
+                                                                   "bucket":  "T4",
+                                                                   "cpu":  199.41500000000002,
+                                                                   "tokenPending":  160,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  160,
+                                                                   "inFlight":  559
+                                                               },
+                                                               {
+                                                                   "bucket":  "T5",
+                                                                   "cpu":  196.83,
+                                                                   "tokenPending":  160,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  160,
+                                                                   "inFlight":  461
+                                                               }
+                                                           ]
+                                },
+                   "C600-200":  {
+                                    "acceptedPerSecond":  134.83333333333334,
+                                    "successRate":  0.67800871605766011,
+                                    "http200P95":  11657,
+                                    "http200P99":  14133,
+                                    "http500":  1210,
+                                    "timeout":  711,
+                                    "connectionError":  0,
+                                    "completedPerSecond":  198.86666666666667,
+                                    "maxInFlight":  2070,
+                                    "resources":  {
+                                                      "cpuAvg":  107.72999999999999,
+                                                      "cpuP50":  151.88,
+                                                      "cpuP95":  207.61,
+                                                      "cpuPeak":  207.61,
+                                                      "memoryAvg":  119.50186666666666,
+                                                      "memoryP95":  836.1,
+                                                      "memoryPeak":  836.1,
+                                                      "pidsAvg":  33,
+                                                      "pidsPeak":  33
+                                                  },
+                                    "provider":  {
+                                                     "doeng-token":  {
+                                                                         "activeAvg":  50.46153846153846,
+                                                                         "activeP95":  200,
+                                                                         "activePeak":  200,
+                                                                         "pendingAvg":  227.07692307692307,
+                                                                         "pendingP95":  646,
+                                                                         "pendingPeak":  778,
+                                                                         "pendingNonZero":  17
+                                                                     },
+                                                     "doeng-ai":  {
+                                                                      "activeAvg":  253,
+                                                                      "activeP95":  600,
+                                                                      "activePeak":  600,
+                                                                      "pendingAvg":  500.88461538461536,
+                                                                      "pendingP95":  960,
+                                                                      "pendingPeak":  960,
+                                                                      "pendingNonZero":  16
+                                                                  },
+                                                     "doeng-storage":  {
+                                                                           "activeAvg":  56.53846153846154,
+                                                                           "activeP95":  200,
+                                                                           "activePeak":  200,
+                                                                           "pendingAvg":  165.03846153846155,
+                                                                           "pendingP95":  320,
+                                                                           "pendingPeak":  320,
+                                                                           "pendingNonZero":  15
+                                                                       }
+                                                 },
+                                    "buckets":  [
+                                                    {
+                                                        "bucket":  "T0",
+                                                        "acceptedHttp200":  9,
+                                                        "acceptedPerSecond":  1.8,
+                                                        "http500":  0,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T1",
+                                                        "acceptedHttp200":  273,
+                                                        "acceptedPerSecond":  54.6,
+                                                        "http500":  0,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T2",
+                                                        "acceptedHttp200":  708,
+                                                        "acceptedPerSecond":  141.6,
+                                                        "http500":  2,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T3",
+                                                        "acceptedHttp200":  604,
+                                                        "acceptedPerSecond":  120.8,
+                                                        "http500":  417,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T4",
+                                                        "acceptedHttp200":  418,
+                                                        "acceptedPerSecond":  83.6,
+                                                        "http500":  770,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T5",
+                                                        "acceptedHttp200":  560,
+                                                        "acceptedPerSecond":  112,
+                                                        "http500":  21,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    }
+                                                ],
+                                    "bucketObservations":  [
+                                                               {
+                                                                   "bucket":  "T0",
+                                                                   "cpu":  195.37,
+                                                                   "tokenPending":  320,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  320,
+                                                                   "inFlight":  515
+                                                               },
+                                                               {
+                                                                   "bucket":  "T1",
+                                                                   "cpu":  200.99,
+                                                                   "tokenPending":  320,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  320,
+                                                                   "inFlight":  304
+                                                               },
+                                                               {
+                                                                   "bucket":  "T2",
+                                                                   "cpu":  199.82,
+                                                                   "tokenPending":  320,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  320,
+                                                                   "inFlight":  643
+                                                               },
+                                                               {
+                                                                   "bucket":  "T3",
+                                                                   "cpu":  203.06,
+                                                                   "tokenPending":  778,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  320,
+                                                                   "inFlight":  882
+                                                               },
+                                                               {
+                                                                   "bucket":  "T4",
+                                                                   "cpu":  207.61,
+                                                                   "tokenPending":  646,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  320,
+                                                                   "inFlight":  707
+                                                               },
+                                                               {
+                                                                   "bucket":  "T5",
+                                                                   "cpu":  200.17,
+                                                                   "tokenPending":  320,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  320,
+                                                                   "inFlight":  827
+                                                               }
+                                                           ]
+                                },
+                   "C600-150":  {
+                                    "acceptedPerSecond":  82.9,
+                                    "successRate":  0.4174219536757301,
+                                    "http200P95":  13601,
+                                    "http200P99":  14710,
+                                    "http500":  2583,
+                                    "timeout":  888,
+                                    "connectionError":  0,
+                                    "completedPerSecond":  198.6,
+                                    "maxInFlight":  2093,
+                                    "resources":  {
+                                                      "cpuAvg":  114.25499999999998,
+                                                      "cpuP50":  138.85,
+                                                      "cpuP95":  210.85,
+                                                      "cpuPeak":  210.85,
+                                                      "memoryAvg":  144.1117142857143,
+                                                      "memoryP95":  1012,
+                                                      "memoryPeak":  1012,
+                                                      "pidsAvg":  33.928571428571431,
+                                                      "pidsPeak":  34
+                                                  },
+                                    "provider":  {
+                                                     "doeng-token":  {
+                                                                         "activeAvg":  34.363636363636367,
+                                                                         "activeP95":  140,
+                                                                         "activePeak":  140,
+                                                                         "pendingAvg":  162,
+                                                                         "pendingP95":  252,
+                                                                         "pendingPeak":  609,
+                                                                         "pendingNonZero":  14
+                                                                     },
+                                                     "doeng-ai":  {
+                                                                      "activeAvg":  191.54545454545453,
+                                                                      "activeP95":  502,
+                                                                      "activePeak":  502,
+                                                                      "pendingAvg":  486.5,
+                                                                      "pendingP95":  960,
+                                                                      "pendingPeak":  960,
+                                                                      "pendingNonZero":  13
+                                                                  },
+                                                     "doeng-storage":  {
+                                                                           "activeAvg":  36.545454545454547,
+                                                                           "activeP95":  150,
+                                                                           "activePeak":  150,
+                                                                           "pendingAvg":  137.59090909090909,
+                                                                           "pendingP95":  240,
+                                                                           "pendingPeak":  240,
+                                                                           "pendingNonZero":  13
+                                                                       }
+                                                 },
+                                    "buckets":  [
+                                                    {
+                                                        "bucket":  "T0",
+                                                        "acceptedHttp200":  0,
+                                                        "acceptedPerSecond":  0,
+                                                        "http500":  0,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T1",
+                                                        "acceptedHttp200":  147,
+                                                        "acceptedPerSecond":  29.4,
+                                                        "http500":  33,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T2",
+                                                        "acceptedHttp200":  398,
+                                                        "acceptedPerSecond":  79.6,
+                                                        "http500":  355,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T3",
+                                                        "acceptedHttp200":  458,
+                                                        "acceptedPerSecond":  91.6,
+                                                        "http500":  729,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T4",
+                                                        "acceptedHttp200":  164,
+                                                        "acceptedPerSecond":  32.8,
+                                                        "http500":  233,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    },
+                                                    {
+                                                        "bucket":  "T5",
+                                                        "acceptedHttp200":  332,
+                                                        "acceptedPerSecond":  66.4,
+                                                        "http500":  781,
+                                                        "timeout":  0,
+                                                        "connectionError":  0,
+                                                        "inFlightAtSample":  "NOT_AVAILABLE",
+                                                        "cpu":  "NOT_AVAILABLE",
+                                                        "tokenPending":  "NOT_AVAILABLE",
+                                                        "aiPending":  "NOT_AVAILABLE",
+                                                        "storagePending":  "NOT_AVAILABLE"
+                                                    }
+                                                ],
+                                    "bucketObservations":  [
+                                                               {
+                                                                   "bucket":  "T0",
+                                                                   "cpu":  199.07,
+                                                                   "tokenPending":  240,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  240,
+                                                                   "inFlight":  520
+                                                               },
+                                                               {
+                                                                   "bucket":  "T1",
+                                                                   "cpu":  199.42,
+                                                                   "tokenPending":  240,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  240,
+                                                                   "inFlight":  347
+                                                               },
+                                                               {
+                                                                   "bucket":  "T2",
+                                                                   "cpu":  197.09,
+                                                                   "tokenPending":  252,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  240,
+                                                                   "inFlight":  512
+                                                               },
+                                                               {
+                                                                   "bucket":  "T3",
+                                                                   "cpu":  199.89,
+                                                                   "tokenPending":  609,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  240,
+                                                                   "inFlight":  654
+                                                               },
+                                                               {
+                                                                   "bucket":  "T4",
+                                                                   "cpu":  206.08499999999998,
+                                                                   "tokenPending":  240,
+                                                                   "aiPending":  960,
+                                                                   "storagePending":  240,
+                                                                   "inFlight":  729
+                                                               },
+                                                               {
+                                                                   "bucket":  "T5",
+                                                                   "cpu":  "NOT_AVAILABLE",
+                                                                   "tokenPending":  "NOT_AVAILABLE",
+                                                                   "aiPending":  "NOT_AVAILABLE",
+                                                                   "storagePending":  "NOT_AVAILABLE",
+                                                                   "inFlight":  "NOT_AVAILABLE"
+                                                               }
+                                                           ]
+                                }
+               },
+    "staticC600Balance":  "NOT_SUPPORTED",
+    "screeningWinner":  "C600-200_NARROW_PRIMARY_ONLY",
+    "confirmationRun":  "NO",
+    "confirmationResult":  "NOT_RUN",
+    "timeDependentDegradation":  "SUPPORTED",
+    "backlogAccumulation":  "SUPPORTED",
+    "bestObservedStaticConfiguration":  "100/600/100_CONTROL_RETAINED; C600-200_NEAR_TIE",
+    "staticPoolSearch":  "CLOSED",
+    "nextControlStrategy":  "INCONCLUSIVE",
+    "nextRecommendedStep":  "Close C600 static search; any admission or logical-concurrency experiment requires a separate plan.",
+    "newPerformanceRunCount":  3,
+    "totalExecutionAttempts":  6,
+    "productionJavaChange":  "NONE",
+    "bucketNote":  "Replacement-run provider/resource bucket observations are timestamp-aligned; initial invalid runs are excluded from all conclusions."
+}
