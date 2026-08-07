@@ -22,6 +22,7 @@ public abstract class AbstractSinkDispatcher<I, O>
     private final Sinks.Many<DispatchWork<I, O>> workSink;
     private final DispatcherMetrics metrics;
     private final AtomicInteger active = new AtomicInteger();
+    private final Object emissionMonitor = new Object();
     private volatile Disposable subscription;
     private volatile boolean stopped;
 
@@ -69,16 +70,23 @@ public abstract class AbstractSinkDispatcher<I, O>
     }
 
     private Mono<O> enqueue(MissionExecutionContext context, I input) {
-        if (stopped) {
-            return Mono.error(new IllegalStateException(spec.getName() + " dispatcher is stopped"));
-        }
         if (context.isExpired()) {
             recordDeadline("BEFORE_ENQUEUE");
             return Mono.error(deadline(context, "BEFORE_ENQUEUE"));
         }
 
         DispatchWork<I, O> work = DispatchWork.create(context, input);
-        Sinks.EmitResult emitResult = workSink.tryEmitNext(work);
+        Sinks.EmitResult emitResult;
+        synchronized (emissionMonitor) {
+            if (stopped) {
+                return Mono.error(new IllegalStateException(spec.getName() + " dispatcher is stopped"));
+            }
+            // Sinks.Many.tryEmitNext fails fast with FAIL_NON_SERIALIZED when
+            // multiple request threads emit concurrently. Serialize only the
+            // emission boundary; downstream work remains reactive and bounded
+            // by flatMap concurrency.
+            emitResult = workSink.tryEmitNext(work);
+        }
         if (emitResult.isFailure()) {
             if (metrics != null) metrics.rejected(spec.getName());
             return Mono.error(new DispatcherQueueRejectedException(
@@ -168,8 +176,10 @@ public abstract class AbstractSinkDispatcher<I, O>
 
     @Override
     public final void destroy() {
-        stopped = true;
-        workSink.tryEmitComplete();
+        synchronized (emissionMonitor) {
+            stopped = true;
+            workSink.tryEmitComplete();
+        }
         Disposable current = subscription;
         if (current != null) {
             current.dispose();
