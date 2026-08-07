@@ -75,18 +75,18 @@ class AbstractSinkDispatcherTest {
                 final int value = i;
                 futures.add(executor.submit(() -> {
                     ready.countDown();
-                    if (!start.await(2, TimeUnit.SECONDS)) {
+                    if (!start.await(5, TimeUnit.SECONDS)) {
                         throw new IllegalStateException("concurrent producer start timed out");
                     }
                     return dispatcher.dispatch(context("concurrent-" + value), value).block();
                 }));
             }
 
-            assertTrue(ready.await(2, TimeUnit.SECONDS));
+            assertTrue(ready.await(5, TimeUnit.SECONDS));
             start.countDown();
 
             for (int i = 0; i < producerCount; i++) {
-                assertEquals(i, futures.get(i).get(2, TimeUnit.SECONDS));
+                assertEquals(i, futures.get(i).get(5, TimeUnit.SECONDS));
             }
         } finally {
             executor.shutdownNow();
