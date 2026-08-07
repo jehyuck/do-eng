@@ -1,0 +1,47 @@
+﻿{
+    "capturedAtEpochMs":  1786117136432,
+    "stages":  {
+                   "TOKEN":  {
+                                 "started":  0,
+                                 "completed":  0,
+                                 "rejected":  0,
+                                 "released":  0,
+                                 "cancelled":  0,
+                                 "wouldReject":  0
+                             },
+                   "AI":  {
+                              "started":  0,
+                              "completed":  0,
+                              "rejected":  0,
+                              "released":  0,
+                              "cancelled":  0,
+                              "wouldReject":  0
+                          },
+                   "STORAGE":  {
+                                   "started":  0,
+                                   "completed":  0,
+                                   "rejected":  0,
+                                   "released":  0,
+                                   "cancelled":  0,
+                                   "wouldReject":  0
+                               }
+               },
+    "admission":  {
+                      "mode":  "OFF",
+                      "enabled":  false,
+                      "configuredLimit":  400,
+                      "currentInUse":  0,
+                      "maxObservedInUse":  0,
+                      "started":  0,
+                      "completed":  0,
+                      "rejected":  0,
+                      "released":  0,
+                      "cancelled":  0,
+                      "permitLeak":  0,
+                      "wouldReject":  0,
+                      "acquired":  0,
+                      "maxObserved":  0
+                  },
+    "mode":  "OFF",
+    "scope":  "FULL_PATH"
+}

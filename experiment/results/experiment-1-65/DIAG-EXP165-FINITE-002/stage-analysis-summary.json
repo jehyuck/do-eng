@@ -1,0 +1,12 @@
+﻿{
+    "runId":  "DIAG-EXP165-FINITE-002",
+    "stageTimelinePath":  "stage-timeline.jsonl",
+    "requestResidencyPath":  "request-stage-residency.json",
+    "eventCount":  7193,
+    "residencyCount":  2398,
+    "stageRows":  30,
+    "notes":  [
+                  "Queue wait is NOT_AVAILABLE when not exposed by existing dispatcher metrics.",
+                  "Residence covers StageObservation observe() boundaries; it is not a queue-only or network-only decomposition."
+              ]
+}

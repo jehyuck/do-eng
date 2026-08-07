@@ -1,0 +1,251 @@
+{
+  "experimentRunId": "DIAG-EXP165-FINITE-002",
+  "implementation": "SINK",
+  "startedAt": "2026-08-07T15:37:54.659Z",
+  "finishedAt": "2026-08-07T15:38:55.690Z",
+  "targetUrl": "http://127.0.0.1:18502/game/face?answer=happy&sceneId=2",
+  "authorizationMode": "single-token",
+  "distinctAuthorizationCount": 1,
+  "arrivalMode": "staggered",
+  "loadScenario": "single-success",
+  "accountingMode": "corrected",
+  "activeMissions": 300,
+  "initialActiveUsers": 300,
+  "activationStepUsers": 300,
+  "activationIntervalMs": 3000,
+  "reconnectDelayMs": 3000,
+  "intervalMs": 1000,
+  "durationMs": 1000,
+  "loadStoppedAt": "2026-08-07T15:37:55.672Z",
+  "requestTimeoutMs": 60000,
+  "fixturePath": "D:\\T7\\workspace\\50_로컬레포\\worktrees\\exp152-sink-dispatcher\\image\\arc.jpg",
+  "fixtureSource": "file",
+  "fixtureBytes": 265745,
+  "fixtureSha256": "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99",
+  "requestBodyBytes": 354363,
+  "scheduledRequests": 300,
+  "startedRequests": 300,
+  "completedRequests": 300,
+  "unfinishedRequests": 0,
+  "successfulRequests": 299,
+  "failedRequests": 1,
+  "errorRate": 0.0033333333333333335,
+  "throughputRequestsPerSecond": 300,
+  "maxInFlight": 300,
+  "completedClassifiedRequests": 300,
+  "outcomeCounts": {
+    "HTTP_200_ACCEPTED": 299,
+    "HTTP_503_ADMISSION": 0,
+    "HTTP_503_DOWNSTREAM": 0,
+    "HTTP_4XX_DOWNSTREAM": 0,
+    "HTTP_5XX_DOWNSTREAM": 0,
+    "HTTP_500_UNCONTROLLED": 0,
+    "HTTP_OTHER": 0,
+    "CLIENT_TIMEOUT": 1,
+    "CLIENT_ABORT": 0,
+    "CONNECTION_ERROR": 0,
+    "UNCLASSIFIED": 0
+  },
+  "latencyByOutcome": {
+    "HTTP_200_ACCEPTED": {
+      "count": 299,
+      "p50": 7026,
+      "p95": 7790,
+      "p99": 7970,
+      "max": 8100
+    },
+    "HTTP_503_ADMISSION": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "HTTP_503_DOWNSTREAM": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "HTTP_4XX_DOWNSTREAM": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "HTTP_5XX_DOWNSTREAM": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "HTTP_500_UNCONTROLLED": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "HTTP_OTHER": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "CLIENT_TIMEOUT": {
+      "count": 1,
+      "p50": 60018,
+      "p95": 60018,
+      "p99": 60018,
+      "max": 60018
+    },
+    "CLIENT_ABORT": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "CONNECTION_ERROR": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    },
+    "UNCLASSIFIED": {
+      "count": 0,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null
+    }
+  },
+  "accounting": {
+    "mode": "corrected",
+    "completedClassifiedRequests": 300,
+    "classifiedTotalMatchesCompleted": true,
+    "startedRequests": 300,
+    "completedAtLoadStop": 0,
+    "unfinishedAtLoadStop": 300,
+    "inFlightAtLoadStop": 300,
+    "finalUnfinishedRequests": 0,
+    "startedMatchesLoadStopAccounting": true,
+    "startedMatchesFinalAccounting": true,
+    "successTriggeredVuExits": 0,
+    "prematureVuExits": 0,
+    "noSuccessTriggeredVuExit": true,
+    "noPrematureVuExit": true,
+    "valid": true
+  },
+  "mockDrain": {
+    "loadStoppedAt": "2026-08-07T15:37:55.672Z",
+    "configuredSeconds": 60,
+    "sampleCount": 61,
+    "initial": {
+      "phase": "load-stop",
+      "capturedAt": "2026-08-07T15:37:55.672Z",
+      "elapsedMs": 0,
+      "ok": true,
+      "status": 200,
+      "metrics": {
+        "aiInFlight": 0,
+        "aiMaxInFlight": 0,
+        "aiCompleted": 0,
+        "storageInFlight": 0,
+        "storageMaxInFlight": 0,
+        "storageCompleted": 0,
+        "strictAuth": false,
+        "authRegisteredUsers": 0,
+        "authIssuedTokens": 0,
+        "authLoginCompleted": 0,
+        "authLoginFailures": 0,
+        "resetGeneration": 0,
+        "aiLifecycleEventCount": 109,
+        "requestCounts": {
+          "GET /api/member/ai": 16
+        }
+      },
+      "error": null
+    },
+    "timeToZeroMs": 0,
+    "drainCompleted": true,
+    "remainingBacklog": {
+      "aiInFlight": 0,
+      "storageInFlight": 0
+    },
+    "terminal": {
+      "phase": "drain",
+      "sample": 60,
+      "capturedAt": "2026-08-07T15:38:55.677Z",
+      "elapsedMs": 60005,
+      "ok": true,
+      "status": 200,
+      "metrics": {
+        "aiInFlight": 0,
+        "aiMaxInFlight": 300,
+        "aiCompleted": 300,
+        "storageInFlight": 0,
+        "storageMaxInFlight": 41,
+        "storageCompleted": 300,
+        "strictAuth": false,
+        "authRegisteredUsers": 0,
+        "authIssuedTokens": 0,
+        "authLoginCompleted": 0,
+        "authLoginFailures": 0,
+        "resetGeneration": 0,
+        "aiLifecycleEventCount": 3927,
+        "requestCounts": {
+          "GET /api/member/ai": 300,
+          "POST /analyze/face": 300,
+          "PUT /storage/object": 300
+        }
+      },
+      "error": null
+    }
+  },
+  "statusCounts": {
+    "200": 299,
+    "AbortError": 1
+  },
+  "latencyMs": {
+    "p50": 7026,
+    "p90": 7698,
+    "p95": 7790,
+    "p99": 7970,
+    "max": 8100
+  },
+  "phaseLatencyMs": {
+    "300": {
+      "count": 299,
+      "p50": 7026,
+      "p95": 7790,
+      "p99": 7970,
+      "max": 8100
+    }
+  },
+  "loadGenerator": {
+    "cpuUserMs": 1203,
+    "cpuSystemMs": 938,
+    "rssBytes": 62824448,
+    "heapUsedBytes": 12913952,
+    "eventLoopDelayMs": {
+      "mean": 30.230752396628656,
+      "p50": 30.949375,
+      "p95": 32.194559,
+      "p99": 35.028991,
+      "max": 41.844735
+    },
+    "runtime": {
+      "nodeVersion": "v24.14.0",
+      "undiciVersion": "7.21.0",
+      "platform": "win32",
+      "arch": "x64"
+    }
+  },
+  "targetP95Ms": 3000
+}
