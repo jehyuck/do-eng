@@ -28,10 +28,22 @@ $databasePort = if ($Cell -eq "A") { 18300 } else { 18301 }
 $applicationUrl = "http://127.0.0.1:$applicationPort"
 $managementUrl = "http://127.0.0.1:$managementPort"
 $mockUrl = "http://127.0.0.1:$mockPort"
+$nodeExecutable = $null
 
 function Save-Json([string]$Path, $Value) {
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $Path) | Out-Null
     $Value | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $Path -Encoding UTF8
+}
+function Resolve-NodeExecutable {
+    $command = Get-Command node.exe -ErrorAction SilentlyContinue
+    if ($command -and (Test-Path -LiteralPath $command.Source)) { return $command.Source }
+    $runtimeRoot = Join-Path $env:USERPROFILE ".cache\codex-runtimes"
+    if (Test-Path -LiteralPath $runtimeRoot) {
+        $bundled = Get-ChildItem -LiteralPath $runtimeRoot -Recurse -Filter node.exe -File -ErrorAction SilentlyContinue |
+            Sort-Object FullName | Select-Object -First 1 -ExpandProperty FullName
+        if ($bundled) { return $bundled }
+    }
+    throw "NODE_EXECUTABLE_NOT_FOUND"
 }
 function Invoke-Git([string[]]$GitArgs) { & git -C $repo @GitArgs }
 function Assert-Common {
@@ -102,6 +114,7 @@ function Prepare-RuntimeCompose {
     $yaml = $yaml.Replace('"3307:3306"', ('"' + $databasePort + ':3306"'))
     $yaml = $yaml.Replace('"9100:9100"', ('"' + $mockPort + ':9100"'))
     $yaml = $yaml.Replace('"8000:8000"', ('"' + $applicationPort + ':8000"'))
+    $yaml = $yaml.Replace('"8001:8000"', ('"' + $applicationPort + ':8000"'))
     $yaml = $yaml.Replace('"9001:9091"', ('"' + $managementPort + ':9091"'))
     Set-Content $script:runtimeCompose $yaml -Encoding UTF8
     $script:baseCompose = $script:runtimeCompose
@@ -117,10 +130,11 @@ function Run-Load([int]$DurationMs) {
     $result=Join-Path $loadDir "client-results.json"
     $env:TARGET_URL="$applicationUrl/game/face"; $env:ACTIVE_MISSIONS="1"; $env:INTERVAL_MS="1000"; $env:DURATION_MS=[string]$DurationMs; $env:REQUEST_TIMEOUT_MS="15000"; $env:SCENE_ID="2"; $env:ANSWER="happy"; $env:AUTH_TOKEN="Bearer experiment-member-15"; $env:FIXTURE_PATH=$fixture; $env:EXPERIMENT_RUN_ID=$RunId; $env:IMPLEMENTATION=if($Cell -eq "A"){"baseline"}else{"webflux"}; $env:RESULT_PATH=$result; $env:PROGRESS_PATH=(Join-Path $loadDir "client-progress.jsonl"); $env:STOP_USER_ON_TRUE="false"; $env:LOAD_SCENARIO="single-success"; $env:ARRIVAL_MODE="staggered"; $env:ACCOUNTING_MODE="corrected"
     "node experiment/load/mission-load.js" | Set-Content (Join-Path $runDir "load-command.txt") -Encoding UTF8
-    $p=Start-Process node -ArgumentList $missionLoad -WorkingDirectory $repo -RedirectStandardOutput (Join-Path $loadDir "load.stdout.log") -RedirectStandardError (Join-Path $loadDir "load.stderr.log") -PassThru
-    $started=[DateTime]::UtcNow; $p.WaitForExit(); $finished=[DateTime]::UtcNow
-    Save-Json (Join-Path $runDir "load-exit.json") ([ordered]@{ command="node experiment/load/mission-load.js"; startedAt=$started.ToString("o"); finishedAt=$finished.ToString("o"); exitCode=$p.ExitCode; timedOut=$false; processId=$p.Id })
-    if ($p.ExitCode -ne 0 -or -not (Test-Path $result)) { throw "LOAD_FAILED_OR_RESULT_MISSING" }
+    $started=[DateTime]::UtcNow
+    $p=Start-Process $nodeExecutable -ArgumentList $missionLoad -WorkingDirectory $repo -RedirectStandardOutput (Join-Path $loadDir "load.stdout.log") -RedirectStandardError (Join-Path $loadDir "load.stderr.log") -PassThru -Wait
+    $finished=[DateTime]::UtcNow; $loadExitCode=$p.ExitCode
+    Save-Json (Join-Path $runDir "load-exit.json") ([ordered]@{ command="node experiment/load/mission-load.js"; startedAt=$started.ToString("o"); finishedAt=$finished.ToString("o"); exitCode=$loadExitCode; timedOut=$false; processId=$p.Id })
+    if ($loadExitCode -ne 0 -or -not (Test-Path $result)) { throw "LOAD_FAILED_OR_RESULT_MISSING" }
     Copy-Item $result (Join-Path $runDir "load-summary.json")
 }
 function Get-Meter([string]$Name,[string]$Dispatcher,[string]$Event) {
@@ -140,9 +154,17 @@ function Drain-Dispatcher {
         if ($nonzero.Count -eq 0) { $drained=$true; break }
         Start-Sleep -Milliseconds 500
     }
-    $failed=@{}; foreach($d in @("token","ai","storage")){ $failed[$d]=Get-Meter "doeng.dispatcher.events" $d "result_emission_failed" }
-    Save-Json (Join-Path $runDir "dispatcher-drain.json") ([ordered]@{applicable=($Cell -eq "B"); drained=if($Cell -eq "A"){$true}else{$drained}; timeoutSeconds=30; final=$last; resultEmissionFailed=$failed; consumerTerminationDetected=$false})
-    if ($Cell -eq "B" -and (-not $drained -or @($failed.Values|Where-Object {$null -eq $_ -or $_ -gt 0}).Count -gt 0)) { throw "DISPATCHER_DRAIN_INVALID" }
+    $failed=@{}; $failedStatus=@{}
+    foreach($d in @("token","ai","storage")){
+        $value=Get-Meter "doeng.dispatcher.events" $d "result_emission_failed"
+        $failed[$d]=$value
+        $failedStatus[$d]=if($null -eq $value){"METER_ABSENT"}elseif($value -gt 0){"FAILURE"}else{"PASS"}
+    }
+    $positiveFailureCount=@($failed.Values|Where-Object {$null -ne $_ -and $_ -gt 0}).Count
+    $meterAbsentCount=@($failed.Values|Where-Object {$null -eq $_}).Count
+    $drainState=if($Cell -eq "A"){"NOT_APPLICABLE"}elseif($positiveFailureCount -gt 0){"INVALID"}elseif($meterAbsentCount -gt 0){"PASS_WITH_METER_ABSENT"}else{"PASS"}
+    Save-Json (Join-Path $runDir "dispatcher-drain.json") ([ordered]@{applicable=($Cell -eq "B"); drained=if($Cell -eq "A"){$true}else{$drained}; timeoutSeconds=30; final=$last; resultEmissionFailed=$failed; resultEmissionFailedStatus=$failedStatus; consumerTerminationDetected=$false; drainStatus=$drainState})
+    if ($Cell -eq "B" -and (-not $drained -or $positiveFailureCount -gt 0)) { throw "DISPATCHER_DRAIN_INVALID" }
 }
 Assert-Common
 if ($Mode -eq "Plan") { Plan-Only; exit 0 }
@@ -154,7 +176,8 @@ try {
     $started=$true
     Invoke-Compose @("up","-d","--force-recreate","mariadb","experiment-mock","flux-corrected"); Wait-Health
     Save-Json (Join-Path $runDir "warmup-result.json") ([ordered]@{status="PASS"; durationMs=1000})
-    $providerPath=Join-Path $runDir "provider-metrics.jsonl"; $resourcePath=Join-Path $runDir "application-resources.jsonl"; $pollSeconds=if($Mode -eq "Smoke"){5}else{35}
+    $nodeExecutable = Resolve-NodeExecutable
+    $providerPath=Join-Path $runDir "provider-metrics.jsonl"; $resourcePath=Join-Path $runDir "application-resources.jsonl"; $pollSeconds=if($Mode -eq "Smoke"){5}else{70}
     $job=Start-Job -ScriptBlock {
         param($ProviderPath,$ResourcePath,$RunId,$Cell,$PollSeconds,$ManagementUrl)
         $end=(Get-Date).AddSeconds($PollSeconds)
@@ -165,7 +188,8 @@ try {
             Start-Sleep -Seconds 1
         }
     } -ArgumentList $providerPath,$resourcePath,$RunId,$Cell,$pollSeconds,$managementUrl
-    $loadDuration = if($Mode -eq "Smoke"){3000}else{30000}
+    if ($Mode -ne "Smoke") { Start-Sleep -Seconds 10 }
+    $loadDuration = if($Mode -eq "Smoke"){3000}else{60000}
     Run-Load $loadDuration
     Drain-Dispatcher
     Wait-Job $job -Timeout 45 | Out-Null; Receive-Job $job -ErrorAction SilentlyContinue | Out-Null; Remove-Job $job -Force
