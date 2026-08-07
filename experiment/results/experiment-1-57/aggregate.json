@@ -1,0 +1,918 @@
+﻿{
+    "experiment":  "Exp157",
+    "generatedAt":  "2026-08-07T08:46:13.1542816Z",
+    "phaseA":  {
+                   "sourceRuns":  [
+                                      "C600-S1",
+                                      "C600-R2",
+                                      "C600-R3",
+                                      "C700-S1"
+                                  ],
+                   "note":  "Stage/provider attribution performed from existing Exp156 raw artifacts",
+                   "cpuSaturation":  "INCONCLUSIVE",
+                   "pressureShift":  "INCONCLUSIVE",
+                   "aiConnectionCeiling":  "NOT_REACHED",
+                   "reason":  "CPU peaks were near the 2-CPU ceiling but not sustained; AI active did not reach configured max, while pending reached configured limits. One C700 screening run cannot separate causal pressure shifts."
+               },
+    "screening":  {
+                      "cells":  [
+                                    "Q600",
+                                    "Q700-B150",
+                                    "Q700-U100",
+                                    "Q700-B200"
+                                ],
+                      "groups":  {
+                                     "Q600":  {
+                                                  "median":  {
+                                                                 "acceptedPerSecond":  98.333333333333329,
+                                                                 "successRate":  0.49397186872069659,
+                                                                 "http200P95":  12264,
+                                                                 "http200P99":  14462,
+                                                                 "timeout":  2,
+                                                                 "connectionError":  0,
+                                                                 "cpuPeak":  198.42,
+                                                                 "memoryPeakMiB":  876.5
+                                                             },
+                                                  "runs":  [
+                                                               {
+                                                                   "cell":  "Q600",
+                                                                   "runId":  "Q600",
+                                                                   "valid":  true,
+                                                                   "successfulRequests":  1475,
+                                                                   "completedRequests":  2986,
+                                                                   "successRate":  0.49397186872069659,
+                                                                   "acceptedPerSecond":  98.333333333333329,
+                                                                   "completedPerSecond":  199.06666666666666,
+                                                                   "http200P50":  7469,
+                                                                   "http200P95":  12264,
+                                                                   "http200P99":  14462,
+                                                                   "http200Max":  14923,
+                                                                   "http500":  1509,
+                                                                   "http503":  0,
+                                                                   "timeout":  2,
+                                                                   "connectionError":  0,
+                                                                   "allP95":  11968,
+                                                                   "allP99":  14170,
+                                                                   "maxInFlight":  1632,
+                                                                   "resources":  {
+                                                                                     "sampleCount":  11,
+                                                                                     "cpuAvg":  76.25363636363636,
+                                                                                     "cpuP50":  8.09,
+                                                                                     "cpuP95":  198.42,
+                                                                                     "cpuPeak":  198.42,
+                                                                                     "memoryAvgMiB":  155.64645454545459,
+                                                                                     "memoryP95MiB":  876.5,
+                                                                                     "memoryPeakMiB":  876.5,
+                                                                                     "pidsAvg":  33,
+                                                                                     "pidsPeak":  33
+                                                                                 },
+                                                                   "provider":  {
+                                                                                    "numericValues":  78,
+                                                                                    "stages":  {
+                                                                                                   "doeng-token":  {
+                                                                                                                       "activeAvg":  23.222222222222221,
+                                                                                                                       "activeP95":  85,
+                                                                                                                       "activePeak":  85,
+                                                                                                                       "pendingAvg":  129.44444444444446,
+                                                                                                                       "pendingP95":  494,
+                                                                                                                       "pendingPeak":  494,
+                                                                                                                       "pendingNonZeroSamples":  11
+                                                                                                                   },
+                                                                                                   "doeng-ai":  {
+                                                                                                                    "activeAvg":  153.55555555555554,
+                                                                                                                    "activeP95":  562,
+                                                                                                                    "activePeak":  562,
+                                                                                                                    "pendingAvg":  480,
+                                                                                                                    "pendingP95":  960,
+                                                                                                                    "pendingPeak":  960,
+                                                                                                                    "pendingNonZeroSamples":  9
+                                                                                                                },
+                                                                                                   "doeng-storage":  {
+                                                                                                                         "activeAvg":  31.125,
+                                                                                                                         "activeP95":  100,
+                                                                                                                         "activePeak":  100,
+                                                                                                                         "pendingAvg":  91.1875,
+                                                                                                                         "pendingP95":  160,
+                                                                                                                         "pendingPeak":  160,
+                                                                                                                         "pendingNonZeroSamples":  10
+                                                                                                                     }
+                                                                                               }
+                                                                                },
+                                                                   "stages":  {
+                                                                                  "AI":  {
+                                                                                             "started":  1853,
+                                                                                             "succeeded":  1744,
+                                                                                             "failed":  109,
+                                                                                             "cancelled":  0,
+                                                                                             "inFlight":  0,
+                                                                                             "maxInFlight":  634,
+                                                                                             "durationP50":  2902.345006,
+                                                                                             "durationP95":  6329.049348,
+                                                                                             "durationP99":  9243.292862,
+                                                                                             "durationMax":  9853.604003
+                                                                                         },
+                                                                                  "STORAGE":  {
+                                                                                                  "started":  1744,
+                                                                                                  "succeeded":  1477,
+                                                                                                  "failed":  267,
+                                                                                                  "cancelled":  0,
+                                                                                                  "inFlight":  0,
+                                                                                                  "maxInFlight":  329,
+                                                                                                  "durationP50":  871.232262,
+                                                                                                  "durationP95":  2998.778375,
+                                                                                                  "durationP99":  8122.77641,
+                                                                                                  "durationMax":  9042.239608
+                                                                                              },
+                                                                                  "TOKEN":  {
+                                                                                                "started":  2986,
+                                                                                                "succeeded":  1853,
+                                                                                                "failed":  1133,
+                                                                                                "cancelled":  0,
+                                                                                                "inFlight":  0,
+                                                                                                "maxInFlight":  710,
+                                                                                                "durationP50":  1238.765463,
+                                                                                                "durationP95":  2697.097654,
+                                                                                                "durationP99":  2911.177305,
+                                                                                                "durationMax":  7511.206242
+                                                                                            }
+                                                                              }
+                                                               }
+                                                           ]
+                                              },
+                                     "Q700-B150":  {
+                                                       "median":  {
+                                                                      "acceptedPerSecond":  44.866666666666667,
+                                                                      "successRate":  0.22728807835190815,
+                                                                      "http200P95":  14791,
+                                                                      "http200P99":  14966,
+                                                                      "timeout":  999,
+                                                                      "connectionError":  0,
+                                                                      "cpuPeak":  209.43,
+                                                                      "memoryPeakMiB":  931.1
+                                                                  },
+                                                       "runs":  [
+                                                                    {
+                                                                        "cell":  "Q700-B150",
+                                                                        "runId":  "Q700-B150",
+                                                                        "valid":  true,
+                                                                        "successfulRequests":  673,
+                                                                        "completedRequests":  2961,
+                                                                        "successRate":  0.22728807835190815,
+                                                                        "acceptedPerSecond":  44.866666666666667,
+                                                                        "completedPerSecond":  197.4,
+                                                                        "http200P50":  12592,
+                                                                        "http200P95":  14791,
+                                                                        "http200P99":  14966,
+                                                                        "http200Max":  15000,
+                                                                        "http500":  1289,
+                                                                        "http503":  0,
+                                                                        "timeout":  999,
+                                                                        "connectionError":  0,
+                                                                        "allP95":  14430,
+                                                                        "allP99":  14892,
+                                                                        "maxInFlight":  2770,
+                                                                        "resources":  {
+                                                                                          "sampleCount":  9,
+                                                                                          "cpuAvg":  118.53888888888888,
+                                                                                          "cpuP50":  146.41,
+                                                                                          "cpuP95":  209.43,
+                                                                                          "cpuPeak":  209.43,
+                                                                                          "memoryAvgMiB":  191.92844444444441,
+                                                                                          "memoryP95MiB":  931.1,
+                                                                                          "memoryPeakMiB":  931.1,
+                                                                                          "pidsAvg":  33.777777777777779,
+                                                                                          "pidsPeak":  34
+                                                                                      },
+                                                                        "provider":  {
+                                                                                         "numericValues":  60,
+                                                                                         "stages":  {
+                                                                                                        "doeng-token":  {
+                                                                                                                            "activeAvg":  45.142857142857146,
+                                                                                                                            "activeP95":  150,
+                                                                                                                            "activePeak":  150,
+                                                                                                                            "pendingAvg":  218.71428571428572,
+                                                                                                                            "pendingP95":  974,
+                                                                                                                            "pendingPeak":  974,
+                                                                                                                            "pendingNonZeroSamples":  10
+                                                                                                                        },
+                                                                                                        "doeng-ai":  {
+                                                                                                                         "activeAvg":  186.14285714285714,
+                                                                                                                         "activeP95":  405,
+                                                                                                                         "activePeak":  405,
+                                                                                                                         "pendingAvg":  560,
+                                                                                                                         "pendingP95":  1120,
+                                                                                                                         "pendingPeak":  1120,
+                                                                                                                         "pendingNonZeroSamples":  7
+                                                                                                                     },
+                                                                                                        "doeng-storage":  {
+                                                                                                                              "activeAvg":  61,
+                                                                                                                              "activeP95":  144,
+                                                                                                                              "activePeak":  144,
+                                                                                                                              "pendingAvg":  136.33333333333334,
+                                                                                                                              "pendingP95":  240,
+                                                                                                                              "pendingPeak":  240,
+                                                                                                                              "pendingNonZeroSamples":  8
+                                                                                                                          }
+                                                                                                    }
+                                                                                     },
+                                                                        "stages":  {
+                                                                                       "AI":  {
+                                                                                                  "started":  1708,
+                                                                                                  "succeeded":  1234,
+                                                                                                  "failed":  115,
+                                                                                                  "cancelled":  359,
+                                                                                                  "inFlight":  0,
+                                                                                                  "maxInFlight":  664,
+                                                                                                  "durationP50":  3000.929037,
+                                                                                                  "durationP95":  12987.943184,
+                                                                                                  "durationP99":  17719.317162,
+                                                                                                  "durationMax":  19626.349199
+                                                                                              },
+                                                                                       "STORAGE":  {
+                                                                                                       "started":  1234,
+                                                                                                       "succeeded":  1086,
+                                                                                                       "failed":  45,
+                                                                                                       "cancelled":  104,
+                                                                                                       "inFlight":  0,
+                                                                                                       "maxInFlight":  397,
+                                                                                                       "durationP50":  1916.631722,
+                                                                                                       "durationP95":  8909.641729,
+                                                                                                       "durationP99":  11405.54914,
+                                                                                                       "durationMax":  17341.75754
+                                                                                                   },
+                                                                                       "TOKEN":  {
+                                                                                                     "started":  2961,
+                                                                                                     "succeeded":  1708,
+                                                                                                     "failed":  1220,
+                                                                                                     "cancelled":  33,
+                                                                                                     "inFlight":  0,
+                                                                                                     "maxInFlight":  1110,
+                                                                                                     "durationP50":  4402.36652,
+                                                                                                     "durationP95":  7184.350259,
+                                                                                                     "durationP99":  12517.270168,
+                                                                                                     "durationMax":  15908.871914
+                                                                                                 }
+                                                                                   }
+                                                                    }
+                                                                ]
+                                                   },
+                                     "Q700-U100":  {
+                                                       "median":  {
+                                                                      "acceptedPerSecond":  49.8,
+                                                                      "successRate":  0.25041904123365738,
+                                                                      "http200P95":  14661,
+                                                                      "http200P99":  14963,
+                                                                      "timeout":  573,
+                                                                      "connectionError":  0,
+                                                                      "cpuPeak":  217.13,
+                                                                      "memoryPeakMiB":  488
+                                                                  },
+                                                       "runs":  [
+                                                                    {
+                                                                        "cell":  "Q700-U100",
+                                                                        "runId":  "Q700-U100",
+                                                                        "valid":  true,
+                                                                        "successfulRequests":  747,
+                                                                        "completedRequests":  2983,
+                                                                        "successRate":  0.25041904123365738,
+                                                                        "acceptedPerSecond":  49.8,
+                                                                        "completedPerSecond":  198.86666666666667,
+                                                                        "http200P50":  11634,
+                                                                        "http200P95":  14661,
+                                                                        "http200P99":  14963,
+                                                                        "http200Max":  15002,
+                                                                        "http500":  1663,
+                                                                        "http503":  0,
+                                                                        "timeout":  573,
+                                                                        "connectionError":  0,
+                                                                        "allP95":  14100,
+                                                                        "allP99":  14787,
+                                                                        "maxInFlight":  2333,
+                                                                        "resources":  {
+                                                                                          "sampleCount":  9,
+                                                                                          "cpuAvg":  118.38666666666667,
+                                                                                          "cpuP50":  189.23,
+                                                                                          "cpuP95":  217.13,
+                                                                                          "cpuPeak":  217.13,
+                                                                                          "memoryAvgMiB":  101.51,
+                                                                                          "memoryP95MiB":  488,
+                                                                                          "memoryPeakMiB":  488,
+                                                                                          "pidsAvg":  33.777777777777779,
+                                                                                          "pidsPeak":  34
+                                                                                      },
+                                                                        "provider":  {
+                                                                                         "numericValues":  60,
+                                                                                         "stages":  {
+                                                                                                        "doeng-token":  {
+                                                                                                                            "activeAvg":  32.142857142857146,
+                                                                                                                            "activeP95":  100,
+                                                                                                                            "activePeak":  100,
+                                                                                                                            "pendingAvg":  176.85714285714286,
+                                                                                                                            "pendingP95":  949,
+                                                                                                                            "pendingPeak":  949,
+                                                                                                                            "pendingNonZeroSamples":  10
+                                                                                                                        },
+                                                                                                        "doeng-ai":  {
+                                                                                                                         "activeAvg":  152.57142857142858,
+                                                                                                                         "activeP95":  377,
+                                                                                                                         "activePeak":  377,
+                                                                                                                         "pendingAvg":  560,
+                                                                                                                         "pendingP95":  1120,
+                                                                                                                         "pendingPeak":  1120,
+                                                                                                                         "pendingNonZeroSamples":  7
+                                                                                                                     },
+                                                                                                        "doeng-storage":  {
+                                                                                                                              "activeAvg":  22.333333333333332,
+                                                                                                                              "activeP95":  75,
+                                                                                                                              "activePeak":  75,
+                                                                                                                              "pendingAvg":  92.333333333333329,
+                                                                                                                              "pendingP95":  160,
+                                                                                                                              "pendingPeak":  160,
+                                                                                                                              "pendingNonZeroSamples":  8
+                                                                                                                          }
+                                                                                                    }
+                                                                                     },
+                                                                        "stages":  {
+                                                                                       "AI":  {
+                                                                                                  "started":  1487,
+                                                                                                  "succeeded":  1044,
+                                                                                                  "failed":  122,
+                                                                                                  "cancelled":  321,
+                                                                                                  "inFlight":  0,
+                                                                                                  "maxInFlight":  550,
+                                                                                                  "durationP50":  3277.294095,
+                                                                                                  "durationP95":  13471.708505,
+                                                                                                  "durationP99":  16888.603414,
+                                                                                                  "durationMax":  18012.546634
+                                                                                              },
+                                                                                       "STORAGE":  {
+                                                                                                       "started":  1044,
+                                                                                                       "succeeded":  855,
+                                                                                                       "failed":  119,
+                                                                                                       "cancelled":  70,
+                                                                                                       "inFlight":  0,
+                                                                                                       "maxInFlight":  268,
+                                                                                                       "durationP50":  1013.253894,
+                                                                                                       "durationP95":  5695.567259,
+                                                                                                       "durationP99":  11311.278047,
+                                                                                                       "durationMax":  16111.457537
+                                                                                                   },
+                                                                                       "TOKEN":  {
+                                                                                                     "started":  2983,
+                                                                                                     "succeeded":  1487,
+                                                                                                     "failed":  1485,
+                                                                                                     "cancelled":  11,
+                                                                                                     "inFlight":  0,
+                                                                                                     "maxInFlight":  1085,
+                                                                                                     "durationP50":  2897.857201,
+                                                                                                     "durationP95":  4699.616196,
+                                                                                                     "durationP99":  6383.894265,
+                                                                                                     "durationMax":  15832.891525
+                                                                                                 }
+                                                                                   }
+                                                                    }
+                                                                ]
+                                                   },
+                                     "Q700-B200":  {
+                                                       "median":  {
+                                                                      "acceptedPerSecond":  33.2,
+                                                                      "successRate":  0.17716115261472787,
+                                                                      "http200P95":  14924,
+                                                                      "http200P99":  14989,
+                                                                      "timeout":  1605,
+                                                                      "connectionError":  0,
+                                                                      "cpuPeak":  207.96,
+                                                                      "memoryPeakMiB":  765.3
+                                                                  },
+                                                       "runs":  [
+                                                                    {
+                                                                        "cell":  "Q700-B200",
+                                                                        "runId":  "Q700-B200",
+                                                                        "valid":  true,
+                                                                        "successfulRequests":  498,
+                                                                        "completedRequests":  2811,
+                                                                        "successRate":  0.17716115261472787,
+                                                                        "acceptedPerSecond":  33.2,
+                                                                        "completedPerSecond":  187.4,
+                                                                        "http200P50":  13863,
+                                                                        "http200P95":  14924,
+                                                                        "http200P99":  14989,
+                                                                        "http200Max":  14995,
+                                                                        "http500":  708,
+                                                                        "http503":  0,
+                                                                        "timeout":  1605,
+                                                                        "connectionError":  0,
+                                                                        "allP95":  14805,
+                                                                        "allP99":  14956,
+                                                                        "maxInFlight":  2637,
+                                                                        "resources":  {
+                                                                                          "sampleCount":  8,
+                                                                                          "cpuAvg":  153.66000000000003,
+                                                                                          "cpuP50":  195.76,
+                                                                                          "cpuP95":  207.96,
+                                                                                          "cpuPeak":  207.96,
+                                                                                          "memoryAvgMiB":  192.62862499999997,
+                                                                                          "memoryP95MiB":  765.3,
+                                                                                          "memoryPeakMiB":  765.3,
+                                                                                          "pidsAvg":  33.75,
+                                                                                          "pidsPeak":  34
+                                                                                      },
+                                                                        "provider":  {
+                                                                                         "numericValues":  51,
+                                                                                         "stages":  {
+                                                                                                        "doeng-token":  {
+                                                                                                                            "activeAvg":  97,
+                                                                                                                            "activeP95":  200,
+                                                                                                                            "activePeak":  200,
+                                                                                                                            "pendingAvg":  250.41666666666666,
+                                                                                                                            "pendingP95":  687,
+                                                                                                                            "pendingPeak":  687,
+                                                                                                                            "pendingNonZeroSamples":  8
+                                                                                                                        },
+                                                                                                        "doeng-ai":  {
+                                                                                                                         "activeAvg":  268.5,
+                                                                                                                         "activeP95":  459,
+                                                                                                                         "activePeak":  459,
+                                                                                                                         "pendingAvg":  560,
+                                                                                                                         "pendingP95":  1120,
+                                                                                                                         "pendingPeak":  1120,
+                                                                                                                         "pendingNonZeroSamples":  6
+                                                                                                                     },
+                                                                                                        "doeng-storage":  {
+                                                                                                                              "activeAvg":  35.4,
+                                                                                                                              "activeP95":  73,
+                                                                                                                              "activePeak":  73,
+                                                                                                                              "pendingAvg":  170.8,
+                                                                                                                              "pendingP95":  320,
+                                                                                                                              "pendingPeak":  320,
+                                                                                                                              "pendingNonZeroSamples":  6
+                                                                                                                          }
+                                                                                                    }
+                                                                                     },
+                                                                        "stages":  {
+                                                                                       "AI":  {
+                                                                                                  "started":  2071,
+                                                                                                  "succeeded":  1252,
+                                                                                                  "failed":  68,
+                                                                                                  "cancelled":  751,
+                                                                                                  "inFlight":  0,
+                                                                                                  "maxInFlight":  640,
+                                                                                                  "durationP50":  3390.159754,
+                                                                                                  "durationP95":  13435.400258,
+                                                                                                  "durationP99":  15793.817371,
+                                                                                                  "durationMax":  16796.307943
+                                                                                              },
+                                                                                       "STORAGE":  {
+                                                                                                       "started":  1252,
+                                                                                                       "succeeded":  728,
+                                                                                                       "failed":  8,
+                                                                                                       "cancelled":  519,
+                                                                                                       "inFlight":  0,
+                                                                                                       "maxInFlight":  368,
+                                                                                                       "durationP50":  994.447356,
+                                                                                                       "durationP95":  9305.794284,
+                                                                                                       "durationP99":  12223.482321,
+                                                                                                       "durationMax":  14405.837918
+                                                                                                   },
+                                                                                       "TOKEN":  {
+                                                                                                     "started":  2811,
+                                                                                                     "succeeded":  2071,
+                                                                                                     "failed":  699,
+                                                                                                     "cancelled":  41,
+                                                                                                     "inFlight":  0,
+                                                                                                     "maxInFlight":  942,
+                                                                                                     "durationP50":  2697.754033,
+                                                                                                     "durationP95":  9677.395767,
+                                                                                                     "durationP99":  12292.798603,
+                                                                                                     "durationMax":  15002.706934
+                                                                                                 }
+                                                                                   }
+                                                                    }
+                                                                ]
+                                                   }
+                                 },
+                      "winner":  "Q600",
+                      "staticBalanceSignal":  "NOT_SUPPORTED",
+                      "confirmationRun":  "NO",
+                      "confirmationResult":  "NOT_RUN",
+                      "reason":  "Q600 exceeded each Q700 cell on accepted HTTP 200/sec in the fixed screening protocol."
+                  },
+    "decision":  "STATIC_POOL_FURTHER_TUNING=LOW_VALUE;FLOW_AWARE_LOGICAL_CONCURRENCY=NOT_JUSTIFIED",
+    "newPerformanceRunCount":  4,
+    "productionJavaChange":  "NONE",
+    "nextRecommendedStep":  "Stop static provider-capacity grid search; do not implement dynamic concurrency from this evidence.",
+    "runs":  [
+                 {
+                     "cell":  "Q600",
+                     "runId":  "Q600",
+                     "valid":  true,
+                     "successfulRequests":  1475,
+                     "completedRequests":  2986,
+                     "successRate":  0.49397186872069659,
+                     "acceptedPerSecond":  98.333333333333329,
+                     "completedPerSecond":  199.06666666666666,
+                     "http200P50":  7469,
+                     "http200P95":  12264,
+                     "http200P99":  14462,
+                     "http200Max":  14923,
+                     "http500":  1509,
+                     "http503":  0,
+                     "timeout":  2,
+                     "connectionError":  0,
+                     "allP95":  11968,
+                     "allP99":  14170,
+                     "maxInFlight":  1632,
+                     "resources":  {
+                                       "sampleCount":  11,
+                                       "cpuAvg":  76.25363636363636,
+                                       "cpuP50":  8.09,
+                                       "cpuP95":  198.42,
+                                       "cpuPeak":  198.42,
+                                       "memoryAvgMiB":  155.64645454545459,
+                                       "memoryP95MiB":  876.5,
+                                       "memoryPeakMiB":  876.5,
+                                       "pidsAvg":  33,
+                                       "pidsPeak":  33
+                                   },
+                     "provider":  {
+                                      "numericValues":  78,
+                                      "stages":  {
+                                                     "doeng-token":  {
+                                                                         "activeAvg":  23.222222222222221,
+                                                                         "activeP95":  85,
+                                                                         "activePeak":  85,
+                                                                         "pendingAvg":  129.44444444444446,
+                                                                         "pendingP95":  494,
+                                                                         "pendingPeak":  494,
+                                                                         "pendingNonZeroSamples":  11
+                                                                     },
+                                                     "doeng-ai":  {
+                                                                      "activeAvg":  153.55555555555554,
+                                                                      "activeP95":  562,
+                                                                      "activePeak":  562,
+                                                                      "pendingAvg":  480,
+                                                                      "pendingP95":  960,
+                                                                      "pendingPeak":  960,
+                                                                      "pendingNonZeroSamples":  9
+                                                                  },
+                                                     "doeng-storage":  {
+                                                                           "activeAvg":  31.125,
+                                                                           "activeP95":  100,
+                                                                           "activePeak":  100,
+                                                                           "pendingAvg":  91.1875,
+                                                                           "pendingP95":  160,
+                                                                           "pendingPeak":  160,
+                                                                           "pendingNonZeroSamples":  10
+                                                                       }
+                                                 }
+                                  },
+                     "stages":  {
+                                    "AI":  {
+                                               "started":  1853,
+                                               "succeeded":  1744,
+                                               "failed":  109,
+                                               "cancelled":  0,
+                                               "inFlight":  0,
+                                               "maxInFlight":  634,
+                                               "durationP50":  2902.345006,
+                                               "durationP95":  6329.049348,
+                                               "durationP99":  9243.292862,
+                                               "durationMax":  9853.604003
+                                           },
+                                    "STORAGE":  {
+                                                    "started":  1744,
+                                                    "succeeded":  1477,
+                                                    "failed":  267,
+                                                    "cancelled":  0,
+                                                    "inFlight":  0,
+                                                    "maxInFlight":  329,
+                                                    "durationP50":  871.232262,
+                                                    "durationP95":  2998.778375,
+                                                    "durationP99":  8122.77641,
+                                                    "durationMax":  9042.239608
+                                                },
+                                    "TOKEN":  {
+                                                  "started":  2986,
+                                                  "succeeded":  1853,
+                                                  "failed":  1133,
+                                                  "cancelled":  0,
+                                                  "inFlight":  0,
+                                                  "maxInFlight":  710,
+                                                  "durationP50":  1238.765463,
+                                                  "durationP95":  2697.097654,
+                                                  "durationP99":  2911.177305,
+                                                  "durationMax":  7511.206242
+                                              }
+                                }
+                 },
+                 {
+                     "cell":  "Q700-B150",
+                     "runId":  "Q700-B150",
+                     "valid":  true,
+                     "successfulRequests":  673,
+                     "completedRequests":  2961,
+                     "successRate":  0.22728807835190815,
+                     "acceptedPerSecond":  44.866666666666667,
+                     "completedPerSecond":  197.4,
+                     "http200P50":  12592,
+                     "http200P95":  14791,
+                     "http200P99":  14966,
+                     "http200Max":  15000,
+                     "http500":  1289,
+                     "http503":  0,
+                     "timeout":  999,
+                     "connectionError":  0,
+                     "allP95":  14430,
+                     "allP99":  14892,
+                     "maxInFlight":  2770,
+                     "resources":  {
+                                       "sampleCount":  9,
+                                       "cpuAvg":  118.53888888888888,
+                                       "cpuP50":  146.41,
+                                       "cpuP95":  209.43,
+                                       "cpuPeak":  209.43,
+                                       "memoryAvgMiB":  191.92844444444441,
+                                       "memoryP95MiB":  931.1,
+                                       "memoryPeakMiB":  931.1,
+                                       "pidsAvg":  33.777777777777779,
+                                       "pidsPeak":  34
+                                   },
+                     "provider":  {
+                                      "numericValues":  60,
+                                      "stages":  {
+                                                     "doeng-token":  {
+                                                                         "activeAvg":  45.142857142857146,
+                                                                         "activeP95":  150,
+                                                                         "activePeak":  150,
+                                                                         "pendingAvg":  218.71428571428572,
+                                                                         "pendingP95":  974,
+                                                                         "pendingPeak":  974,
+                                                                         "pendingNonZeroSamples":  10
+                                                                     },
+                                                     "doeng-ai":  {
+                                                                      "activeAvg":  186.14285714285714,
+                                                                      "activeP95":  405,
+                                                                      "activePeak":  405,
+                                                                      "pendingAvg":  560,
+                                                                      "pendingP95":  1120,
+                                                                      "pendingPeak":  1120,
+                                                                      "pendingNonZeroSamples":  7
+                                                                  },
+                                                     "doeng-storage":  {
+                                                                           "activeAvg":  61,
+                                                                           "activeP95":  144,
+                                                                           "activePeak":  144,
+                                                                           "pendingAvg":  136.33333333333334,
+                                                                           "pendingP95":  240,
+                                                                           "pendingPeak":  240,
+                                                                           "pendingNonZeroSamples":  8
+                                                                       }
+                                                 }
+                                  },
+                     "stages":  {
+                                    "AI":  {
+                                               "started":  1708,
+                                               "succeeded":  1234,
+                                               "failed":  115,
+                                               "cancelled":  359,
+                                               "inFlight":  0,
+                                               "maxInFlight":  664,
+                                               "durationP50":  3000.929037,
+                                               "durationP95":  12987.943184,
+                                               "durationP99":  17719.317162,
+                                               "durationMax":  19626.349199
+                                           },
+                                    "STORAGE":  {
+                                                    "started":  1234,
+                                                    "succeeded":  1086,
+                                                    "failed":  45,
+                                                    "cancelled":  104,
+                                                    "inFlight":  0,
+                                                    "maxInFlight":  397,
+                                                    "durationP50":  1916.631722,
+                                                    "durationP95":  8909.641729,
+                                                    "durationP99":  11405.54914,
+                                                    "durationMax":  17341.75754
+                                                },
+                                    "TOKEN":  {
+                                                  "started":  2961,
+                                                  "succeeded":  1708,
+                                                  "failed":  1220,
+                                                  "cancelled":  33,
+                                                  "inFlight":  0,
+                                                  "maxInFlight":  1110,
+                                                  "durationP50":  4402.36652,
+                                                  "durationP95":  7184.350259,
+                                                  "durationP99":  12517.270168,
+                                                  "durationMax":  15908.871914
+                                              }
+                                }
+                 },
+                 {
+                     "cell":  "Q700-U100",
+                     "runId":  "Q700-U100",
+                     "valid":  true,
+                     "successfulRequests":  747,
+                     "completedRequests":  2983,
+                     "successRate":  0.25041904123365738,
+                     "acceptedPerSecond":  49.8,
+                     "completedPerSecond":  198.86666666666667,
+                     "http200P50":  11634,
+                     "http200P95":  14661,
+                     "http200P99":  14963,
+                     "http200Max":  15002,
+                     "http500":  1663,
+                     "http503":  0,
+                     "timeout":  573,
+                     "connectionError":  0,
+                     "allP95":  14100,
+                     "allP99":  14787,
+                     "maxInFlight":  2333,
+                     "resources":  {
+                                       "sampleCount":  9,
+                                       "cpuAvg":  118.38666666666667,
+                                       "cpuP50":  189.23,
+                                       "cpuP95":  217.13,
+                                       "cpuPeak":  217.13,
+                                       "memoryAvgMiB":  101.51,
+                                       "memoryP95MiB":  488,
+                                       "memoryPeakMiB":  488,
+                                       "pidsAvg":  33.777777777777779,
+                                       "pidsPeak":  34
+                                   },
+                     "provider":  {
+                                      "numericValues":  60,
+                                      "stages":  {
+                                                     "doeng-token":  {
+                                                                         "activeAvg":  32.142857142857146,
+                                                                         "activeP95":  100,
+                                                                         "activePeak":  100,
+                                                                         "pendingAvg":  176.85714285714286,
+                                                                         "pendingP95":  949,
+                                                                         "pendingPeak":  949,
+                                                                         "pendingNonZeroSamples":  10
+                                                                     },
+                                                     "doeng-ai":  {
+                                                                      "activeAvg":  152.57142857142858,
+                                                                      "activeP95":  377,
+                                                                      "activePeak":  377,
+                                                                      "pendingAvg":  560,
+                                                                      "pendingP95":  1120,
+                                                                      "pendingPeak":  1120,
+                                                                      "pendingNonZeroSamples":  7
+                                                                  },
+                                                     "doeng-storage":  {
+                                                                           "activeAvg":  22.333333333333332,
+                                                                           "activeP95":  75,
+                                                                           "activePeak":  75,
+                                                                           "pendingAvg":  92.333333333333329,
+                                                                           "pendingP95":  160,
+                                                                           "pendingPeak":  160,
+                                                                           "pendingNonZeroSamples":  8
+                                                                       }
+                                                 }
+                                  },
+                     "stages":  {
+                                    "AI":  {
+                                               "started":  1487,
+                                               "succeeded":  1044,
+                                               "failed":  122,
+                                               "cancelled":  321,
+                                               "inFlight":  0,
+                                               "maxInFlight":  550,
+                                               "durationP50":  3277.294095,
+                                               "durationP95":  13471.708505,
+                                               "durationP99":  16888.603414,
+                                               "durationMax":  18012.546634
+                                           },
+                                    "STORAGE":  {
+                                                    "started":  1044,
+                                                    "succeeded":  855,
+                                                    "failed":  119,
+                                                    "cancelled":  70,
+                                                    "inFlight":  0,
+                                                    "maxInFlight":  268,
+                                                    "durationP50":  1013.253894,
+                                                    "durationP95":  5695.567259,
+                                                    "durationP99":  11311.278047,
+                                                    "durationMax":  16111.457537
+                                                },
+                                    "TOKEN":  {
+                                                  "started":  2983,
+                                                  "succeeded":  1487,
+                                                  "failed":  1485,
+                                                  "cancelled":  11,
+                                                  "inFlight":  0,
+                                                  "maxInFlight":  1085,
+                                                  "durationP50":  2897.857201,
+                                                  "durationP95":  4699.616196,
+                                                  "durationP99":  6383.894265,
+                                                  "durationMax":  15832.891525
+                                              }
+                                }
+                 },
+                 {
+                     "cell":  "Q700-B200",
+                     "runId":  "Q700-B200",
+                     "valid":  true,
+                     "successfulRequests":  498,
+                     "completedRequests":  2811,
+                     "successRate":  0.17716115261472787,
+                     "acceptedPerSecond":  33.2,
+                     "completedPerSecond":  187.4,
+                     "http200P50":  13863,
+                     "http200P95":  14924,
+                     "http200P99":  14989,
+                     "http200Max":  14995,
+                     "http500":  708,
+                     "http503":  0,
+                     "timeout":  1605,
+                     "connectionError":  0,
+                     "allP95":  14805,
+                     "allP99":  14956,
+                     "maxInFlight":  2637,
+                     "resources":  {
+                                       "sampleCount":  8,
+                                       "cpuAvg":  153.66000000000003,
+                                       "cpuP50":  195.76,
+                                       "cpuP95":  207.96,
+                                       "cpuPeak":  207.96,
+                                       "memoryAvgMiB":  192.62862499999997,
+                                       "memoryP95MiB":  765.3,
+                                       "memoryPeakMiB":  765.3,
+                                       "pidsAvg":  33.75,
+                                       "pidsPeak":  34
+                                   },
+                     "provider":  {
+                                      "numericValues":  51,
+                                      "stages":  {
+                                                     "doeng-token":  {
+                                                                         "activeAvg":  97,
+                                                                         "activeP95":  200,
+                                                                         "activePeak":  200,
+                                                                         "pendingAvg":  250.41666666666666,
+                                                                         "pendingP95":  687,
+                                                                         "pendingPeak":  687,
+                                                                         "pendingNonZeroSamples":  8
+                                                                     },
+                                                     "doeng-ai":  {
+                                                                      "activeAvg":  268.5,
+                                                                      "activeP95":  459,
+                                                                      "activePeak":  459,
+                                                                      "pendingAvg":  560,
+                                                                      "pendingP95":  1120,
+                                                                      "pendingPeak":  1120,
+                                                                      "pendingNonZeroSamples":  6
+                                                                  },
+                                                     "doeng-storage":  {
+                                                                           "activeAvg":  35.4,
+                                                                           "activeP95":  73,
+                                                                           "activePeak":  73,
+                                                                           "pendingAvg":  170.8,
+                                                                           "pendingP95":  320,
+                                                                           "pendingPeak":  320,
+                                                                           "pendingNonZeroSamples":  6
+                                                                       }
+                                                 }
+                                  },
+                     "stages":  {
+                                    "AI":  {
+                                               "started":  2071,
+                                               "succeeded":  1252,
+                                               "failed":  68,
+                                               "cancelled":  751,
+                                               "inFlight":  0,
+                                               "maxInFlight":  640,
+                                               "durationP50":  3390.159754,
+                                               "durationP95":  13435.400258,
+                                               "durationP99":  15793.817371,
+                                               "durationMax":  16796.307943
+                                           },
+                                    "STORAGE":  {
+                                                    "started":  1252,
+                                                    "succeeded":  728,
+                                                    "failed":  8,
+                                                    "cancelled":  519,
+                                                    "inFlight":  0,
+                                                    "maxInFlight":  368,
+                                                    "durationP50":  994.447356,
+                                                    "durationP95":  9305.794284,
+                                                    "durationP99":  12223.482321,
+                                                    "durationMax":  14405.837918
+                                                },
+                                    "TOKEN":  {
+                                                  "started":  2811,
+                                                  "succeeded":  2071,
+                                                  "failed":  699,
+                                                  "cancelled":  41,
+                                                  "inFlight":  0,
+                                                  "maxInFlight":  942,
+                                                  "durationP50":  2697.754033,
+                                                  "durationP95":  9677.395767,
+                                                  "durationP99":  12292.798603,
+                                                  "durationMax":  15002.706934
+                                              }
+                                }
+                 }
+             ]
+}
