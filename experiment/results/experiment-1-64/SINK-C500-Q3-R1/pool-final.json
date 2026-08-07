@@ -1,0 +1,173 @@
+﻿{
+    "capturedAtEpochMs":  1786114450018,
+    "poolMode":  "ISOLATED",
+    "providers":  [
+                      "doeng-token",
+                      "doeng-ai",
+                      "doeng-storage"
+                  ],
+    "metrics":  [
+                    {
+                        "name":  "reactor.netty.connection.provider.active.connections",
+                        "value":  0.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-storage",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.active.connections",
+                        "value":  0.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-token",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.active.connections",
+                        "value":  0.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-ai",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.idle.connections",
+                        "value":  100.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-token",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.idle.connections",
+                        "value":  465.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-ai",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.idle.connections",
+                        "value":  42.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-storage",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.total.connections",
+                        "value":  465.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-ai",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.total.connections",
+                        "value":  42.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-storage",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.total.connections",
+                        "value":  100.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-token",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.max.connections",
+                        "value":  100.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-token",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.max.connections",
+                        "value":  100.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-storage",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.max.connections",
+                        "value":  600.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-ai",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.pending.connections",
+                        "value":  0.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-ai",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.pending.connections",
+                        "value":  0.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-storage",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.pending.connections",
+                        "value":  0.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-token",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.max.pending.connections",
+                        "value":  160.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-storage",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.max.pending.connections",
+                        "value":  960.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-ai",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    },
+                    {
+                        "name":  "reactor.netty.connection.provider.max.pending.connections",
+                        "value":  160.0,
+                        "tags":  {
+                                     "id":  "-548754711",
+                                     "name":  "doeng-token",
+                                     "remote.address":  "experiment-mock:9100"
+                                 }
+                    }
+                ]
+}
