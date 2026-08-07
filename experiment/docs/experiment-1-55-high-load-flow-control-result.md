@@ -42,18 +42,18 @@ CONTROL/GATE는 source `507e075016728daeaab75a51e7172577efe4c5ce`, SINK는 sourc
 
 ### 3회 중앙값
 
-| 셀 | success rate | successful RPS | p50 | p95 | p99 |
+| 셀 | success rate | completed per load second | accepted HTTP 200 completions per load second | all-response p50/p95/p99 | HTTP 200 p50/p95/p99 |
 |---|---:|---:|---:|---:|---:|
-| CONTROL | 0.85% | 128.97 | 12,550 | 14,871 | 15,456 |
-| GATE | 4.20% | 124.33 | 6,001 | 14,349 | 15,158 |
-| SINK | 2.33% | 131.00 | 12,040 | 14,850 | 15,417 |
+| CONTROL | 0.85% | 128.97 | 1.10 | 12,550 / 14,871 / 15,456 | 13,214 / 14,936 / 14,962 |
+| GATE | 4.20% | 124.33 | 5.47 | 6,001 / 14,349 / 15,158 | 13,210 / 14,770 / 14,976 |
+| SINK | 2.33% | 131.00 | 4.17 | 12,040 / 14,850 / 15,417 | 12,402 / 13,450 / 13,567 |
 
-중앙값만 보면 SINK의 p95는 CONTROL과 사실상 같은 수준이며, successful RPS 차이는 작다. 개별 run 방향은 일관되지 않았다.
+`completed per load second`는 `mission-load.js`가 계산한 `completedRequests / configured load duration`이며 성공 처리량이 아니다. 성공 처리량은 별도로 `accepted HTTP 200 completions per load second`로 표시했다. HTTP 200 latency도 all-response latency와 분리했다. SINK의 HTTP 200 tail은 CONTROL보다 낮은 방향이지만, run별 성공 수·완료량·오류 유형의 변동이 커 단독 효과로 확정하지 않는다.
 
 ## 5. Provider·stage·drain 관찰
 
 - 모든 load-stop 최종 pool snapshot에서 `pending.connections=0`이었다.
-- provider final snapshot은 TOKEN/AI/STORAGE별 active/idle/total/max/pending을 숫자로 보존했다.
+- provider final snapshot은 TOKEN/AI/STORAGE별 active/idle/total/max/pending을 숫자로 보존했다. 모든 run의 final pending은 0이었다.
 - continuous JSONL의 provider metric 배열은 문자열화된 행도 포함하여 pending peak와 acquire wait의 시계열 정량 집계는 `NOT AVAILABLE`이다. 따라서 pending 감소·acquire timeout 감소를 반복적으로 주장하지 않는다.
 - stage-final의 대표 maxInFlight 범위: CONTROL AI 347–562, GATE AI 297–353, SINK AI 386–873. TOKEN과 STORAGE도 run 간 편차가 컸다.
 - SINK queue depth/queue-wait 및 `result_emission_failed`의 단계별 수치는 현재 artifact에서 `NOT AVAILABLE`이다. mock downstream in-flight는 모든 core에서 drain 후 0으로 수렴했다.
@@ -69,7 +69,7 @@ container stats에서 application의 관찰 최대치는 대략 CPU 199–236%�
 
 근거:
 
-1. SINK에서 HTTP 500과 client timeout이 CONTROL보다 낮은 방향은 보이지만, successful RPS·p95·connection error는 반복적으로 같은 방향이 아니다.
+1. SINK에서 HTTP 500과 client timeout이 CONTROL보다 낮은 방향은 보이지만, accepted HTTP 200 completion rate·connection error는 반복적으로 같은 방향이 아니다.
 2. SINK-3의 completed/attempt 규모가 다른 run보다 커 maxInFlight가 2,544까지 올라 run 간 변동성이 크다.
 3. provider pending peak/acquire wait의 직접 시계열과 Sink queue/wait 시계열이 현재 artifact에서 정량적으로 복원되지 않아, SINK의 안정성 개선을 인과적으로 확정할 수 없다.
 
