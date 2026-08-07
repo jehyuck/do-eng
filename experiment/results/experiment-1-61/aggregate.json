@@ -1,0 +1,72 @@
+{
+  "experiment": "Exp161",
+  "sourceExperiment": "Exp160",
+  "newPerformanceRun": false,
+  "startHead": "ad37460ef48b979dca4811c1cdf15ed66deacb8e",
+  "validRun": "SINK-C400-Q3-R1",
+  "transportFailureTotal": 2229,
+  "transportBreakdown": {
+    "CLIENT_ABORT_DEADLINE": 575,
+    "CONNECT_REFUSED": 1654,
+    "CONNECT_TIMEOUT": 0,
+    "SOCKET_RESET": 0,
+    "SOCKET_CLOSED": 0,
+    "UNDICI_HEADERS_TIMEOUT": 0,
+    "UNDICI_BODY_TIMEOUT": 0,
+    "OTHER": 0
+  },
+  "phaseBreakdown": {
+    "PHASE_FETCH_HEADERS": 2229,
+    "PHASE_RESPONSE_BODY": 0
+  },
+  "deadlineAbort": {
+    "true": 575,
+    "false": 1654
+  },
+  "rootCodes": {
+    "ECONNREFUSED": 1654,
+    "20": 575
+  },
+  "requestIdCorrelation": {
+    "applicationEvidencePresent": 575,
+    "applicationEvidenceAbsent": 1654,
+    "connectRefusedWithoutApplicationEvidence": 1654,
+    "deadlineAbortWithApplicationEvidence": 575,
+    "stageLevelCorrelation": "NOT_AVAILABLE"
+  },
+  "timeBuckets5s": [
+    {"range":"0-5s","requests":531,"http200":5,"http500":2,"http503":305,"http504":105,"transport":114,"connectRefused":0,"deadlineAbort":114},
+    {"range":"5-10s","requests":568,"http200":0,"http500":0,"http503":54,"http504":52,"transport":462,"connectRefused":318,"deadlineAbort":144},
+    {"range":"10-15s","requests":513,"http200":0,"http500":14,"http503":35,"http504":9,"transport":455,"connectRefused":286,"deadlineAbort":169},
+    {"range":"15-20s","requests":438,"http200":0,"http500":3,"http503":10,"http504":19,"transport":406,"connectRefused":305,"deadlineAbort":101},
+    {"range":"20-25s","requests":466,"http200":18,"http500":0,"http503":44,"http504":48,"transport":356,"connectRefused":309,"deadlineAbort":47},
+    {"range":"25-30s","requests":441,"http200":118,"http500":0,"http503":64,"http504":6,"transport":253,"connectRefused":253,"deadlineAbort":0}
+  ],
+  "sinkUtilization": {
+    "token": {"configuredConcurrency":100,"activePeak":35,"ceilingReached":"NO"},
+    "ai": {"configuredConcurrency":400,"activePeak":189,"ceilingReached":"NO"},
+    "storage": {"configuredConcurrency":100,"activePeak":42,"ceilingReached":"NO"}
+  },
+  "queue": {
+    "tokenPeak":0,"aiPeak":0,"storagePeak":0,
+    "tokenQueueWaitMaxSeconds":3.668889493,
+    "aiQueueWaitMaxSeconds":0.252058076,
+    "storageQueueWaitMaxSeconds":0.003638355,
+    "percentiles":"NOT_AVAILABLE"
+  },
+  "dispatcherEmission": {
+    "failNonSerializedTotal":515,
+    "token":283,
+    "ai":185,
+    "storage":47,
+    "resultEmissionTaggedMetric":"NOT_AVAILABLE"
+  },
+  "dispatcherConsumerTermination":"NOT_SUPPORTED",
+  "clientToApplicationTransportFailure":"SUPPORTED",
+  "clientDeadlineAccumulation":"SUPPORTED",
+  "sinkMechanismFailure":"SUPPORTED",
+  "providerTimelineRecovery":"NOT_AVAILABLE",
+  "sinkFinalState":"FAIL_NON_SERIALIZED emission failures observed; consumers drained; no ceiling reached",
+  "nextExperimentClass":"SINK IMPLEMENTATION REPAIR",
+  "newPerformanceRun":"NONE"
+}
