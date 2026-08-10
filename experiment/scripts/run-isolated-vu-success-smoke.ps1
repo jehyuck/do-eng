@@ -363,6 +363,11 @@ try {
         mvc = [ordered]@{ maxThreads = $MvcMaxThreads; source = $composeSource }
         jvm = [ordered]@{ xms = $JavaXms; xmx = $JavaXmx; source = $composeSource }
     }
+    if ($resolvedConfigPath) {
+        $sharedResolvedJson = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "..\config\resolve-experiment-config.ps1") -Implementation $Implementation -ConfigPath $resolvedConfigPath
+        if ($LASTEXITCODE -ne 0) { throw "Shared experiment config resolution failed" }
+        $resolvedConfiguration = @($sharedResolvedJson) -join [Environment]::NewLine | ConvertFrom-Json
+    }
     $resolvedConfiguration | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "resolved-experiment-config.json")
     $runConfig = [ordered]@{
         runId = $RunId
