@@ -1,12 +1,12 @@
 # Experiment Variable Contract
 
-이 문서는 WebFlux/MVC 실험 조건의 단일 외부 설정 계약이다. 기본값은 현재 runner와 Compose의 기존 동작을 보존한다. `-ConfigPath`를 사용하면 같은 구조의 JSON으로 한 실행의 조건을 명시할 수 있고, runner는 결과 디렉터리에 `resolved-config.json`을 저장한다.
+이 문서는 WebFlux/MVC 실험 조건의 단일 외부 설정 계약이다. 기본값은 현재 runner와 Compose의 기존 동작을 보존한다. `-ConfigPath`를 사용하면 같은 구조의 JSON으로 한 실행의 조건을 명시할 수 있고, runner는 결과 디렉터리에 `resolved-experiment-config.json`을 저장한다.
 
 실제 performance workload는 이 변경에서 실행하지 않았다.
 
 ## Canonical variables
 
-| Variable | Meaning | Default | Consumed by | Scope | Unit |
+| Variable | Purpose | Default | Consumer | Scope | Unit |
 |---|---|---:|---|---|---|
 | `ACTIVE_MISSIONS` | active logical missions/users | `2` | runner → `mission-load.js` | Common | count |
 | `LOAD_SCENARIO` | `single-success` or `reconnect-ramp` | `single-success` | runner → load | Common | enum |
@@ -21,11 +21,11 @@
 | `RECONNECT_DELAY_MS` | reconnect delay | `3000` | runner → load | Common | ms |
 | `WARMUP_MS` | reserved orchestration warmup metadata | `0` | runner resolved config only | Common | ms |
 | `DRAIN_OBSERVATION_SECONDS` | post-load drain observation | `0` | runner → load | Common | seconds |
-| `MOCK_AI_RESULT` | mock AI result | `true` in runtime control | Compose/mock and runner control | Common | boolean |
-| `MOCK_AI_DELAY_MS` | AI mock delay | `500` runner default | Compose/mock and runner control | Common | ms |
-| `MOCK_AI_STATUS` | AI mock status | `200` | Compose/mock and runner control | Common | HTTP status |
-| `MOCK_STORAGE_DELAY_MS` | storage mock delay | `100` | Compose/mock and runner control | Common | ms |
-| `MOCK_STORAGE_STATUS` | storage mock status | `200` | Compose/mock and runner control | Common | HTTP status |
+| `AI_RESULT` → `MOCK_AI_RESULT` | mock AI result | `true` in runtime control | runner control → Compose/mock | Common | boolean |
+| `AI_DELAY_MS` → `MOCK_AI_DELAY_MS` | AI mock delay | `500` runner default | runner control → Compose/mock | Common | ms |
+| `AI_STATUS` → `MOCK_AI_STATUS` | AI mock status | `200` | runner control → Compose/mock | Common | HTTP status |
+| `STORAGE_DELAY_MS` → `MOCK_STORAGE_DELAY_MS` | storage mock delay | `100` | runner control → Compose/mock | Common | ms |
+| `STORAGE_STATUS` → `MOCK_STORAGE_STATUS` | storage mock status | `200` | runner control → Compose/mock | Common | HTTP status |
 | `APP_CPU` | application container CPU limit | Compose default | Compose | Common | CPU |
 | `APP_MEMORY` | application container memory limit | Compose default | Compose | Common | Docker memory |
 | `HTTP_MAX_CONNECTIONS` | outbound HTTP maximum connections | Compose/application default | Compose → `DOENG_HTTP_MAX_CONNECTIONS` | Common | count |
@@ -42,6 +42,19 @@
 
 The JSON contract uses camelCase fields under `load`, `downstream`, `application`, `http`, `database`, `mvc`, and `jvm`. The runner accepts `-ConfigPath` and maps these fields to the existing process and application environment names. Application-facing `DOENG_*` names remain the existing canonical names; no legacy alias is removed.
 
+## Current inventory
+
+| Condition | Existing variable/parameter | Existing default | Current consumer | Hardcoded/parameter location | Scope |
+|---|---|---:|---|---|---|
+| load scheduling | `INTERVAL_MS`, `ARRIVAL_MODE`, `LOAD_SCENARIO` | 3000/aligned/single-success | `mission-load.js` | `experiment/load/mission-load.js`; runner exports | Common |
+| client timeout | `REQUEST_TIMEOUT_MS` | 10000 | `mission-load.js` | runner parameter and load env | Common |
+| AI/storage mock | `MOCK_AI_*`, `MOCK_STORAGE_*` | runner control defaults | mock control endpoint and Compose | runner + compose files | Common |
+| application resources | `APP_CPU`, `APP_MEMORY` | Compose defaults | Docker Compose | `backend/docker-compose.experiment.yaml` and override | Common |
+| outbound HTTP | `DOENG_HTTP_*` mapped from contract names | application/Compose defaults | Spring config | WebFlux/MVC `application.yml` | Common; pending max is WebFlux-specific |
+| database pool | `DOENG_DB_POOL_MAX_SIZE` | 10 | R2DBC/Hikari | WebFlux/MVC `application.yml` | Common |
+| Tomcat workers | `DOENG_MVC_MAX_THREADS` | 200 | MVC Spring config | MVC `application.yml` | MVC only |
+| JVM heap | `JAVA_XMS`, `JAVA_XMX` | Compose defaults | `JAVA_TOOL_OPTIONS` | Compose service definitions | Common |
+
 | Canonical contract field | Existing application name | Disposition |
 |---|---|---|
 | `http.maxConnections` | `DOENG_HTTP_MAX_CONNECTIONS` | Canonical mapping |
@@ -55,7 +68,7 @@ Existing experiment-specific variables not listed here remain unchanged. No lega
 
 ## Resolved configuration
 
-`resolved-config.json` is written beside `run-config.json`. It includes the implementation, all load/downstream/resource/pool/database/MVC/JVM fields, source (`parameter`, `config-file`, or `compose-default`), and the config file path when supplied. `WARMUP_MS` is recorded as metadata because the current runner has no warmup execution phase; it does not create a warmup workload.
+`resolved-experiment-config.json` is written beside `run-config.json`. It includes the implementation, all load/downstream/resource/pool/database/MVC/JVM fields, source (`parameter`, `config-file`, or `compose-default`), and the config file path when supplied. `WARMUP_MS` is recorded as metadata because the current runner has no warmup execution phase; it does not create a warmup workload.
 
 ## Validation scope
 

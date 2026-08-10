@@ -363,7 +363,7 @@ try {
         mvc = [ordered]@{ maxThreads = $MvcMaxThreads; source = $composeSource }
         jvm = [ordered]@{ xms = $JavaXms; xmx = $JavaXmx; source = $composeSource }
     }
-    $resolvedConfiguration | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "resolved-config.json")
+    $resolvedConfiguration | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "resolved-experiment-config.json")
     $runConfig = [ordered]@{
         runId = $RunId
         implementation = $Implementation
