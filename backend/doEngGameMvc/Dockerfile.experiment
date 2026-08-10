@@ -1,0 +1,18 @@
+FROM gradle:7.6.1-jdk11 AS builder
+
+WORKDIR /workspace
+
+COPY build.gradle settings.gradle ./
+COPY src src
+
+RUN gradle clean bootJar -x test --no-daemon
+
+FROM eclipse-temurin:11-jdk
+
+WORKDIR /app
+
+COPY --from=builder /workspace/build/libs/doEngGameMvc-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8000 9091
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "--server.port=8000"]

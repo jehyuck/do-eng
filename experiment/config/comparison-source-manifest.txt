@@ -1,0 +1,42 @@
+Comparison source manifest
+Generated from baseline commit: 2f6b348
+Source-tracking commit: the commit that adds this manifest and MVC source
+
+WebFlux source root:
+backend/doEngGameFlux
+
+MVC source root:
+backend/doEngGameMvc
+
+WebFlux Dockerfile:
+backend/doEngGameFlux/Dockerfile.experiment
+
+MVC Dockerfile:
+backend/doEngGameMvc/Dockerfile.experiment
+
+Compose files:
+backend/docker-compose.experiment.yaml
+experiment/compose/experiment-1-37-runtime.override.yml
+
+Load generator:
+experiment/load/mission-load.js
+
+Experiment variable contract:
+experiment/config/experiment-variable-contract.json
+
+Tracked MVC build inputs:
+backend/doEngGameMvc/build.gradle
+backend/doEngGameMvc/settings.gradle
+backend/doEngGameMvc/src/main/java/**
+backend/doEngGameMvc/src/main/resources/**
+
+SHA256 (selected inputs):
+backend/doEngGameMvc/build.gradle 80B5255C910988B6E45326EE9BF99ED0242B0C118559FF9C719155D1F09CC77E
+backend/doEngGameMvc/settings.gradle 173E19CFECFD6A6F6D73DF0AE776894412A37E924A4F30A90A15BC209D6C0687
+backend/doEngGameMvc/Dockerfile.experiment 959CBFE97339FEE72A0874AA3A4DE9146B70C2DFB517BD57A14DDFB0A5F73E6B
+backend/doEngGameMvc/src/main/java/com/example/doenggamemvc/controller/MissionController.java C21257D95D5C2D3C05F9E1BF484B3F34A71447343C6E8E877D585011C2832B00
+backend/doEngGameMvc/src/main/resources/application.yml 58A0D88A49599F9E461DF66E6858EDF45DE2C7383198C0D57869754DB5B6F4AE
+backend/doEngGameFlux/Dockerfile.experiment 22F978FA94B94E73838671497E83380CA4754ACEAF88C3284027CC37F81E8E7F
+backend/docker-compose.experiment.yaml A430D90C3BEF4AC9274B53881427863F59481DF62B94B7918031A694C66A18CA
+experiment/compose/experiment-1-37-runtime.override.yml BF3D68DDAE417C1F673F8BA1167697E3AAA1D0935CDB9730AF0B79AFD290B2D4
+experiment/load/mission-load.js F3A6EB36798A57CE408DE85E5420F65273BB5C2684BC02618822C4C78095619B

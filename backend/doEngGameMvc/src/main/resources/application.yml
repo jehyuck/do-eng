@@ -1,0 +1,25 @@
+server:
+  tomcat:
+    threads:
+      max: ${DOENG_MVC_MAX_THREADS:200}
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mariadb://localhost:3307/doeng}
+    username: ${SPRING_DATASOURCE_USERNAME:doeng}
+    password: ${SPRING_DATASOURCE_PASSWORD:doeng-experiment-pass}
+    hikari:
+      maximum-pool-size: ${DOENG_DB_POOL_MAX_SIZE:10}
+      connection-timeout: 10000
+
+doeng:
+  mission:
+    max-request-bytes: ${DOENG_MISSION_MAX_REQUEST_BYTES:2097152}
+  external:
+    ai-base-url: ${DOENG_EXTERNAL_AI_BASE_URL:https://j8a601.p.ssafy.io/analyze}
+    token-verification-url: ${DOENG_EXTERNAL_TOKEN_VERIFICATION_URL:https://j8a601.p.ssafy.io/api/member/ai}
+    storage-base-url: ${DOENG_EXTERNAL_STORAGE_BASE_URL:http://localhost:9100}
+    max-connections: ${DOENG_HTTP_MAX_CONNECTIONS:200}
+    connect-timeout-ms: ${DOENG_HTTP_CONNECT_TIMEOUT_MS:2000}
+    response-timeout-ms: ${DOENG_HTTP_RESPONSE_TIMEOUT_MS:10000}
+    pending-acquire-timeout-ms: ${DOENG_HTTP_PENDING_ACQUIRE_TIMEOUT_MS:10000}
