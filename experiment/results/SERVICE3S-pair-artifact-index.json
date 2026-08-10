@@ -1,0 +1,61 @@
+{
+  "configPreregistrationCommit": "d977391",
+  "experimentRuntimeGitHead": "96c1b4cee7d695fa3c84c48ef49c8b00d8f786e9",
+  "runs": {
+    "webflux": {
+      "runId": "SERVICE3S-W001",
+      "implementation": "WebFlux",
+      "executionValidity": "VALID",
+      "applicationOutcome": "PASS",
+      "results": {
+        "started": 5318,
+        "completed": 5318,
+        "http200": 5317,
+        "http500": 0,
+        "http503": 0,
+        "timeout": 1,
+        "connectionError": 0,
+        "trueResponses": 5317,
+        "trueSuccessRate": 99.9812,
+        "successfulRps": 50.638095,
+        "totalRps": 50.647619,
+        "p50": 2152,
+        "p95": 3092,
+        "p99": 4441,
+        "maxInFlight": 291
+      },
+      "artifactDirectory": "experiment/results/SERVICE3S-W001",
+      "runtimeIdentity": "experiment/results/runtime-identities/SERVICE3S-W001/runtime-identity.json"
+    },
+    "mvc400": {
+      "runId": "SERVICE3S-M001",
+      "implementation": "MVC400",
+      "executionValidity": "VALID",
+      "applicationOutcome": "PASS",
+      "results": {
+        "started": 5447,
+        "completed": 5447,
+        "http200": 3000,
+        "http500": 0,
+        "http503": 0,
+        "timeout": 2447,
+        "connectionError": 0,
+        "trueResponses": 3000,
+        "trueSuccessRate": 55.0762,
+        "successfulRps": 28.571429,
+        "totalRps": 51.876190,
+        "p50": 2157,
+        "p95": 8339,
+        "p99": 9531,
+        "maxInFlight": 537
+      },
+      "artifactDirectory": "experiment/results/SERVICE3S-M001",
+      "runtimeIdentity": "experiment/results/runtime-identities/SERVICE3S-M001/runtime-identity.json"
+    }
+  },
+  "successfulRpsDefinition": "HTTP 200 count divided by the 105-second measurement duration",
+  "artifactPolicy": {
+    "included": "resolved config, run config, verification summary, client results, mock metrics/drain, DB/storage evidence, mission completion evidence, runtime identity and build logs",
+    "excluded": ["prepared-users.json (private runtime authentication material)", "temporary JAR and Docker image/cache"]
+  }
+}
