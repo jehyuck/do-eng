@@ -1,0 +1,158 @@
+﻿{
+    "runId":  "SERVICE1S-W001",
+    "implementation":  "WebFlux",
+    "targetUrl":  "http://127.0.0.1:8001/game/face",
+    "serverService":  "flux-corrected",
+    "composeProject":  "doeng-service1s-webflux",
+    "composeFiles":  [
+                         {
+                             "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment.yaml",
+                             "sha256":  "a430d90c3bef4ac9274b53881427863f59481df62b94b7918031a694c66a18ca"
+                         },
+                         {
+                             "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\compose\\experiment-1-37-runtime.override.yml",
+                             "sha256":  "bf3d68ddae417c1f673f8ba1167697e3aaa1d0935cdb9730af0b79afd290b2d4"
+                         }
+                     ],
+    "activeMissions":  160,
+    "arrivalMode":  "staggered",
+    "loadScenario":  "reconnect-ramp",
+    "outcomeMode":  "standard",
+    "accountingMode":  "corrected",
+    "initialActiveUsers":  160,
+    "activationStepUsers":  1,
+    "activationIntervalMs":  3000,
+    "reconnectDelayMs":  1000,
+    "intervalMs":  1000,
+    "durationMs":  105000,
+    "requestTimeoutMs":  10000,
+    "targetP95Ms":  3000,
+    "warmupMs":  0,
+    "resolvedConfiguration":  {
+                                  "contractVersion":  1,
+                                  "implementation":  "WebFlux",
+                                  "configPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\config\\comparison-vu160-service-1s.json",
+                                  "load":  {
+                                               "scenario":  "reconnect-ramp",
+                                               "activeMissions":  160,
+                                               "intervalMs":  1000,
+                                               "durationMs":  105000,
+                                               "requestTimeoutMs":  10000,
+                                               "warmupMs":  0,
+                                               "arrivalMode":  "staggered",
+                                               "initialActiveUsers":  160,
+                                               "activationStepUsers":  1,
+                                               "activationIntervalMs":  3000,
+                                               "reconnectDelayMs":  1000,
+                                               "drainObservationSeconds":  15
+                                           },
+                                  "downstream":  {
+                                                     "aiResult":  true,
+                                                     "aiDelayMs":  2000,
+                                                     "aiStatus":  200,
+                                                     "storageDelayMs":  100,
+                                                     "storageStatus":  200
+                                                 },
+                                  "application":  {
+                                                      "cpu":  "2.0",
+                                                      "memory":  "3g"
+                                                  },
+                                  "http":  {
+                                               "maxConnections":  400,
+                                               "pendingMaxCount":  400,
+                                               "connectTimeoutMs":  2000,
+                                               "responseTimeoutMs":  10000,
+                                               "pendingAcquireTimeoutMs":  10000
+                                           },
+                                  "database":  {
+                                                   "poolMaxSize":  10
+                                               },
+                                  "mvc":  {
+                                              "maxThreads":  400
+                                          },
+                                  "jvm":  {
+                                              "xms":  "512m",
+                                              "xmx":  "2048m"
+                                          },
+                                  "source":  {
+                                                 "application.cpu":  "config-file",
+                                                 "application.memory":  "config-file",
+                                                 "http.maxConnections":  "config-file",
+                                                 "http.pendingMaxCount":  "config-file",
+                                                 "http.connectTimeoutMs":  "config-file",
+                                                 "http.responseTimeoutMs":  "config-file",
+                                                 "http.pendingAcquireTimeoutMs":  "config-file",
+                                                 "database.poolMaxSize":  "config-file",
+                                                 "mvc.maxThreads":  "config-file",
+                                                 "jvm.xms":  "config-file",
+                                                 "jvm.xmx":  "config-file"
+                                             },
+                                  "composeEnvironment":  {
+                                                             "MOCK_AI_RESULT":  "true",
+                                                             "MOCK_AI_DELAY_MS":  2000,
+                                                             "MOCK_AI_STATUS":  200,
+                                                             "MOCK_STORAGE_DELAY_MS":  100,
+                                                             "MOCK_STORAGE_STATUS":  200,
+                                                             "APP_CPU":  "2.0",
+                                                             "APP_MEMORY":  "3g",
+                                                             "HTTP_MAX_CONNECTIONS":  "400",
+                                                             "HTTP_PENDING_MAX_COUNT":  "400",
+                                                             "HTTP_CONNECT_TIMEOUT_MS":  "2000",
+                                                             "HTTP_RESPONSE_TIMEOUT_MS":  "10000",
+                                                             "HTTP_PENDING_ACQUIRE_TIMEOUT_MS":  "10000",
+                                                             "DB_POOL_MAX_SIZE":  "10",
+                                                             "MVC_MAX_THREADS":  "400",
+                                                             "JAVA_XMS":  "512m",
+                                                             "JAVA_XMX":  "2048m"
+                                                         },
+                                  "loadEnvironment":  {
+                                                          "ACTIVE_MISSIONS":  160,
+                                                          "LOAD_SCENARIO":  "reconnect-ramp",
+                                                          "ACCOUNTING_MODE":  "corrected",
+                                                          "INTERVAL_MS":  1000,
+                                                          "DURATION_MS":  105000,
+                                                          "REQUEST_TIMEOUT_MS":  10000,
+                                                          "ARRIVAL_MODE":  "staggered",
+                                                          "INITIAL_ACTIVE_USERS":  160,
+                                                          "ACTIVATION_STEP_USERS":  1,
+                                                          "ACTIVATION_INTERVAL_MS":  3000,
+                                                          "RECONNECT_DELAY_MS":  1000,
+                                                          "DRAIN_OBSERVATION_SECONDS":  15
+                                                      }
+                              },
+    "sceneId":  2,
+    "answer":  "happy",
+    "ai":  {
+               "result":  true,
+               "delayMs":  2000,
+               "status":  200
+           },
+    "storage":  {
+                    "delayMs":  100,
+                    "status":  200
+                },
+    "observability":  {
+                          "enabled":  false,
+                          "containerMonitorEnabled":  false,
+                          "jfrEnabled":  false,
+                          "applicationIntervalMs":  null,
+                          "applicationSnapshotEnabled":  false,
+                          "mockContinuousPollingEnabled":  false,
+                          "databaseIntervalMs":  null
+                      },
+    "lifecycle":  {
+                      "preRunMockIdleRequired":  true,
+                      "drainObservationSeconds":  15,
+                      "endOfLoadBacklogIsSystemOutcome":  true
+                  },
+    "fixture":  {
+                    "path":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\image\\arc.jpg",
+                    "bytes":  265745,
+                    "sha256":  "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99"
+                },
+    "authentication":  {
+                           "mode":  "per-vu mock-issued token",
+                           "loginCompletedBeforeMeasurement":  true,
+                           "rawTokensPersistedInResults":  false
+                       }
+}

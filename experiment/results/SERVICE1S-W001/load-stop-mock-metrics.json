@@ -1,0 +1,29 @@
+{
+  "loadStoppedAt": "2026-08-10T11:18:10.778Z",
+  "phase": "load-stop",
+  "capturedAt": "2026-08-10T11:18:10.779Z",
+  "elapsedMs": 0,
+  "ok": true,
+  "status": 200,
+  "metrics": {
+    "aiInFlight": 226,
+    "aiMaxInFlight": 339,
+    "aiCompleted": 6634,
+    "storageInFlight": 0,
+    "storageMaxInFlight": 56,
+    "storageCompleted": 2978,
+    "strictAuth": true,
+    "authRegisteredUsers": 160,
+    "authIssuedTokens": 160,
+    "authLoginCompleted": 160,
+    "authLoginFailures": 0,
+    "resetGeneration": 1,
+    "aiLifecycleEventCount": 57534,
+    "requestCounts": {
+      "GET /api/member/ai": 10536,
+      "POST /analyze/face": 6871,
+      "PUT /storage/object": 3084
+    }
+  },
+  "error": null
+}

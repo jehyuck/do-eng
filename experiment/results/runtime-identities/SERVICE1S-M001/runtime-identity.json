@@ -1,0 +1,62 @@
+﻿{
+    "git":  {
+                "head":  "441682524b3629a661a0971e9d31f3472f74c3ea",
+                "branch":  "experiment/webflux-runtime-evidence-handoff",
+                "comparisonSourceClean":  true
+            },
+    "implementation":  "MVC400",
+    "container":  {
+                      "id":  "257dd1a61b3b683cf658500284751ff2cab70ab9266e090860ad3f05b075ae7e",
+                      "imageId":  "sha256:2dfbff77ea445c0f41e4dcebf47f1beb5d5ca810a24530022549052daf11ce51"
+                  },
+    "image":  {
+                  "id":  "sha256:2dfbff77ea445c0f41e4dcebf47f1beb5d5ca810a24530022549052daf11ce51",
+                  "created":  "2026-07-29T08:32:48.345556053Z",
+                  "repoTags":  [
+                                   "doeng-service1s-mvc400-mvc:latest"
+                               ],
+                  "repoDigests":  [
+                                      "doeng-service1s-mvc400-mvc@sha256:2dfbff77ea445c0f41e4dcebf47f1beb5d5ca810a24530022549052daf11ce51"
+                                  ]
+              },
+    "application":  {
+                        "jarPath":  "/app/app.jar",
+                        "jarSha256":  "3E846B8BE2F00D63BDA6793DA7CD2A795C9DDA8778AB14F087F0D20DA9FAED5F"
+                    },
+    "source":  {
+                   "comparisonSourceManifest":  "experiment/config/comparison-source-manifest.txt",
+                   "comparisonSourceManifestSha256":  "E4429C7284FC7F21D5F307B1E403DC5D87382F644A9DEA2ED7C3E17B7ABA68B8",
+                   "experimentMockSourceRoot":  "backend/experiment-mock",
+                   "experimentMockBuildExecuted":  true
+               },
+    "dependencies":  {
+                         "experimentMock":  {
+                                                "containerId":  "af9a3c4842bdf2c3722224be86799f4d2fa04a8dae9768248eb3e14bfa685f13",
+                                                "imageId":  "sha256:6fcbe49ab0505f003ff17eaf187e5c813a8cea107a30412b2d4f4e79848546d3",
+                                                "imageCreated":  "2026-08-06T01:20:22.013989132Z",
+                                                "repoTags":  [
+                                                                 "doeng-service1s-mvc400-experiment-mock:latest"
+                                                             ],
+                                                "repoDigests":  [
+                                                                    "doeng-service1s-mvc400-experiment-mock@sha256:6fcbe49ab0505f003ff17eaf187e5c813a8cea107a30412b2d4f4e79848546d3"
+                                                                ]
+                                            },
+                         "mariadb":  {
+                                         "containerId":  "cf0b1e1c412a140cc24de4fe3bb6be87a2936218b1b5679dbdc444b493aadab3",
+                                         "imageId":  "sha256:be981e4113326ada8d6004174dd09eeaefc03094037f811182a52d4f2e737350",
+                                         "imageCreated":  "2026-07-02T02:30:44.891113353Z",
+                                         "repoTags":  [
+                                                          "mariadb:10.11"
+                                                      ],
+                                         "repoDigests":  [
+                                                             "mariadb@sha256:be981e4113326ada8d6004174dd09eeaefc03094037f811182a52d4f2e737350"
+                                                         ]
+                                     }
+                     },
+    "build":  {
+                  "executed":  true,
+                  "exitCode":  0,
+                  "stdout":  "docker-build.stdout.log",
+                  "stderr":  "docker-build.stderr.log"
+              }
+}

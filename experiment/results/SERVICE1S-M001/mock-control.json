@@ -1,0 +1,12 @@
+﻿{
+    "ai":  {
+               "result":  true,
+               "delayMs":  2000,
+               "status":  200,
+               "closeBeforeResponse":  false
+           },
+    "storage":  {
+                    "delayMs":  100,
+                    "status":  200
+                }
+}

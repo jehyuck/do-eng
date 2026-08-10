@@ -1,0 +1,105 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.40kB 0.0s done
+#1 DONE 0.0s
+
+#2 [experiment-mock internal] load build definition from Dockerfile
+#2 transferring dockerfile: 160B 0.0s done
+#2 DONE 0.1s
+
+#3 [flux-corrected internal] load build definition from Dockerfile.experiment
+#3 transferring dockerfile: 538B 0.0s done
+#3 DONE 0.1s
+
+#4 [flux-corrected internal] load metadata for docker.io/library/eclipse-temurin:11-jdk
+#4 ...
+
+#5 [experiment-mock internal] load metadata for docker.io/library/node:20-alpine
+#5 DONE 0.2s
+
+#4 [flux-corrected internal] load metadata for docker.io/library/eclipse-temurin:11-jdk
+#4 DONE 0.2s
+
+#6 [experiment-mock internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.1s
+
+#7 [flux-corrected internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.1s
+
+#8 [flux-corrected internal] load build context
+#8 DONE 0.0s
+
+#9 [experiment-mock internal] load build context
+#9 transferring context: 31B done
+#9 DONE 0.0s
+
+#10 [experiment-mock 1/3] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#10 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#10 DONE 0.1s
+
+#11 [experiment-mock 2/3] WORKDIR /app
+#11 CACHED
+
+#12 [experiment-mock 3/3] COPY server.js .
+#12 CACHED
+
+#13 [flux-corrected builder 1/7] FROM docker.io/library/eclipse-temurin:11-jdk@sha256:51cad80517b1e18e289460e0a48657374d17711c83270263054a4a22cc1a992a
+#13 resolve docker.io/library/eclipse-temurin:11-jdk@sha256:51cad80517b1e18e289460e0a48657374d17711c83270263054a4a22cc1a992a 0.1s done
+#13 DONE 0.1s
+
+#8 [flux-corrected internal] load build context
+#8 transferring context: 9.49kB 0.0s done
+#8 DONE 0.1s
+
+#14 [flux-corrected builder 3/7] COPY gradlew gradlew.bat build.gradle settings.gradle ./
+#14 CACHED
+
+#15 [flux-corrected builder 2/7] WORKDIR /workspace
+#15 CACHED
+
+#16 [flux-corrected builder 5/7] RUN sed -i 's/\r$//' gradlew     && chmod +x gradlew
+#16 CACHED
+
+#17 [flux-corrected builder 6/7] COPY src src
+#17 CACHED
+
+#18 [flux-corrected builder 7/7] RUN ./gradlew clean bootJar -x test --no-daemon
+#18 CACHED
+
+#19 [flux-corrected stage-1 2/3] WORKDIR /app
+#19 CACHED
+
+#20 [flux-corrected builder 4/7] COPY gradle gradle
+#20 CACHED
+
+#21 [flux-corrected stage-1 3/3] COPY --from=builder /workspace/build/libs/doEngGameFlux-0.0.1-SNAPSHOT.jar app.jar
+#21 CACHED
+
+#22 [flux-corrected] exporting to image
+#22 exporting layers done
+#22 exporting manifest sha256:3988e852fe110ad054d58707bd33bcc1a3acc944e3aa6aebfbb8e62c43f43be2 0.1s done
+#22 exporting config sha256:d473ed5189c14d46e03711c8ba8a3baee2508438efbdfb9a21b632036becb002
+#22 exporting config sha256:d473ed5189c14d46e03711c8ba8a3baee2508438efbdfb9a21b632036becb002 0.1s done
+#22 exporting attestation manifest sha256:943c2762beb50489ecb93a88ad234065238f7c2bc63f1a2060e10129cc376c68
+#22 exporting attestation manifest sha256:943c2762beb50489ecb93a88ad234065238f7c2bc63f1a2060e10129cc376c68 0.1s done
+#22 exporting manifest list sha256:abd23d7860bd9eccd738ab5224fd8e2ca31d6612f4037e4f343b87e006b81f90 0.0s done
+#22 naming to docker.io/library/doeng-service1s-webflux-flux-corrected:latest done
+#22 unpacking to docker.io/library/doeng-service1s-webflux-flux-corrected:latest 0.0s done
+#22 DONE 0.5s
+
+#23 [experiment-mock] exporting to image
+#23 exporting layers done
+#23 exporting manifest sha256:10ea657ad5a37fd0e7a98d5de1dda2dab8d14b73ccf030c977c6adcd61718d36 0.1s done
+#23 exporting config sha256:c6bf22750d59bb2518bbef3134ef9ae67abde98d7c7b6a762b8722a9f843d4dd 0.0s done
+#23 exporting attestation manifest sha256:000295b681686ba9762c45e525dc4e8f401739493185a9f3787d445aca9e36aa 0.1s done
+#23 exporting manifest list sha256:5c5d962e629a2fb3a08a57d5eb6ff51dda03b81b6c43e31a5d154c5fc77895e2 0.1s done
+#23 naming to docker.io/library/doeng-service1s-webflux-experiment-mock:latest 0.0s done
+#23 unpacking to docker.io/library/doeng-service1s-webflux-experiment-mock:latest 0.0s done
+#23 DONE 0.4s
+
+#24 [experiment-mock] resolving provenance for metadata file
+#24 DONE 0.0s
+
+#25 [flux-corrected] resolving provenance for metadata file
+#25 DONE 0.0s

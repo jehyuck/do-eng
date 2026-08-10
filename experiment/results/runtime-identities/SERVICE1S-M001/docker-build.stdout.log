@@ -1,0 +1,107 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.35kB 0.0s done
+#1 DONE 0.0s
+
+#2 [experiment-mock internal] load build definition from Dockerfile
+#2 transferring dockerfile: 160B done
+#2 DONE 0.0s
+
+#3 [mvc internal] load build definition from Dockerfile.experiment
+#3 transferring dockerfile: 413B done
+#3 DONE 0.1s
+
+#4 [mvc internal] load metadata for docker.io/library/eclipse-temurin:11-jdk
+#4 DONE 0.1s
+
+#5 [mvc internal] load metadata for docker.io/library/gradle:7.6.1-jdk11
+#5 DONE 0.1s
+
+#6 [experiment-mock internal] load metadata for docker.io/library/node:20-alpine
+#6 DONE 0.1s
+
+#7 [mvc internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+
+#8 [mvc internal] load build context
+#8 DONE 0.0s
+
+#9 [experiment-mock internal] load .dockerignore
+#9 transferring context: 2B done
+#9 DONE 0.0s
+
+#10 [experiment-mock internal] load build context
+#10 transferring context: 31B done
+#10 DONE 0.0s
+
+#11 [experiment-mock 1/3] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#11 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#11 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#11 DONE 0.1s
+
+#12 [mvc stage-1 1/3] FROM docker.io/library/eclipse-temurin:11-jdk@sha256:51cad80517b1e18e289460e0a48657374d17711c83270263054a4a22cc1a992a
+#12 resolve docker.io/library/eclipse-temurin:11-jdk@sha256:51cad80517b1e18e289460e0a48657374d17711c83270263054a4a22cc1a992a 0.1s done
+#12 DONE 0.1s
+
+#13 [mvc builder 1/5] FROM docker.io/library/gradle:7.6.1-jdk11@sha256:85ab03e26bb948e85abc1a4996abde0fc8561721d1a271d0a83e194c5dbacd29
+#13 resolve docker.io/library/gradle:7.6.1-jdk11@sha256:85ab03e26bb948e85abc1a4996abde0fc8561721d1a271d0a83e194c5dbacd29 0.1s done
+#13 DONE 0.1s
+
+#14 [experiment-mock 2/3] WORKDIR /app
+#14 CACHED
+
+#15 [experiment-mock 3/3] COPY server.js .
+#15 CACHED
+
+#16 [experiment-mock] exporting to image
+#16 exporting layers done
+#16 ...
+
+#8 [mvc internal] load build context
+#8 transferring context: 3.05kB 0.0s done
+#8 DONE 0.1s
+
+#17 [mvc builder 3/5] COPY build.gradle settings.gradle ./
+#17 CACHED
+
+#18 [mvc builder 5/5] RUN gradle clean bootJar -x test --no-daemon
+#18 CACHED
+
+#19 [mvc builder 2/5] WORKDIR /workspace
+#19 CACHED
+
+#20 [mvc builder 4/5] COPY src src
+#20 CACHED
+
+#21 [mvc stage-1 2/3] WORKDIR /app
+#21 CACHED
+
+#22 [mvc stage-1 3/3] COPY --from=builder /workspace/build/libs/doEngGameMvc-0.0.1-SNAPSHOT.jar app.jar
+#22 CACHED
+
+#16 [experiment-mock] exporting to image
+#16 exporting manifest sha256:6241795696b2755f702528c2fd6e16f5f63ee3a5764c4cf7e870defea7c41739 0.1s done
+#16 exporting config sha256:b84e437f86affb5cf01593f6da30f0489332d4c07403271850139af76bdc5e32 0.0s done
+#16 exporting attestation manifest sha256:71e7ae6c013309072ce902280670ae100b26e42c2bee5266ab5941796917b01c
+#16 exporting attestation manifest sha256:71e7ae6c013309072ce902280670ae100b26e42c2bee5266ab5941796917b01c 0.1s done
+#16 exporting manifest list sha256:6fcbe49ab0505f003ff17eaf187e5c813a8cea107a30412b2d4f4e79848546d3 0.1s done
+#16 naming to docker.io/library/doeng-service1s-mvc400-experiment-mock:latest
+#16 naming to docker.io/library/doeng-service1s-mvc400-experiment-mock:latest 0.0s done
+#16 unpacking to docker.io/library/doeng-service1s-mvc400-experiment-mock:latest 0.0s done
+#16 DONE 0.5s
+
+#23 [mvc] exporting to image
+#23 exporting layers done
+#23 exporting manifest sha256:5e93cc7a1ea825c245f816101655ec1ce026cbf526a8b2eb151e7cb15414be23 0.1s done
+#23 exporting config sha256:c27ce411bb8ac745b4a4407ba394097268ac5ad5970b86f8531c3c10120f84a9 0.0s done
+#23 exporting attestation manifest sha256:219875eb3657b23dea5c20b201944c29595cae15968eeb64cad0becd3aff2b67 0.1s done
+#23 exporting manifest list sha256:2dfbff77ea445c0f41e4dcebf47f1beb5d5ca810a24530022549052daf11ce51 0.0s done
+#23 naming to docker.io/library/doeng-service1s-mvc400-mvc:latest done
+#23 unpacking to docker.io/library/doeng-service1s-mvc400-mvc:latest 0.0s done
+#23 DONE 0.5s
+
+#24 [experiment-mock] resolving provenance for metadata file
+#24 DONE 0.0s
+
+#25 [mvc] resolving provenance for metadata file
+#25 DONE 0.0s

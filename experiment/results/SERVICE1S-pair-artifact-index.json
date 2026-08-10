@@ -1,0 +1,63 @@
+{
+  "preregistrationCommit": "441682524b3629a661a0971e9d31f3472f74c3ea",
+  "experimentRuntimeGitHead": "441682524b3629a661a0971e9d31f3472f74c3ea",
+  "baseConfig": "experiment/config/comparison-vu160-service-3s.json",
+  "config": "experiment/config/comparison-vu160-service-1s.json",
+  "runs": {
+    "webflux": {
+      "runId": "SERVICE1S-W001",
+      "implementation": "WebFlux",
+      "executionValidity": "VALID",
+      "applicationOutcome": "PASS",
+      "results": {
+        "started": 15901,
+        "completed": 15901,
+        "http200": 2279,
+        "http500": 7660,
+        "http503": 0,
+        "timeout": 5441,
+        "connectionError": 521,
+        "trueResponses": 2279,
+        "trueSuccessRate": 14.3324,
+        "successfulRps": 21.704762,
+        "totalRps": 151.438095,
+        "p50": 4943,
+        "p95": 9575,
+        "p99": 9941,
+        "maxInFlight": 1531
+      },
+      "artifactDirectory": "experiment/results/SERVICE1S-W001",
+      "runtimeIdentity": "experiment/results/runtime-identities/SERVICE1S-W001/runtime-identity.json"
+    },
+    "mvc400": {
+      "runId": "SERVICE1S-M001",
+      "implementation": "MVC400",
+      "executionValidity": "VALID",
+      "applicationOutcome": "PASS",
+      "results": {
+        "started": 16493,
+        "completed": 16493,
+        "http200": 2,
+        "http500": 0,
+        "http503": 0,
+        "timeout": 16376,
+        "connectionError": 115,
+        "trueResponses": 2,
+        "trueSuccessRate": 0.0121,
+        "successfulRps": 0.019048,
+        "totalRps": 157.076190,
+        "p50": 9395,
+        "p95": 9688,
+        "p99": 9688,
+        "maxInFlight": 1616
+      },
+      "artifactDirectory": "experiment/results/SERVICE1S-M001",
+      "runtimeIdentity": "experiment/results/runtime-identities/SERVICE1S-M001/runtime-identity.json"
+    }
+  },
+  "successfulRpsDefinition": "HTTP 200 count divided by the 105-second measurement duration",
+  "artifactPolicy": {
+    "included": "resolved config, run config, verification summary, client results, mock metrics/drain, DB/storage evidence, mission completion evidence, runtime identity and build logs",
+    "excluded": ["prepared-users.json (private runtime authentication material)", "temporary JAR and Docker image/cache"]
+  }
+}

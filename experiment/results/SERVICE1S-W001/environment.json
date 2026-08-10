@@ -1,0 +1,1495 @@
+﻿{
+    "runId":  "SERVICE1S-W001",
+    "capturedAt":  "2026-08-10T11:16:17.8854370Z",
+    "git":  {
+                "head":  "441682524b3629a661a0971e9d31f3472f74c3ea",
+                "branch":  "experiment/webflux-runtime-evidence-handoff",
+                "status":  [
+                               " M README.md",
+                               " M backend/ai/Dockerfile",
+                               " M backend/doEngGameFlux/Dockerfile",
+                               " M backend/doeng/Dockerfile",
+                               " M backend/experiments/results/experiment-1-19/plan/BASELINE-001-command-manifest.json",
+                               " M backend/experiments/results/experiment-1-20/plan/BASELINE-001-command-manifest.json",
+                               " M backend/experiments/results/experiment-1-21/plan/BASELINE-001-command-manifest.json",
+                               " M docs/11_run_ledger.md",
+                               " M frontend/Dockerfile",
+                               " M frontend/src/components/PlayTaleComponents/CanvasInteraction.tsx",
+                               " M frontend/src/components/PlayTaleComponents/InteractionComp.tsx",
+                               " M frontend/src/components/PlayTaleComponents/VideoInteraction.tsx",
+                               "?? .idea/",
+                               "?? AGENTS.md",
+                               "?? DoEng-WebFlux-Capacity-Closure.zip",
+                               "?? DoEng-WebFlux-Capacity-Closure/",
+                               "?? PROJECT_META.txt",
+                               "?? backend/doEngGameMvc/.gradle/",
+                               "?? backend/doEngGameMvc/build/",
+                               "?? backend/doEngGameMvc/src/test/",
+                               "?? backend/docker-compose.diagnostic.yaml",
+                               "?? backend/docker-compose.http-pool-500.yaml",
+                               "?? backend/docker-compose.local.yaml",
+                               "?? backend/docker-compose.mock-headroom.yaml",
+                               "?? backend/docker-compose.mvc-threads-400.yaml",
+                               "?? backend/experiments/results/experiment-1-19/core/",
+                               "?? backend/experiments/results/experiment-1-20/collector-staging/",
+                               "?? backend/experiments/results/experiment-1-20/core/",
+                               "?? backend/experiments/results/experiment-1-21/collector-staging/",
+                               "?? backend/experiments/results/experiment-1-21/core/",
+                               "?? claim-evidence-map/",
+                               "?? confirmation/",
+                               "?? docs/00_doeng_project_meta.md",
+                               "?? docs/01_mission_webflux_mvc_experiment_requirements.md",
+                               "?? docs/02_image_transport_decision_notes.md",
+                               "?? docs/03_current_image_mission_fact_sheet.md",
+                               "?? docs/04_experiment_environment_design.md",
+                               "?? docs/05_existing_webflux_baseline_protocol.md",
+                               "?? docs/06_baseline_environment_smoke_result.md",
+                               "?? docs/07_experiment_index.md",
+                               "?? docs/08_current_experiment_status.md",
+                               "?? docs/09_experiment_plan_template.md",
+                               "?? docs/10_experiment_report_template.md",
+                               "?? docs/12_image_mission_webflux_mvc_experiment_plan.md",
+                               "?? docs/13_mvc_comparison_implementation_design.md",
+                               "?? docs/14_ai500_vu10_pressure_experiment_plan.md",
+                               "?? docs/15_ai500_vu10_pressure_experiment_report.md",
+                               "?? docs/16_thread_exhaustion_observability_plan.md",
+                               "?? docs/17_observability_artifact_specification.md",
+                               "?? docs/18_jfr_and_low_interference_observability_plan.md",
+                               "?? docs/19_ai500_vu25_jfr_pressure_experiment_plan.md",
+                               "?? docs/20_ai500_vu25_jfr_pressure_experiment_report.md",
+                               "?? docs/21_ai500_vu50_jfr_sustained_stress_experiment_plan.md",
+                               "?? docs/22_ai500_vu50_jfr_sustained_stress_experiment_report.md",
+                               "?? docs/23_ai500_vu100_jfr_sustained_stress_experiment_plan.md",
+                               "?? docs/24_mvc_vu100_failure_artifact_reproduction_plan.md",
+                               "?? docs/25_bounded_monitor_mvc_vu100_diagnostic_plan.md",
+                               "?? docs/26_storage_mock_true_path_correctness_plan.md",
+                               "?? docs/27_isolated_vu_identity_setup_plan.md",
+                               "?? docs/28_isolated_success_burst_pressure_plan.md",
+                               "?? docs/29_isolated_success_burst_vu100_incident_report.md",
+                               "?? docs/30_original_request_image_storage_decoupling_plan.md",
+                               "?? docs/31_original_request_storage_vu100_recheck_plan.md",
+                               "?? docs/32_vu100_timeout_variability_diagnostic_plan.md",
+                               "?? docs/33_vu100_timeout_variability_diagnostic_report.md",
+                               "?? docs/34_jfr_completion_artifact_integrity_plan.md",
+                               "?? docs/35_persistent_user_reconnect_ramp_plan.md",
+                               "?? docs/36_mission_run_idempotent_completion_plan.md",
+                               "?? docs/37_persistent_user_reconnect_ramp_report.md",
+                               "?? docs/38_persistent_mission_capacity_boundary_plan.md",
+                               "?? docs/39_persistent_mission_capacity_boundary_report.md",
+                               "?? docs/40_t3_medium_resource_sensitivity_plan.md",
+                               "?? docs/41_app_instance_t3_medium_resource_plan.md",
+                               "?? docs/42_app_instance_t3_medium_resource_report.md",
+                               "?? docs/43_mvc_250_jfr_diagnostic_plan.md",
+                               "?? docs/44_mvc_250_jfr_diagnostic_report.md",
+                               "?? docs/45_lightweight_boundary_observability_plan.md",
+                               "?? docs/46_lightweight_boundary_observability_report.md",
+                               "?? docs/47_mock_cpu_headroom_capacity_boundary_plan.md",
+                               "?? docs/48_mock_cpu_headroom_capacity_boundary_report.md",
+                               "?? docs/49_one_second_forced_load_plan.md",
+                               "?? docs/50_one_second_forced_load_report.md",
+                               "?? docs/51_load_generator_progress_sampling_calibration_plan.md",
+                               "?? docs/52_load_generator_progress_sampling_calibration_report.md",
+                               "?? docs/53_ai_latency_sensitivity_pool400_plan.md",
+                               "?? docs/54_ai_delay_outer_vu_boundary_plan.md",
+                               "?? docs/55_mock_memory_headroom_recheck_plan.md",
+                               "?? docs/56_mock_memory_headroom_recheck_report.md",
+                               "?? docs/57_ai_two_second_vu120_steady_pair_plan.md",
+                               "?? docs/58_ai_two_second_vu120_steady_pair_report.md",
+                               "?? docs/59_realtime_frame_interval_quality_plan.md",
+                               "?? docs/60_realtime_frame_interval_quality_report.md",
+                               "?? docs/61_portfolio_experiment_preflight_review.md",
+                               "?? docs/62_realtime_half_second_vu_boundary_plan.md",
+                               "?? docs/63_realtime_half_second_vu60_baseline_plan.md",
+                               "?? docs/64_realtime_half_second_vu60_reproduction_plan.md",
+                               "?? docs/65_realtime_half_second_vu70_cross_reproduction_plan.md",
+                               "?? docs/66_mvc_vu70_jfr_diagnostic_plan.md",
+                               "?? docs/67_mvc_thread400_sensitivity_plan.md",
+                               "?? docs/68_mvc_vu70_jfr_thread_sensitivity_report.md",
+                               "?? docs/69_mvc_thread400_reproduction_plan.md",
+                               "?? docs/70_portfolio_webflux_decision_final.md",
+                               "?? docs/71_webflux_mvc_three_arm_reproduction_plan.md",
+                               "?? docs/73_mvc400_vu50_observer_control_diagnostic_plan.md",
+                               "?? docs/74_webflux_mvc_three_arm_low_interference_plan.md",
+                               "?? docs/76_three_arm_run_lifecycle_contract_plan.md",
+                               "?? docs/77_three_arm_run_lifecycle_contract_validation.md",
+                               "?? docs/78_webflux_mvc_three_arm_low_interference_drain_cohort_plan.md",
+                               "?? docs/80_mock_continuous_polling_observer_control_plan.md",
+                               "?? docs/81_final_observation_contract_three_arm_plan.md",
+                               "?? docs/82_capacity_boundary_final_execution_plan.md",
+                               "?? docs/83_capacity_management_preflight_recovery_report.md",
+                               "?? docs/84_webflux_implementation_audit_20260801.md",
+                               "?? docs/85_webflux_vu200_root_cause_evidence_recovery_20260801.md",
+                               "?? docs/86_webflux_vu200_diagnostic_preflight_20260801.md",
+                               "?? docs/87_webflux_diagnostic_harness_implementation_20260801.md",
+                               "?? docs/88_webflux_vu200_final_diagnostic_execution_20260801.md",
+                               "?? docs/89_diagnostic_phase_a_docker_jdk11_gate_20260801.md",
+                               "?? docs/90_diagnostic_phase_a_persistent_dependency_gate_20260801.md",
+                               "?? docs/91_webflux_vu200_final_diagnostic_result_20260801.md",
+                               "?? docs/92_pool500_mechanism_test_plan_20260801.md",
+                               "?? docs/93_pool500_mechanism_test_result_20260801.md",
+                               "?? docs/94_experiment_1_2_overload_control_plan_20260801.md",
+                               "?? docs/95_experiment_1_2_overload_control_result_20260801.md",
+                               "?? docs/portfolio-figures/",
+                               "?? evidence-2023/",
+                               "?? evidence-addendum/",
+                               "?? experiment/.tmp-exp13/",
+                               "?? experiment/README.md",
+                               "?? experiment/capture/",
+                               "?? experiment/docker/",
+                               "?? experiment/load/mission-load.accounting.test.js",
+                               "?? experiment/load/smoke-test.js",
+                               "?? experiment/patches/",
+                               "?? experiment/results/.gitkeep",
+                               "?? experiment/sql/",
+                               "?? figures/",
+                               "?? frontend/.dockerignore",
+                               "?? frontend/nginx.local.conf",
+                               "?? portfolio-package/",
+                               "?? resource-diagnostic/"
+                           ]
+            },
+    "source":  {
+                   "aggregateSha256":  "774d8ba7b928b1536e6da7d3fc9c3c2beba7d02876a7d33553ddb37007c32e0d",
+                   "files":  [
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\.gitignore",
+                                     "sha256":  "35ab27d6a44e05ca61013eca857e0ece777c10b33140402e660d4cddc7c1d566",
+                                     "bytes":  481
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\baseline-execution-manifest.json",
+                                     "sha256":  "e535e9cdc822a6c06da96585e53f73ec25910bbba7f2b4996c7ad40fc8bcd206",
+                                     "bytes":  1230
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\baseline-source-manifest.json",
+                                     "sha256":  "823f32a11606ae32b57c8468aec80e15e070e339ef9e509c8ad3f446b19e336e",
+                                     "bytes":  11435
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\build.gradle",
+                                     "sha256":  "16f0185398f2ea59af1705ff80f4a9bbf236536b54cf57498fbe4b096ffe3fb0",
+                                     "bytes":  1396
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\Dockerfile",
+                                     "sha256":  "6bb20fd756845946ead152e7bf580384d79006fe045fb3fe284659a31bc6d185",
+                                     "bytes":  458
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\gradle\\wrapper\\gradle-wrapper.jar",
+                                     "sha256":  "91a239400bb638f36a1795d8fdf7939d532cdc7d794d1119b7261aac158b1e60",
+                                     "bytes":  60756
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\gradle\\wrapper\\gradle-wrapper.properties",
+                                     "sha256":  "d75d9df2519c2a8150ed66298696f683f36d624e6720ff73fa95642359feb082",
+                                     "bytes":  207
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\gradlew",
+                                     "sha256":  "cc091938da61f618c5ead086e322d9ef54b48af2f64a27d861fc7f9e8e263c80",
+                                     "bytes":  8428
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\gradlew.bat",
+                                     "sha256":  "fbc50a5a441b0917ea1bfba260c0717a8416fd54505338f074ccd3f03241ec09",
+                                     "bytes":  2838
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\settings.gradle",
+                                     "sha256":  "d62217f8c331eff035d9715ef1c29e7685aa597cdb0332ed9538bf3e22f53f65",
+                                     "bytes":  36
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\component\\CustomFilePart.java",
+                                     "sha256":  "17c94ed57a2477fa40a3f2f7f9aa5ee687ec16e8b948f5882a8f2a38f5e3810a",
+                                     "bytes":  2202
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\component\\DBComponent.java",
+                                     "sha256":  "704de5bc04761fbd29b6002c94d383e470182213c0a6cf7f9f189f8cbde05bb1",
+                                     "bytes":  2130
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\component\\DBComponentHttp.java",
+                                     "sha256":  "fad678caf29eb39ab76681fa0f6145f094d6cdcd77cb03e66fb2326c5de063a5",
+                                     "bytes":  2906
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\component\\TokenComponent.java",
+                                     "sha256":  "d0df3d56bfa9e5746f4a4ed5e1ba0dac8b505f321fb5f6ff81f1848a0604b4bb",
+                                     "bytes":  2561
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\config\\R2dbcConfig.java",
+                                     "sha256":  "13754d748cca9ff37c32dc13c70f6f2526469ccf7af4124fbb88e5b3b9a3057c",
+                                     "bytes":  1132
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\config\\urlEnum\\WebSocketMapping.java",
+                                     "sha256":  "7017bde08d3f2a201dabb6731a93b2724a5dd4318f6feb330856eb5d77bc1274",
+                                     "bytes":  317
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\config\\WebConfig.java",
+                                     "sha256":  "b0a361b18c4982799bb12964357a67383a55eec982d65f8951eb38e7ca29c122",
+                                     "bytes":  2238
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\config\\WebSocketConfig.java",
+                                     "sha256":  "c745fa81d1341918d3f6635a82f463862369d9f856421365229d55e3dae14b94",
+                                     "bytes":  3275
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\contoller\\AiGameController.java",
+                                     "sha256":  "dd364f17accb6a7a3ac7b29e149cf926aa3eb7c004ff3d6f90bec8420dce4a8b",
+                                     "bytes":  9608
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\DoEngGameFluxApplication.java",
+                                     "sha256":  "984d90bb3f243defb605ba5f81ade95829f67bb91c1590e962f7ec835d53781d",
+                                     "bytes":  357
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\dto\\request\\FaceAiRequestDto.java",
+                                     "sha256":  "878cba63567b211ea2fda73c2d355d136417ceb391aa4f96dc92ff84e8935ff7",
+                                     "bytes":  292
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\dto\\request\\ImageRequestDto.java",
+                                     "sha256":  "29fa18286e08012eafce990d9c9a1e6712917413dd2045842a20d05243a07f07",
+                                     "bytes":  324
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\dto\\response\\FaceResultResponseDto.java",
+                                     "sha256":  "69fe0c3055960cd18fa9d3493d2603ae16247c90f1dcbaa6c71047c45815859c",
+                                     "bytes":  214
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\dto\\response\\TokenResponseDto.java",
+                                     "sha256":  "775952b285ac90aebd02d5b260aabac24fe39a87fa23b3600862c256130d82bc",
+                                     "bytes":  212
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\entity\\Member.java",
+                                     "sha256":  "756cc7f69982f94dd046ecd5dfa5041918f58c3e07d8d0949b2a0cf8d0f4754e",
+                                     "bytes":  264
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\entity\\Picture.java",
+                                     "sha256":  "46493db28ec2fe55c1ca75f952f3f6a0b488bdd0d2ddeb637ae3974e1aa39063",
+                                     "bytes":  520
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\entity\\Progress.java",
+                                     "sha256":  "7e9d128829732e444b2defb9ed071a8f874457fdd85463b8334e70be2e043f63",
+                                     "bytes":  640
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\entity\\Scene.java",
+                                     "sha256":  "5425a11b33b4070a2c4082b6f23182a9f68e80489553e1e3d9da450dbb1c6aba",
+                                     "bytes":  232
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\filter\\CustomWebFilter.java",
+                                     "sha256":  "d1a2f81e839493c1133757cf1e1d90e0a94b868093a7ff42e84188101cc0051a",
+                                     "bytes":  654
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\handler\\DoodleWebsocketHandler.java",
+                                     "sha256":  "daece8c7e104b2aca6997476ba50253fb8bea7540202bad4507ac7dbd295f5e9",
+                                     "bytes":  2355
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\handler\\FaceWebsocketHandler.java",
+                                     "sha256":  "5dc108a441424b59b9ce845ba4cf1b3b0367798b43cfc462712fc64694a92786",
+                                     "bytes":  4544
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\handler\\ObjectWebsocketHandler.java",
+                                     "sha256":  "f49db54dc32dea5932fbf980501209870b9c73658802a52d0835ce23a22bb525",
+                                     "bytes":  2355
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\repository\\PictureRepository.java",
+                                     "sha256":  "6c68208312f9c70ec0b6ca1c890b3e1278c834a2063f9b5c49c9c3254cc45c94",
+                                     "bytes":  318
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\repository\\ProgressRepository.java",
+                                     "sha256":  "6afd3711411007b709e205bd22aeaf7286aed2a9f4da33149b97cf18c6a43446",
+                                     "bytes":  823
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\s3\\AwsS3Controller.java",
+                                     "sha256":  "315d84703de5107c17b293ae2d3e847e105c9868307a4d35eec78bb98bd4d208",
+                                     "bytes":  1292
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\s3\\AwsS3Repository.java",
+                                     "sha256":  "91bf9fa76ea3e2bb773614cf091095436785f211b06c3ff816f8b33046428605",
+                                     "bytes":  78
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\s3\\AwsS3Service.java",
+                                     "sha256":  "1ee0d5ce19f4b8efb902874ee4c6b4c1a6496da4ee1ad085000d93f3ad57fe96",
+                                     "bytes":  398
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\s3\\PictureUtil.java",
+                                     "sha256":  "6267f4ce54a1c4ad3734084176fd332d76b59fd5d0340877cdf46ba1ddf446c5",
+                                     "bytes":  8012
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\s3\\S3Config.java",
+                                     "sha256":  "2b617004425f044a11ee372a7fb3d0677259d681a9dff52ffcb0f86bb53dc148",
+                                     "bytes":  2264
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\java\\com\\example\\doenggameflux\\s3\\UploadState.java",
+                                     "sha256":  "2279f90fe945ac47dd7000338a2302c55d020944dfe775c1588288aac731f455",
+                                     "bytes":  617
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\main\\resources\\.gitkeep",
+                                     "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                     "bytes":  0
+                                 },
+                                 {
+                                     "path":  ".experiment-work\\baseline-source-8e85646\\src\\test\\java\\com\\example\\doenggameflux\\DoEngGameFluxApplicationTests.java",
+                                     "sha256":  "a2a8bc5208b0af342e6d1d34d97c86b2ae3d660d93e1f2d2616db6a84627eda6",
+                                     "bytes":  249
+                                 },
+                                 {
+                                     "path":  "backend\\docker-compose.experiment.yaml",
+                                     "sha256":  "a430d90c3bef4ac9274b53881427863f59481df62b94b7918031a694c66a18ca",
+                                     "bytes":  6303
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\.gitignore",
+                                     "sha256":  "35ab27d6a44e05ca61013eca857e0ece777c10b33140402e660d4cddc7c1d566",
+                                     "bytes":  481
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\.idea\\.gitignore",
+                                     "sha256":  "b49d53ecc33024a629693452b90315a389aa0bf25039c2c5cc8d63788a4a351e",
+                                     "bytes":  268
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\.idea\\compiler.xml",
+                                     "sha256":  "5953226bb5c1aff159d442609c320773c067264d3943c925267e2c9b9663c2e4",
+                                     "bytes":  765
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\.idea\\gradle.xml",
+                                     "sha256":  "50c0b0deb3c0ee5c9bbbc84d84bb6cd4ba3da84573bbe6723501bee257c51b44",
+                                     "bytes":  458
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\.idea\\misc.xml",
+                                     "sha256":  "d31e2692c1f1edb784a7d63680474b2d0adbac6e6d0aa524a16d4722c80231da",
+                                     "bytes":  278
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\.idea\\modules.xml",
+                                     "sha256":  "8a434a1bfdc677f33966f411d5ea87c580b6d71f0928b231025605446f52451a",
+                                     "bytes":  311
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\.idea\\modules\\doEngGameFlux.main.iml",
+                                     "sha256":  "02e112121a691f6571e673e6fb50bb6dac073405e3cb383055acf1beeaa5dd21",
+                                     "bytes":  399
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\.idea\\vcs.xml",
+                                     "sha256":  "d87ca0035a110307375417fe8abc47ad7e49246f435ee430acdd0196e6e1a0a6",
+                                     "bytes":  191
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\build.gradle",
+                                     "sha256":  "b0e210d927e79201f3446e1f102a6da8ba242d08bf4f144ceb3c24be7a603278",
+                                     "bytes":  1514
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\Dockerfile",
+                                     "sha256":  "6552a8c12031a75cfcc063923539df2545d00dc6059500571553788b9d348ab9",
+                                     "bytes":  470
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\Dockerfile.diagnostic",
+                                     "sha256":  "01aafcc2f25a6f8d187d7282713779514f0785b316fc35e7c5f2600919799ff6",
+                                     "bytes":  194
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\Dockerfile.experiment",
+                                     "sha256":  "22f978fa94b94e73838671497e83380ca4754aceaf88c3284027cc37f81e8e7f",
+                                     "bytes":  488
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\Dockerfile.overload-control",
+                                     "sha256":  "01aafcc2f25a6f8d187d7282713779514f0785b316fc35e7c5f2600919799ff6",
+                                     "bytes":  194
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\gradle\\wrapper\\gradle-wrapper.jar",
+                                     "sha256":  "91a239400bb638f36a1795d8fdf7939d532cdc7d794d1119b7261aac158b1e60",
+                                     "bytes":  60756
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\gradle\\wrapper\\gradle-wrapper.properties",
+                                     "sha256":  "d75d9df2519c2a8150ed66298696f683f36d624e6720ff73fa95642359feb082",
+                                     "bytes":  207
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\gradlew",
+                                     "sha256":  "cc091938da61f618c5ead086e322d9ef54b48af2f64a27d861fc7f9e8e263c80",
+                                     "bytes":  8428
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\gradlew.bat",
+                                     "sha256":  "fbc50a5a441b0917ea1bfba260c0717a8416fd54505338f074ccd3f03241ec09",
+                                     "bytes":  2838
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\settings.gradle",
+                                     "sha256":  "d62217f8c331eff035d9715ef1c29e7685aa597cdb0332ed9538bf3e22f53f65",
+                                     "bytes":  36
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\AiCapacityExceededException.java",
+                                     "sha256":  "6ee3488e6aa32f99771b27dc05fb5e45e354403a7ce5315e61c64ee5d335da37",
+                                     "bytes":  233
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\AiOutboundAdmissionGate.java",
+                                     "sha256":  "a0b94ed1e9b2dc2131eaf412bc08d1311a806bac4f832fde26211f4ca24a9bcc",
+                                     "bytes":  11569
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\CustomFilePart.java",
+                                     "sha256":  "17c94ed57a2477fa40a3f2f7f9aa5ee687ec16e8b948f5882a8f2a38f5e3810a",
+                                     "bytes":  2202
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\DBComponent.java",
+                                     "sha256":  "704de5bc04761fbd29b6002c94d383e470182213c0a6cf7f9f189f8cbde05bb1",
+                                     "bytes":  2130
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\DBComponentHttp.java",
+                                     "sha256":  "a9eb2da94d61316dd3f2bd54f0e7770f1eb7cef023c89dfe22d4490aa3479797",
+                                     "bytes":  1572
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\DiagnosticErrorLogger.java",
+                                     "sha256":  "2e51d1aa6a5814f83d9aedec8ffd4fd31b9b5e5080ef87249c4ab336e15588fe",
+                                     "bytes":  3665
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\MissionDatabaseService.java",
+                                     "sha256":  "dfebe5ea2620a6454c1a4659a3a6145df27460b44452412bd0853986a7578947",
+                                     "bytes":  3131
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\OutboundStage.java",
+                                     "sha256":  "be6ed9f24273d356c36e4a4d00ca8699982cdfa3998f56eef43efc6a253d2fde",
+                                     "bytes":  114
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\RequestIdentity.java",
+                                     "sha256":  "c3156cf79ba0e8c7b61f9d6c09b61a8fa5c14a9b7d109165a7666ce5a4949ff6",
+                                     "bytes":  3358
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\StageObservation.java",
+                                     "sha256":  "b633b0112c155f56fdf4f510fe56a052cd36395a30ac8e0aaa81a80803fba74f",
+                                     "bytes":  5027
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\TokenComponent.java",
+                                     "sha256":  "6d822b9a21b42890ca5f872a3fec2473d5a8c3fb474357cabcb4da5194ff7306",
+                                     "bytes":  931
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\TransportDiagnosticLogger.java",
+                                     "sha256":  "de78695088eb899bea0b5c9aba27d5dfc28599d0b16ab24fa16eefea63bbb2f2",
+                                     "bytes":  4708
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\component\\TransportHttpClientObservation.java",
+                                     "sha256":  "9a63733add03785afac5397bad646ffc25aa51361f5c7896a3917bd0e2bfe352",
+                                     "bytes":  16116
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\AdmissionEndpoint.java",
+                                     "sha256":  "53651d637da64c440337f075fae11697a65087f3b894d98628140fbc4bf44ab5",
+                                     "bytes":  930
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\AdmissionMode.java",
+                                     "sha256":  "2ff82ad9ff204398b78feee5ffd58d30e6fd97d5a1d134c1db9ff1f8cb8ccf99",
+                                     "bytes":  183
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\AdmissionProperties.java",
+                                     "sha256":  "3ad40ad34bed112fe390ab7e88b496d4106395f4de4ccf629015946bd61e2a67",
+                                     "bytes":  2221
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\AdmissionScope.java",
+                                     "sha256":  "5aacc07d2ec4ffefac7e1f0758d5afcb64d3a21e3db0de32fbd17fa6e226cef5",
+                                     "bytes":  195
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\DiagnosticPoolEndpoint.java",
+                                     "sha256":  "01adb80bed0d61f76c17ef3fefde14d105de81168eb0b8e381df307c412b82d5",
+                                     "bytes":  5507
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\DiagnosticProperties.java",
+                                     "sha256":  "6ac6889fbbb5bfbafd8badfa4d7007544bdea5d6919ccc5bc1d0dace6a401483",
+                                     "bytes":  385
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\ExperimentRequestLoggingFilter.java",
+                                     "sha256":  "1a1ec2ab8d4dfe5b33f69b0d8b81eae567fc3e2b69f1cf80233aaf5e57325e32",
+                                     "bytes":  2365
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\ExperimentSnapshotEndpoint.java",
+                                     "sha256":  "0cf4e80e3648c9b2d879395b405960b8408bfa601bf03cf54ac3876cadc7363b",
+                                     "bytes":  5027
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\ExternalHttpClientConfig.java",
+                                     "sha256":  "6dbbfa16b07766b59bb5d31de739e94d6cdef4a73f50ba615528b7725a8653ad",
+                                     "bytes":  10396
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\ExternalLeasingStrategy.java",
+                                     "sha256":  "5083f98750be73928281f1f0a3ec7e9810532ed35773cd0421867725ab170a09",
+                                     "bytes":  108
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\ExternalPoolMode.java",
+                                     "sha256":  "0ab2cf50c80cab1be363a28042b5b22968f7b308540f1b9558cf3a41e8624600",
+                                     "bytes":  107
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\ExternalServiceProperties.java",
+                                     "sha256":  "68c6048969b938c1f440ae01d43923083fe5c3b30a0ede993c65f050182f82c2",
+                                     "bytes":  3778
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\R2dbcConfig.java",
+                                     "sha256":  "13754d748cca9ff37c32dc13c70f6f2526469ccf7af4124fbb88e5b3b9a3057c",
+                                     "bytes":  1132
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\RequestSizeLimitFilter.java",
+                                     "sha256":  "88053da869c6259c704e9d5789583bd7448b91edb65c76302c780df744626f8b",
+                                     "bytes":  1342
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\StageObservationEndpoint.java",
+                                     "sha256":  "b9be0c08714ee1ebf0f09ffdd2246adb45d3272efdfc01f84abf356883800865",
+                                     "bytes":  1079
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\StageObservationProperties.java",
+                                     "sha256":  "a548990888fcf37fab72b522e1f1434cba5b5215ecce55145013974dd3079ea3",
+                                     "bytes":  398
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\TransportAttributionProperties.java",
+                                     "sha256":  "0c19e065afdfca11248bcf792400f4719b900e4f549cbae011f805573eaf7c75",
+                                     "bytes":  406
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\TransportRequestObservationFilter.java",
+                                     "sha256":  "b74a7dc951c5d754e32284f90a3f61cfa883d22053d594e1632e126f51efef9c",
+                                     "bytes":  3116
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\urlEnum\\WebSocketMapping.java",
+                                     "sha256":  "7017bde08d3f2a201dabb6731a93b2724a5dd4318f6feb330856eb5d77bc1274",
+                                     "bytes":  317
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\WebConfig.java",
+                                     "sha256":  "b0a361b18c4982799bb12964357a67383a55eec982d65f8951eb38e7ca29c122",
+                                     "bytes":  2238
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\config\\WebSocketConfig.java",
+                                     "sha256":  "c745fa81d1341918d3f6635a82f463862369d9f856421365229d55e3dae14b94",
+                                     "bytes":  3275
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\contoller\\AiGameController.java",
+                                     "sha256":  "ea114118fed9e2592c21be32a2e086f32a720503936261527b9cfcf6c8615809",
+                                     "bytes":  9502
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\DoEngGameFluxApplication.java",
+                                     "sha256":  "984d90bb3f243defb605ba5f81ade95829f67bb91c1590e962f7ec835d53781d",
+                                     "bytes":  357
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\dto\\request\\FaceAiRequestDto.java",
+                                     "sha256":  "878cba63567b211ea2fda73c2d355d136417ceb391aa4f96dc92ff84e8935ff7",
+                                     "bytes":  292
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\dto\\request\\ImageRequestDto.java",
+                                     "sha256":  "29fa18286e08012eafce990d9c9a1e6712917413dd2045842a20d05243a07f07",
+                                     "bytes":  324
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\dto\\response\\AiDecisionResultDto.java",
+                                     "sha256":  "0f43e8c8734751f81b6334165ea8afada2bfb7219c349cc8c2b26b626fc5d1ff",
+                                     "bytes":  293
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\dto\\response\\FaceResultResponseDto.java",
+                                     "sha256":  "69fe0c3055960cd18fa9d3493d2603ae16247c90f1dcbaa6c71047c45815859c",
+                                     "bytes":  214
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\dto\\response\\TokenResponseDto.java",
+                                     "sha256":  "775952b285ac90aebd02d5b260aabac24fe39a87fa23b3600862c256130d82bc",
+                                     "bytes":  212
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\entity\\Member.java",
+                                     "sha256":  "756cc7f69982f94dd046ecd5dfa5041918f58c3e07d8d0949b2a0cf8d0f4754e",
+                                     "bytes":  264
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\entity\\Picture.java",
+                                     "sha256":  "46493db28ec2fe55c1ca75f952f3f6a0b488bdd0d2ddeb637ae3974e1aa39063",
+                                     "bytes":  520
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\entity\\Progress.java",
+                                     "sha256":  "7e9d128829732e444b2defb9ed071a8f874457fdd85463b8334e70be2e043f63",
+                                     "bytes":  640
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\entity\\Scene.java",
+                                     "sha256":  "5425a11b33b4070a2c4082b6f23182a9f68e80489553e1e3d9da450dbb1c6aba",
+                                     "bytes":  232
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\filter\\CustomWebFilter.java",
+                                     "sha256":  "d1a2f81e839493c1133757cf1e1d90e0a94b868093a7ff42e84188101cc0051a",
+                                     "bytes":  654
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\handler\\AiCapacityExceptionHandler.java",
+                                     "sha256":  "8a603aba4b2a96044449209f6d482821784528d34d0dcc03e912f2db2b1495c2",
+                                     "bytes":  838
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\handler\\DoodleWebsocketHandler.java",
+                                     "sha256":  "daece8c7e104b2aca6997476ba50253fb8bea7540202bad4507ac7dbd295f5e9",
+                                     "bytes":  2355
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\handler\\FaceWebsocketHandler.java",
+                                     "sha256":  "5dc108a441424b59b9ce845ba4cf1b3b0367798b43cfc462712fc64694a92786",
+                                     "bytes":  4544
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\handler\\ObjectWebsocketHandler.java",
+                                     "sha256":  "f49db54dc32dea5932fbf980501209870b9c73658802a52d0835ce23a22bb525",
+                                     "bytes":  2355
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\repository\\PictureRepository.java",
+                                     "sha256":  "6c68208312f9c70ec0b6ca1c890b3e1278c834a2063f9b5c49c9c3254cc45c94",
+                                     "bytes":  318
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\repository\\ProgressRepository.java",
+                                     "sha256":  "6b4616bdbdaa04a5c7eccafd9494845f3ff9fd5a3cee1708c3ec47125aac7bb9",
+                                     "bytes":  813
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\AwsS3Controller.java",
+                                     "sha256":  "315d84703de5107c17b293ae2d3e847e105c9868307a4d35eec78bb98bd4d208",
+                                     "bytes":  1292
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\AwsS3Repository.java",
+                                     "sha256":  "91bf9fa76ea3e2bb773614cf091095436785f211b06c3ff816f8b33046428605",
+                                     "bytes":  78
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\AwsS3Service.java",
+                                     "sha256":  "1ee0d5ce19f4b8efb902874ee4c6b4c1a6496da4ee1ad085000d93f3ad57fe96",
+                                     "bytes":  398
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\HttpMissionImageStorage.java",
+                                     "sha256":  "608ac535a880f942bed594be9272cee77b677b33ed98cf7131c8a9a7d8619b39",
+                                     "bytes":  1568
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\MissionImageStorage.java",
+                                     "sha256":  "605c98fa3a833d757e10677109b556e8b4853eea81458f0ccc12e48ece5cd043",
+                                     "bytes":  183
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\PictureUtil.java",
+                                     "sha256":  "6267f4ce54a1c4ad3734084176fd332d76b59fd5d0340877cdf46ba1ddf446c5",
+                                     "bytes":  8012
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\S3Config.java",
+                                     "sha256":  "2b617004425f044a11ee372a7fb3d0677259d681a9dff52ffcb0f86bb53dc148",
+                                     "bytes":  2264
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\S3MissionImageStorage.java",
+                                     "sha256":  "08d03dc14a575b5415dd792e7f229e7e08f40b94661aba14ca7255241fe53034",
+                                     "bytes":  1434
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\s3\\UploadState.java",
+                                     "sha256":  "2279f90fe945ac47dd7000338a2302c55d020944dfe775c1588288aac731f455",
+                                     "bytes":  617
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\java\\com\\example\\doenggameflux\\util\\ImagePayloadDecoder.java",
+                                     "sha256":  "dc0e599aef22039af53864caed2c3a64bcbe6983e207e66f70a3967f29c568d6",
+                                     "bytes":  603
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\resources\\.gitkeep",
+                                     "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                     "bytes":  0
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\resources\\application.yml",
+                                     "sha256":  "b97cda37af70b1d18b6eb38e86db5e85e7eafd5d942918ecedea2e2a24303874",
+                                     "bytes":  2090
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\main\\resources\\application-experiment.yml",
+                                     "sha256":  "eff43d2c4746642efd8412a00f5335f6eb902739d15e42353cf714c27880023c",
+                                     "bytes":  243
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\component\\AiOutboundAdmissionGateTest.java",
+                                     "sha256":  "3212bc4fd93d67295e3ba8bd167251a60613dd1fa59634184578e1ac16f7257f",
+                                     "bytes":  7108
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\component\\StageObservationCorrelationTest.java",
+                                     "sha256":  "76ef04223afc054a940b99b203de577d972e35bd544b89b5c15b87a0ca8c82db",
+                                     "bytes":  1933
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\component\\StageObservationTest.java",
+                                     "sha256":  "8901cb60c782ad8f6bbe9c6ccb3321ebc4f4e224233e3ea129aaec27cac52d7b",
+                                     "bytes":  1842
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\component\\TransportConnectionLifecycleTest.java",
+                                     "sha256":  "85b804f37e5c25d13d65525a3c9aabdc0ee247b455d05ccb12ca33f0dd9cf572",
+                                     "bytes":  3197
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\config\\DiagnosticPoolEndpointTest.java",
+                                     "sha256":  "25712e1a548e58412f3a5f14a922cff6a7d77f722b25a4447dd6a461cc2a9e97",
+                                     "bytes":  3183
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\config\\ExternalHttpClientConfigTest.java",
+                                     "sha256":  "dd1bdcb3475b775a346f4017b7b2f6a4bfe67421d556e450f6766a6e0ae5a90b",
+                                     "bytes":  1694
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\config\\ExternalIdleFreshnessTest.java",
+                                     "sha256":  "9d2c7cdf0f6e3f3254c7a33796ce9611c2e6ea4ff8ff6612d1728762702116f3",
+                                     "bytes":  4655
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\config\\ExternalServicePropertiesTest.java",
+                                     "sha256":  "8d5c721e933e4ae1f334cff591a55481b24f7fc98400a7f2ab89ae06db4175be",
+                                     "bytes":  3141
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\config\\FreshFirstLifecyclePolicyTest.java",
+                                     "sha256":  "20b68de419baf53da51c8c4d3e241e4b15d616573cc38374a42b28dd60ccb4e3",
+                                     "bytes":  14722
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\config\\TransportRequestObservationFilterTest.java",
+                                     "sha256":  "439ca9b1d8790b6496752d700db8a05c06498d7a5eade7a23956af8699c8d2c6",
+                                     "bytes":  3655
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\contoller\\AiGameControllerCorrelationTest.java",
+                                     "sha256":  "de046a94ee5fb7b3eb09b7997909fbd539dfef74ad041a3186fbc90ef05c4c92",
+                                     "bytes":  3816
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\DoEngGameFluxApplicationTests.java",
+                                     "sha256":  "a2a8bc5208b0af342e6d1d34d97c86b2ae3d660d93e1f2d2616db6a84627eda6",
+                                     "bytes":  249
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\experiment\\CloseAcquireRaceAttributionTest.java",
+                                     "sha256":  "2fbb82fee69b8814e563eb59965530fe804e5a131fb660b44ef8cb721299edb3",
+                                     "bytes":  34576
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\experiment\\DeterministicConnectionLifecycleCorrelationTest.java",
+                                     "sha256":  "76cf657ac4861486eb305b2e69f8b565008306d4b6b129b737b476656bdf4b5a",
+                                     "bytes":  30861
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\handler\\AiCapacityExceptionHandlerTest.java",
+                                     "sha256":  "16cac0acba8aa328542cf79dbc0c5faad1cb3e07108c262fbc8e3acc1f56f909",
+                                     "bytes":  830
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameFlux\\src\\test\\java\\com\\example\\doenggameflux\\util\\ImagePayloadDecoderTest.java",
+                                     "sha256":  "192df2a10c4a041a2d8453570b2c4dacf7c1af2ab6c9c40e7dcea859811062bf",
+                                     "bytes":  927
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\build.gradle",
+                                     "sha256":  "80b5255c910988b6e45326ee9bf99ed0242b0c118559ff9c719155d1f09cc77e",
+                                     "bytes":  730
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\Dockerfile.experiment",
+                                     "sha256":  "959cbfe97339fee72a0874aa3a4de9146b70c2dfb517bd57a14ddfb0a5f73e6b",
+                                     "bytes":  363
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\settings.gradle",
+                                     "sha256":  "173e19cfecfd6a6f6d73df0ae776894412a37e924a4f30a90a15bc209d6c0687",
+                                     "bytes":  34
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\client\\AiClient.java",
+                                     "sha256":  "53147e6f64e79e6c46b3b0111bcde913ea7f6fa2bd0c61c56630768691c77f8a",
+                                     "bytes":  1561
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\client\\TokenClient.java",
+                                     "sha256":  "0f5f6f6fa9a035ce8808a55f6ed79097404dca88bfa736dd5e6fc85a0a9a0212",
+                                     "bytes":  1414
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\config\\ExperimentRequestLoggingFilter.java",
+                                     "sha256":  "46f5e2131c3f6e6fb693bf7c72cea80b2614b4eab0017617a7a8349b4dbd72a8",
+                                     "bytes":  2237
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\config\\ExperimentSnapshotEndpoint.java",
+                                     "sha256":  "0cff66de2304c1c7bd5cfcbc7782f10cb6c7ba89bc72c78e910781dbc7861276",
+                                     "bytes":  4557
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\config\\ExternalHttpClientConfig.java",
+                                     "sha256":  "f747c180014d26bf2369249905bcd10df2d80bc87384da0e617b52d858df72bc",
+                                     "bytes":  2083
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\config\\ExternalServiceProperties.java",
+                                     "sha256":  "8fd9731d90f5ec766a1eb892aa4c07f6af7002ac59cecd27cba7729459dede9e",
+                                     "bytes":  2056
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\config\\MvcRuntimeMetrics.java",
+                                     "sha256":  "8f5a417d41a3966ed5c596fe9fab79f00e8d631f0b093976b0d580254b85eb8d",
+                                     "bytes":  4791
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\config\\RequestSizeLimitFilter.java",
+                                     "sha256":  "e077f7b3fc9461c16bb2b1a4f694881741529b2df8a8b172e63dfe19b5bb0f69",
+                                     "bytes":  1296
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\controller\\MissionController.java",
+                                     "sha256":  "c21257d95d5c2d3c05f9e1bf484b3f34a71447343c6e8e877d585011c2832b00",
+                                     "bytes":  3683
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\DoEngGameMvcApplication.java",
+                                     "sha256":  "9cb2c58f12ae651ef232708d563dfb17e8e9c81fde670d7da7a1f3fd3777d2a0",
+                                     "bytes":  340
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\dto\\AiDecisionResponse.java",
+                                     "sha256":  "6e89b17b8040425e1347ea8aaf4d17bc97976103d7b07affbd2dfd1f6c305ad1",
+                                     "bytes":  409
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\dto\\AiDecisionResult.java",
+                                     "sha256":  "302d287d012a1c3d3c0490630d27ea3b11477e99a82d0e230aec58a21a2257d8",
+                                     "bytes":  352
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\dto\\ImageRequest.java",
+                                     "sha256":  "1d7ea6a63d3bcb5cf10d8eafd38bb8ba8311819d4a8f9f4c80b9f1adb272c88b",
+                                     "bytes":  232
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\dto\\StorageResponse.java",
+                                     "sha256":  "aeba58e9502a16ee9e7f9e10109bf41212e48a5ec198f08f889ec1366f36725e",
+                                     "bytes":  221
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\dto\\TokenResponse.java",
+                                     "sha256":  "8983d42c289a0b75e26a66373a60aa069a9c04873c7966ec1042fe1473224455",
+                                     "bytes":  206
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\service\\MissionCompletionService.java",
+                                     "sha256":  "c0780b507bfb9e01750937bed085799fc26a77d3ffc2240509bd77aa7afd0794",
+                                     "bytes":  1546
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\service\\MissionDatabaseService.java",
+                                     "sha256":  "34e46a03a39395e548730ed1c397811ffa019abf71e380f5b361f431dd30a7e9",
+                                     "bytes":  3319
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\storage\\HttpMissionImageStorage.java",
+                                     "sha256":  "c7ab8d88df2c2ad9062b7aa8bd3b065fd4d00d4ede8adbd2c0b2a4194931fb96",
+                                     "bytes":  1863
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\storage\\MissionImageStorage.java",
+                                     "sha256":  "651a04161242bb71cb6d3e15728ac0f7a8302180e488d9675e345763e12258b9",
+                                     "bytes":  136
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\java\\com\\example\\doenggamemvc\\util\\ImagePayloadDecoder.java",
+                                     "sha256":  "0cd07ad7be39d626da237aa83045cc5622ac3fdf1fdb93605d4eac2f28f40b59",
+                                     "bytes":  582
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\resources\\application.yml",
+                                     "sha256":  "58a0d88a49599f9e461df66e6858edf45de2c7383198c0d57869754db5b6f4ae",
+                                     "bytes":  1005
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\main\\resources\\application-experiment.yml",
+                                     "sha256":  "4de4cea5790585141ccbc9b966fce0160cced86db841091fa6dfccb7d0466038",
+                                     "bytes":  286
+                                 },
+                                 {
+                                     "path":  "backend\\doEngGameMvc\\src\\test\\java\\com\\example\\doenggamemvc\\util\\ImagePayloadDecoderTest.java",
+                                     "sha256":  "8b6966af3b1a6e8618470bc4940f174fdde2d05365c1cf415c9fef722880cace",
+                                     "bytes":  898
+                                 },
+                                 {
+                                     "path":  "backend\\experiment-mock\\Dockerfile",
+                                     "sha256":  "bedb404bfee6376ab94a6242be5a7103148fd6fbdadc537126d742cbe2a1f9e8",
+                                     "bytes":  123
+                                 },
+                                 {
+                                     "path":  "backend\\experiment-mock\\README.md",
+                                     "sha256":  "20ecf809e9e4943f62c698249764a6e3052a9fd3a3b343fdf90bcc14125c5cf5",
+                                     "bytes":  1928
+                                 },
+                                 {
+                                     "path":  "backend\\experiment-mock\\server.js",
+                                     "sha256":  "a335d8fabdd0210b9ae752d99254340db1639e3ec5b525d0f71d634e19b00286",
+                                     "bytes":  16207
+                                 },
+                                 {
+                                     "path":  "backend\\experiment-mock\\smoke-test.js",
+                                     "sha256":  "69efc2f0033c914e9fefa7078a6cf693e5dc34b57a083c8698b583cfd1b2bd47",
+                                     "bytes":  2451
+                                 },
+                                 {
+                                     "path":  "experiment\\load\\experiment-1-11-correlation.e2e.test.js",
+                                     "sha256":  "30e45871dad3db6c28eeb8d7c09d0d4774c7f99ed80ff5efff521a6d3d769f5c",
+                                     "bytes":  5162
+                                 },
+                                 {
+                                     "path":  "experiment\\load\\experiment-1-12-controls.e2e.test.js",
+                                     "sha256":  "e57c59938190aa061972ae35596b81e38d30d2829eefe61e8e251cbe1aeb5b5e",
+                                     "bytes":  4169
+                                 },
+                                 {
+                                     "path":  "experiment\\load\\mission-load.accounting.test.js",
+                                     "sha256":  "294df67ba636169c8791b76027bb9c034fa54702646a4b67a920fff0819b2ec7",
+                                     "bytes":  2288
+                                 },
+                                 {
+                                     "path":  "experiment\\load\\mission-load.js",
+                                     "sha256":  "f3a6eb36798a57ce408de85e5420f65273bb5c2684bc02618822c4c78095619b",
+                                     "bytes":  26199
+                                 },
+                                 {
+                                     "path":  "experiment\\load\\mission-load.reconnect-ramp.test.js",
+                                     "sha256":  "957e6607cf9b2f10dcf2694521040280b6f03425cc757a4b24c6434c2746f63f",
+                                     "bytes":  4213
+                                 },
+                                 {
+                                     "path":  "experiment\\load\\smoke-test.js",
+                                     "sha256":  "3332b621713d841b67510e7a5688583d74c5c8a4edbbfd38e895d4c427a69996",
+                                     "bytes":  3221
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\aggregate-experiment-1-11-correlation.js",
+                                     "sha256":  "ff9fd5b5bffef7034617d63ff3e2572921543cf9cfd4631ae86d2070987bdf0b",
+                                     "bytes":  9105
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\aggregate-experiment-1-12-connection.js",
+                                     "sha256":  "7cbb083b5ad75aee946dec6d00d56900dcc232e913c3d8cc500184c075a5b735",
+                                     "bytes":  14041
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\aggregate-experiment-1-13.js",
+                                     "sha256":  "ca3e53f08a8bf7937295533eb1835b11822f79f4d4a4692cbecf7b5145894bca",
+                                     "bytes":  11055
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\aggregate-experiment-1-19.js",
+                                     "sha256":  "9398e9ab73e967f6f297bdbbe7d40d3e7004319a3ad7cdfc6bae9ef70109068d",
+                                     "bytes":  4829
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\aggregate-experiment-1-20.js",
+                                     "sha256":  "d278d663ed0103b60d81b7d83c7981a7a6e8146a45b7e6ab84aafaf2bb02a658",
+                                     "bytes":  2226
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\aggregate-experiment-1-21.js",
+                                     "sha256":  "57d0624ab344ac01ed6d65dc265bdb745a107af4e31e21454ea0cecf91433f83",
+                                     "bytes":  3709
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\aggregate-experiment-1-22.js",
+                                     "sha256":  "bd8843cd9c4f4c248accddaae5cfabe7e933cfd197bd3cc68ae3bc5cc70e6a54",
+                                     "bytes":  5680
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\apply-baseline-overlay.ps1",
+                                     "sha256":  "f9ec0568988e08aad211e07aa1e64342041a69689b08a0d19f166f1e0f82f293",
+                                     "bytes":  3848
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\build-2023-implementation-evidence.js",
+                                     "sha256":  "2f848963e950fb16a1fe5716c2637d0fb2b3dea8bdbe2a3c11f0c1dda97d20c9",
+                                     "bytes":  14317
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\build-evidence-addendum.js",
+                                     "sha256":  "3ccd3736fda738592d63cb4ae6c9763c324787273eea81443be018eb5e634d46",
+                                     "bytes":  24235
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\capture-environment.ps1",
+                                     "sha256":  "915eb5ecf3e5a1d461f1fd286997924001cf68ae633ab98eac0e291ce27e62a6",
+                                     "bytes":  5481
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\close-experiment-1-19-outcome-blind.ps1",
+                                     "sha256":  "d16cc8d81be68ec68ad4055918f6e624cf56f03b08d5d05dbbe7dc5be7380dd5",
+                                     "bytes":  1790
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\collect-admission.ps1",
+                                     "sha256":  "f2a1539bde782cdefc3b5a0b8c391f84f4fa8c5d1d26842597135db5e287ee2c",
+                                     "bytes":  1334
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\collect-diagnostic-pool.ps1",
+                                     "sha256":  "35caaa04f0bae5eac11e9528e4707ea0548654583016915802b41f316d48174b",
+                                     "bytes":  1702
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\collect-phase1-observer.ps1",
+                                     "sha256":  "f5f03f6c5ced694f92aca5cf81583bd1b747946399427d602f94e2144ebd3ee8",
+                                     "bytes":  2841
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\collect-stage-observation.ps1",
+                                     "sha256":  "a976af175ec017cf7bfd7402c3055fd251309542024a020a15fcb70091b5098e",
+                                     "bytes":  1339
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\comparison-source-gate.ps1",
+                                     "sha256":  "897077199e49a16f8d1fd4535d06151c8af1d1fcf391fdef61cf936b120f66d0",
+                                     "bytes":  2067
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\comparison-source-gate.test.ps1",
+                                     "sha256":  "f686a3493df491ca678f0a4c70bf3671b64a219290c57544b45b3ae6d335099c",
+                                     "bytes":  1150
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-19-artifact-contract.ps1",
+                                     "sha256":  "51a46c2aded2033df89115ee2864d1536065c7db4c5e16406bed2d73c5a55332",
+                                     "bytes":  4605
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-20-artifact-contract.ps1",
+                                     "sha256":  "73a9a20c1b561cb500cd333b3466ddb2d0d1050ca02dcda728b12eb2d4fd0b47",
+                                     "bytes":  3271
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-20-collector-coverage.ps1",
+                                     "sha256":  "fe863af680c261b24462d8795c365f677a8cba79496ab413e83e595d382cd872",
+                                     "bytes":  6330
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-21-artifact-contract.ps1",
+                                     "sha256":  "0b80893527ad39c5d1576590d225e5c44b370fbe3db83751280ce56a2f007a37",
+                                     "bytes":  7433
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-21-collector-coverage.ps1",
+                                     "sha256":  "5a7ea747c2a89000bfbe0e86bcc861a21c566f680bc074f8b2ffc3dfa159e313",
+                                     "bytes":  6335
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-21-native-log-capture.ps1",
+                                     "sha256":  "e6dbae6774dbff0013d7c66899c499f0ba10014529cfe3c2636b5ececcbbb11c",
+                                     "bytes":  2294
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-22-artifact-contract.ps1",
+                                     "sha256":  "40e22122be077a5f3dbb75af27068e9c96dbfad6192efda5de93b2ea90984eed",
+                                     "bytes":  8533
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-22-collector-coverage.ps1",
+                                     "sha256":  "55de1a09009f3a857a0fff341ffe7e6cc818cdc40ac459080ba32107f834df49",
+                                     "bytes":  6337
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-22-container-stop.ps1",
+                                     "sha256":  "8e979ad89ab8e584c16190f04c8dab061d9ca6ba4f65c3691f3ab646b3265254",
+                                     "bytes":  4549
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\experiment-1-22-native-log-capture.ps1",
+                                     "sha256":  "7e9b19c5f7d746c276e17d9d62de1230fb84ae13603f900ff0e8de8f506bef0c",
+                                     "bytes":  3168
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\invoke-experiment-1-12-capture.ps1",
+                                     "sha256":  "4ffd3201575006b87005d7e8f49ed2a814662f3f68837945b4dd7312e719b428",
+                                     "bytes":  3683
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\monitor-containers.js",
+                                     "sha256":  "78004a9afc3fe27c43bfc675276be39475dcaa35db5a8fe134f043584d0a4d21",
+                                     "bytes":  11519
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\monitor-containers.ps1",
+                                     "sha256":  "872981adeaaeae4c0d76035200bfd0e9e2e9e003129c28dcc8e8f3108b8b491b",
+                                     "bytes":  5334
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\monitor-containers.source.test.js",
+                                     "sha256":  "9ac97ae125bfc6ad922fcfe75ccad65ac923c774773ecdf527477570f9197d68",
+                                     "bytes":  732
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\prepare-baseline.ps1",
+                                     "sha256":  "91b6ac49d98b5232e05ef06cbb386179dffb8e1f2b0eae335cbb0bf362334430",
+                                     "bytes":  3434
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\provision-experiment-users.ps1",
+                                     "sha256":  "cce58c1d693f76eb98984e3d606439855ef51448d40e3dedf8177697aab10c5f",
+                                     "bytes":  7153
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\render-portfolio-figures.js",
+                                     "sha256":  "c45d7a0cb0e26bd57d1a5a0f01e1192040cacb07921086b57e7e5ebd3e955092",
+                                     "bytes":  8633
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\render-timeseries.js",
+                                     "sha256":  "0ab08359a8cafacca4d2d5911bed89d0277ffe19d32039a58d64f3b6bb691a56",
+                                     "bytes":  12404
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\resolve-verification-validity.ps1",
+                                     "sha256":  "02412f713b22a8ce0acc5e17ec815c8cafef8a61af1eea6737f0018ae1660951",
+                                     "bytes":  1372
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-comparison.ps1",
+                                     "sha256":  "abab9ea40b8fbc1768d77eb42b55beeead338deb3be678161ca8fc2f1b96344c",
+                                     "bytes":  15055
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-correctness-smoke.ps1",
+                                     "sha256":  "d338b58497317fece2395cb7b95e540a85b6022969c170f89c57561903329c98",
+                                     "bytes":  13992
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-exp137-runtime-diagnostic.ps1",
+                                     "sha256":  "f11bc6781a196a6c8fd6433ac1dae3f236b961e5076f4f0c3bffa5e6c229e18b",
+                                     "bytes":  8942
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-10-transport-attribution.ps1",
+                                     "sha256":  "34636d4754034371c03d29682002d60b4e45b0081097fe3ecdb4c6285d2141bc",
+                                     "bytes":  3374
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-11-correlation.ps1",
+                                     "sha256":  "7330b37e9e21ef8a2a3b45755a3335a0f9f0c6006e94964fe63274a233780bf1",
+                                     "bytes":  4733
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-11-deterministic-tests.ps1",
+                                     "sha256":  "d9d687d6b72c89bc4e040900341b7b876bebe17b9d95f80d4769ff9234e1e50e",
+                                     "bytes":  4548
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-12-core.ps1",
+                                     "sha256":  "afebde31450a2dbb0ec4e9776506f27a7e99be088da1c4da247671ff49fd06cc",
+                                     "bytes":  7790
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-12-positive-controls.ps1",
+                                     "sha256":  "e04ec8ced19a4325e7c3b2a11589cf9bc23e39bb9c340916465835d469c7d2fe",
+                                     "bytes":  5642
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-13-core.ps1",
+                                     "sha256":  "640107bf2a83aa204844fbee6b7c488f34c94d640610972e566813636c6297b5",
+                                     "bytes":  9819
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-13-positive-controls.ps1",
+                                     "sha256":  "b35c1b9f7e55905078792ba4cc65c87889eab9771bf8673ac45725fe36ba512d",
+                                     "bytes":  6168
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-19-core.ps1",
+                                     "sha256":  "d459a74e9ac33357aacdd3f3e68792482bc08544bddc2e016cf703d379805c98",
+                                     "bytes":  11273
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-19-preflight.ps1",
+                                     "sha256":  "8f0d7864467e478ce4a9d3a2362d914dcdfa53782dd871c6094941312a7f9be2",
+                                     "bytes":  24238
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-19-six-core.ps1",
+                                     "sha256":  "5e67b8ced967a87b62a1ae91c949b250798df8fc5f5f4d9b8f47478cab3b2e1b",
+                                     "bytes":  4255
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-20-collector-preflight.ps1",
+                                     "sha256":  "c906d311f7b2cfd8598e16ac8e745d45171e857d30138a3a591cda399922fdaa",
+                                     "bytes":  5092
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-20-core.ps1",
+                                     "sha256":  "986a49c854b55fc33ddb4a131bd98a3db55d7d973a6a1400616b487de8bfdda7",
+                                     "bytes":  11972
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-20-six-core.ps1",
+                                     "sha256":  "c26355f113da08a4eab6ae82d3c495c36b72f39c4c2347565e57c0aea0460153",
+                                     "bytes":  2447
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-21-core.ps1",
+                                     "sha256":  "6f57ed0ebfc5c9a29da7362419c277baa15e8d436adacfce686769a41cf6c8e3",
+                                     "bytes":  15040
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-21-log-capture-preflight.ps1",
+                                     "sha256":  "05619b615eb6b863c68cdbf863cd4ff092f63565f51fca943b8fa49efa4387ca",
+                                     "bytes":  2795
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-21-six-core.ps1",
+                                     "sha256":  "0aacde41e02362014b6264ab66eca690bc084a87678d80a750382c2ec3a0f3fa",
+                                     "bytes":  2452
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-22-core.ps1",
+                                     "sha256":  "658cebfa24b3ffe2190926c0f34a0b172c6eeea03eba944b2501579c0ed37622",
+                                     "bytes":  16009
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-22-post-stop-preflight.ps1",
+                                     "sha256":  "57dd4103132fab2a65680548ed69d3628b663ccc6ab9cf51783f72b82498f83d",
+                                     "bytes":  3568
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-22-six-core.ps1",
+                                     "sha256":  "a5b395ababeb37deca936703bf146f1a0e9f043ae14792dbc5c62d4ebb8b462f",
+                                     "bytes":  2454
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-3-core.ps1",
+                                     "sha256":  "a5b0902acd8fdcbd8166630f2912104a81df11b6e754694f470f1c78fca0d77a",
+                                     "bytes":  2530
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-3-diagnostic.ps1",
+                                     "sha256":  "d8c8423134741a0d8cb8136cc155ee6f74ef83f5e96bce82a9a4b56777308bdc",
+                                     "bytes":  2861
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-4-after.ps1",
+                                     "sha256":  "d17c520487d061836c63c38dfc1bf5e85697648323c08e6cd1c4ffcff90b2809",
+                                     "bytes":  440
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-4-before.ps1",
+                                     "sha256":  "2fa219900c702081d7d1f752c74ecfab9992fb05f354245808fcafa5ea81e134",
+                                     "bytes":  5330
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-5-fullpath352.ps1",
+                                     "sha256":  "cb2fb7f5d7024ee291fa6e397b2bc1a8476e7279d961697b887972f3f050e203",
+                                     "bytes":  496
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-6-ai-latency.ps1",
+                                     "sha256":  "3ea4b1a7d06a1e4935598baa016922b4b98d9ed4f759b73b3d65028355498eed",
+                                     "bytes":  586
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-6-ai-latency.source.test.js",
+                                     "sha256":  "29428b293d52786258caca9e02f507fa810249f9ea3b0522e37d29319edf6ee2",
+                                     "bytes":  1266
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-7-pending-diagnostic.ps1",
+                                     "sha256":  "394137408a678e72854863602d0ed0b6f8612e6d895e09d55685a7541ea9a930",
+                                     "bytes":  543
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-8-pool-isolation.ps1",
+                                     "sha256":  "3a8532f5e723d1f6eccd54062bc8b65fa0d6e1a4edd05f291b2c171ffdb8df60",
+                                     "bytes":  1219
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-experiment-1-9-overload-control.ps1",
+                                     "sha256":  "46c1ccde2b09a5251712cf328aaa60c052f035afa2bf39d87b805a67c8b19c9a",
+                                     "bytes":  1492
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-isolated-vu-success-smoke.ps1",
+                                     "sha256":  "44aefa5a607d5651546077b2bf82f4cb1e91e22595ca9f8dbfd47e56c23b966c",
+                                     "bytes":  44937
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-isolated-vu-success-stage.ps1",
+                                     "sha256":  "8d6de0750fa3a1ad51f37d02937d3750f941e6d18530ec736884e5ddcb39c0ef",
+                                     "bytes":  1971
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-load-stage.ps1",
+                                     "sha256":  "0745ed3c028d634a13bd5423c2d5a889ab4ec25f1b844bae9d09cb9ba2f937ea",
+                                     "bytes":  21984
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\run-webflux-vu200-diagnostic.ps1",
+                                     "sha256":  "03dffbf2380c888209b9aecb1fbae9fb8b0119cacc149d66c14d6a26d19a34ea",
+                                     "bytes":  1082
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\summarize-experiment-1-12-mechanism.js",
+                                     "sha256":  "10236f4de6d79945e00634e4d641f6c5d89a12e36456567644335f2523d6384f",
+                                     "bytes":  6776
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\summarize-pool-metrics.ps1",
+                                     "sha256":  "fb632b540b3b4a32fb6771a9a8bfdf43b6537fb7b6302ed6f415745affc26191",
+                                     "bytes":  3502
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\test-experiment-1-19-artifact-finalization.ps1",
+                                     "sha256":  "b06cb226d17506c170dd6c6826c831d417247ed47c1c6ed6be4e50fdae2db208",
+                                     "bytes":  3879
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\test-experiment-1-20-collector-coverage.ps1",
+                                     "sha256":  "196dfae5071a3ae4398d8b8f4d8f3debab3adf5a7f8859be954476f545680b0a",
+                                     "bytes":  2539
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\test-experiment-1-21-finalization-contract.ps1",
+                                     "sha256":  "f1b3047755beb5ea62b0e530af128d42b746a3b3d41dd61b9c2bc0b3d2d96490",
+                                     "bytes":  5194
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\test-experiment-1-21-native-log-capture.ps1",
+                                     "sha256":  "13dbfce77f59a75fc27218ae486bfeedb8cc62a1c4b682cdb09f43f3e62dc201",
+                                     "bytes":  1781
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\test-experiment-1-22-post-stop-capture.ps1",
+                                     "sha256":  "808bc2730ea8d052a80cbed96c92f4830f8f5beb53856d0850e6a32d9fc20461",
+                                     "bytes":  6669
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\verification-validity.test.ps1",
+                                     "sha256":  "fa5f33ed2e9849246f3e6f4ff9b3fd2c51f8f6207a125a541d9ba88924a97d6b",
+                                     "bytes":  1376
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\verify-experiment-1-12-controls.js",
+                                     "sha256":  "73624bada9f50293fee7d75d197182f15dc86f69544cd9888eaf3d03c904bd6e",
+                                     "bytes":  2360
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\verify-experiment-1-13-config-diff.js",
+                                     "sha256":  "7b574591dc1cd5f694d9d06d0f9c4ee0042bd626243c81d1f2576e9400dbbc02",
+                                     "bytes":  1365
+                                 },
+                                 {
+                                     "path":  "experiment\\scripts\\verify-experiment-1-19-controlled-diff.js",
+                                     "sha256":  "c176afee55e21ef74cf25d7d1a3cd27ca4ec58a2f63af78362e6cc7cf1211cc4",
+                                     "bytes":  6063
+                                 }
+                             ]
+               },
+    "host":  {
+                 "os":  "Microsoft Windows 11 Home",
+                 "osVersion":  "10.0.26200",
+                 "cpu":  "Intel(R) Core(TM) Ultra 7 255H",
+                 "logicalProcessors":  16,
+                 "totalMemoryBytes":  33756008448
+             },
+    "tools":  {
+                  "docker":  {
+                                 "command":  "docker",
+                                 "available":  true,
+                                 "output":  "{\"Client\":{\"Version\":\"29.4.1\",\"ApiVersion\":\"1.54\",\"DefaultAPIVersion\":\"1.54\",\"GitCommit\":\"055a478\",\"GoVersion\":\"go1.26.2\",\"Os\":\"windows\",\"Arch\":\"amd64\",\"BuildTime\":\"Mon Apr 20 16:35:45 2026\",\"Context\":\"desktop-linux\"},\"Server\":{\"Platform\":{\"Name\":\"Docker Desktop 4.71.0 (225177)\"},\"Version\":\"29.4.1\",\"ApiVersion\":\"1.54\",\"MinAPIVersion\":\"1.40\",\"Os\":\"linux\",\"Arch\":\"amd64\",\"Components\":[{\"Name\":\"Engine\",\"Version\":\"29.4.1\",\"Details\":{\"ApiVersion\":\"1.54\",\"Arch\":\"amd64\",\"BuildTime\":\"Mon Apr 20 16:32:41 2026\",\"Experimental\":\"false\",\"GitCommit\":\"6c91b92\",\"GoVersion\":\"go1.26.2\",\"KernelVersion\":\"6.6.87.2-microsoft-standard-WSL2\",\"MinAPIVersion\":\"1.40\",\"Module\":\"github.com/moby/moby/v2\",\"ModuleVersion\":\"v2.0.0+unknown\",\"Os\":\"linux\"}},{\"Name\":\"containerd\",\"Version\":\"v2.2.3\",\"Details\":{\"GitCommit\":\"77c84241c7cbdd9b4eca2591793e3d4f4317c590\"}},{\"Name\":\"runc\",\"Version\":\"1.3.5\",\"Details\":{\"GitCommit\":\"v1.3.5-0-g488fc13e\"}},{\"Name\":\"docker-init\",\"Version\":\"0.19.0\",\"Details\":{\"GitCommit\":\"de40ad0\"}}],\"GitCommit\":\"6c91b92\",\"GoVersion\":\"go1.26.2\",\"KernelVersion\":\"6.6.87.2-microsoft-standard-WSL2\",\"BuildTime\":\"2026-04-20T16:32:41.000000000+00:00\"}}"
+                             },
+                  "java":  {
+                               "command":  "java",
+                               "available":  false,
+                               "output":  "The term \u0027java\u0027 is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again."
+                           },
+                  "node":  {
+                               "command":  "C:\\Users\\KOSCOM\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+                               "available":  true,
+                               "output":  "v24.14.0"
+                           },
+                  "git":  {
+                              "command":  "git",
+                              "available":  true,
+                              "output":  "git version 2.45.1.windows.1"
+                          }
+              }
+}
