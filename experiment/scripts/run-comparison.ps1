@@ -106,19 +106,32 @@ try {
         $process = Start-Process -FilePath $FilePath -ArgumentList $startArguments -Wait -PassThru -NoNewWindow -RedirectStandardOutput $StdOutPath -RedirectStandardError $StdErrPath
         return [int]$process.ExitCode
     }
-    $buildExitCode = Invoke-NativeProcess -FilePath "docker" -Arguments (@("compose", "-p", $ComposeProject) + $composeArguments + @("build", $service)) -StdOutPath $buildStdoutPath -StdErrPath $buildStderrPath
+    $buildExitCode = Invoke-NativeProcess -FilePath "docker" -Arguments (@("compose", "-p", $ComposeProject) + $composeArguments + @("build", "experiment-mock", $service)) -StdOutPath $buildStdoutPath -StdErrPath $buildStderrPath
     if ($buildExitCode -ne 0) { throw "Docker comparison image build failed with exit code $buildExitCode" }
     $configResult.buildExecuted = $true
     & docker compose -p $ComposeProject @composeArguments up -d $service
     if ($LASTEXITCODE -ne 0) { throw "Compose startup failed" }
     $runtimeStarted = $true
-    $containerId = (& docker compose -p $ComposeProject @composeArguments ps -q $service).Trim()
-    if ([string]::IsNullOrWhiteSpace($containerId)) { throw "Running application container was not found: $service" }
-    $containerInspect = @(& docker inspect $containerId | ConvertFrom-Json)[0]
-    if ($LASTEXITCODE -ne 0 -or $null -eq $containerInspect) { throw "Container identity capture failed" }
-    $imageReference = [string]$containerInspect.Config.Image
-    $imageInspect = @(& docker image inspect $imageReference | ConvertFrom-Json)[0]
-    if ($LASTEXITCODE -ne 0 -or $null -eq $imageInspect) { throw "Image identity capture failed: $imageReference" }
+    function Get-ContainerIdentity([string]$serviceName) {
+        $id = (& docker compose -p $ComposeProject @composeArguments ps -q $serviceName).Trim()
+        if ([string]::IsNullOrWhiteSpace($id)) { throw "Running container was not found: $serviceName" }
+        $inspect = @(& docker inspect $id | ConvertFrom-Json)[0]
+        if ($LASTEXITCODE -ne 0 -or $null -eq $inspect) { throw "Container identity capture failed: $serviceName" }
+        $imageReference = [string]$inspect.Config.Image
+        $image = @(& docker image inspect $imageReference | ConvertFrom-Json)[0]
+        if ($LASTEXITCODE -ne 0 -or $null -eq $image) { throw "Image identity capture failed: $imageReference" }
+        [ordered]@{
+            containerId = $inspect.Id
+            imageId = $inspect.Image
+            imageCreated = $image.Created
+            repoTags = @($image.RepoTags)
+            repoDigests = @($image.RepoDigests)
+        }
+    }
+    $applicationIdentity = Get-ContainerIdentity $service
+    $experimentMockIdentity = Get-ContainerIdentity "experiment-mock"
+    $mariadbIdentity = Get-ContainerIdentity "mariadb"
+    $containerId = $applicationIdentity.containerId
     $jarPath = Join-Path $identityDirectory "app.jar"
     & docker cp "$containerId`:/app/app.jar" $jarPath
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $jarPath)) { throw "Running JAR capture failed" }
@@ -129,10 +142,11 @@ try {
     $runtimeIdentity = [ordered]@{
         git = [ordered]@{ head = (git rev-parse HEAD); branch = (git branch --show-current); comparisonSourceClean = $sourceStatus.clean }
         implementation = $Implementation
-        container = [ordered]@{ id = $containerInspect.Id; imageId = $containerInspect.Image }
-        image = [ordered]@{ id = $imageInspect.Id; created = $imageInspect.Created; repoTags = @($imageInspect.RepoTags); repoDigests = @($imageInspect.RepoDigests) }
+        container = [ordered]@{ id = $applicationIdentity.containerId; imageId = $applicationIdentity.imageId }
+        image = [ordered]@{ id = $applicationIdentity.imageId; created = $applicationIdentity.imageCreated; repoTags = $applicationIdentity.repoTags; repoDigests = $applicationIdentity.repoDigests }
         application = [ordered]@{ jarPath = "/app/app.jar"; jarSha256 = $jarHash }
-        source = [ordered]@{ comparisonSourceManifest = "experiment/config/comparison-source-manifest.txt"; comparisonSourceManifestSha256 = $manifestHash }
+        source = [ordered]@{ comparisonSourceManifest = "experiment/config/comparison-source-manifest.txt"; comparisonSourceManifestSha256 = $manifestHash; experimentMockSourceRoot = "backend/experiment-mock"; experimentMockBuildExecuted = $true }
+        dependencies = [ordered]@{ experimentMock = $experimentMockIdentity; mariadb = $mariadbIdentity }
         build = [ordered]@{ executed = $true; exitCode = $buildExitCode; stdout = "docker-build.stdout.log"; stderr = "docker-build.stderr.log" }
     }
     $runtimeIdentity | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 -LiteralPath $runtimeIdentityPath

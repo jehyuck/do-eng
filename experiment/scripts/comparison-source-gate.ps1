@@ -14,10 +14,19 @@ function Get-ComparisonSourceStatus {
             "backend/doEngGameMvc/build.gradle",
             "backend/doEngGameMvc/settings.gradle",
             "backend/doEngGameMvc/src/main",
+            "backend/experiment-mock/Dockerfile",
+            "backend/experiment-mock/server.js",
             "backend/docker-compose.experiment.yaml",
             "experiment/compose/experiment-1-37-runtime.override.yml",
             "experiment/load/mission-load.js",
-            "experiment/config/experiment-variable-contract.json"
+            "experiment/config/experiment-variable-contract.json",
+            "experiment/config/resolve-experiment-config.ps1",
+            "experiment/scripts/run-comparison.ps1",
+            "experiment/scripts/comparison-source-gate.ps1",
+            "experiment/scripts/run-isolated-vu-success-smoke.ps1",
+            "experiment/scripts/resolve-verification-validity.ps1",
+            "experiment/scripts/provision-experiment-users.ps1",
+            "image/arc.jpg"
         )
     )
 
