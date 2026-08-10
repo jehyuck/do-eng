@@ -8,12 +8,32 @@ param(
     [string[]]$ComposeFiles,
     [switch]$Execute,
     [switch]$PrepareRuntimeOnly,
+    [switch]$CpuNormalizationSelfTest,
     [string]$NodeCommand
 )
 
 $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 . (Join-Path $PSScriptRoot "comparison-source-gate.ps1")
+function Test-NumericCpuValue($expected, $actual) {
+    try {
+        $expectedNumber = [double]::Parse([string]$expected, [Globalization.CultureInfo]::InvariantCulture)
+        $actualNumber = [double]::Parse([string]$actual, [Globalization.CultureInfo]::InvariantCulture)
+        return [Math]::Abs($expectedNumber - $actualNumber) -le 1e-9
+    } catch {
+        return $false
+    }
+}
+if ($CpuNormalizationSelfTest) {
+    $cases = @(
+        [ordered]@{ name = "CASE_A"; expected = "2.0"; actual = "2"; pass = Test-NumericCpuValue "2.0" "2" },
+        [ordered]@{ name = "CASE_B"; expected = "2.5"; actual = "2.5"; pass = Test-NumericCpuValue "2.5" "2.5" },
+        [ordered]@{ name = "CASE_C"; expected = "2.0"; actual = "1"; pass = -not (Test-NumericCpuValue "2.0" "1") }
+    )
+    $cases | ConvertTo-Json -Depth 4
+    if (@($cases | Where-Object { -not $_.pass }).Count -gt 0) { exit 1 }
+    exit 0
+}
 if ($null -eq $ComposeFiles -or $ComposeFiles.Count -eq 0) {
     $ComposeFiles = @("backend/docker-compose.experiment.yaml", "experiment/compose/experiment-1-37-runtime.override.yml")
 }
@@ -62,7 +82,13 @@ try {
         return $null
     }
     function Test-ComposeValue($name, $value) {
-        if ($name -eq "APP_CPU") { return $renderedText -match [regex]::Escape("cpus: $value") }
+        if ($name -eq "APP_CPU") {
+            $serviceMatch = [regex]::Match($renderedText, "(?ms)^[ ]{2}" + [regex]::Escape($service) + ":\r?\n(?<body>.*?)(?=^[ ]{2}\S|\z)")
+            if (-not $serviceMatch.Success) { return $false }
+            $cpuMatch = [regex]::Match($serviceMatch.Groups["body"].Value, '(?m)^[ \t]*cpus:\s*(?<value>[-+]?(?:\d+(?:\.\d*)?|\.\d+))\s*$')
+            if (-not $cpuMatch.Success) { return $false }
+            return Test-NumericCpuValue $value $cpuMatch.Groups["value"].Value
+        }
         if ($name -eq "APP_MEMORY") { return $renderedText -match [regex]::Escape("mem_limit: `"$(MemoryBytes $value)`"") }
         if ($name -eq "JAVA_XMS") { return $renderedText -match [regex]::Escape("-Xms$value") }
         if ($name -eq "JAVA_XMX") { return $renderedText -match [regex]::Escape("-Xmx$value") }
