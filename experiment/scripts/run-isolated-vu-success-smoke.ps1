@@ -69,6 +69,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+. (Join-Path $PSScriptRoot "resolve-verification-validity.ps1")
 $configDocument = $null
 if (-not [string]::IsNullOrWhiteSpace($ConfigPath)) {
     $resolvedConfigPath = if ([System.IO.Path]::IsPathRooted($ConfigPath)) {
@@ -720,7 +721,9 @@ try {
             )
         )
     }
-    $valid = -not (@($assertions.Values) -contains $false)
+    $verificationValidity = Get-VerificationValidity $assertions
+    $executionValidity = $verificationValidity.executionValidity
+    $applicationOutcomePassed = $verificationValidity.applicationOutcomePassed
     $endOfLoadInFlight = if ($null -ne $loadStopMockMetrics -and $null -ne $loadStopMockMetrics.metrics) {
         [ordered]@{
             aiInFlight = $loadStopMockMetrics.metrics.aiInFlight
@@ -730,8 +733,12 @@ try {
     $verification = [ordered]@{
         runId = $RunId
         assertions = $assertions
-        valid = $valid
-        measurementValidity = if ($valid) { "VALID" } else { "INVALID" }
+        executionAssertions = $verificationValidity.executionAssertions
+        executionValidity = $executionValidity
+        applicationOutcomeAssertions = $verificationValidity.applicationOutcomeAssertions
+        applicationOutcomePassed = $applicationOutcomePassed
+        valid = $executionValidity -eq "VALID"
+        measurementValidity = $executionValidity
         databaseAfter = $databaseAfter
         storageObjectCount = $storageObjects.Count
         clientSummary = $clientResult.summary
@@ -752,7 +759,7 @@ try {
     }
     $verification | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "verification-summary.json")
     $verification | ConvertTo-Json -Depth 8
-    if (-not $valid) { throw "Isolated VU success smoke verification failed" }
+    if ($executionValidity -ne "VALID") { throw "Isolated VU execution verification failed" }
 } finally {
     Remove-Item -LiteralPath $privateTokenPath -Force -ErrorAction SilentlyContinue
     Remove-Item Env:AUTH_TOKENS_PATH -ErrorAction SilentlyContinue
