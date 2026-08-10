@@ -19,7 +19,7 @@ const server = http.createServer((request, response) => {
   })
 })
 
-function runCase(arrivalMode) {
+function runCase({ arrivalMode, activeMissions = 4, initialActiveUsers = 4, activationStepUsers = 1, activationIntervalMs = 100, durationMs = 180 }) {
   return new Promise((resolve, reject) => {
     server.listen(0, "127.0.0.1", () => {
       const port = server.address().port
@@ -29,14 +29,14 @@ function runCase(arrivalMode) {
         env: {
           ...process.env,
           TARGET_URL: `http://127.0.0.1:${port}/game/face`,
-          ACTIVE_MISSIONS: "4",
+          ACTIVE_MISSIONS: String(activeMissions),
           LOAD_SCENARIO: "reconnect-ramp",
           ARRIVAL_MODE: arrivalMode,
-          INITIAL_ACTIVE_USERS: "4",
-          ACTIVATION_STEP_USERS: "1",
-          ACTIVATION_INTERVAL_MS: "40",
+          INITIAL_ACTIVE_USERS: String(initialActiveUsers),
+          ACTIVATION_STEP_USERS: String(activationStepUsers),
+          ACTIVATION_INTERVAL_MS: String(activationIntervalMs),
           INTERVAL_MS: "1000",
-          DURATION_MS: "180",
+          DURATION_MS: String(durationMs),
           REQUEST_TIMEOUT_MS: "1000",
           RECONNECT_DELAY_MS: "1000",
           FIXTURE_PATH: fixturePath,
@@ -59,26 +59,54 @@ function runCase(arrivalMode) {
 }
 
 ;(async () => {
-  const aligned = await runCase("aligned")
-  const staggered = await runCase("staggered")
+  const aligned = await runCase({ arrivalMode: "aligned" })
+  const staggered = await runCase({ arrivalMode: "staggered" })
+  const staged = await runCase({
+    arrivalMode: "staggered",
+    activeMissions: 4,
+    initialActiveUsers: 2,
+    activationStepUsers: 1,
+    activationIntervalMs: 100,
+    durationMs: 280,
+  })
   const initialStarts = (output) =>
     output.requests
       .filter((request) => request.frame === 1)
       .sort((left, right) => left.user - right.user)
-      .map((request) => Date.parse(request.requestStartedAt))
+      .map((request) => ({
+        stage: request.activationStage,
+        time: Date.parse(request.requestStartedAt),
+      }))
 
   const alignedStarts = initialStarts(aligned)
   const staggeredStarts = initialStarts(staggered)
+  const stagedStarts = initialStarts(staged)
   assert.strictEqual(alignedStarts.length, 4)
   assert.strictEqual(staggeredStarts.length, 4)
+  assert.strictEqual(stagedStarts.length, 4)
   assert.ok(
-    Math.max(...alignedStarts) - Math.min(...alignedStarts) <= 80,
+    Math.max(...alignedStarts.map(({ time }) => time)) -
+        Math.min(...alignedStarts.map(({ time }) => time)) <=
+      80,
     `aligned starts were not aligned: ${alignedStarts}`,
   )
   assert.ok(
-    Math.max(...staggeredStarts) - Math.min(...staggeredStarts) >= 100,
+    Math.max(...staggeredStarts.map(({ time }) => time)) -
+        Math.min(...staggeredStarts.map(({ time }) => time)) >=
+      50 &&
+      Math.max(...staggeredStarts.map(({ time }) => time)) -
+        Math.min(...staggeredStarts.map(({ time }) => time)) <
+        100,
     `staggered starts were not distributed: ${staggeredStarts}`,
   )
+  const stageZero = stagedStarts.filter(({ stage }) => stage === 0)
+  const stageOne = stagedStarts.filter(({ stage }) => stage === 1)
+  const stageTwo = stagedStarts.filter(({ stage }) => stage === 2)
+  assert.strictEqual(stageZero.length, 2)
+  assert.strictEqual(stageOne.length, 1)
+  assert.strictEqual(stageTwo.length, 1)
+  assert.ok(stageOne[0].time - stageZero[0].time >= 70)
+  assert.ok(stageTwo[0].time - stageOne[0].time >= 70)
   process.stdout.write("reconnect-ramp arrival scheduling test passed\n")
 })().catch((error) => {
   console.error(error)

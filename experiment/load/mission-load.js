@@ -557,9 +557,12 @@ async function run() {
     for (const [stage, cohort] of cohorts) {
       const stageInitialDelayMs = stage * activationIntervalMs
       for (const [cohortIndex, user] of cohort.entries()) {
+        const phaseOffsetMs =
+          arrivalMode === "staggered"
+            ? Math.floor((cohortIndex * activationIntervalMs) / cohort.length)
+            : 0
         const initialDelayMs =
-          stageInitialDelayMs +
-          (arrivalMode === "staggered" ? cohortIndex * activationIntervalMs : 0)
+          stageInitialDelayMs + phaseOffsetMs
         user.startTimer = setTimeout(() => {
           activatedUsers += 1
           startReconnectMission(user)
