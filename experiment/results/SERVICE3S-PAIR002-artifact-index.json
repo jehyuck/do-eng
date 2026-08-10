@@ -1,0 +1,121 @@
+{
+  "pair": "SERVICE3S-PAIR002",
+  "gitHead": "fac0ba80a9a089f0587dd87a379964f4c6f1e639",
+  "config": "experiment/config/comparison-vu160-service-3s.json",
+  "missionLoadSha256": "F3A6EB36798A57CE408DE85E5420F65273BB5C2684BC02618822C4C78095619B",
+  "fixture": "image/arc.jpg",
+  "fixtureSha256": "1EEADB414471C8F89207118BAAD01D1A9EC7B05306DF0482A79D92D2C615FA99",
+  "runs": {
+    "webflux": {
+      "runId": "SERVICE3S-W002",
+      "artifactRoot": "experiment/results/SERVICE3S-W002",
+      "runtimeIdentity": "experiment/results/runtime-identities/SERVICE3S-W002/runtime-identity.json",
+      "executionValidity": "VALID",
+      "applicationOutcome": "PASS",
+      "results": {
+        "started": 5403,
+        "completed": 5403,
+        "http200": 5403,
+        "http500": 0,
+        "http503": 0,
+        "timeout": 0,
+        "connectionError": 0,
+        "trueResponses": 5403,
+        "trueSuccessRate": 100.0,
+        "successfulRps": 51.457143,
+        "totalRps": 51.457143,
+        "successfulHttp200P50": 2148,
+        "successfulHttp200P95": 2597,
+        "successfulHttp200P99": 3958,
+        "maxInFlight": 267,
+        "aiMaxInFlight": 166,
+        "aiCompleted": 5403,
+        "storageMaxInFlight": 50,
+        "storageCompleted": 5403,
+        "drainCompleted": true,
+        "timeToZeroMs": 3005
+      }
+    },
+    "mvc400": {
+      "runId": "SERVICE3S-M002",
+      "artifactRoot": "experiment/results/SERVICE3S-M002",
+      "runtimeIdentity": "experiment/results/runtime-identities/SERVICE3S-M002/runtime-identity.json",
+      "executionValidity": "VALID",
+      "applicationOutcome": "PASS",
+      "results": {
+        "started": 5472,
+        "completed": 5472,
+        "http200": 4362,
+        "http500": 0,
+        "http503": 0,
+        "timeout": 1110,
+        "connectionError": 0,
+        "trueResponses": 4362,
+        "trueSuccessRate": 79.7149,
+        "successfulRps": 41.542857,
+        "totalRps": 52.114286,
+        "successfulHttp200P50": 2152,
+        "successfulHttp200P95": 7006,
+        "successfulHttp200P99": 9181,
+        "maxInFlight": 537,
+        "aiMaxInFlight": 391,
+        "aiCompleted": 5472,
+        "storageMaxInFlight": 74,
+        "storageCompleted": 5472,
+        "drainCompleted": true,
+        "timeToZeroMs": 3004
+      }
+    }
+  },
+  "pairParity": {
+    "result": "PASS",
+    "gitHead": true,
+    "resolvedConfig": true,
+    "missionLoad": true,
+    "fixture": true,
+    "loadAndDownstreamConditions": true,
+    "mariaDbImageId": true,
+    "setupRecoveryChangedConditions": false
+  },
+  "setupRecovery": {
+    "staleContainers": "NONE",
+    "staleNetworks": "NONE",
+    "volumePreserved": true,
+    "partialArtifactsPreservedOutsideRepository": true,
+    "staleM002UsersRemoved": 160,
+    "dependentProgressPictureMissionRowsBeforeRemoval": 0
+  },
+  "baselineComparison": {
+    "w001": {
+      "started": 5318,
+      "http200": 5317,
+      "timeout": 1,
+      "trueResponses": 5317,
+      "trueSuccessRate": 99.9812,
+      "successfulRps": 50.638095,
+      "totalRps": 50.647619,
+      "p50": 2152,
+      "p95": 3092,
+      "p99": 4441,
+      "maxInFlight": 291
+    },
+    "m001": {
+      "started": 5447,
+      "http200": 3000,
+      "timeout": 2447,
+      "trueResponses": 3000,
+      "trueSuccessRate": 55.0762,
+      "successfulRps": 28.571429,
+      "totalRps": 51.87619,
+      "p50": 2157,
+      "p95": 8339,
+      "p99": 9531,
+      "maxInFlight": 537
+    }
+  },
+  "classification": {
+    "w001DirectionReproducedByW002": "YES",
+    "m001DirectionReproducedByM002": "YES",
+    "baselineReplication2": "REPRODUCED"
+  }
+}
