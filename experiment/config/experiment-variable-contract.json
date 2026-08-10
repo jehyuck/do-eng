@@ -1,0 +1,46 @@
+{
+  "contractVersion": 1,
+  "load": {
+      "activeMissions": 2,
+      "loadScenario": "single-success",
+      "accountingMode": "legacy",
+      "intervalMs": 3000,
+      "durationMs": 3500,
+      "requestTimeoutMs": 10000,
+      "arrivalMode": "aligned",
+      "initialActiveUsers": 0,
+      "activationStepUsers": 0,
+      "activationIntervalMs": 3000,
+      "reconnectDelayMs": 3000,
+      "warmupMs": 0,
+      "drainObservationSeconds": 0
+  },
+  "downstream": {
+      "aiResult": true,
+      "aiDelayMs": 500,
+      "aiStatus": 200,
+      "storageDelayMs": 100,
+      "storageStatus": 200
+  },
+  "application": {
+      "cpu": null,
+      "memory": null
+  },
+  "http": {
+      "maxConnections": null,
+      "pendingMaxCount": null,
+      "connectTimeoutMs": null,
+      "responseTimeoutMs": null,
+      "pendingAcquireTimeoutMs": null
+  },
+  "database": {
+      "poolMaxSize": null
+  },
+  "mvc": {
+      "maxThreads": null
+  },
+  "jvm": {
+      "xms": null,
+      "xmx": null
+  }
+}

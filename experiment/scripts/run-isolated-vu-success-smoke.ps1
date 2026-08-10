@@ -45,11 +45,119 @@ param(
     [int]$SkipMockMetrics = 0,
     [ValidateRange(0, 300)]
     [int]$DrainObservationSeconds = 0,
+    [ValidateRange(0, 86400000)]
+    [int]$WarmupMs = 0,
+    [bool]$AiResult = $true,
+    [ValidateRange(100, 599)]
+    [int]$AiStatus = 200,
+    [ValidateRange(100, 599)]
+    [int]$StorageStatus = 200,
+    [string]$AppCpu,
+    [string]$AppMemory,
+    [Nullable[int]]$HttpMaxConnections,
+    [Nullable[int]]$HttpPendingMaxCount,
+    [Nullable[int]]$HttpConnectTimeoutMs,
+    [Nullable[int]]$HttpResponseTimeoutMs,
+    [Nullable[int]]$HttpPendingAcquireTimeoutMs,
+    [Nullable[int]]$DbPoolMaxSize,
+    [Nullable[int]]$MvcMaxThreads,
+    [string]$JavaXms,
+    [string]$JavaXmx,
+    [string]$ConfigPath,
     [string]$NodeCommand
 )
 
 $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$configDocument = $null
+if (-not [string]::IsNullOrWhiteSpace($ConfigPath)) {
+    $resolvedConfigPath = if ([System.IO.Path]::IsPathRooted($ConfigPath)) {
+        [System.IO.Path]::GetFullPath($ConfigPath)
+    } else {
+        [System.IO.Path]::GetFullPath((Join-Path $repositoryRoot $ConfigPath))
+    }
+    if (-not (Test-Path -LiteralPath $resolvedConfigPath)) {
+        throw "Configuration file not found: $resolvedConfigPath"
+    }
+    $configDocument = Get-Content -Raw -LiteralPath $resolvedConfigPath | ConvertFrom-Json
+    $loadConfig = $configDocument.load
+    $downstreamConfig = $configDocument.downstream
+    $applicationConfig = $configDocument.application
+    $httpConfig = $configDocument.http
+    $databaseConfig = $configDocument.database
+    $mvcConfig = $configDocument.mvc
+    $jvmConfig = $configDocument.jvm
+    if ($null -ne $loadConfig.activeMissions) { $ActiveMissions = [int]$loadConfig.activeMissions }
+    if ($null -ne $loadConfig.loadScenario) { $LoadScenario = [string]$loadConfig.loadScenario }
+    if ($null -ne $loadConfig.accountingMode) { $AccountingMode = [string]$loadConfig.accountingMode }
+    if ($null -ne $loadConfig.intervalMs) { $IntervalMs = [int]$loadConfig.intervalMs }
+    if ($null -ne $loadConfig.durationMs) { $DurationMs = [int]$loadConfig.durationMs }
+    if ($null -ne $loadConfig.requestTimeoutMs) { $RequestTimeoutMs = [int]$loadConfig.requestTimeoutMs }
+    if ($null -ne $loadConfig.arrivalMode) { $ArrivalMode = [string]$loadConfig.arrivalMode }
+    if ($null -ne $loadConfig.initialActiveUsers) { $InitialActiveUsers = [int]$loadConfig.initialActiveUsers }
+    if ($null -ne $loadConfig.activationStepUsers) { $ActivationStepUsers = [int]$loadConfig.activationStepUsers }
+    if ($null -ne $loadConfig.activationIntervalMs) { $ActivationIntervalMs = [int]$loadConfig.activationIntervalMs }
+    if ($null -ne $loadConfig.reconnectDelayMs) { $ReconnectDelayMs = [int]$loadConfig.reconnectDelayMs }
+    if ($null -ne $loadConfig.warmupMs) { $WarmupMs = [int]$loadConfig.warmupMs }
+    if ($null -ne $loadConfig.drainObservationSeconds) { $DrainObservationSeconds = [int]$loadConfig.drainObservationSeconds }
+    if ($null -ne $downstreamConfig.aiResult) { $AiResult = [bool]$downstreamConfig.aiResult }
+    if ($null -ne $downstreamConfig.aiDelayMs) { $AiDelayMs = [int]$downstreamConfig.aiDelayMs }
+    if ($null -ne $downstreamConfig.aiStatus) { $AiStatus = [int]$downstreamConfig.aiStatus }
+    if ($null -ne $downstreamConfig.storageDelayMs) { $StorageDelayMs = [int]$downstreamConfig.storageDelayMs }
+    if ($null -ne $downstreamConfig.storageStatus) { $StorageStatus = [int]$downstreamConfig.storageStatus }
+    if ($null -ne $applicationConfig.cpu) { $AppCpu = [string]$applicationConfig.cpu }
+    if ($null -ne $applicationConfig.memory) { $AppMemory = [string]$applicationConfig.memory }
+    if ($null -ne $httpConfig.maxConnections) { $HttpMaxConnections = [int]$httpConfig.maxConnections }
+    if ($null -ne $httpConfig.pendingMaxCount) { $HttpPendingMaxCount = [int]$httpConfig.pendingMaxCount }
+    if ($null -ne $httpConfig.connectTimeoutMs) { $HttpConnectTimeoutMs = [int]$httpConfig.connectTimeoutMs }
+    if ($null -ne $httpConfig.responseTimeoutMs) { $HttpResponseTimeoutMs = [int]$httpConfig.responseTimeoutMs }
+    if ($null -ne $httpConfig.pendingAcquireTimeoutMs) { $HttpPendingAcquireTimeoutMs = [int]$httpConfig.pendingAcquireTimeoutMs }
+    if ($null -ne $databaseConfig.poolMaxSize) { $DbPoolMaxSize = [int]$databaseConfig.poolMaxSize }
+    if ($null -ne $mvcConfig.maxThreads) { $MvcMaxThreads = [int]$mvcConfig.maxThreads }
+    if ($null -ne $jvmConfig.xms) { $JavaXms = [string]$jvmConfig.xms }
+    if ($null -ne $jvmConfig.xmx) { $JavaXmx = [string]$jvmConfig.xmx }
+} else {
+    $resolvedConfigPath = $null
+}
+if ($ArrivalMode -notin @("aligned", "staggered")) { throw "ArrivalMode must be aligned or staggered" }
+if ($LoadScenario -notin @("single-success", "reconnect-ramp")) { throw "LoadScenario must be single-success or reconnect-ramp" }
+if ($AccountingMode -notin @("legacy", "corrected")) { throw "AccountingMode must be legacy or corrected" }
+foreach ($value in @($ActiveMissions, $IntervalMs, $DurationMs, $RequestTimeoutMs, $ActivationIntervalMs, $ReconnectDelayMs, $AiDelayMs, $StorageDelayMs)) {
+    if ($value -lt 1) { throw "Load and downstream timing values must be positive" }
+}
+foreach ($value in @($WarmupMs, $DrainObservationSeconds)) {
+    if ($value -lt 0) { throw "Warmup and drain values must be non-negative" }
+}
+if ($AiStatus -lt 100 -or $AiStatus -gt 599 -or $StorageStatus -lt 100 -or $StorageStatus -gt 599) { throw "Mock status values must be valid HTTP status codes" }
+foreach ($value in @($HttpMaxConnections, $HttpPendingMaxCount, $HttpConnectTimeoutMs, $HttpResponseTimeoutMs, $HttpPendingAcquireTimeoutMs, $DbPoolMaxSize, $MvcMaxThreads)) {
+    if ($null -ne $value -and $value -lt 1) { throw "Numeric resource and timeout configuration values must be positive" }
+}
+$configurationEnvironmentNames = @("APP_CPU", "APP_MEMORY", "HTTP_MAX_CONNECTIONS", "HTTP_PENDING_MAX_COUNT", "HTTP_CONNECT_TIMEOUT_MS", "HTTP_RESPONSE_TIMEOUT_MS", "HTTP_PENDING_ACQUIRE_TIMEOUT_MS", "DB_POOL_MAX_SIZE", "MVC_MAX_THREADS", "JAVA_XMS", "JAVA_XMX", "MOCK_AI_RESULT", "MOCK_AI_DELAY_MS", "MOCK_AI_STATUS", "MOCK_STORAGE_DELAY_MS", "MOCK_STORAGE_STATUS")
+$previousConfigurationEnvironment = @{}
+foreach ($name in $configurationEnvironmentNames) { $previousConfigurationEnvironment[$name] = [Environment]::GetEnvironmentVariable($name, "Process") }
+$explicitConfiguration = (-not [string]::IsNullOrWhiteSpace($ConfigPath)) -or $PSBoundParameters.ContainsKey("AppCpu") -or $PSBoundParameters.ContainsKey("AppMemory") -or $PSBoundParameters.ContainsKey("HttpMaxConnections") -or $PSBoundParameters.ContainsKey("HttpPendingMaxCount") -or $PSBoundParameters.ContainsKey("HttpConnectTimeoutMs") -or $PSBoundParameters.ContainsKey("HttpResponseTimeoutMs") -or $PSBoundParameters.ContainsKey("HttpPendingAcquireTimeoutMs") -or $PSBoundParameters.ContainsKey("DbPoolMaxSize") -or $PSBoundParameters.ContainsKey("MvcMaxThreads") -or $PSBoundParameters.ContainsKey("JavaXms") -or $PSBoundParameters.ContainsKey("JavaXmx") -or $PSBoundParameters.ContainsKey("AiResult") -or $PSBoundParameters.ContainsKey("AiDelayMs") -or $PSBoundParameters.ContainsKey("AiStatus") -or $PSBoundParameters.ContainsKey("StorageDelayMs") -or $PSBoundParameters.ContainsKey("StorageStatus")
+function Set-ContractEnvironment {
+    param([string]$Name, [object]$Value)
+    if ($null -ne $Value -and -not [string]::IsNullOrWhiteSpace([string]$Value)) { [Environment]::SetEnvironmentVariable($Name, [string]$Value, "Process") }
+}
+if ($explicitConfiguration) {
+    Set-ContractEnvironment "APP_CPU" $AppCpu
+    Set-ContractEnvironment "APP_MEMORY" $AppMemory
+    Set-ContractEnvironment "HTTP_MAX_CONNECTIONS" $HttpMaxConnections
+    Set-ContractEnvironment "HTTP_PENDING_MAX_COUNT" $HttpPendingMaxCount
+    Set-ContractEnvironment "HTTP_CONNECT_TIMEOUT_MS" $HttpConnectTimeoutMs
+    Set-ContractEnvironment "HTTP_RESPONSE_TIMEOUT_MS" $HttpResponseTimeoutMs
+    Set-ContractEnvironment "HTTP_PENDING_ACQUIRE_TIMEOUT_MS" $HttpPendingAcquireTimeoutMs
+    Set-ContractEnvironment "DB_POOL_MAX_SIZE" $DbPoolMaxSize
+    Set-ContractEnvironment "MVC_MAX_THREADS" $MvcMaxThreads
+    Set-ContractEnvironment "JAVA_XMS" $JavaXms
+    Set-ContractEnvironment "JAVA_XMX" $JavaXmx
+    Set-ContractEnvironment "MOCK_AI_RESULT" ([string]$AiResult).ToLowerInvariant()
+    Set-ContractEnvironment "MOCK_AI_DELAY_MS" $AiDelayMs
+    Set-ContractEnvironment "MOCK_AI_STATUS" $AiStatus
+    Set-ContractEnvironment "MOCK_STORAGE_DELAY_MS" $StorageDelayMs
+    Set-ContractEnvironment "MOCK_STORAGE_STATUS" $StorageStatus
+}
 if ($null -eq $ComposeFiles -or $ComposeFiles.Count -eq 0) {
     $ComposeFiles = @("backend\docker-compose.experiment.yaml")
 }
@@ -212,6 +320,50 @@ try {
 
     Ensure-MissionCompletionSchema
     $fixture = Get-Item -LiteralPath $resolvedFixture
+    $configurationSource = if ($resolvedConfigPath) { "config-file" } else { "parameter-or-runner-default" }
+    $composeSource = if ($explicitConfiguration) { $configurationSource } else { "compose-default" }
+    $resolvedConfiguration = [ordered]@{
+        contractVersion = 1
+        configPath = $resolvedConfigPath
+        implementation = $Implementation
+        load = [ordered]@{
+            activeMissions = $ActiveMissions
+            loadScenario = $LoadScenario
+            accountingMode = $AccountingMode
+            intervalMs = $IntervalMs
+            durationMs = $DurationMs
+            requestTimeoutMs = $RequestTimeoutMs
+            arrivalMode = $ArrivalMode
+            initialActiveUsers = $effectiveInitialActiveUsers
+            activationStepUsers = $effectiveActivationStepUsers
+            activationIntervalMs = $ActivationIntervalMs
+            reconnectDelayMs = $ReconnectDelayMs
+            warmupMs = $WarmupMs
+            drainObservationSeconds = $DrainObservationSeconds
+            source = $configurationSource
+        }
+        downstream = [ordered]@{
+            aiResult = $AiResult
+            aiDelayMs = $AiDelayMs
+            aiStatus = $AiStatus
+            storageDelayMs = $StorageDelayMs
+            storageStatus = $StorageStatus
+            source = $configurationSource
+        }
+        application = [ordered]@{ cpu = $AppCpu; memory = $AppMemory; source = $composeSource }
+        http = [ordered]@{
+            maxConnections = $HttpMaxConnections
+            pendingMaxCount = $HttpPendingMaxCount
+            connectTimeoutMs = $HttpConnectTimeoutMs
+            responseTimeoutMs = $HttpResponseTimeoutMs
+            pendingAcquireTimeoutMs = $HttpPendingAcquireTimeoutMs
+            source = $composeSource
+        }
+        database = [ordered]@{ poolMaxSize = $DbPoolMaxSize; source = $composeSource }
+        mvc = [ordered]@{ maxThreads = $MvcMaxThreads; source = $composeSource }
+        jvm = [ordered]@{ xms = $JavaXms; xmx = $JavaXmx; source = $composeSource }
+    }
+    $resolvedConfiguration | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "resolved-config.json")
     $runConfig = [ordered]@{
         runId = $RunId
         implementation = $Implementation
@@ -237,10 +389,12 @@ try {
         durationMs = $DurationMs
         requestTimeoutMs = $RequestTimeoutMs
         targetP95Ms = $TargetP95Ms
+        warmupMs = $WarmupMs
+        resolvedConfiguration = $resolvedConfiguration
         sceneId = $SceneId
         answer = $Answer
-        ai = [ordered]@{ result = $true; delayMs = $AiDelayMs; status = 200 }
-        storage = [ordered]@{ delayMs = $StorageDelayMs; status = 200 }
+        ai = [ordered]@{ result = $AiResult; delayMs = $AiDelayMs; status = $AiStatus }
+        storage = [ordered]@{ delayMs = $StorageDelayMs; status = $StorageStatus }
         observability = [ordered]@{
             enabled = $observabilityEnabled
             containerMonitorEnabled = $containerMonitorEnabled
@@ -275,11 +429,11 @@ try {
 
     Invoke-RestMethod -Method Post -Uri "$mockBaseUrl/__reset" -ContentType "application/json" -Body "{}" | Out-Null
     Invoke-RestMethod -Method Post -Uri "$mockBaseUrl/__control" -ContentType "application/json" -Body (([ordered]@{
-        result = $true
+        result = $AiResult
         delayMs = $AiDelayMs
-        status = 200
+        status = $AiStatus
         storageDelayMs = $StorageDelayMs
-        storageStatus = 200
+        storageStatus = $StorageStatus
     }) | ConvertTo-Json -Compress) | ConvertTo-Json -Depth 4 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "mock-control.json")
 
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "provision-experiment-users.ps1") `
@@ -608,4 +762,12 @@ try {
     Remove-Item Env:LOAD_STOP_MOCK_METRICS_PATH -ErrorAction SilentlyContinue
     Remove-Item Env:MOCK_DRAIN_PATH -ErrorAction SilentlyContinue
     Remove-Item Env:MOCK_DRAIN_SUMMARY_PATH -ErrorAction SilentlyContinue
+    foreach ($name in $configurationEnvironmentNames) {
+        $previousValue = $previousConfigurationEnvironment[$name]
+        if ($null -eq $previousValue) {
+            Remove-Item "Env:$name" -ErrorAction SilentlyContinue
+        } else {
+            [Environment]::SetEnvironmentVariable($name, $previousValue, "Process")
+        }
+    }
 }
