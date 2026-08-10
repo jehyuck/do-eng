@@ -555,14 +555,16 @@ async function run() {
       cohorts.get(stage).push(user)
     }
     for (const [stage, cohort] of cohorts) {
-      const initialDelayMs = stage * activationIntervalMs
-      const cohortTimer = setTimeout(() => {
-        activatedUsers += cohort.length
-        for (const user of cohort) {
+      const stageInitialDelayMs = stage * activationIntervalMs
+      for (const [cohortIndex, user] of cohort.entries()) {
+        const initialDelayMs =
+          stageInitialDelayMs +
+          (arrivalMode === "staggered" ? cohortIndex * activationIntervalMs : 0)
+        user.startTimer = setTimeout(() => {
+          activatedUsers += 1
           startReconnectMission(user)
-        }
-      }, initialDelayMs)
-      for (const user of cohort) user.startTimer = cohortTimer
+        }, initialDelayMs)
+      }
     }
   } else {
     for (const user of users) {
