@@ -9,6 +9,7 @@ param(
     [switch]$Execute,
     [switch]$PrepareRuntimeOnly,
     [switch]$CpuNormalizationSelfTest,
+    [switch]$RunnerArgumentSelfTest,
     [string]$NodeCommand
 )
 
@@ -24,6 +25,12 @@ function Test-NumericCpuValue($expected, $actual) {
         return $false
     }
 }
+function Resolve-RunnerConfigPath($path) {
+    if ([System.IO.Path]::IsPathRooted($path)) {
+        return [System.IO.Path]::GetFullPath($path)
+    }
+    return [System.IO.Path]::GetFullPath((Join-Path $repositoryRoot $path))
+}
 if ($CpuNormalizationSelfTest) {
     $cases = @(
         [ordered]@{ name = "CASE_A"; expected = "2.0"; actual = "2"; pass = Test-NumericCpuValue "2.0" "2" },
@@ -32,6 +39,20 @@ if ($CpuNormalizationSelfTest) {
     )
     $cases | ConvertTo-Json -Depth 4
     if (@($cases | Where-Object { -not $_.pass }).Count -gt 0) { exit 1 }
+    exit 0
+}
+$resolvedRunnerConfigPath = Resolve-RunnerConfigPath $ConfigPath
+if ($RunnerArgumentSelfTest) {
+    $relativePath = Resolve-RunnerConfigPath "experiment/config/comparison-vu160-service-3s.json"
+    $absolutePath = Resolve-RunnerConfigPath $relativePath
+    $relativeArguments = @("-ConfigPath", $relativePath)
+    $absoluteArguments = @("-ConfigPath", $absolutePath)
+    $result = [ordered]@{
+        relative = [ordered]@{ argument = $relativeArguments[0]; path = $relativeArguments[1]; pass = ($relativeArguments[0] -eq "-ConfigPath" -and [System.IO.Path]::IsPathRooted($relativeArguments[1])) }
+        absolute = [ordered]@{ argument = $absoluteArguments[0]; path = $absoluteArguments[1]; pass = ($absoluteArguments[0] -eq "-ConfigPath" -and [System.IO.Path]::IsPathRooted($absoluteArguments[1])) }
+    }
+    $result | ConvertTo-Json -Depth 5
+    if (-not ($result.relative.pass -and $result.absolute.pass)) { exit 1 }
     exit 0
 }
 if ($null -eq $ComposeFiles -or $ComposeFiles.Count -eq 0) {
@@ -194,7 +215,7 @@ try {
         "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "run-isolated-vu-success-smoke.ps1"),
         "-RunId", $RunId, "-Implementation", $Implementation, "-TargetUrl", $targetUrl,
         "-ServerService", $service, "-ComposeProject", $ComposeProject, "-ComposeFiles", ($composePaths -join ","),
-        "-ConfigPath", (if ([System.IO.Path]::IsPathRooted($ConfigPath)) { [System.IO.Path]::GetFullPath($ConfigPath) } else { [System.IO.Path]::GetFullPath((Join-Path $repositoryRoot $ConfigPath)) })
+        "-ConfigPath", $resolvedRunnerConfigPath
     )
     if ($NodeCommand) { $runnerArguments += @("-NodeCommand", $NodeCommand) }
     & powershell.exe @runnerArguments
