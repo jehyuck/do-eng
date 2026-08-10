@@ -1,0 +1,98 @@
+{
+  "pair": "SERVICE3S-PAIR003",
+  "gitHead": "8f8d0777658e5354beb0a9ce83aaf7e17997b306",
+  "config": "experiment/config/comparison-vu160-service-3s.json",
+  "missionLoadSha256": "F3A6EB36798A57CE408DE85E5420F65273BB5C2684BC02618822C4C78095619B",
+  "fixture": "image/arc.jpg",
+  "fixtureSha256": "1EEADB414471C8F89207118BAAD01D1A9EC7B05306DF0482A79D92D2C615FA99",
+  "runs": {
+    "webflux": {
+      "runId": "SERVICE3S-W003",
+      "artifactRoot": "experiment/results/SERVICE3S-W003",
+      "runtimeIdentity": "experiment/results/runtime-identities/SERVICE3S-W003/runtime-identity.json",
+      "executionValidity": "VALID",
+      "applicationOutcome": "PASS",
+      "results": {
+        "started": 5423,
+        "completed": 5423,
+        "http200": 5423,
+        "http500": 0,
+        "http503": 0,
+        "timeout": 0,
+        "connectionError": 0,
+        "trueResponses": 5423,
+        "trueSuccessRate": 100.0,
+        "successfulRps": 51.647619,
+        "totalRps": 51.647619,
+        "successfulHttp200P50": 2172,
+        "successfulHttp200P95": 7214,
+        "successfulHttp200P99": 8352,
+        "maxInFlight": 487,
+        "aiMaxInFlight": 198,
+        "aiCompleted": 5423,
+        "storageMaxInFlight": 31,
+        "storageCompleted": 5423,
+        "drainCompleted": true,
+        "timeToZeroMs": 3003
+      }
+    },
+    "mvc400": {
+      "runId": "SERVICE3S-M003",
+      "artifactRoot": "experiment/results/SERVICE3S-M003",
+      "runtimeIdentity": "experiment/results/runtime-identities/SERVICE3S-M003/runtime-identity.json",
+      "executionValidity": "VALID",
+      "applicationOutcome": "PASS",
+      "results": {
+        "started": 5611,
+        "completed": 5611,
+        "http200": 569,
+        "http500": 0,
+        "http503": 0,
+        "timeout": 5042,
+        "connectionError": 0,
+        "trueResponses": 569,
+        "trueSuccessRate": 10.1408,
+        "successfulRps": 5.419048,
+        "totalRps": 53.438095,
+        "successfulHttp200P50": 7112,
+        "successfulHttp200P95": 9842,
+        "successfulHttp200P99": 9962,
+        "maxInFlight": 554,
+        "aiMaxInFlight": 398,
+        "aiCompleted": 5594,
+        "storageMaxInFlight": 124,
+        "storageCompleted": 5594,
+        "drainCompleted": true,
+        "timeToZeroMs": 5008
+      }
+    }
+  },
+  "pairParity": {
+    "result": "PASS",
+    "gitHead": true,
+    "resolvedConfig": true,
+    "missionLoad": true,
+    "fixture": true,
+    "loadAndDownstreamConditions": true,
+    "applicationResources": true,
+    "jvmAndHttpSettings": true,
+    "dbPool": true,
+    "mariaDbImageId": true,
+    "setupRecoveryChangedConditions": false
+  },
+  "baselineComparison": {
+    "pair001": {
+      "webfluxRun": "SERVICE3S-W001",
+      "mvcRun": "SERVICE3S-M001"
+    },
+    "pair002": {
+      "webfluxRun": "SERVICE3S-W002",
+      "mvcRun": "SERVICE3S-M002"
+    }
+  },
+  "classification": {
+    "wBaselineDirectionReproduced": "YES",
+    "mBaselineDirectionReproduced": "YES",
+    "baselineReplication3": "REPRODUCED"
+  }
+}
