@@ -6,10 +6,12 @@ param(
     [string]$RunId,
     [string]$ComposeProject = "doeng-comparison",
     [string[]]$ComposeFiles,
+    [string]$ExperimentMockImage,
     [switch]$Execute,
     [switch]$PrepareRuntimeOnly,
     [switch]$CpuNormalizationSelfTest,
     [switch]$RunnerArgumentSelfTest,
+    [switch]$ExperimentMockSelectionSelfTest,
     [string]$NodeCommand
 )
 
@@ -31,6 +33,17 @@ function Resolve-RunnerConfigPath($path) {
     }
     return [System.IO.Path]::GetFullPath((Join-Path $repositoryRoot $path))
 }
+function Get-ExperimentMockSelection([string]$image, [string]$service, [string]$composeProject) {
+    $prebuilt = -not [string]::IsNullOrWhiteSpace($image)
+    [ordered]@{
+        selectionMode = if ($prebuilt) { "prebuilt-image" } else { "built-current" }
+        requestedImage = if ($prebuilt) { $image } else { $null }
+        runtimeTag = "$composeProject-experiment-mock:latest"
+        buildServices = if ($prebuilt) { @($service) } else { @("experiment-mock", $service) }
+        buildExperimentMock = -not $prebuilt
+        useNoBuildOnStartup = $prebuilt
+    }
+}
 if ($CpuNormalizationSelfTest) {
     $cases = @(
         [ordered]@{ name = "CASE_A"; expected = "2.0"; actual = "2"; pass = Test-NumericCpuValue "2.0" "2" },
@@ -39,6 +52,31 @@ if ($CpuNormalizationSelfTest) {
     )
     $cases | ConvertTo-Json -Depth 4
     if (@($cases | Where-Object { -not $_.pass }).Count -gt 0) { exit 1 }
+    exit 0
+}
+if ($ExperimentMockSelectionSelfTest) {
+    $normal = Get-ExperimentMockSelection $null "mvc" "self-test-normal"
+    $prebuilt = Get-ExperimentMockSelection "historical-mock:latest" "mvc" "self-test-prebuilt"
+    $webflux = Get-ExperimentMockSelection "historical-mock:latest" "flux-corrected" "self-test-webflux"
+    $result = [ordered]@{
+        normal = [ordered]@{
+            buildServices = @($normal.buildServices)
+            experimentMockBuildExecuted = $normal.buildExperimentMock
+            pass = (@($normal.buildServices) -join ",") -eq "experiment-mock,mvc" -and $normal.buildExperimentMock -and -not $normal.useNoBuildOnStartup
+        }
+        prebuilt = [ordered]@{
+            buildServices = @($prebuilt.buildServices)
+            experimentMockBuildExecuted = $prebuilt.buildExperimentMock
+            runtimeAlias = $prebuilt.runtimeTag
+            pass = (@($prebuilt.buildServices) -join ",") -eq "mvc" -and -not $prebuilt.buildExperimentMock -and $prebuilt.useNoBuildOnStartup -and $prebuilt.runtimeTag -eq "self-test-prebuilt-experiment-mock:latest"
+        }
+        webflux = [ordered]@{
+            buildServices = @($webflux.buildServices)
+            pass = (@($webflux.buildServices) -join ",") -eq "flux-corrected" -and -not $webflux.buildExperimentMock -and $webflux.useNoBuildOnStartup
+        }
+    }
+    $result | ConvertTo-Json -Depth 8
+    if (-not ($result.normal.pass -and $result.prebuilt.pass -and $result.webflux.pass)) { exit 1 }
     exit 0
 }
 $resolvedRunnerConfigPath = Resolve-RunnerConfigPath $ConfigPath
@@ -72,6 +110,15 @@ $service = if ($Implementation -eq "WebFlux") { "flux-corrected" } else { "mvc" 
 $targetUrl = if ($Implementation -eq "WebFlux") { "http://127.0.0.1:8001/game/face" } else { "http://127.0.0.1:8002/game/face" }
 $sourceStatus = Get-ComparisonSourceStatus -RepositoryRoot $repositoryRoot
 $runtimeMode = $Execute -or $PrepareRuntimeOnly
+$mockSelection = Get-ExperimentMockSelection $ExperimentMockImage $service $ComposeProject
+$requestedExperimentMockImageId = $null
+if (-not [string]::IsNullOrWhiteSpace($ExperimentMockImage)) {
+    $requestedImageInspect = @(& docker image inspect $ExperimentMockImage | ConvertFrom-Json)[0]
+    if ($LASTEXITCODE -ne 0 -or $null -eq $requestedImageInspect) {
+        throw "Experiment mock image was not found locally: $ExperimentMockImage"
+    }
+    $requestedExperimentMockImageId = [string]$requestedImageInspect.Id
+}
 if ($runtimeMode -and -not $sourceStatus.clean) {
     [ordered]@{
         comparisonSourceClean = $false
@@ -153,10 +200,19 @@ try {
         $process = Start-Process -FilePath $FilePath -ArgumentList $startArguments -Wait -PassThru -NoNewWindow -RedirectStandardOutput $StdOutPath -RedirectStandardError $StdErrPath
         return [int]$process.ExitCode
     }
-    $buildExitCode = Invoke-NativeProcess -FilePath "docker" -Arguments (@("compose", "-p", $ComposeProject) + $composeArguments + @("build", "experiment-mock", $service)) -StdOutPath $buildStdoutPath -StdErrPath $buildStderrPath
+    if ($mockSelection.useNoBuildOnStartup) {
+        & docker tag $ExperimentMockImage $mockSelection.runtimeTag
+        if ($LASTEXITCODE -ne 0) { throw "Experiment mock runtime alias creation failed" }
+        $buildExitCode = Invoke-NativeProcess -FilePath "docker" -Arguments (@("compose", "-p", $ComposeProject) + $composeArguments + @("build", $service)) -StdOutPath $buildStdoutPath -StdErrPath $buildStderrPath
+    } else {
+        $buildExitCode = Invoke-NativeProcess -FilePath "docker" -Arguments (@("compose", "-p", $ComposeProject) + $composeArguments + @("build", "experiment-mock", $service)) -StdOutPath $buildStdoutPath -StdErrPath $buildStderrPath
+    }
     if ($buildExitCode -ne 0) { throw "Docker comparison image build failed with exit code $buildExitCode" }
     $configResult.buildExecuted = $true
-    & docker compose -p $ComposeProject @composeArguments up -d $service
+    $upArguments = @("compose", "-p", $ComposeProject) + $composeArguments + @("up", "-d")
+    if ($mockSelection.useNoBuildOnStartup) { $upArguments += "--no-build" }
+    $upArguments += $service
+    & docker @upArguments
     if ($LASTEXITCODE -ne 0) { throw "Compose startup failed" }
     $runtimeStarted = $true
     function Get-ContainerIdentity([string]$serviceName) {
@@ -177,6 +233,9 @@ try {
     }
     $applicationIdentity = Get-ContainerIdentity $service
     $experimentMockIdentity = Get-ContainerIdentity "experiment-mock"
+    if ($mockSelection.useNoBuildOnStartup -and $requestedExperimentMockImageId -ne $experimentMockIdentity.imageId) {
+        throw "Experiment mock image identity mismatch: requested $requestedExperimentMockImageId, running $($experimentMockIdentity.imageId)"
+    }
     $mariadbIdentity = Get-ContainerIdentity "mariadb"
     $containerId = $applicationIdentity.containerId
     $jarPath = Join-Path $identityDirectory "app.jar"
@@ -192,7 +251,11 @@ try {
         container = [ordered]@{ id = $applicationIdentity.containerId; imageId = $applicationIdentity.imageId }
         image = [ordered]@{ id = $applicationIdentity.imageId; created = $applicationIdentity.imageCreated; repoTags = $applicationIdentity.repoTags; repoDigests = $applicationIdentity.repoDigests }
         application = [ordered]@{ jarPath = "/app/app.jar"; jarSha256 = $jarHash }
-        source = [ordered]@{ comparisonSourceManifest = "experiment/config/comparison-source-manifest.txt"; comparisonSourceManifestSha256 = $manifestHash; experimentMockSourceRoot = "backend/experiment-mock"; experimentMockBuildExecuted = $true }
+        source = [ordered]@{ comparisonSourceManifest = "experiment/config/comparison-source-manifest.txt"; comparisonSourceManifestSha256 = $manifestHash; experimentMockSourceRoot = "backend/experiment-mock"; experimentMockBuildExecuted = $mockSelection.buildExperimentMock }
+        experimentMockSelectionMode = $mockSelection.selectionMode
+        requestedExperimentMockImage = $mockSelection.requestedImage
+        requestedExperimentMockImageId = $requestedExperimentMockImageId
+        composeExperimentMockRuntimeTag = $mockSelection.runtimeTag
         dependencies = [ordered]@{ experimentMock = $experimentMockIdentity; mariadb = $mariadbIdentity }
         build = [ordered]@{ executed = $true; exitCode = $buildExitCode; stdout = "docker-build.stdout.log"; stderr = "docker-build.stderr.log" }
     }
