@@ -55,8 +55,11 @@ function Test-Idle($snapshot) {
     if ($null -eq $snapshot -or $snapshot.status -ne 200) { return $false }
     $runtime = $snapshot.body.requestRuntime
     $http = $snapshot.body.outboundHttp
-    $runtimeOk = $null -eq $runtime -or (($runtime.busy -as [double]) -eq 0 -and ($runtime.queue -as [double]) -eq 0)
-    $httpOk = $null -eq $http -or (($http.active -as [double]) -eq 0 -and ($http.pending -as [double]) -eq 0)
+    if ($null -eq $runtime -or $null -eq $http) { return $false }
+    if ($null -eq $runtime.busy -or $null -eq $runtime.queue -or
+        $null -eq $http.active -or $null -eq $http.pending) { return $false }
+    $runtimeOk = (($runtime.busy -as [double]) -eq 0 -and ($runtime.queue -as [double]) -eq 0)
+    $httpOk = (($http.active -as [double]) -eq 0 -and ($http.pending -as [double]) -eq 0)
     return $runtimeOk -and $httpOk
 }
 

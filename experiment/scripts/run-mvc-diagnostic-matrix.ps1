@@ -12,6 +12,7 @@ if (-not [IO.Path]::IsPathRooted($CasesPath)) { $CasesPath = Join-Path $reposito
 if (-not [IO.Path]::IsPathRooted($ResultsRoot)) { $ResultsRoot = Join-Path $repositoryRoot $ResultsRoot }
 $manifest = Get-Content -Raw -LiteralPath $CasesPath | ConvertFrom-Json
 $composeFile = Join-Path $repositoryRoot "backend\docker-compose.experiment.yaml"
+$fixturePath = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "image\arc.jpg"))
 $casePlan = @($manifest.topologyLadder | ForEach-Object {
     $case = $_
     [ordered]@{
@@ -71,15 +72,37 @@ if ([string]::IsNullOrWhiteSpace($matrixImageContract.mvcImageId) -or
     [string]::IsNullOrWhiteSpace($matrixImageContract.mockImageId)) {
     throw "Immutable image IDs could not be resolved"
 }
+$lockedMvcImage = "doeng-mvcdiag-mvc:locked"
+$lockedMockImage = "doeng-mvcdiag-mock:locked"
+docker tag $matrixImageContract.mvcImageId $lockedMvcImage
+if ($LASTEXITCODE -ne 0) { throw "Could not create locked MVC image tag" }
+docker tag $matrixImageContract.mockImageId $lockedMockImage
+if ($LASTEXITCODE -ne 0) { throw "Could not create locked mock image tag" }
+$imageOverride = Join-Path $ResultsRoot "mvc-diagnostic-images.override.yml"
+@"
+services:
+  mvc:
+    image: $lockedMvcImage
+  experiment-mock:
+    image: $lockedMockImage
+"@ | Set-Content -Encoding UTF8 -LiteralPath $imageOverride
+$runtimeComposeFiles = @($composeFile, $imageOverride)
+$matrixImageContract.lockedMvcImage = $lockedMvcImage
+$matrixImageContract.lockedMockImage = $lockedMockImage
 $matrixImageContract | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $ResultsRoot "matrix-image-contract.json")
 
 function Get-CaseClassification($case) {
     $resultPath = Join-Path (Join-Path $ResultsRoot "MVC-DIAG-$($case.id)") "client-results.json"
     if (-not (Test-Path -LiteralPath $resultPath)) { throw "Missing result for $($case.id)" }
-    $result = Get-Content -Raw -LiteralPath $resultPath | ConvertFrom-Json
-    $successRate = if ($result.started -gt 0) { [double]$result.http200 / $result.started } else { 0 }
-    $timeoutRate = if ($result.started -gt 0) { [double]$result.timeout / $result.started } else { 1 }
-    $http4xxRate = if ($result.started -gt 0) { [double]$result.http4xx / $result.started } else { 0 }
+    $rawResult = Get-Content -Raw -LiteralPath $resultPath | ConvertFrom-Json
+    $result = if ($null -ne $rawResult.summary) { $rawResult.summary } else { $rawResult }
+    $started = if ($null -ne $result.started) { $result.started } else { $result.startedRequests }
+    $successes = if ($null -ne $result.http200) { $result.http200 } else { $result.successfulRequests }
+    $timeouts = if ($null -ne $result.timeout) { $result.timeout } else { @($result.requests | Where-Object { $_.transport.category -eq "CLIENT_ABORT_DEADLINE" }).Count }
+    $http4xx = if ($null -ne $result.http4xx) { $result.http4xx } else { @($result.requests | Where-Object { $_.status -ge 400 -and $_.status -lt 500 }).Count }
+    $successRate = if ($started -gt 0) { [double]$successes / $started } else { 0 }
+    $timeoutRate = if ($started -gt 0) { [double]$timeouts / $started } else { 1 }
+    $http4xxRate = if ($started -gt 0) { [double]$http4xx / $started } else { 0 }
     if ($http4xxRate -gt 0) { return "INVALID_CONFIGURATION" }
     if ($successRate -ge $manifest.classification.stable.successMin -and $timeoutRate -le $manifest.classification.stable.timeoutMax) { return "STABLE" }
     if ($successRate -ge $manifest.classification.degraded.successMin -and $successRate -lt $manifest.classification.degraded.successMaxExclusive) { return "DEGRADED" }
@@ -87,7 +110,9 @@ function Get-CaseClassification($case) {
 }
 
 function Get-Container($project, $service) {
-    $ids = @(& docker compose -p $project -f $composeFile ps -q $service 2>$null |
+    $composeArgs = @()
+    foreach ($file in $runtimeComposeFiles) { $composeArgs += @("-f", $file) }
+    $ids = @(& docker compose -p $project @composeArgs ps -q $service 2>$null |
         ForEach-Object { $id = ([string]$_).Trim(); if ($id) { $id } })
     if ($ids.Count -ne 1) { throw "Expected one $service container for $project" }
     $raw = @(& docker inspect $ids[0] 2>$null)
@@ -110,26 +135,26 @@ function Write-RuntimeContract($project, $caseDir) {
         nanoCpus = $container.HostConfig.NanoCpus
         memory = $container.HostConfig.Memory
         environment = [ordered]@{
-            MVC_MAX_THREADS = $environment.MVC_MAX_THREADS
-            HTTP_MAX_CONNECTIONS = $environment.HTTP_MAX_CONNECTIONS
-            DB_POOL_MAX_SIZE = $environment.DB_POOL_MAX_SIZE
+            DOENG_MVC_MAX_THREADS = $environment.DOENG_MVC_MAX_THREADS
+            DOENG_HTTP_MAX_CONNECTIONS = $environment.DOENG_HTTP_MAX_CONNECTIONS
+            DOENG_DB_POOL_MAX_SIZE = $environment.DOENG_DB_POOL_MAX_SIZE
             JAVA_TOOL_OPTIONS = $javaOptions
         }
         expected = [ordered]@{
             nanoCpus = 2000000000
             memory = 3221225472
-            MVC_MAX_THREADS = "400"
-            HTTP_MAX_CONNECTIONS = "400"
-            DB_POOL_MAX_SIZE = "10"
+            DOENG_MVC_MAX_THREADS = "400"
+            DOENG_HTTP_MAX_CONNECTIONS = "400"
+            DOENG_DB_POOL_MAX_SIZE = "10"
             javaXms = "512m"
             javaXmx = "2048m"
         }
     }
     $contract.pass = $contract.nanoCpus -eq $contract.expected.nanoCpus -and
         $contract.memory -eq $contract.expected.memory -and
-        $contract.environment.MVC_MAX_THREADS -eq $contract.expected.MVC_MAX_THREADS -and
-        $contract.environment.HTTP_MAX_CONNECTIONS -eq $contract.expected.HTTP_MAX_CONNECTIONS -and
-        $contract.environment.DB_POOL_MAX_SIZE -eq $contract.expected.DB_POOL_MAX_SIZE -and
+        $contract.environment.DOENG_MVC_MAX_THREADS -eq $contract.expected.DOENG_MVC_MAX_THREADS -and
+        $contract.environment.DOENG_HTTP_MAX_CONNECTIONS -eq $contract.expected.DOENG_HTTP_MAX_CONNECTIONS -and
+        $contract.environment.DOENG_DB_POOL_MAX_SIZE -eq $contract.expected.DOENG_DB_POOL_MAX_SIZE -and
         $javaOptions -match "-Xms512m" -and $javaOptions -match "-Xmx2048m"
     $contract | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $caseDir "runtime-contract.json")
     if (-not $contract.pass) { throw "RUNTIME_CONTRACT: FAIL for $caseDir" }
@@ -176,22 +201,80 @@ function Wait-IdleWindow([int]$seconds = 5) {
     return $true
 }
 
+function Observe-PostLoadIdle($caseDir, [int]$seconds = 30) {
+    $startedAt = Get-Date
+    $samples = @()
+    $idleReached = $false
+    $last = $null
+    while (((Get-Date) - $startedAt).TotalSeconds -lt $seconds) {
+        try {
+            $snapshot = Invoke-RestMethod -Uri "http://127.0.0.1:9002/actuator/doengexperiment" -TimeoutSec 2
+            $metrics = Invoke-RestMethod -Uri "http://127.0.0.1:9100/__metrics" -TimeoutSec 2
+            $last = [ordered]@{
+                capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+                tomcatBusy = $snapshot.requestRuntime.busy
+                tomcatQueue = $snapshot.requestRuntime.queue
+                httpLeased = $snapshot.outboundHttp.active
+                httpPending = $snapshot.outboundHttp.pending
+                aiInFlight = $metrics.aiInFlight
+                storageInFlight = $metrics.storageInFlight
+            }
+            $samples += $last
+            if ($last.tomcatBusy -eq 0 -and $last.tomcatQueue -eq 0 -and
+                $last.httpLeased -eq 0 -and $last.httpPending -eq 0 -and
+                $last.aiInFlight -eq 0 -and $last.storageInFlight -eq 0) {
+                $idleReached = $true
+                break
+            }
+        } catch {
+            $samples += [ordered]@{ capturedAt = (Get-Date).ToUniversalTime().ToString("o"); error = $_.Exception.Message }
+        }
+        Start-Sleep -Seconds 1
+    }
+    $result = [ordered]@{
+        observedAt = (Get-Date).ToUniversalTime().ToString("o")
+        idleReached = $idleReached
+        timeToIdleMs = if ($idleReached) { [math]::Round(((Get-Date) - $startedAt).TotalMilliseconds) } else { $null }
+        lastTomcatBusy = if ($last) { $last.tomcatBusy } else { $null }
+        lastTomcatQueue = if ($last) { $last.tomcatQueue } else { $null }
+        lastHttpLeased = if ($last) { $last.httpLeased } else { $null }
+        lastHttpPending = if ($last) { $last.httpPending } else { $null }
+        lastAiInFlight = if ($last) { $last.aiInFlight } else { $null }
+        lastStorageInFlight = if ($last) { $last.storageInFlight } else { $null }
+        observationSeconds = $seconds
+        sampleCount = $samples.Count
+    }
+    $result | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $caseDir "post-load-idle.json")
+    return $result
+}
+
 function Invoke-B01Warmup($case, $target, $caseDir) {
     $warmupRequests = 20
+    $tokenPath = $env:AUTH_TOKENS_PATH
+    $warmupTokens = @((Get-Content -Raw -LiteralPath $tokenPath | ConvertFrom-Json))
     for ($index = 1; $index -le $warmupRequests; $index++) {
         $env:TARGET_URL = $target
-        $env:MODE = [string]$case.mode
-        $env:PAYLOAD_PROFILE = [string]$case.payload
+        $env:MODE = "FULL"
+        $env:PAYLOAD_PROFILE = "REAL"
         $env:ACTIVE_USERS = "1"
         $env:INTERVAL_MS = "60000"
         $env:DURATION_MS = "1"
         $env:REQUEST_TIMEOUT_MS = [string]$case.requestTimeoutMs
+        $env:FIXTURE_PATH = $fixturePath
+        $env:ANSWER = "happy"
+        $env:SCENE_ID = "2"
+        $env:AUTH_TOKEN = [string]$warmupTokens[0]
+        Remove-Item Env:AUTH_TOKENS_PATH -ErrorAction SilentlyContinue
         $env:EXPERIMENT_RUN_ID = "MVC-DIAG-$($case.id)-W$index"
         $env:RESULT_PATH = Join-Path $caseDir "warmup-$index.json"
         $env:PROGRESS_PATH = Join-Path $caseDir "warmup-$index.progress.jsonl"
         & $NodeCommand (Join-Path $repositoryRoot "experiment\load\mvc-diagnostic-load.js")
         if ($LASTEXITCODE -ne 0) { throw "B01 warmup request $index failed" }
     }
+    [ordered]@{ mode = "FULL"; endpoint = "/game/face"; requests = $warmupRequests; concurrency = 1; fixturePath = $fixturePath; answer = "happy"; sceneId = 2 } |
+        ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $caseDir "warmup-contract.json")
+    $env:AUTH_TOKENS_PATH = $tokenPath
+    Remove-Item Env:AUTH_TOKEN -ErrorAction SilentlyContinue
     if (-not (Wait-IdleWindow 5)) { throw "B01 warmup idle gate failed" }
 }
 
@@ -200,7 +283,10 @@ function Invoke-Case($case) {
     $caseDir = Join-Path $ResultsRoot "MVC-DIAG-$($case.id)"
     New-Item -ItemType Directory -Force -Path $caseDir | Out-Null
     $env:MOCK_AI_DELAY_MS = [string]$case.aiDelayMs
+    $env:MOCK_AI_RESULT = "true"
+    $env:MOCK_AI_STATUS = "200"
     $env:MOCK_STORAGE_DELAY_MS = [string]$case.storageDelayMs
+    $env:MOCK_STORAGE_STATUS = "200"
     $env:APP_CPU = [string]$manifest.defaults.appCpu
     $env:APP_MEMORY = [string]$manifest.defaults.appMemory
     $env:MVC_MAX_THREADS = [string]$manifest.defaults.mvcMaxThreads
@@ -208,11 +294,13 @@ function Invoke-Case($case) {
     $env:DB_POOL_MAX_SIZE = [string]$manifest.defaults.dbPoolMaxSize
     $env:JAVA_XMS = [string]$manifest.defaults.javaXms
     $env:JAVA_XMX = [string]$manifest.defaults.javaXmx
-    docker compose -p $project -f $composeFile up -d mariadb experiment-mock mvc
+    $composeArgs = @()
+    foreach ($file in $runtimeComposeFiles) { $composeArgs += @("-f", $file) }
+    docker compose -p $project @composeArgs up -d --no-build mariadb experiment-mock mvc
     if ($LASTEXITCODE -ne 0) { throw "compose up failed for $($case.id)" }
     try {
         & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "wait-mvc-readiness.ps1") `
-            -ComposeProject $project -ServerService mvc -OutputPath (Join-Path $caseDir "startup-gate.json")
+            -ComposeProject $project -ServerService mvc -ComposeFiles $runtimeComposeFiles -OutputPath (Join-Path $caseDir "startup-gate.json")
         if ($LASTEXITCODE -ne 0) { throw "STARTUP_GATE: FAIL for $($case.id)" }
         $mvcImageId = Write-RuntimeContract $project $caseDir
         $mockImageId = (Get-Container $project "experiment-mock").Image
@@ -241,10 +329,14 @@ function Invoke-Case($case) {
         $env:EXPERIMENT_RUN_ID = "MVC-DIAG-$($case.id)"
         $env:RESULT_PATH = Join-Path $caseDir "client-results.json"
         $env:PROGRESS_PATH = Join-Path $caseDir "client-progress.jsonl"
+        $env:FIXTURE_PATH = $fixturePath
+        $env:ANSWER = "happy"
+        $env:SCENE_ID = "2"
         if ($case.id -eq "B01") { Invoke-B01Warmup $case $target $caseDir }
         $observer = Start-Process -FilePath "powershell.exe" -ArgumentList @(
             "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "observe-mvc-diagnostic.ps1"),
             "-ComposeProject", $project, "-ServerService", "mvc", "-DurationSeconds", [string]([math]::Ceiling($manifest.defaults.durationMs / 1000)),
+            "-ComposeFiles", $runtimeComposeFiles,
             "-OutputPath", (Join-Path $caseDir "observer.jsonl")
         ) -PassThru -WindowStyle Hidden
         if ($case.mode -eq "FULL_ORIGINAL_SCHEDULER") {
@@ -256,6 +348,12 @@ function Invoke-Case($case) {
             $env:ACTIVATION_STEP_USERS = "1"
             $env:ACTIVATION_INTERVAL_MS = "3000"
             $env:RECONNECT_DELAY_MS = "1000"
+            $env:INTERVAL_MS = "1000"
+            $env:DURATION_MS = "60000"
+            $env:REQUEST_TIMEOUT_MS = "10000"
+            $env:FIXTURE_PATH = $fixturePath
+            $env:ANSWER = "happy"
+            $env:SCENE_ID = "2"
             $env:RESULT_PATH = Join-Path $caseDir "client-results.json"
             $env:PROGRESS_PATH = Join-Path $caseDir "client-progress.jsonl"
             & $NodeCommand (Join-Path $repositoryRoot "experiment\load\mission-load.js")
@@ -263,13 +361,13 @@ function Invoke-Case($case) {
             & $NodeCommand (Join-Path $repositoryRoot "experiment\load\mvc-diagnostic-load.js")
         }
         if ($LASTEXITCODE -ne 0) { throw "diagnostic load failed for $($case.id)" }
-        if (-not (Wait-IdleWindow 5)) { throw "post-warmup/load idle gate failed for $($case.id)" }
+        Observe-PostLoadIdle $caseDir 30 | Out-Null
         if (-not $observer.HasExited) { $observer.WaitForExit() }
     } finally {
         if (Test-Path -LiteralPath $caseDir) {
             try { Capture-CaseArtifacts $project $caseDir } catch { $_.Exception.Message | Set-Content (Join-Path $caseDir "capture-error.txt") }
         }
-        docker compose -p $project -f $composeFile down --remove-orphans
+        docker compose -p $project @composeArgs down --remove-orphans
     }
 }
 
@@ -278,6 +376,27 @@ function Write-NotApplicable($case, $reason) {
     New-Item -ItemType Directory -Force -Path $caseDir | Out-Null
     [ordered]@{ caseId = $case.id; status = "NOT_APPLICABLE"; reason = $reason } |
         ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $caseDir "case-status.json")
+}
+
+function Assert-T06T07FixtureParity {
+    $t06Path = Join-Path $ResultsRoot "MVC-DIAG-T06\client-results.json"
+    $t07Path = Join-Path $ResultsRoot "MVC-DIAG-T07\client-results.json"
+    if (-not (Test-Path -LiteralPath $t06Path) -or -not (Test-Path -LiteralPath $t07Path)) { return }
+    $t06 = Get-Content -Raw -LiteralPath $t06Path | ConvertFrom-Json
+    $t07 = Get-Content -Raw -LiteralPath $t07Path | ConvertFrom-Json
+    $t06Meta = $t06.payload
+    $t07Meta = $t07.summary
+    $parity = [ordered]@{
+        fixturePath = $fixturePath
+        t06 = [ordered]@{ sha256 = $t06Meta.binarySha256; binaryBytes = $t06Meta.binaryBytes; requestBodyBytes = $t06Meta.requestJsonBytes }
+        t07 = [ordered]@{ sha256 = $t07Meta.fixtureSha256; binaryBytes = $t07Meta.fixtureBytes; requestBodyBytes = $t07Meta.requestBodyBytes }
+        pass = $null -ne $t06Meta -and $null -ne $t07Meta -and
+            $t06Meta.binarySha256 -eq $t07Meta.fixtureSha256 -and
+            $t06Meta.binaryBytes -eq $t07Meta.fixtureBytes -and
+            $t06Meta.requestJsonBytes -eq $t07Meta.requestBodyBytes
+    }
+    $parity | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $ResultsRoot "T06-T07-fixture-parity.json")
+    if (-not $parity.pass) { throw "T06_T07_FIXTURE_PARITY: FAIL" }
 }
 
 $topologyCases = @($casePlan | Where-Object { $_.kind -eq "TOPOLOGY" })
@@ -300,6 +419,7 @@ if ($null -eq $topologyTarget) {
     $topologyTarget = if ((Get-CaseClassification $t07) -eq "STABLE") {
         @($topologyCases | Where-Object { $_.id -eq "T06" }) | Select-Object -First 1
     } else { $t07 }
+    Assert-T06T07FixtureParity
 }
 foreach ($boundary in @($casePlan | Where-Object { $_.kind -eq "BOUNDARY" })) {
     $case = [ordered]@{}

@@ -87,6 +87,11 @@ $summary = [ordered]@{
     readinessFailures = $readinessFailures
     containerStateFailures = $containerStateFailures
     coverageRatio = if ($samples -gt 0) { $successfulApplicationSamples / $samples } else { 0 }
-    observerValid = $true
+    mockCoverageRatio = if ($samples -gt 0) { $successfulMockSamples / $samples } else { 0 }
+    containerCoverageRatio = if ($samples -gt 0) { ($samples - $containerStateFailures) / $samples } else { 0 }
+    observerValid = $samples -gt 0 -and
+        $successfulApplicationSamples -gt 0 -and
+        $successfulMockSamples -gt 0 -and
+        $containerStateFailures -lt $samples
 }
 $summary | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 -LiteralPath ([IO.Path]::ChangeExtension($OutputPath, ".summary.json"))
