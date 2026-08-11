@@ -1,0 +1,76 @@
+﻿{
+    "composeFileCount":  2,
+    "composeFiles":  [
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment.yaml",
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\mvc-diagnostic-images.override.yml"
+                     ],
+    "composeFilesSource":  "BASE64_JSON",
+    "containerStartedAt":  "2026-08-11T11:16:16.504467176Z",
+    "firstLivenessUpAt":  "2026-08-11T11:16:38.9799357Z",
+    "firstReadinessUpAt":  "2026-08-11T11:16:38.9799357Z",
+    "stableWindowStartedAt":  "2026-08-11T11:16:27.6114011Z",
+    "readyForLoadAt":  "2026-08-11T11:16:38.9799357Z",
+    "startupAgeMsAtLoad":  22475,
+    "livenessAttempts":  7,
+    "readinessAttempts":  7,
+    "canaryAttempts":  7,
+    "containerId":  "289d7a9e508b5977f040de8f48766b325fe0491b9dc490d5bda3b1cc11517a51",
+    "restartCount":  0,
+    "oomKilled":  false,
+    "mainLiveness":  {
+                         "status":  200,
+                         "text":  "{\"status\":\"UP\"}",
+                         "body":  {
+                                      "status":  "UP"
+                                  }
+                     },
+    "managementLiveness":  {
+                               "status":  200,
+                               "text":  "{\"status\":\"UP\"}",
+                               "body":  {
+                                            "status":  "UP"
+                                        }
+                           },
+    "mainReadiness":  {
+                          "status":  200,
+                          "text":  "{\"status\":\"UP\"}",
+                          "body":  {
+                                       "status":  "UP"
+                                   }
+                      },
+    "managementReadiness":  {
+                                "status":  200,
+                                "text":  "{\"status\":\"UP\"}",
+                                "body":  {
+                                             "status":  "UP"
+                                         }
+                            },
+    "mockHealth":  {
+                       "status":  200,
+                       "text":  "{\"status\":\"ok\",\"ai\":{\"result\":true,\"delayMs\":0,\"status\":200,\"closeBeforeResponse\":false},\"storage\":{\"delayMs\":100,\"status\":200},\"storedObjectCount\":0,\"strictAuth\":false,\"authRegisteredUsers\":0,\"requestCounts\":{}}",
+                       "body":  {
+                                    "status":  "ok",
+                                    "ai":  {
+                                               "result":  true,
+                                               "delayMs":  0,
+                                               "status":  200,
+                                               "closeBeforeResponse":  false
+                                           },
+                                    "storage":  {
+                                                    "delayMs":  100,
+                                                    "status":  200
+                                                },
+                                    "storedObjectCount":  0,
+                                    "strictAuth":  false,
+                                    "authRegisteredUsers":  0,
+                                    "requestCounts":  {
+
+                                                      }
+                                }
+                   },
+    "mockAiInFlight":  0,
+    "mockStorageInFlight":  0,
+    "stableWindowSeconds":  10,
+    "stableWindowActualMs":  11369,
+    "loadAllowed":  true
+}

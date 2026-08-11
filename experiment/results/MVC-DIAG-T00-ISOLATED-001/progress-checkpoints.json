@@ -1,0 +1,26 @@
+﻿[
+    {
+        "checkpointSeconds":  55,
+        "elapsedMs":  55175,
+        "processRunning":  true,
+        "progressExists":  true,
+        "progressLineCount":  54,
+        "resultExists":  false
+    },
+    {
+        "checkpointSeconds":  30,
+        "elapsedMs":  30152,
+        "processRunning":  true,
+        "progressExists":  true,
+        "progressLineCount":  29,
+        "resultExists":  false
+    },
+    {
+        "checkpointSeconds":  5,
+        "elapsedMs":  5200,
+        "processRunning":  true,
+        "progressExists":  true,
+        "progressLineCount":  4,
+        "resultExists":  false
+    }
+]
