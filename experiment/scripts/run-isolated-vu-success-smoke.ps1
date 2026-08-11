@@ -536,30 +536,14 @@ try {
     $applicationLogCapture = [ordered]@{
         attempted = $false
         succeeded = $false
+        capturedAt = $null
         exitCode = $null
         applicationLog = $null
         phaseTrace = $null
         phaseCount = 0
+        phaseTraceJsonlValid = $false
+        phaseParseFailures = 0
     }
-    if ([string]::IsNullOrWhiteSpace($serverContainerId)) {
-        $serverContainerId = (& docker compose -p $ComposeProject @composeArguments ps -q $ServerService).Trim()
-    }
-    if (-not [string]::IsNullOrWhiteSpace($serverContainerId)) {
-        $applicationLogCapture.attempted = $true
-        $applicationLogPath = Join-Path $runDirectory "application-container.log"
-        $phaseTracePath = Join-Path $runDirectory "mvc-phase-trace.jsonl"
-        $applicationLogOutput = @(& docker logs $serverContainerId 2>&1)
-        $applicationLogExitCode = $LASTEXITCODE
-        $applicationLogOutput | Set-Content -Encoding UTF8 -LiteralPath $applicationLogPath
-        $phaseLines = @($applicationLogOutput | Where-Object { [string]$_ -match "DOENG_PHASE " })
-        $phaseLines | Set-Content -Encoding UTF8 -LiteralPath $phaseTracePath
-        $applicationLogCapture.succeeded = $applicationLogExitCode -eq 0
-        $applicationLogCapture.exitCode = $applicationLogExitCode
-        $applicationLogCapture.applicationLog = "application-container.log"
-        $applicationLogCapture.phaseTrace = "mvc-phase-trace.jsonl"
-        $applicationLogCapture.phaseCount = $phaseLines.Count
-    }
-
     $observability = $null
     if ($observabilityEnabled) {
         $monitorStatus = $null
@@ -685,6 +669,49 @@ try {
     $mockRequests | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "mock-requests.json")
     $mockMetrics = Invoke-RestMethod -Uri "$mockBaseUrl/__metrics"
     $mockMetrics | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "mock-metrics-after.json")
+
+    if ([string]::IsNullOrWhiteSpace($serverContainerId)) {
+        $serverContainerId = (& docker compose -p $ComposeProject @composeArguments ps -q $ServerService).Trim()
+    }
+    if (-not [string]::IsNullOrWhiteSpace($serverContainerId)) {
+        $applicationLogCapture.attempted = $true
+        $applicationLogCapture.capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+        $applicationLogPath = Join-Path $runDirectory "application-container.log"
+        $phaseTracePath = Join-Path $runDirectory "mvc-phase-trace.jsonl"
+        $applicationLogOutput = @(& docker logs $serverContainerId 2>&1)
+        $applicationLogExitCode = $LASTEXITCODE
+        $applicationLogOutput | Set-Content -Encoding UTF8 -LiteralPath $applicationLogPath
+        $phaseLines = @($applicationLogOutput | ForEach-Object {
+            $line = [string]$_
+            $marker = $line.IndexOf("DOENG_PHASE ", [System.StringComparison]::Ordinal)
+            if ($marker -ge 0) {
+                $line.Substring($marker + "DOENG_PHASE ".Length)
+            }
+        })
+        $phaseObjects = @()
+        $phaseParseFailures = 0
+        foreach ($phaseLine in $phaseLines) {
+            try {
+                $phaseObject = $phaseLine | ConvertFrom-Json
+                $requiredFields = @("event", "runId", "requestId", "missionRunId", "capturedAt", "elapsedFromServerEnterMicros", "thread")
+                if (@($requiredFields | Where-Object { $null -eq $phaseObject.$_ }).Count -gt 0 -or
+                    ($phaseObject.event -match "_HTTP_" -and [string]::IsNullOrWhiteSpace([string]$phaseObject.outboundType))) {
+                    throw "required phase field missing"
+                }
+                $phaseObjects += $phaseObject
+            } catch {
+                $phaseParseFailures += 1
+            }
+        }
+        $phaseLines | Set-Content -Encoding UTF8 -LiteralPath $phaseTracePath
+        $applicationLogCapture.succeeded = $applicationLogExitCode -eq 0
+        $applicationLogCapture.exitCode = $applicationLogExitCode
+        $applicationLogCapture.applicationLog = "application-container.log"
+        $applicationLogCapture.phaseTrace = "mvc-phase-trace.jsonl"
+        $applicationLogCapture.phaseCount = $phaseLines.Count
+        $applicationLogCapture.phaseTraceJsonlValid = $phaseParseFailures -eq 0
+        $applicationLogCapture.phaseParseFailures = $phaseParseFailures
+    }
 
     $clientResult = Get-Content -Raw -LiteralPath (Join-Path $runDirectory "client-results.json") | ConvertFrom-Json
     $missionCompletions = @(Get-MissionCompletions -Users @($preparedUsers.users))
