@@ -1,0 +1,26 @@
+﻿{
+    "capturedAt":  "2026-08-11T11:32:16.9361166Z",
+    "containerId":  "24d8147bc07f4e3c23049aa2fad6e7fd3ee8537b30d9d331a1ea2da6f5c09834",
+    "imageId":  "sha256:edf0b39b32a6771edc24479b87a4ec273f7336a61aca08f837baaca6c34733e7",
+    "restartCount":  0,
+    "oomKilled":  false,
+    "exitCode":  0,
+    "nanoCpus":  2000000000,
+    "memory":  3221225472,
+    "environment":  {
+                        "DOENG_MVC_MAX_THREADS":  "400",
+                        "DOENG_HTTP_MAX_CONNECTIONS":  "400",
+                        "DOENG_DB_POOL_MAX_SIZE":  "10",
+                        "JAVA_TOOL_OPTIONS":  "-Xms512m -Xmx2048m -XX:+UseG1GC"
+                    },
+    "expected":  {
+                     "nanoCpus":  2000000000,
+                     "memory":  3221225472,
+                     "DOENG_MVC_MAX_THREADS":  "400",
+                     "DOENG_HTTP_MAX_CONNECTIONS":  "400",
+                     "DOENG_DB_POOL_MAX_SIZE":  "10",
+                     "javaXms":  "512m",
+                     "javaXmx":  "2048m"
+                 },
+    "pass":  true
+}
