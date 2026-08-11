@@ -1,0 +1,41 @@
+﻿{
+    "git":  {
+                "head":  "e6c43addfec66cb6839692c2815543a44552ec66",
+                "branch":  "experiment/webflux-runtime-evidence-handoff"
+            },
+    "implementation":  "mvc",
+    "composeProject":  "doeng-mvcdiag-t02-ai0-001",
+    "composeFiles":  [
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment.yaml",
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\mvc-diagnostic-images.override.yml"
+                     ],
+    "composeFilesSource":  "BASE64_JSON",
+    "aiDelayMs":  0,
+    "storageDelayMs":  100,
+    "containers":  {
+                       "mvc":  {
+                                   "id":  "07f5eff15ea1c84f168e29c2c14b83cfa1454e3fa1054a09bd800b3285ed4f76",
+                                   "imageId":  "sha256:edf0b39b32a6771edc24479b87a4ec273f7336a61aca08f837baaca6c34733e7",
+                                   "running":  true,
+                                   "restartCount":  0,
+                                   "oomKilled":  false,
+                                   "exitCode":  0
+                               },
+                       "experimentMock":  {
+                                              "id":  "e3165ab5a85ed0a53d692d8117d9520bce0b6cb144661a9e696fae9853baadaf",
+                                              "imageId":  "sha256:fee2a6dcd7e412ea5aa6432b300aa6dacea0800dc2e0f00dae9160cd9dfe8bed",
+                                              "running":  true,
+                                              "restartCount":  0,
+                                              "oomKilled":  false,
+                                              "exitCode":  0
+                                          },
+                       "mariadb":  {
+                                       "id":  "fff611c2a23a66ae774d108480ca5e4be73596be9fe5ef34850c6ef1e4127d1f",
+                                       "imageId":  "sha256:be981e4113326ada8d6004174dd09eeaefc03094037f811182a52d4f2e737350",
+                                       "running":  true,
+                                       "restartCount":  0,
+                                       "oomKilled":  false,
+                                       "exitCode":  0
+                                   }
+                   }
+}
