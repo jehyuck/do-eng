@@ -50,7 +50,7 @@ Values are the three runs per implementation. Median is used for the summary sta
 | Successful HTTP 200 p99 (ms) | 4441, 3958, 8352 | **4441 (3958–8352)** | 9531, 9181, 9962 | **9531 (9181–9962)** |
 | maxInFlight | 291, 267, 487 | **291 (267–487)** | 537, 537, 554 | **537 (537–554)** |
 
-Observed baseline direction: all three WebFlux runs had no client timeout and 99.9812–100% success. MVC400 had lower and variable success, with higher timeout exposure and higher median tail latency in this frozen condition.
+Observed baseline direction: across the three WebFlux baseline runs, success remained 99.9812–100%; W001 recorded one client timeout, while W002 and W003 recorded none. MVC400 had lower and variable success, with higher timeout exposure and higher median tail latency in this frozen condition.
 
 ## External-I/O latency supplement
 
@@ -103,7 +103,7 @@ The historical investigation did not establish a supported claim of MVC applicat
 
 | Claim candidate | Evidence strength | Allowed wording | Forbidden wording |
 |---|---|---|---|
-| Longer external I/O waiting was associated with better WebFlux outcomes in this frozen comparison | Moderate; three 2000ms pairs plus one pair at 500ms and 1000ms | “Under the tested request flow and fixed resource contract, WebFlux retained higher completion/success outcomes as AI delay increased.” | “WebFlux is always faster/better.” |
+| Tested external I/O conditions showed better WebFlux outcomes in this frozen comparison | Moderate; three 2000ms pairs plus one pair at 500ms and 1000ms | “Under the tested request flow and fixed resource contract, WebFlux retained higher completion/success outcomes than MVC in the tested 1000ms and 2000ms AI-delay conditions, while both implementations recorded 100% success at 500ms.” | “WebFlux is always faster/better.” |
 | WebFlux 2000ms success | Strong for tested runs; three valid pairs | “WebFlux recorded 99.9812–100% success across the three 2000ms baseline runs.” | “WebFlux cannot fail under 2s AI latency.” |
 | MVC400 2000ms outcome | Strong for tested runs; three valid pairs | “MVC400 recorded lower and more variable success, with median successful RPS 28.571429 and p95 8339ms.” | “Tomcat thread exhaustion is proven as the root cause.” |
 | AI500 behavior | Limited; one valid pair | “Both implementations recorded 100% success in the AI500 pair; MVC400 had higher p95 and maxInFlight.” | “The 500ms result is a repeated general baseline.” |
