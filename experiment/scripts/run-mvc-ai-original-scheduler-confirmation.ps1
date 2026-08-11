@@ -24,7 +24,8 @@ $baseCompose = Join-Path $RepositoryRoot "backend/docker-compose.experiment.yaml
 $imageOverride = Join-Path $resultDirectory "original-scheduler.images.override.yml"
 $runtimeOverride = Join-Path $resultDirectory "original-scheduler.runtime.override.yml"
 $loadScript = Join-Path $RepositoryRoot "experiment/load/mission-load.js"
-$nodeCommand = if ($env:NODE_COMMAND) { $env:NODE_COMMAND } else { "node" }
+$requestedNodeCommand = $env:NODE_COMMAND
+$nodeCommand = $null
 $canonicalImageContractPath = Join-Path $RepositoryRoot "experiment/results/matrix-image-contract.json"
 $expectedMvcImageId = "sha256:984fa39f3ab397d831086f8bef96402180c1d80d2d47b0a0274b2189652b6d4d"
 $expectedMockImageId = "sha256:0bbf354a08732a5dbfd3a3013218a6f1955d74c1bc41ecc407e819ba1788bbf6"
@@ -36,6 +37,61 @@ $runLockedMockImage = "doeng-mvc-ai-original-scheduler-mock:locked"
 function Write-JsonFile {
     param([string]$Path, $object)
     $object | ConvertTo-Json -Depth 20 | Set-Content -Encoding UTF8 -LiteralPath $Path
+}
+
+function Resolve-NodeExecutable {
+    $candidates = @()
+    $sources = @{}
+    if (-not [string]::IsNullOrWhiteSpace($requestedNodeCommand)) {
+        if ([IO.Path]::IsPathRooted($requestedNodeCommand)) {
+            $candidates += $requestedNodeCommand
+            $sources[$requestedNodeCommand] = "NODE_COMMAND"
+        } else {
+            $command = Get-Command $requestedNodeCommand -All -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($command) {
+                $candidates += $command.Source
+                $sources[$command.Source] = "NODE_COMMAND"
+            }
+        }
+    } else {
+        $command = Get-Command node -All -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($command) {
+            $candidates += $command.Source
+            $sources[$command.Source] = "GET_COMMAND"
+        }
+        $localNode = "C:\Users\KOSCOM\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe"
+        if (Test-Path -LiteralPath $localNode) {
+            $candidates += $localNode
+            $sources[$localNode] = "VERIFIED_LOCAL_PATH"
+        }
+    }
+    foreach ($candidate in @($candidates | Select-Object -Unique)) {
+        if (-not (Test-Path -LiteralPath $candidate)) { continue }
+        $versionOutput = @(& $candidate --version 2>&1)
+        $exitCode = $LASTEXITCODE
+        if ($exitCode -eq 0 -and $versionOutput.Count -gt 0) {
+            $contract = [ordered]@{
+                requestedNodeCommand = $requestedNodeCommand
+                resolvedExecutable = $candidate
+                version = ([string]($versionOutput -join " ")).Trim()
+                resolutionSource = $sources[$candidate]
+                preflightExitCode = $exitCode
+                pass = $true
+            }
+            Write-JsonFile (Join-Path $resultDirectory "node-runtime-contract.json") $contract
+            return $contract
+        }
+    }
+    $contract = [ordered]@{
+        requestedNodeCommand = $requestedNodeCommand
+        resolvedExecutable = $null
+        version = $null
+        resolutionSource = $null
+        preflightExitCode = $null
+        pass = $false
+    }
+    Write-JsonFile (Join-Path $resultDirectory "node-runtime-contract.json") $contract
+    throw "NODE_RUNTIME_CONTRACT: FAIL"
 }
 
 function Get-ComposeFilesBase64 {
@@ -364,6 +420,7 @@ $script:bootstrapStage = "IMAGE_CONTRACT"
 $script:performanceWorkloadStarted = $false
 $script:imageContractPass = $false
 $script:freshProjectGuardPass = $false
+$script:nodeRuntimeContractPass = $false
 try {
     Assert-CanonicalImageContract
     $script:imageContractPass = $true
@@ -372,11 +429,17 @@ try {
     $script:bootstrapStage = "FRESH_PROJECT_GUARD"
     Assert-FreshProject
     $script:freshProjectGuardPass = $true
+    $script:bootstrapStage = "NODE_RUNTIME_CONTRACT"
+    $nodeContract = Resolve-NodeExecutable
+    $nodeCommand = $nodeContract.resolvedExecutable
+    $script:nodeRuntimeContractPass = $true
     if ($BootstrapOnly) {
         Write-JsonFile (Join-Path $resultDirectory "measurement-validity.json") ([ordered]@{
             imageContract = "PASS"
             freshProjectGuard = "PASS"
+            nodeRuntimeContract = "PASS"
             measurementValid = $false
+            composeStarted = $false
             performanceWorkloadStarted = $false
         })
         Write-Output "BOOTSTRAP_ONLY_VALIDATION: PASS"
@@ -394,7 +457,9 @@ try {
     Write-JsonFile (Join-Path $resultDirectory "measurement-validity.json") ([ordered]@{
         imageContract = if ($script:imageContractPass) { "PASS" } else { "FAIL" }
         freshProjectGuard = if ($script:freshProjectGuardPass) { "PASS" } else { "FAIL" }
+        nodeRuntimeContract = if ($script:nodeRuntimeContractPass) { "PASS" } else { "FAIL" }
         measurementValid = $false
+        composeStarted = $false
         performanceWorkloadStarted = $false
     })
     throw
@@ -444,6 +509,9 @@ $script:observerContractPass = $false
 $script:mvcFinalStatePass = $false
 $script:mockFinalStatePass = $false
 $script:nodeExitCode = $null
+$script:clientProcessInvocationAttempted = $false
+$script:clientProcessStarted = $false
+$clientProcess = $null
 try {
     $script:bootstrapStage = "COMPOSE_STARTUP"
     & docker compose -p $composeProject -f $baseCompose -f $imageOverride -f $runtimeOverride up -d --no-build mariadb experiment-mock mvc
@@ -501,11 +569,15 @@ try {
     $env:SEND_MISSION_RUN_ID = "false"
     $env:SEND_SCENE_ID = "false"
 
-    $script:bootstrapStage = "CLIENT_WORKLOAD"
-    $script:performanceWorkloadStarted = $true
+    $script:bootstrapStage = "CLIENT_PROCESS_BOOTSTRAP"
+    $script:clientProcessInvocationAttempted = $true
     $clientStartedAt = Get-Date
-    & $nodeCommand $loadScript 1> $clientStdout 2> $clientStderr
-    $nodeExitCode = $LASTEXITCODE
+    $clientProcess = Start-Process -FilePath $nodeCommand -ArgumentList @($loadScript) `
+        -RedirectStandardOutput $clientStdout -RedirectStandardError $clientStderr `
+        -Wait -PassThru -NoNewWindow
+    $script:clientProcessStarted = $true
+    $script:performanceWorkloadStarted = $true
+    $nodeExitCode = $clientProcess.ExitCode
     $script:nodeExitCode = $nodeExitCode
     $clientFinishedAt = Get-Date
     Write-JsonFile (Join-Path $resultDirectory "client-process-contract.json") ([ordered]@{
@@ -513,6 +585,11 @@ try {
         finishedAt = $clientFinishedAt.ToUniversalTime().ToString("o")
         elapsedMs = ($clientFinishedAt - $clientStartedAt).TotalMilliseconds
         nodeCommand = $nodeCommand
+        resolvedNodeExecutable = $nodeContract.resolvedExecutable
+        nodeVersion = $nodeContract.version
+        processId = $clientProcess.Id
+        processStarted = $script:clientProcessStarted
+        invocationAttempted = $script:clientProcessInvocationAttempted
         scriptPath = $loadScript
         exitCode = $nodeExitCode
         resultPath = $clientResults
@@ -551,6 +628,17 @@ try {
 }
 catch {
     $originalError = $_
+    if ($script:clientProcessInvocationAttempted -and -not (Test-Path -LiteralPath (Join-Path $resultDirectory "client-process-contract.json"))) {
+        Write-JsonFile (Join-Path $resultDirectory "client-process-contract.json") ([ordered]@{
+            nodeCommand = $nodeCommand
+            resolvedNodeExecutable = if ($nodeContract) { $nodeContract.resolvedExecutable } else { $null }
+            nodeVersion = if ($nodeContract) { $nodeContract.version } else { $null }
+            processId = if ($clientProcess) { $clientProcess.Id } else { $null }
+            processStarted = $script:clientProcessStarted
+            invocationAttempted = $script:clientProcessInvocationAttempted
+            exitCode = $script:nodeExitCode
+        })
+    }
     Write-JsonFile (Join-Path $resultDirectory "bootstrap-failure.json") ([ordered]@{
         stage = $script:bootstrapStage
         message = $_.Exception.Message
@@ -585,12 +673,13 @@ finally {
     }
     if ($Execute) {
         $measurementValid = $script:imageContractPass -and $script:freshProjectGuardPass -and
-            $script:startupGatePass -and $script:mvcRuntimeContractPass -and $script:mockRuntimeContractPass -and
+            $script:nodeRuntimeContractPass -and $script:startupGatePass -and $script:mvcRuntimeContractPass -and $script:mockRuntimeContractPass -and
             $script:nodeExitCode -eq 0 -and $script:clientAccountingPass -and $script:schedulerContractPass -and
             $script:observerContractPass -and $script:mvcFinalStatePass -and $script:mockFinalStatePass
         Write-JsonFile (Join-Path $resultDirectory "measurement-validity.json") ([ordered]@{
             imageContract = if ($script:imageContractPass) { "PASS" } else { "FAIL" }
             freshProjectGuard = if ($script:freshProjectGuardPass) { "PASS" } else { "FAIL" }
+            nodeRuntimeContract = if ($script:nodeRuntimeContractPass) { "PASS" } else { "FAIL" }
             startupGate = if ($script:startupGatePass) { "PASS" } else { "FAIL" }
             mvcRuntimeContract = if ($script:mvcRuntimeContractPass) { "PASS" } else { "FAIL" }
             mockRuntimeContract = if ($script:mockRuntimeContractPass) { "PASS" } else { "FAIL" }
@@ -600,6 +689,8 @@ finally {
             observerContract = if ($script:observerContractPass) { "PASS" } else { "FAIL" }
             mvcFinalState = if ($script:mvcFinalStatePass) { "PASS" } else { "FAIL" }
             mockFinalState = if ($script:mockFinalStatePass) { "PASS" } else { "FAIL" }
+            clientProcessInvocationAttempted = $script:clientProcessInvocationAttempted
+            clientProcessStarted = $script:clientProcessStarted
             performanceWorkloadStarted = $script:performanceWorkloadStarted
             measurementValid = $measurementValid
         })
