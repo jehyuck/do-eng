@@ -1,0 +1,10 @@
+﻿{
+    "completed":  true,
+    "startCommand":  "jcmd 1 JFR.start name=doeng_I1S_AI1S_MVC_JFR002 settings=profile maxsize=64m",
+    "stopCommand":  "jcmd 1 JFR.stop name=doeng_I1S_AI1S_MVC_JFR002 filename=/tmp/I1S-AI1S-MVC-JFR002.jfr",
+    "stopSucceeded":  true,
+    "sourceBytes":  48331364,
+    "copiedBytes":  48331364,
+    "summaryFile":  "jfr-summary.txt",
+    "valid":  true
+}

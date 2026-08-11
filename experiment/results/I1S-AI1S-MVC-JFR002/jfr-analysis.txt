@@ -1,0 +1,57 @@
+JFR analysis: I1S-AI1S-MVC-JFR002
+Recording: jvm-recording.jfr
+SHA-256: 3016C3305D386BF9D78477DD4E45D39BA7E0268787751352F6EA73823D1676DF
+
+Capture validation
+- JFR.start: jcmd 1 JFR.start name=doeng_I1S_AI1S_MVC_JFR002 settings=profile maxsize=64m
+- JFR.stop: jcmd 1 JFR.stop name=doeng_I1S_AI1S_MVC_JFR002 filename=/tmp/I1S-AI1S-MVC-JFR002.jfr
+- stopSucceeded: true
+- sourceBytes: 48331364
+- copiedBytes: 48331364
+- jfr summary: success
+
+Execution samples
+- jdk.ExecutionSample events: 2346
+- Top observed stack-frame occurrences:
+  1. java.util.Base64$Decoder.decode: 577
+  2. com.fasterxml.jackson.core.json.UTF8JsonGenerator._writeStringSegments: 499
+  3. com.fasterxml.jackson.databind.ser.std.MapSerializer.serializeFields: 467
+  4. com.fasterxml.jackson.core.json.UTF8JsonGenerator.writeString: 465
+  5. com.fasterxml.jackson.databind.ser.std.StringSerializer.serialize: 465
+  6. com.fasterxml.jackson.databind.deser.std.StringDeserializer.deserialize: 405
+  7. com.fasterxml.jackson.core.json.UTF8StreamJsonParser._finishAndReturnString: 358
+  8. com.example.doenggamemvc.controller.MissionController.requestFaceAi: 301
+  9. com.example.doenggamemvc.util.ImagePayloadDecoder.decodeDataUrlOrBase64: 290
+  10. org.apache.http.impl.execchain.MainClientExec.execute: 54
+  11. org.springframework.web.client.RestTemplate.doExecute: 43
+
+The counts above are sampled stack-frame occurrences, not CPU percentages.
+
+Thread and I/O observations
+- jdk.ThreadPark events: 16103.
+- 331 HikariPool-1 connection-adder parks were observed.
+- 266 parks each were observed for Catalina-utility-1 and Catalina-utility-2.
+- Many http-nio-8000-exec threads parked on ReentrantLock$NonfairSync. The captured stack depth ended at AQS acquire/park frames, so the owning application lock/call site is not uniquely identified.
+- jdk.SocketRead events: 60054 in the JFR summary.
+- Execution samples include Apache HttpClient MainClientExec/ProtocolExec/RetryExec and Spring RestTemplate calls. This supports blocking outbound socket-response activity in the MVC request path; a separate connection-acquire wait was not directly isolated by JFR.
+
+GC and allocation observations
+- jdk.GarbageCollection events: 637.
+- GC duration total across jdk.GarbageCollection events: approximately 52244.99 ms.
+- Maximum individual jdk.GarbageCollection duration: approximately 2141.09 ms.
+- 49 GC events were at least 100 ms; 36 were at least 500 ms.
+- Allocation-related events in the JFR summary included 336402 ObjectAllocationOutsideTLAB, 219158 ObjectAllocationInNewTLAB, 303914 PromoteObjectInNewPLAB, and 222488 PromoteObjectOutsidePLAB.
+- The sampled allocation/CPU path is concentrated in Jackson JSON serialization/deserialization and Base64/image decoding. This supports allocation pressure, but does not prove that allocation alone is the primary trigger.
+
+Database
+- JFR contains JDBC-related request-path context only indirectly through the captured application path; no unique dominant JDBC wait stack was established.
+- Existing paired database evidence remains low-pressure (Threads_connected <= 11, Threads_running <= 2). Database is not supported as the primary cause.
+
+Assessment
+- TRIGGER: request-side JSON/Base64 CPU and allocation work is supported by ExecutionSample evidence.
+- AMPLIFIER: blocking outbound HTTP activity keeps MVC request workers occupied; supported by Apache HttpClient/RestTemplate samples and SocketRead volume, but connection-acquire versus socket-response wait is not fully separable.
+- FINAL_COLLAPSE_STATE: multiple coupled pressures, consistent with the observed MVC timeout outcome; JFR alone does not isolate a single final resource boundary.
+- CURRENT_PRIMARY_BOTTLENECK: MULTIPLE_COUPLED
+- CURRENT_ROOT_CAUSE_CONFIDENCE: MEDIUM
+- DATABASE_PRIMARY_CAUSE: NOT_SUPPORTED
+- HISTORICAL_DISCREPANCY: STILL_UNEXPLAINED
