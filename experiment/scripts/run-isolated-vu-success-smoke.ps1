@@ -485,7 +485,6 @@ try {
 
     $monitorProcess = $null
     $monitorDurationSeconds = [int][Math]::Ceiling($DurationMs / 1000) + 2
-    $jfrDurationSeconds = $monitorDurationSeconds + 3
     $jfrContainerFile = "/tmp/$RunId.jfr"
     $serverContainerId = $null
     if ($observabilityEnabled) {
@@ -497,7 +496,7 @@ try {
             $jfrName = "doeng_" + ($RunId -replace "[^A-Za-z0-9_]", "_")
             $jfrStartArguments = @(
                 "1", "JFR.start", "name=$jfrName", "settings=profile",
-                "duration=$($jfrDurationSeconds)s", "filename=$jfrContainerFile", "maxsize=64m"
+                "maxsize=64m"
             )
             $jfrStartOutput = & docker exec $serverContainerId env -u JAVA_TOOL_OPTIONS jcmd @jfrStartArguments 2>&1
             if ($LASTEXITCODE -ne 0) {
@@ -505,9 +504,11 @@ try {
                 throw "JFR start failed"
             }
             $jfrStartedAt = Get-Date
+            $jfrStartCommandText = "jcmd " + ($jfrStartArguments -join " ")
             [ordered]@{
                 containerId = $serverContainerId
-                command = "jcmd " + ($jfrStartArguments -join " ")
+                command = $jfrStartCommandText
+                startCommand = $jfrStartCommandText
                 startedAt = $jfrStartedAt.ToUniversalTime().ToString("o")
             } | ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "jfr-command.json")
         }
@@ -572,32 +573,29 @@ try {
         $jfrValidation = $null
         $jfrRecordingPath = $null
         if ($jfrEnabled) {
-            # A non-empty JFR file is created while recording is still running.
-            # Wait for completion before copying the diagnostic artifact.
-            $jfrEarliestCompletion = $jfrStartedAt.AddSeconds($jfrDurationSeconds)
-            $jfrCompletionDeadline = $jfrEarliestCompletion.AddSeconds(10)
-            $jfrCompleted = $false
-            $jfrCheckText = ""
-            while ((Get-Date) -lt $jfrCompletionDeadline) {
-                if ((Get-Date) -lt $jfrEarliestCompletion) {
-                    Start-Sleep -Milliseconds 500
-                    continue
-                }
-                $jfrCheckOutput = & docker exec $serverContainerId env -u JAVA_TOOL_OPTIONS `
-                    jcmd 1 JFR.check "name=$jfrName" 2>&1
-                $jfrCheckText = (@($jfrCheckOutput) -join "`n")
-                if ($jfrCheckText -notmatch "\(running\)") {
-                    $jfrCompleted = $true
-                    break
-                }
-                Start-Sleep -Milliseconds 500
+            $jfrStopArguments = @(
+                "1", "JFR.stop", "name=$jfrName", "filename=$jfrContainerFile"
+            )
+            $jfrStopCommandText = "jcmd " + ($jfrStopArguments -join " ")
+            $jfrStoppedAt = Get-Date
+            [ordered]@{
+                containerId = $serverContainerId
+                stopCommand = $jfrStopCommandText
+                stoppedAt = $jfrStoppedAt.ToUniversalTime().ToString("o")
+            } | ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "jfr-stop-command.json")
+
+            $jfrStopOutput = & docker exec $serverContainerId env -u JAVA_TOOL_OPTIONS jcmd @jfrStopArguments 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                $jfrStopOutput | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "jfr-stop.stderr.log")
+                throw "JFR stop failed"
             }
-            if (-not $jfrCompleted) { throw "JFR recording did not finish before its deadline" }
+            $jfrStopOutput | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "jfr-stop.stdout.log")
+            $jfrCompleted = $true
 
             $jfrSummaryPath = Join-Path $runDirectory "jfr-summary.txt"
             & docker exec $serverContainerId env -u JAVA_TOOL_OPTIONS jfr summary $jfrContainerFile |
                 Set-Content -Encoding UTF8 -LiteralPath $jfrSummaryPath
-            if ($LASTEXITCODE -ne 0) { throw "JFR summary failed after recording completion" }
+            if ($LASTEXITCODE -ne 0) { throw "JFR summary failed after JFR stop" }
 
             $jfrSourceSizeText = (@(& docker exec $serverContainerId sh -c "wc -c < '$jfrContainerFile'" 2>$null) -join "").Trim()
             if ($jfrSourceSizeText -notmatch "^\d+$") { throw "JFR source size could not be read" }
@@ -614,7 +612,9 @@ try {
 
             $jfrValidation = [ordered]@{
                 completed = $jfrCompleted
-                checkOutput = $jfrCheckText
+                startCommand = $jfrStartCommandText
+                stopCommand = $jfrStopCommandText
+                stopSucceeded = $true
                 sourceBytes = $jfrSourceBytes
                 copiedBytes = $jfrCopiedBytes
                 summaryFile = "jfr-summary.txt"
