@@ -314,6 +314,116 @@ ORDER BY member_id, mission_run_id;
     })
 }
 
+function Get-ServerContainerId {
+    param([switch]$IncludeStopped)
+    $psArguments = @("ps", "-q")
+    if ($IncludeStopped) { $psArguments += "--all" }
+    $output = @(& docker compose -p $ComposeProject @composeArguments @psArguments 2>$null)
+    if ($LASTEXITCODE -ne 0) { return $null }
+    $ids = @($output | ForEach-Object {
+        $value = ([string]$_).Trim()
+        if (-not [string]::IsNullOrWhiteSpace($value)) { $value }
+    })
+    if ($ids.Count -gt 1) {
+        throw "Expected exactly one server container for $ServerService; found $($ids.Count)"
+    }
+    if ($ids.Count -eq 1) { return $ids[0] }
+    return $null
+}
+
+function Get-SafeContainerState {
+    param([Parameter(Mandatory = $true)][string]$ContainerId)
+    $inspectOutput = @(& docker inspect $ContainerId 2>&1)
+    if ($LASTEXITCODE -ne 0) { throw "docker inspect failed for $ContainerId" }
+    $container = (($inspectOutput -join [Environment]::NewLine) | ConvertFrom-Json -ErrorAction Stop)[0]
+    return [ordered]@{
+        containerId = $container.Id
+        name = $container.Name
+        image = $container.Config.Image
+        restartCount = $container.RestartCount
+        state = [ordered]@{
+            status = $container.State.Status
+            running = $container.State.Running
+            restarting = $container.State.Restarting
+            paused = $container.State.Paused
+            dead = $container.State.Dead
+            exitCode = $container.State.ExitCode
+            oomKilled = $container.State.OOMKilled
+            error = $container.State.Error
+            startedAt = $container.State.StartedAt
+            finishedAt = $container.State.FinishedAt
+        }
+        hostConfig = [ordered]@{
+            nanoCpus = $container.HostConfig.NanoCpus
+            cpuQuota = $container.HostConfig.CpuQuota
+            cpuPeriod = $container.HostConfig.CpuPeriod
+            cpusetCpus = $container.HostConfig.CpusetCpus
+            memory = $container.HostConfig.Memory
+            memorySwap = $container.HostConfig.MemorySwap
+        }
+        capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+    }
+}
+
+function Capture-ApplicationDiagnostics {
+    param([Parameter(Mandatory = $true)][string]$ContainerId)
+    $capture = [ordered]@{
+        attempted = $true
+        succeeded = $false
+        capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+        exitCode = $null
+        applicationLog = "application-container.log"
+        phaseTrace = "mvc-phase-trace.jsonl"
+        phaseCount = 0
+        phaseTraceJsonlValid = $false
+        phaseParseFailures = 0
+    }
+    $recoveryErrors = @()
+    try {
+        $state = Get-SafeContainerState -ContainerId $ContainerId
+        $state | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "server-container-state.json")
+    } catch {
+        $recoveryErrors += "container-state: $($_.Exception.Message)"
+    }
+    try {
+        $applicationLogPath = Join-Path $runDirectory "application-container.log"
+        $phaseTracePath = Join-Path $runDirectory "mvc-phase-trace.jsonl"
+        $applicationLogOutput = @(& docker logs $ContainerId 2>&1)
+        $capture.exitCode = $LASTEXITCODE
+        $applicationLogOutput | Set-Content -Encoding UTF8 -LiteralPath $applicationLogPath
+        $phaseLines = @($applicationLogOutput | ForEach-Object {
+            $line = [string]$_
+            $marker = $line.IndexOf("DOENG_PHASE ", [System.StringComparison]::Ordinal)
+            if ($marker -ge 0) { $line.Substring($marker + "DOENG_PHASE ".Length) }
+        })
+        $phaseObjects = @()
+        foreach ($phaseLine in $phaseLines) {
+            try {
+                $phaseObject = $phaseLine | ConvertFrom-Json -ErrorAction Stop
+                $requiredFields = @("event", "runId", "requestId", "missionRunId", "capturedAt", "elapsedFromServerEnterMicros", "thread")
+                if (@($requiredFields | Where-Object { $null -eq $phaseObject.$_ }).Count -gt 0 -or
+                    ($phaseObject.event -match "_HTTP_" -and [string]::IsNullOrWhiteSpace([string]$phaseObject.outboundType))) {
+                    throw "required phase field missing"
+                }
+                $phaseObjects += $phaseObject
+            } catch {
+                $capture.phaseParseFailures += 1
+            }
+        }
+        $phaseLines | Set-Content -Encoding UTF8 -LiteralPath $phaseTracePath
+        $capture.phaseCount = $phaseLines.Count
+        $capture.phaseTraceJsonlValid = $capture.phaseParseFailures -eq 0
+        $capture.succeeded = $capture.exitCode -eq 0
+    } catch {
+        $recoveryErrors += "application-log: $($_.Exception.Message)"
+    }
+    if ($recoveryErrors.Count -gt 0) {
+        $recoveryErrors | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "application-diagnostic-recovery-error.txt")
+    }
+    $capture | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "application-log-capture.json")
+    return $capture
+}
+
 try {
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "capture-environment.ps1") `
         -RunId $RunId -NodeCommand $NodeCommand
@@ -483,16 +593,27 @@ try {
     $env:MOCK_DRAIN_PATH = Join-Path $runDirectory "mock-drain.jsonl"
     $env:MOCK_DRAIN_SUMMARY_PATH = Join-Path $runDirectory "mock-drain-summary.json"
 
-    $monitorProcess = $null
-    $monitorDurationSeconds = [int][Math]::Ceiling($DurationMs / 1000) + 2
-    $jfrContainerFile = "/tmp/$RunId.jfr"
-    $serverContainerId = $null
-    if ($observabilityEnabled) {
-        $serverContainerId = (& docker compose -p $ComposeProject @composeArguments ps -q $ServerService).Trim()
-        if ([string]::IsNullOrWhiteSpace($serverContainerId)) {
-            throw "Running server container was not found for observability: $ServerService"
-        }
-        if ($jfrEnabled) {
+$monitorProcess = $null
+$monitorDurationSeconds = [int][Math]::Ceiling($DurationMs / 1000) + 2
+$jfrContainerFile = "/tmp/$RunId.jfr"
+$serverContainerId = Get-ServerContainerId
+if ([string]::IsNullOrWhiteSpace($serverContainerId)) {
+    throw "Running server container was not found: $ServerService"
+}
+$applicationLogCapture = [ordered]@{
+    attempted = $false
+    succeeded = $false
+    capturedAt = $null
+    exitCode = $null
+    applicationLog = "application-container.log"
+    phaseTrace = "mvc-phase-trace.jsonl"
+    phaseCount = 0
+    phaseTraceJsonlValid = $false
+    phaseParseFailures = 0
+}
+$observability = $null
+if ($observabilityEnabled) {
+    if ($jfrEnabled) {
             $jfrName = "doeng_" + ($RunId -replace "[^A-Za-z0-9_]", "_")
             $jfrStartArguments = @(
                 "1", "JFR.start", "name=$jfrName", "settings=profile",
@@ -533,18 +654,6 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Load driver failed" }
     $clientStdout | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "client-summary.stdout.json")
 
-    $applicationLogCapture = [ordered]@{
-        attempted = $false
-        succeeded = $false
-        capturedAt = $null
-        exitCode = $null
-        applicationLog = $null
-        phaseTrace = $null
-        phaseCount = 0
-        phaseTraceJsonlValid = $false
-        phaseParseFailures = 0
-    }
-    $observability = $null
     if ($observabilityEnabled) {
         $monitorStatus = $null
         if ($containerMonitorEnabled) {
@@ -670,48 +779,7 @@ try {
     $mockMetrics = Invoke-RestMethod -Uri "$mockBaseUrl/__metrics"
     $mockMetrics | ConvertTo-Json -Depth 6 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "mock-metrics-after.json")
 
-    if ([string]::IsNullOrWhiteSpace($serverContainerId)) {
-        $serverContainerId = (& docker compose -p $ComposeProject @composeArguments ps -q $ServerService).Trim()
-    }
-    if (-not [string]::IsNullOrWhiteSpace($serverContainerId)) {
-        $applicationLogCapture.attempted = $true
-        $applicationLogCapture.capturedAt = (Get-Date).ToUniversalTime().ToString("o")
-        $applicationLogPath = Join-Path $runDirectory "application-container.log"
-        $phaseTracePath = Join-Path $runDirectory "mvc-phase-trace.jsonl"
-        $applicationLogOutput = @(& docker logs $serverContainerId 2>&1)
-        $applicationLogExitCode = $LASTEXITCODE
-        $applicationLogOutput | Set-Content -Encoding UTF8 -LiteralPath $applicationLogPath
-        $phaseLines = @($applicationLogOutput | ForEach-Object {
-            $line = [string]$_
-            $marker = $line.IndexOf("DOENG_PHASE ", [System.StringComparison]::Ordinal)
-            if ($marker -ge 0) {
-                $line.Substring($marker + "DOENG_PHASE ".Length)
-            }
-        })
-        $phaseObjects = @()
-        $phaseParseFailures = 0
-        foreach ($phaseLine in $phaseLines) {
-            try {
-                $phaseObject = $phaseLine | ConvertFrom-Json
-                $requiredFields = @("event", "runId", "requestId", "missionRunId", "capturedAt", "elapsedFromServerEnterMicros", "thread")
-                if (@($requiredFields | Where-Object { $null -eq $phaseObject.$_ }).Count -gt 0 -or
-                    ($phaseObject.event -match "_HTTP_" -and [string]::IsNullOrWhiteSpace([string]$phaseObject.outboundType))) {
-                    throw "required phase field missing"
-                }
-                $phaseObjects += $phaseObject
-            } catch {
-                $phaseParseFailures += 1
-            }
-        }
-        $phaseLines | Set-Content -Encoding UTF8 -LiteralPath $phaseTracePath
-        $applicationLogCapture.succeeded = $applicationLogExitCode -eq 0
-        $applicationLogCapture.exitCode = $applicationLogExitCode
-        $applicationLogCapture.applicationLog = "application-container.log"
-        $applicationLogCapture.phaseTrace = "mvc-phase-trace.jsonl"
-        $applicationLogCapture.phaseCount = $phaseLines.Count
-        $applicationLogCapture.phaseTraceJsonlValid = $phaseParseFailures -eq 0
-        $applicationLogCapture.phaseParseFailures = $phaseParseFailures
-    }
+    $applicationLogCapture = Capture-ApplicationDiagnostics -ContainerId $serverContainerId
 
     $clientResult = Get-Content -Raw -LiteralPath (Join-Path $runDirectory "client-results.json") | ConvertFrom-Json
     $missionCompletions = @(Get-MissionCompletions -Users @($preparedUsers.users))
@@ -817,6 +885,33 @@ try {
     $verification | ConvertTo-Json -Depth 8
     if ($executionValidity -ne "VALID") { throw "Isolated VU execution verification failed" }
 } finally {
+    try {
+        $diagnosticStatePath = Join-Path $runDirectory "server-container-state.json"
+        $diagnosticLogPath = Join-Path $runDirectory "application-container.log"
+        $diagnosticRecoveryNeeded =
+            -not (Test-Path -LiteralPath $diagnosticStatePath) -or
+            -not (Test-Path -LiteralPath $diagnosticLogPath) -or
+            $null -eq $applicationLogCapture -or
+            -not $applicationLogCapture.succeeded
+        if ($diagnosticRecoveryNeeded) {
+            $recoveryContainerId = $serverContainerId
+            if ([string]::IsNullOrWhiteSpace($recoveryContainerId)) {
+                $recoveryContainerId = Get-ServerContainerId -IncludeStopped
+            }
+            if (-not [string]::IsNullOrWhiteSpace($recoveryContainerId)) {
+                $recoveredCapture = Capture-ApplicationDiagnostics -ContainerId $recoveryContainerId
+                if ($null -eq $applicationLogCapture -or -not $applicationLogCapture.succeeded) {
+                    $applicationLogCapture = $recoveredCapture
+                }
+            } else {
+                "container lookup: server container was not found during diagnostic recovery" |
+                    Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "application-diagnostic-recovery-error.txt")
+            }
+        }
+    } catch {
+        $_.Exception.Message |
+            Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "application-diagnostic-recovery-error.txt")
+    }
     Remove-Item -LiteralPath $privateTokenPath -Force -ErrorAction SilentlyContinue
     Remove-Item Env:AUTH_TOKENS_PATH -ErrorAction SilentlyContinue
     Remove-Item Env:LOAD_SCENARIO -ErrorAction SilentlyContinue
