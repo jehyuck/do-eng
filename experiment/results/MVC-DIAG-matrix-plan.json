@@ -1,0 +1,199 @@
+﻿{
+    "generatedAt":  "2026-08-11T10:13:14.5768751Z",
+    "cases":  [
+                  {
+                      "id":  "T00",
+                      "kind":  "TOPOLOGY",
+                      "mode":  "INGRESS",
+                      "payload":  "SMALL",
+                      "aiDelayMs":  0,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "T01",
+                      "kind":  "TOPOLOGY",
+                      "mode":  "INGRESS",
+                      "payload":  "REAL",
+                      "aiDelayMs":  0,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "T02",
+                      "kind":  "TOPOLOGY",
+                      "mode":  "AI",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "T03",
+                      "kind":  "TOPOLOGY",
+                      "mode":  "AI_DECODE",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "T04",
+                      "kind":  "TOPOLOGY",
+                      "mode":  "AI_STORAGE",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "T05",
+                      "kind":  "TOPOLOGY",
+                      "mode":  "TOKEN_AI_STORAGE",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "T06",
+                      "kind":  "TOPOLOGY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "T07",
+                      "kind":  "TOPOLOGY",
+                      "mode":  "FULL_ORIGINAL_SCHEDULER",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B00",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B01",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B02",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  0,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B03",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  500,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B04",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B05",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  2000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B06",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  3000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B07",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  2000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B08",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  10000
+                  },
+                  {
+                      "id":  "B09",
+                      "kind":  "BOUNDARY",
+                      "mode":  "FULL",
+                      "payload":  "REAL",
+                      "aiDelayMs":  1000,
+                      "storageDelayMs":  100,
+                      "intervalMs":  1000,
+                      "requestTimeoutMs":  30000
+                  }
+              ],
+    "readinessGate":  {
+                          "stableWindowSeconds":  10,
+                          "maxWaitSeconds":  120,
+                          "loadAllowedOnlyAfter":  [
+                                                       "CONTAINER_RUNNING",
+                                                       "LIVENESS_UP",
+                                                       "READINESS_UP",
+                                                       "MAIN_HTTP_CANARY_PASS",
+                                                       "MOCK_READY_AND_IDLE",
+                                                       "APPLICATION_IDLE",
+                                                       "STABLE_WINDOW"
+                                                   ]
+                      },
+    "executed":  false
+}

@@ -1,0 +1,25 @@
+﻿{
+    "containerId":  "8a1bb159fa7921af55f4c6ab0c6a81a861d9d87ade9ab2a354d66c727f2a5999",
+    "name":  "/doeng-mvcdiag-t00-mvc-1",
+    "image":  "sha256:984fa39f3ab397d831086f8bef96402180c1d80d2d47b0a0274b2189652b6d4d",
+    "state":  {
+                  "Status":  "running",
+                  "Running":  true,
+                  "Paused":  false,
+                  "Restarting":  false,
+                  "OOMKilled":  false,
+                  "Dead":  false,
+                  "Pid":  24610,
+                  "ExitCode":  0,
+                  "Error":  "",
+                  "StartedAt":  "2026-08-11T10:13:30.966236733Z",
+                  "FinishedAt":  "0001-01-01T00:00:00Z"
+              },
+    "restartCount":  0,
+    "hostConfig":  {
+                       "nanoCpus":  2000000000,
+                       "memory":  3221225472,
+                       "memorySwap":  6442450944
+                   },
+    "capturedAt":  "2026-08-11T10:13:32.0346125Z"
+}

@@ -1,0 +1,5 @@
+﻿services:
+  mvc:
+    image: doeng-mvcdiag-mvc:locked
+  experiment-mock:
+    image: doeng-mvcdiag-mock:locked
