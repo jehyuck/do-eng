@@ -1,0 +1,45 @@
+﻿{
+    "git":  {
+                "head":  "e48bb086683c484d20e2fb8ab936b272d204aba0",
+                "branch":  "experiment/webflux-runtime-evidence-handoff"
+            },
+    "implementation":  "mvc",
+    "composeProject":  "doeng-mvcdiag-t02-ai0-small-001",
+    "composeFiles":  [
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment.yaml",
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\mvc-diagnostic-images.override.yml",
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\MVC-DIAG-T02-AI0-SMALL-001\\mock-capacity.override.yml"
+                     ],
+    "composeFilesSource":  "BASE64_JSON",
+    "intendedVariation":  {
+                              "payloadProfile":  "SMALL",
+                              "mockCpu":  "4.0",
+                              "mockMemory":  "1GiB"
+                          },
+    "containers":  {
+                       "mvc":  {
+                                   "id":  "c04051cbc23fbc8e0ec965c02a1ffb2ce80378a60328ec374743a367c4dc65a0",
+                                   "imageId":  "sha256:edf0b39b32a6771edc24479b87a4ec273f7336a61aca08f837baaca6c34733e7",
+                                   "running":  true,
+                                   "restartCount":  0,
+                                   "oomKilled":  false,
+                                   "exitCode":  0
+                               },
+                       "experimentMock":  {
+                                              "id":  "df0ee3ec133a39d330ccd522230152183263327d5d6ea3d6f91a1122b82bab8e",
+                                              "imageId":  "sha256:fee2a6dcd7e412ea5aa6432b300aa6dacea0800dc2e0f00dae9160cd9dfe8bed",
+                                              "running":  true,
+                                              "restartCount":  0,
+                                              "oomKilled":  false,
+                                              "exitCode":  0
+                                          },
+                       "mariadb":  {
+                                       "id":  "7e1e90a703dbea686926c4f19ca4ec4ae9ceed3a980395bea5605894927efa3e",
+                                       "imageId":  "sha256:be981e4113326ada8d6004174dd09eeaefc03094037f811182a52d4f2e737350",
+                                       "running":  true,
+                                       "restartCount":  0,
+                                       "oomKilled":  false,
+                                       "exitCode":  0
+                                   }
+                   }
+}
