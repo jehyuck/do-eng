@@ -1,0 +1,18 @@
+﻿{
+    "nodePath":  "C:\\Users\\KOSCOM\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "nodeVersion":  "v24.14.0",
+    "scriptPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\load\\mvc-diagnostic-load.js",
+    "mode":  "INGRESS",
+    "payloadProfile":  "SMALL",
+    "activeUsers":  1,
+    "intervalMs":  1000,
+    "durationMs":  1000,
+    "requestTimeoutMs":  10000,
+    "targetUrl":  "http://127.0.0.1:8002/experiment/mvc-probe",
+    "resultPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\MVC-DIAG-CLIENT-SMOKE\\client-results.json",
+    "progressPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\MVC-DIAG-CLIENT-SMOKE\\client-progress.jsonl",
+    "fixturePath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\image\\arc.jpg",
+    "startedAt":  "2026-08-11T11:07:44.7284980Z",
+    "finishedAt":  "2026-08-11T11:07:46.2510467Z",
+    "exitCode":  0
+}
