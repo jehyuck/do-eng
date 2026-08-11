@@ -39,15 +39,25 @@ const issuedTokens = new Map()
 
 function observeRequest(request, pathname) {
   requestSequence += 1
-  observedRequests.push({
+  const observedRequest = {
     sequence: requestSequence,
     observedAt: new Date().toISOString(),
+    completedAt: null,
+    status: null,
     method: request.method,
     path: pathname,
     contentLength: Number(request.headers["content-length"] || 0),
     experimentRunId: request.headers["x-experiment-run-id"] || null,
     experimentRequestId: request.headers["x-experiment-request-id"] || null,
-  })
+  }
+  observedRequests.push(observedRequest)
+  return observedRequest
+}
+
+function completeObservedRequest(observedRequest, response) {
+  if (!observedRequest) return
+  observedRequest.completedAt = new Date().toISOString()
+  observedRequest.status = response.statusCode
 }
 
 function getSocketId(socket) {
@@ -205,7 +215,8 @@ const server = http.createServer(async (request, response) => {
   }
 
   if (request.method === "GET" && url.pathname === "/api/member/ai") {
-    observeRequest(request, url.pathname)
+    const observedRequest = observeRequest(request, url.pathname)
+    response.once("finish", () => completeObservedRequest(observedRequest, response))
     const memberId = parseMemberId(request.headers.authorization)
     if (memberId === null) {
       sendJson(response, 401, { error: "mock token is not issued" })
@@ -371,7 +382,8 @@ const server = http.createServer(async (request, response) => {
   }
 
   if (request.method === "PUT" && url.pathname === "/storage/object") {
-    observeRequest(request, url.pathname)
+    const observedRequest = observeRequest(request, url.pathname)
+    response.once("finish", () => completeObservedRequest(observedRequest, response))
     try {
       const objectKey = url.searchParams.get("key")
       if (!objectKey) {
@@ -418,7 +430,8 @@ const server = http.createServer(async (request, response) => {
   }
 
   if (request.method === "POST" && isAnalyzePath(url.pathname)) {
-    observeRequest(request, url.pathname)
+    const observedRequest = observeRequest(request, url.pathname)
+    response.once("finish", () => completeObservedRequest(observedRequest, response))
     const requestGeneration = resetGeneration
     const lifecycle = {
       requestReceived: true,

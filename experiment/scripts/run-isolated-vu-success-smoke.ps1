@@ -533,6 +533,33 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Load driver failed" }
     $clientStdout | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "client-summary.stdout.json")
 
+    $applicationLogCapture = [ordered]@{
+        attempted = $false
+        succeeded = $false
+        exitCode = $null
+        applicationLog = $null
+        phaseTrace = $null
+        phaseCount = 0
+    }
+    if ([string]::IsNullOrWhiteSpace($serverContainerId)) {
+        $serverContainerId = (& docker compose -p $ComposeProject @composeArguments ps -q $ServerService).Trim()
+    }
+    if (-not [string]::IsNullOrWhiteSpace($serverContainerId)) {
+        $applicationLogCapture.attempted = $true
+        $applicationLogPath = Join-Path $runDirectory "application-container.log"
+        $phaseTracePath = Join-Path $runDirectory "mvc-phase-trace.jsonl"
+        $applicationLogOutput = @(& docker logs $serverContainerId 2>&1)
+        $applicationLogExitCode = $LASTEXITCODE
+        $applicationLogOutput | Set-Content -Encoding UTF8 -LiteralPath $applicationLogPath
+        $phaseLines = @($applicationLogOutput | Where-Object { [string]$_ -match "DOENG_PHASE " })
+        $phaseLines | Set-Content -Encoding UTF8 -LiteralPath $phaseTracePath
+        $applicationLogCapture.succeeded = $applicationLogExitCode -eq 0
+        $applicationLogCapture.exitCode = $applicationLogExitCode
+        $applicationLogCapture.applicationLog = "application-container.log"
+        $applicationLogCapture.phaseTrace = "mvc-phase-trace.jsonl"
+        $applicationLogCapture.phaseCount = $phaseLines.Count
+    }
+
     $observability = $null
     if ($observabilityEnabled) {
         $monitorStatus = $null
@@ -632,6 +659,7 @@ try {
             monitorSummaryExists = $containerMonitorEnabled -and (Test-Path -LiteralPath (Join-Path $runDirectory "container-monitor-summary.json"))
             applicationMetricsExists = $containerMonitorEnabled -and (Test-Path -LiteralPath (Join-Path $runDirectory "application-metrics.jsonl"))
             databaseMetricsExists = $containerMonitorEnabled -and (Test-Path -LiteralPath (Join-Path $runDirectory "database-metrics.jsonl"))
+            applicationLogCapture = $applicationLogCapture
             jfrEnabled = $jfrEnabled
             jfrExists = $jfrEnabled -and (Test-Path -LiteralPath $jfrRecordingPath)
             jfrValidated = $jfrEnabled -and $jfrValidation.valid
@@ -755,6 +783,7 @@ try {
             uncontrolledFailed = $uncontrolledFailedRequests.Count
             status503 = @($requests | Where-Object { $_.status -eq 503 }).Count
         }
+        applicationLogCapture = $applicationLogCapture
         observability = $observability
     }
     $verification | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "verification-summary.json")
