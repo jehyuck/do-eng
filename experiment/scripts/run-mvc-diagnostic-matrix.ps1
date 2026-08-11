@@ -338,6 +338,54 @@ function Invoke-B01Warmup($case, $target, $caseDir) {
     if (-not (Wait-IdleWindow 5)) { throw "B01 warmup idle gate failed" }
 }
 
+function Set-CaseMeasurementEnvironment($case, $target, $caseDir) {
+    $env:TARGET_URL = [string]$target
+    $env:MODE = [string]$case.mode
+    $env:PAYLOAD_PROFILE = [string]$case.payload
+    $env:ACTIVE_USERS = [string]$manifest.defaults.activeUsers
+    $env:INTERVAL_MS = [string]$case.intervalMs
+    $env:DURATION_MS = [string]$manifest.defaults.durationMs
+    $env:REQUEST_TIMEOUT_MS = [string]$case.requestTimeoutMs
+    $env:EXPERIMENT_RUN_ID = "MVC-DIAG-$($case.id)"
+    $env:RESULT_PATH = [IO.Path]::GetFullPath((Join-Path $caseDir "client-results.json"))
+    $env:PROGRESS_PATH = [IO.Path]::GetFullPath((Join-Path $caseDir "client-progress.jsonl"))
+    $env:FIXTURE_PATH = $fixturePath
+    $env:ANSWER = "happy"
+    $env:SCENE_ID = "2"
+    return [ordered]@{
+        caseId = [string]$case.id
+        mode = $env:MODE
+        targetUrl = $env:TARGET_URL
+        payloadProfile = $env:PAYLOAD_PROFILE
+        activeUsers = [int]$env:ACTIVE_USERS
+        intervalMs = [int]$env:INTERVAL_MS
+        durationMs = [int]$env:DURATION_MS
+        requestTimeoutMs = [int]$env:REQUEST_TIMEOUT_MS
+        experimentRunId = $env:EXPERIMENT_RUN_ID
+        resultPath = $env:RESULT_PATH
+        progressPath = $env:PROGRESS_PATH
+        fixturePath = $env:FIXTURE_PATH
+        authorizationMode = if (-not [string]::IsNullOrWhiteSpace($env:AUTH_TOKENS_PATH)) { "per-vu-token-file" } elseif (-not [string]::IsNullOrWhiteSpace($env:AUTH_TOKEN)) { "single-token" } else { "none" }
+    }
+}
+
+function Assert-B01MeasurementEnvironment($case, $caseDir, $measurementContract) {
+    $expectedResultPath = [IO.Path]::GetFullPath((Join-Path $caseDir "client-results.json"))
+    $expectedProgressPath = [IO.Path]::GetFullPath((Join-Path $caseDir "client-progress.jsonl"))
+    $guardPass = $env:ACTIVE_USERS -eq [string]$manifest.defaults.activeUsers -and
+        $env:DURATION_MS -eq [string]$manifest.defaults.durationMs -and
+        $env:EXPERIMENT_RUN_ID -eq "MVC-DIAG-B01" -and
+        [IO.Path]::GetFullPath($env:RESULT_PATH) -eq $expectedResultPath -and
+        [IO.Path]::GetFullPath($env:PROGRESS_PATH) -eq $expectedProgressPath -and
+        $env:MODE -eq [string]$case.mode -and
+        $env:PAYLOAD_PROFILE -eq [string]$case.payload -and
+        $env:INTERVAL_MS -eq [string]$case.intervalMs -and
+        $env:REQUEST_TIMEOUT_MS -eq [string]$case.requestTimeoutMs
+    $measurementContract.pass = $guardPass
+    $measurementContract | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $caseDir "measurement-contract.json")
+    if (-not $guardPass) { throw "B01_MEASUREMENT_ENVIRONMENT: FAIL" }
+}
+
 function Invoke-Case($case) {
     $project = "$ComposeProjectPrefix-$($case.id.ToLowerInvariant())"
     $caseDir = Join-Path $ResultsRoot "MVC-DIAG-$($case.id)"
@@ -379,20 +427,12 @@ function Invoke-Case($case) {
             Remove-Item Env:AUTH_TOKENS_PATH -ErrorAction SilentlyContinue
         }
         $target = if ($case.mode -in @("FULL", "FULL_ORIGINAL_SCHEDULER")) { "http://127.0.0.1:8002/game/face" } else { "http://127.0.0.1:8002/experiment/mvc-probe" }
-        $env:TARGET_URL = $target
-        $env:MODE = [string]$case.mode
-        $env:PAYLOAD_PROFILE = [string]$case.payload
-        $env:ACTIVE_USERS = [string]$manifest.defaults.activeUsers
-        $env:INTERVAL_MS = [string]$case.intervalMs
-        $env:DURATION_MS = [string]$manifest.defaults.durationMs
-        $env:REQUEST_TIMEOUT_MS = [string]$case.requestTimeoutMs
-        $env:EXPERIMENT_RUN_ID = "MVC-DIAG-$($case.id)"
-        $env:RESULT_PATH = Join-Path $caseDir "client-results.json"
-        $env:PROGRESS_PATH = Join-Path $caseDir "client-progress.jsonl"
-        $env:FIXTURE_PATH = $fixturePath
-        $env:ANSWER = "happy"
-        $env:SCENE_ID = "2"
-        if ($case.id -eq "B01") { Invoke-B01Warmup $case $target $caseDir }
+        $measurementContract = Set-CaseMeasurementEnvironment $case $target $caseDir
+        if ($case.id -eq "B01") {
+            Invoke-B01Warmup $case $target $caseDir
+            $measurementContract = Set-CaseMeasurementEnvironment $case $target $caseDir
+            Assert-B01MeasurementEnvironment $case $caseDir $measurementContract
+        }
         $observer = Start-Process -FilePath "powershell.exe" -ArgumentList @(
             "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "observe-mvc-diagnostic.ps1"),
             "-ComposeProject", $project, "-ServerService", "mvc", "-DurationSeconds", [string]([math]::Ceiling($manifest.defaults.durationMs / 1000)),
