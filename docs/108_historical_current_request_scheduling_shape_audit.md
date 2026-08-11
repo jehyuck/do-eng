@@ -11,6 +11,27 @@ Compared runs:
 
 Both runs use the recorded VU160/reconnect-ramp shape with 1,000 ms interval, 160 initial missions, staggered arrival, 3,000 ms activation interval, and 1,000 ms reconnect delay. AI delay differs (historical 2,000 ms; current 1,000 ms), so this document compares scheduling shape rather than latency or capacity.
 
+## Current source lock
+
+```text
+CURRENT_SOURCE_LOCK: PASS
+CURRENT_RUN: I1S-AI1S-M001
+CANONICAL_INDEX: experiment/results/I1S-AI1S-PAIR001-artifact-index.json
+CANONICAL_EVIDENCE_COMMIT: 4a19e9dcaaa8c0f34c35cf0cb08fe5443fcd20bf
+started: 16464
+completed: 16464
+http200: 60
+timeout: 16404
+connectionError: 0
+trueResponses: 60
+successRate: 0.3644%
+successfulRps: 0.571429
+totalRps: 156.8
+maxInFlight: 1615
+```
+
+All current values in this audit come from `experiment/results/I1S-AI1S-M001/**` and the canonical pair index. `I1S-AI1S-MVC-DIAG001`, `I1S-AI1S-MVC-JFR001`, and `I1S-AI1S-MVC-JFR002` are not used as current-run substitutes.
+
 ## Provenance and available fields
 
 The current `experiment/load/mission-load.js` SHA-256 is:
@@ -78,13 +99,13 @@ p95 11
 max 11
 ```
 
-The current client summary reports `maxInFlight=1600`; direct interval reconstruction from the timestamp-bearing subset reaches 1,615, so the two artifact-derived definitions are not identical. The summary value is retained as the canonical run metric, and the reconstruction is reported separately rather than silently substituted.
+The canonical M001 client summary reports `maxInFlight=1615`, and direct interval reconstruction from the same timestamp-bearing M001 records also reaches 1,615. These values agree; no value from the diagnostic or JFR runs is used here.
 
 Historical per-user interval and overlap distributions cannot be computed from the available `client-results.json`, because its request records lack the required timestamps. Historical global `maxInFlight=480` is valid as the recorded summary value, but `480 = 160 × 3` is not sufficient by itself to prove a hard per-user overlap cap of three.
 
 ## Response feedback and reconnect
 
-Historical recorded 15,351 HTTP 200/`true` responses, so mission completion and subsequent reconnect activity are present in its request records. Current `I1S-AI1S-M001` recorded no successful responses and 16,532 client timeouts; therefore the current run does not exercise a successful-response feedback transition that can be paired directly with the historical transition.
+Historical recorded 15,351 HTTP 200/`true` responses, so mission completion and subsequent reconnect activity are present in its request records. Canonical current `I1S-AI1S-M001` recorded 60 HTTP 200/`true` responses and 16,404 client timeouts; therefore only a small current successful-response subset is available for comparison with the historical feedback transition.
 
 The current run's request records show no success-triggered VU exits in its accounting. This supports continued scheduling after failed/timeout requests, but it does not establish that the historical and current reconnect implementation is source-identical.
 
@@ -98,13 +119,15 @@ HISTORICAL_DISCREPANCY_CANDIDATE:
 WORKLOAD_SCHEDULER_SEMANTICS_SUPPORTED
 ```
 
-The basis is the directly observed initial-arrival difference: historical had 160 scheduled by T+1.016s, whereas current reached 54 at T+1.003s, 161 at T+2.006s, and 321 at T+3.020s. The historical per-user timestamp evidence and historical source text are missing, so this is a supported discrepancy candidate, not proof that scheduler semantics alone caused the performance difference. The current run's larger in-flight population is also strongly affected by its response-time/timeout outcome.
+The basis is the directly observed initial-arrival difference: historical had 160 scheduled by T+1.016s, whereas current reached 54 at T+1.003s, 161 at T+2.006s, and 321 at T+3.020s. The historical per-user timestamp evidence and historical source text are missing, so this remains a supported shape discrepancy candidate, not proof that scheduler semantics alone caused the performance difference.
+
+The early completion comparison points in the opposite direction for a scheduler-only explanation of the current collapse: at the first progress sample at or after T+10s, historical had 1,511 starts and 1,191 completions, while current had 1,441 starts and only 4 completions. This supports an early completion discrepancy and moves the causal focus toward per-request processing/runtime behavior rather than arrival scheduling alone.
 
 ```text
 HISTORICAL_FIRST_START_SPREAD_MS: NOT_AVAILABLE; initial cohort <= 1,016 ms by progress sampling
 CURRENT_FIRST_START_SPREAD_MS: 2,982
 HISTORICAL_GLOBAL_PEAK_INFLIGHT: 480
-CURRENT_GLOBAL_PEAK_INFLIGHT: 1600 (summary); 1615 reconstructed from timestamp-bearing subset
+CURRENT_GLOBAL_PEAK_INFLIGHT: 1615 summary and reconstruction
 HISTORICAL_PER_USER_MAX_OVERLAP: UNKNOWN
 CURRENT_PER_USER_MAX_OVERLAP: min 10 / p50 10 / p95 11 / max 11
 HISTORICAL_INTERVAL_P50: UNKNOWN
@@ -113,6 +136,10 @@ HISTORICAL_FIRST_10S_STARTED: 1,511 at T+10.093s sample
 CURRENT_FIRST_10S_STARTED: 1,441 at T+10.073s sample
 HISTORICAL_FIRST_10S_PEAK_INFLIGHT: 340 at T+9.080s sample
 CURRENT_FIRST_10S_PEAK_INFLIGHT: 1,437 at T+10.073s sample
+HISTORICAL_FIRST_10S_COMPLETED: 1,191 at T+10.093s sample
+CURRENT_FIRST_10S_COMPLETED: 4 at T+10.073s sample
+EARLY_COMPLETION_DISCREPANCY: SUPPORTED
+SCHEDULER_CAUSAL_DIRECTION: DOES_NOT_SUPPORT_CURRENT_COLLAPSE
 PERFORMANCE_LOAD_EXECUTED: NO
 PRODUCTION_CODE_CHANGED: NO
 LOAD_DRIVER_CHANGED: NO
