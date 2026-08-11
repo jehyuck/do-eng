@@ -1,0 +1,19 @@
+﻿{
+    "composeFileCount":  2,
+    "composeFilesSource":  "BASE64_JSON",
+    "capturedAt":  "2026-08-11T11:45:19.5022150Z",
+    "durationSeconds":  60,
+    "intervalSeconds":  1,
+    "sampleCount":  17,
+    "failedSampleCount":  3,
+    "successfulApplicationSamples":  14,
+    "failedApplicationSamples":  3,
+    "successfulMockSamples":  5,
+    "failedMockSamples":  12,
+    "readinessFailures":  17,
+    "containerStateFailures":  0,
+    "coverageRatio":  0.82352941176470584,
+    "mockCoverageRatio":  0.29411764705882354,
+    "containerCoverageRatio":  1,
+    "observerValid":  true
+}
