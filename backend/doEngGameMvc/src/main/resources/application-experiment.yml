@@ -8,6 +8,12 @@ management:
   endpoint:
     health:
       show-details: never
+      probes:
+        enabled: true
+        add-additional-paths: true
+      group:
+        readiness:
+          include: readinessState,db
 
 server:
   tomcat:

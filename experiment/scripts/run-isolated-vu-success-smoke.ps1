@@ -374,6 +374,8 @@ function Capture-ApplicationDiagnostics {
         capturedAt = (Get-Date).ToUniversalTime().ToString("o")
         exitCode = $null
         applicationLog = "application-container.log"
+        stdoutLog = "application-container.stdout.log"
+        stderrLog = "application-container.stderr.log"
         phaseTrace = "mvc-phase-trace.jsonl"
         phaseCount = 0
         phaseTraceJsonlValid = $false
@@ -389,8 +391,14 @@ function Capture-ApplicationDiagnostics {
     try {
         $applicationLogPath = Join-Path $runDirectory "application-container.log"
         $phaseTracePath = Join-Path $runDirectory "mvc-phase-trace.jsonl"
-        $applicationLogOutput = @(& docker logs $ContainerId 2>&1)
-        $capture.exitCode = $LASTEXITCODE
+        $stdoutPath = Join-Path $runDirectory "application-container.stdout.log"
+        $stderrPath = Join-Path $runDirectory "application-container.stderr.log"
+        $logProcess = Start-Process -FilePath "docker" -ArgumentList @("logs", $ContainerId) -Wait -PassThru -NoNewWindow `
+            -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+        $capture.exitCode = [int]$logProcess.ExitCode
+        $stdoutLines = if (Test-Path -LiteralPath $stdoutPath) { @(Get-Content -LiteralPath $stdoutPath) } else { @() }
+        $stderrLines = if (Test-Path -LiteralPath $stderrPath) { @(Get-Content -LiteralPath $stderrPath) } else { @() }
+        $applicationLogOutput = @($stdoutLines + $stderrLines)
         $applicationLogOutput | Set-Content -Encoding UTF8 -LiteralPath $applicationLogPath
         $phaseLines = @($applicationLogOutput | ForEach-Object {
             $line = [string]$_

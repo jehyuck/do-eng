@@ -1,0 +1,44 @@
+{
+  "contractVersion": 1,
+  "defaults": {
+    "activeUsers": 160,
+    "intervalMs": 1000,
+    "durationMs": 60000,
+    "requestTimeoutMs": 10000,
+    "aiDelayMs": 1000,
+    "storageDelayMs": 100,
+    "appCpu": "2.0",
+    "appMemory": "3g",
+    "mvcMaxThreads": 400,
+    "httpMaxConnections": 400,
+    "dbPoolMaxSize": 10,
+    "javaXms": "512m",
+    "javaXmx": "2048m"
+  },
+  "topologyLadder": [
+    { "id": "T00", "mode": "INGRESS", "payload": "SMALL", "aiDelayMs": 0 },
+    { "id": "T01", "mode": "INGRESS", "payload": "REAL", "aiDelayMs": 0 },
+    { "id": "T02", "mode": "AI", "payload": "REAL", "aiDelayMs": 1000 },
+    { "id": "T03", "mode": "AI_DECODE", "payload": "REAL", "aiDelayMs": 1000 },
+    { "id": "T04", "mode": "AI_STORAGE", "payload": "REAL", "aiDelayMs": 1000, "storageDelayMs": 100 },
+    { "id": "T05", "mode": "TOKEN_AI_STORAGE", "payload": "REAL", "aiDelayMs": 1000, "storageDelayMs": 100 },
+    { "id": "T06", "mode": "FULL", "payload": "REAL", "aiDelayMs": 1000, "storageDelayMs": 100 }
+  ],
+  "boundaryMatrix": [
+    { "id": "B00", "kind": "COLD_REFERENCE", "warmup": "NONE", "aiDelayMs": 1000, "intervalMs": 1000, "requestTimeoutMs": 10000 },
+    { "id": "B01", "kind": "EXPLICIT_WARM", "warmupRequests": 20, "warmupConcurrency": 1, "aiDelayMs": 1000, "intervalMs": 1000, "requestTimeoutMs": 10000 },
+    { "id": "B02", "kind": "AI_DELAY", "aiDelayMs": 0, "intervalMs": 1000, "requestTimeoutMs": 10000 },
+    { "id": "B03", "kind": "AI_DELAY", "aiDelayMs": 500, "intervalMs": 1000, "requestTimeoutMs": 10000 },
+    { "id": "B04", "kind": "AI_DELAY", "aiDelayMs": 1000, "intervalMs": 1000, "requestTimeoutMs": 10000 },
+    { "id": "B05", "kind": "AI_DELAY", "aiDelayMs": 2000, "intervalMs": 1000, "requestTimeoutMs": 10000 },
+    { "id": "B06", "kind": "INTERVAL", "aiDelayMs": 1000, "intervalMs": 3000, "requestTimeoutMs": 10000 },
+    { "id": "B07", "kind": "INTERVAL", "aiDelayMs": 1000, "intervalMs": 2000, "requestTimeoutMs": 10000 },
+    { "id": "B08", "kind": "INTERVAL", "aiDelayMs": 1000, "intervalMs": 1000, "requestTimeoutMs": 10000 },
+    { "id": "B09", "kind": "TIMEOUT", "aiDelayMs": 1000, "intervalMs": 1000, "requestTimeoutMs": 30000 }
+  ],
+  "classification": {
+    "stable": { "successMin": 0.95, "timeoutMax": 0.05 },
+    "degraded": { "successMin": 0.80, "successMaxExclusive": 0.95 },
+    "collapse": { "successMaxExclusive": 0.80, "timeoutMin": 0.20 }
+  }
+}
