@@ -1,18 +1,37 @@
 [CmdletBinding()]
 param(
     [switch]$Execute,
-    [string]$RepositoryRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+    [switch]$BootstrapOnly,
+    [string]$RepositoryRoot
 )
 
 $ErrorActionPreference = "Stop"
+if ([string]::IsNullOrWhiteSpace($RepositoryRoot)) {
+    $invokedScriptPath = $MyInvocation.MyCommand.Path
+    if ([string]::IsNullOrWhiteSpace($invokedScriptPath)) { throw "Could not resolve runner script path" }
+    if (-not [IO.Path]::IsPathRooted($invokedScriptPath)) {
+        $invokedScriptPath = Join-Path (Get-Location).Path $invokedScriptPath
+    }
+    $invokedScriptPath = [IO.Path]::GetFullPath($invokedScriptPath)
+    $RepositoryRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $invokedScriptPath))
+}
+$RepositoryRoot = (Resolve-Path $RepositoryRoot).Path
+if ($Execute -and $BootstrapOnly) { throw "-Execute and -BootstrapOnly cannot be combined" }
 $runId = "MVC-AI-ORIGINAL-SCHED-001"
 $composeProject = "doeng-mvcdiag-ai-original-scheduler-001"
 $resultDirectory = Join-Path $RepositoryRoot "experiment/results/$runId"
 $baseCompose = Join-Path $RepositoryRoot "backend/docker-compose.experiment.yaml"
-$imageOverride = Join-Path $RepositoryRoot "experiment/results/mvc-diagnostic-images.override.yml"
+$imageOverride = Join-Path $resultDirectory "original-scheduler.images.override.yml"
 $runtimeOverride = Join-Path $resultDirectory "original-scheduler.runtime.override.yml"
 $loadScript = Join-Path $RepositoryRoot "experiment/load/mission-load.js"
 $nodeCommand = if ($env:NODE_COMMAND) { $env:NODE_COMMAND } else { "node" }
+$canonicalImageContractPath = Join-Path $RepositoryRoot "experiment/results/matrix-image-contract.json"
+$expectedMvcImageId = "sha256:984fa39f3ab397d831086f8bef96402180c1d80d2d47b0a0274b2189652b6d4d"
+$expectedMockImageId = "sha256:0bbf354a08732a5dbfd3a3013218a6f1955d74c1bc41ecc407e819ba1788bbf6"
+$lockedMvcImage = "doeng-mvcdiag-mvc:locked"
+$lockedMockImage = "doeng-mvcdiag-mock:locked"
+$runLockedMvcImage = "doeng-mvc-ai-original-scheduler-mvc:locked"
+$runLockedMockImage = "doeng-mvc-ai-original-scheduler-mock:locked"
 
 function Write-JsonFile {
     param([string]$Path, $object)
@@ -144,7 +163,7 @@ function Write-InitialArrivalSummary {
     })
 }
 
-if (-not $Execute) {
+if (-not $Execute -and -not $BootstrapOnly) {
     Write-Output "Prepared $runId; use -Execute only for the separately approved confirmation run."
     exit 0
 }
@@ -157,24 +176,6 @@ services:
     mem_limit: 1g
 "@ | Set-Content -Encoding UTF8 -LiteralPath $runtimeOverride
 
-$composeFiles = @(
-    (Resolve-Path $baseCompose).Path,
-    (Resolve-Path $imageOverride).Path,
-    (Resolve-Path $runtimeOverride).Path
-)
-$composeFilesBase64 = Get-ComposeFilesBase64 $composeFiles
-$clientResults = Join-Path $resultDirectory "client-results.json"
-$clientProgress = Join-Path $resultDirectory "client-progress.jsonl"
-$observerOutput = Join-Path $resultDirectory "observer.jsonl"
-$clientStdout = Join-Path $resultDirectory "client-process.stdout.log"
-$clientStderr = Join-Path $resultDirectory "client-process.stderr.log"
-$mvcStdout = Join-Path $resultDirectory "application-container.stdout.log"
-$mvcStderr = Join-Path $resultDirectory "application-container.stderr.log"
-$canonicalImageContractPath = Join-Path $RepositoryRoot "experiment/results/matrix-image-contract.json"
-$expectedMvcImageId = "sha256:984fa39f3ab397d831086f8bef96402180c1d80d2d47b0a0274b2189652b6d4d"
-$expectedMockImageId = "sha256:0bbf354a08732a5dbfd3a3013218a6f1955d74c1bc41ecc407e819ba1788bbf6"
-$lockedMvcImage = "doeng-mvcdiag-mvc:locked"
-$lockedMockImage = "doeng-mvcdiag-mock:locked"
 
 function Get-InspectedContainer {
     param([string]$Service)
@@ -203,25 +204,69 @@ function Get-ImageId {
     return $id
 }
 
+function Try-GetImageId {
+    param([string]$Reference)
+    $id = ([string](@(& docker image inspect $Reference --format "{{.Id}}" 2>$null) -join "")).Trim()
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($id)) { return $null }
+    return $id
+}
+
 function Assert-CanonicalImageContract {
     if (-not (Test-Path -LiteralPath $canonicalImageContractPath)) { throw "IMAGE_CONTRACT: missing canonical contract" }
     $contract = Get-Content -Raw -LiteralPath $canonicalImageContractPath | ConvertFrom-Json
-    $mvcId = Get-ImageId $lockedMvcImage
-    $mockId = Get-ImageId $lockedMockImage
+    $mvcId = Try-GetImageId $expectedMvcImageId
+    $mockId = Try-GetImageId $expectedMockImageId
+    $lockedMvcId = Try-GetImageId $lockedMvcImage
+    $lockedMockId = Try-GetImageId $lockedMockImage
     $actual = [ordered]@{
-        mvcImage = $mvcId
-        mockImage = $mockId
+        stage = "IMAGE_CONTRACT"
+        lockedMvcTagPresent = $null -ne $lockedMvcId
+        lockedMockTagPresent = $null -ne $lockedMockId
+        canonicalMvcImagePresent = $null -ne $mvcId
+        canonicalMockImagePresent = $null -ne $mockId
+        lockedMvcImage = $lockedMvcId
+        lockedMockImage = $lockedMockId
+        canonicalMvcImage = $mvcId
+        canonicalMockImage = $mockId
         expectedMvcImage = $expectedMvcImageId
         expectedMockImage = $expectedMockImageId
         sourceContractMvcImage = [string]$contract.mvcImageId
         sourceContractMockImage = [string]$contract.mockImageId
+        sourceContractMatch = [string]$contract.mvcImageId -eq $expectedMvcImageId -and
+            [string]$contract.mockImageId -eq $expectedMockImageId
     }
-    $pass = $mvcId -eq $expectedMvcImageId -and $mockId -eq $expectedMockImageId -and
-        [string]$contract.mvcImageId -eq $expectedMvcImageId -and
-        [string]$contract.mockImageId -eq $expectedMockImageId
+    $pass = $null -ne $mvcId -and $null -ne $mockId -and
+        $actual.canonicalMvcImagePresent -and $actual.canonicalMockImagePresent
     $actual.pass = $pass
     Write-JsonFile (Join-Path $resultDirectory "image-contract.json") $actual
     if (-not $pass) { throw "IMAGE_CONTRACT: FAIL" }
+}
+
+function Ensure-RunSpecificImageTags {
+    $mvcId = Get-ImageId $expectedMvcImageId
+    $mockId = Get-ImageId $expectedMockImageId
+    & docker tag $mvcId $runLockedMvcImage
+    if ($LASTEXITCODE -ne 0) { throw "Could not create run-specific MVC image tag" }
+    & docker tag $mockId $runLockedMockImage
+    if ($LASTEXITCODE -ne 0) { throw "Could not create run-specific mock image tag" }
+    $taggedMvcId = Get-ImageId $runLockedMvcImage
+    $taggedMockId = Get-ImageId $runLockedMockImage
+    $pass = $taggedMvcId -eq $expectedMvcImageId -and $taggedMockId -eq $expectedMockImageId
+    Write-JsonFile (Join-Path $resultDirectory "run-specific-image-tags.json") ([ordered]@{
+        mvcTag = $runLockedMvcImage
+        mockTag = $runLockedMockImage
+        mvcImageId = $taggedMvcId
+        mockImageId = $taggedMockId
+        pass = $pass
+    })
+    if (-not $pass) { throw "RUN_SPECIFIC_IMAGE_TAGGING: FAIL" }
+    @"
+services:
+  mvc:
+    image: $runLockedMvcImage
+  experiment-mock:
+    image: $runLockedMockImage
+"@ | Set-Content -Encoding UTF8 -LiteralPath $imageOverride
 }
 
 function Assert-FreshProject {
@@ -315,6 +360,60 @@ function Assert-MockRuntimeContract {
     if (-not $pass) { throw "MOCK_RUNTIME_CONTRACT: FAIL" }
 }
 
+$script:bootstrapStage = "IMAGE_CONTRACT"
+$script:performanceWorkloadStarted = $false
+$script:imageContractPass = $false
+$script:freshProjectGuardPass = $false
+try {
+    Assert-CanonicalImageContract
+    $script:imageContractPass = $true
+    $script:bootstrapStage = "RUN_SPECIFIC_IMAGE_TAGGING"
+    Ensure-RunSpecificImageTags
+    $script:bootstrapStage = "FRESH_PROJECT_GUARD"
+    Assert-FreshProject
+    $script:freshProjectGuardPass = $true
+    if ($BootstrapOnly) {
+        Write-JsonFile (Join-Path $resultDirectory "measurement-validity.json") ([ordered]@{
+            imageContract = "PASS"
+            freshProjectGuard = "PASS"
+            measurementValid = $false
+            performanceWorkloadStarted = $false
+        })
+        Write-Output "BOOTSTRAP_ONLY_VALIDATION: PASS"
+        exit 0
+    }
+} catch {
+    $errorRecord = $_
+    Write-JsonFile (Join-Path $resultDirectory "bootstrap-failure.json") ([ordered]@{
+        stage = $script:bootstrapStage
+        message = $errorRecord.Exception.Message
+        exceptionType = $errorRecord.Exception.GetType().FullName
+        capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+        performanceWorkloadStarted = $false
+    })
+    Write-JsonFile (Join-Path $resultDirectory "measurement-validity.json") ([ordered]@{
+        imageContract = if ($script:imageContractPass) { "PASS" } else { "FAIL" }
+        freshProjectGuard = if ($script:freshProjectGuardPass) { "PASS" } else { "FAIL" }
+        measurementValid = $false
+        performanceWorkloadStarted = $false
+    })
+    throw
+}
+
+$composeFiles = @(
+    (Resolve-Path $baseCompose).Path,
+    (Resolve-Path $imageOverride).Path,
+    (Resolve-Path $runtimeOverride).Path
+)
+$composeFilesBase64 = Get-ComposeFilesBase64 $composeFiles
+$clientResults = Join-Path $resultDirectory "client-results.json"
+$clientProgress = Join-Path $resultDirectory "client-progress.jsonl"
+$observerOutput = Join-Path $resultDirectory "observer.jsonl"
+$clientStdout = Join-Path $resultDirectory "client-process.stdout.log"
+$clientStderr = Join-Path $resultDirectory "client-process.stderr.log"
+$mvcStdout = Join-Path $resultDirectory "application-container.stdout.log"
+$mvcStderr = Join-Path $resultDirectory "application-container.stderr.log"
+
 $env:APP_CPU = "2.0"
 $env:APP_MEMORY = "3g"
 $env:MVC_MAX_THREADS = "400"
@@ -336,8 +435,6 @@ $env:MOCK_DRAIN_SUMMARY_PATH = Join-Path $resultDirectory "mock-drain-summary.js
 $observerProcess = $null
 $mvcLogProcess = $null
 $originalError = $null
-$script:imageContractPass = $false
-$script:freshProjectGuardPass = $false
 $script:startupGatePass = $false
 $script:mvcRuntimeContractPass = $false
 $script:mockRuntimeContractPass = $false
@@ -348,19 +445,18 @@ $script:mvcFinalStatePass = $false
 $script:mockFinalStatePass = $false
 $script:nodeExitCode = $null
 try {
-    Assert-CanonicalImageContract
-    $script:imageContractPass = $true
-    Assert-FreshProject
-    $script:freshProjectGuardPass = $true
+    $script:bootstrapStage = "COMPOSE_STARTUP"
     & docker compose -p $composeProject -f $baseCompose -f $imageOverride -f $runtimeOverride up -d --no-build mariadb experiment-mock mvc
     if ($LASTEXITCODE -ne 0) { throw "Compose startup failed" }
 
+    $script:bootstrapStage = "STARTUP_GATE"
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $RepositoryRoot "experiment/scripts/wait-mvc-readiness.ps1") `
         -ComposeProject $composeProject -ServerService mvc -MainPort 8002 -ManagementPort 9002 -MockPort 9100 `
         -ComposeFilesBase64 $composeFilesBase64 -OutputPath (Join-Path $resultDirectory "startup-gate.json")
     if ($LASTEXITCODE -ne 0) { throw "Startup gate failed" }
     $script:startupGatePass = $true
 
+    $script:bootstrapStage = "RUNTIME_CONTRACT"
     $mvcContainer = Get-InspectedContainer "mvc"
     $mockContainer = Get-InspectedContainer "experiment-mock"
     $mvcId = $mvcContainer.Id
@@ -405,6 +501,8 @@ try {
     $env:SEND_MISSION_RUN_ID = "false"
     $env:SEND_SCENE_ID = "false"
 
+    $script:bootstrapStage = "CLIENT_WORKLOAD"
+    $script:performanceWorkloadStarted = $true
     $clientStartedAt = Get-Date
     & $nodeCommand $loadScript 1> $clientStdout 2> $clientStderr
     $nodeExitCode = $LASTEXITCODE
@@ -453,6 +551,13 @@ try {
 }
 catch {
     $originalError = $_
+    Write-JsonFile (Join-Path $resultDirectory "bootstrap-failure.json") ([ordered]@{
+        stage = $script:bootstrapStage
+        message = $_.Exception.Message
+        exceptionType = $_.Exception.GetType().FullName
+        capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+        performanceWorkloadStarted = $script:performanceWorkloadStarted
+    })
     throw
 }
 finally {
@@ -495,6 +600,7 @@ finally {
             observerContract = if ($script:observerContractPass) { "PASS" } else { "FAIL" }
             mvcFinalState = if ($script:mvcFinalStatePass) { "PASS" } else { "FAIL" }
             mockFinalState = if ($script:mockFinalStatePass) { "PASS" } else { "FAIL" }
+            performanceWorkloadStarted = $script:performanceWorkloadStarted
             measurementValid = $measurementValid
         })
     }
