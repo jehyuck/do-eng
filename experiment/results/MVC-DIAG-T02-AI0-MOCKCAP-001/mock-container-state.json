@@ -1,0 +1,298 @@
+﻿{
+    "Id":  "beee5a55089831bae6063d7a9b651011fe9f3ff3f2b6bf43443d7059ce6bff59",
+    "Created":  "2026-08-11T12:06:51.313325317Z",
+    "Path":  "docker-entrypoint.sh",
+    "Args":  [
+                 "node",
+                 "server.js"
+             ],
+    "State":  {
+                  "Status":  "running",
+                  "Running":  true,
+                  "Paused":  false,
+                  "Restarting":  false,
+                  "OOMKilled":  false,
+                  "Dead":  false,
+                  "Pid":  49226,
+                  "ExitCode":  0,
+                  "Error":  "",
+                  "StartedAt":  "2026-08-11T12:06:51.702741979Z",
+                  "FinishedAt":  "0001-01-01T00:00:00Z",
+                  "Health":  {
+                                 "Status":  "healthy",
+                                 "FailingStreak":  0,
+                                 "Log":  [
+                                             {
+                                                 "Start":  "2026-08-11T12:09:25.95569432Z",
+                                                 "End":  "2026-08-11T12:09:26.25762981Z",
+                                                 "ExitCode":  0,
+                                                 "Output":  ""
+                                             },
+                                             {
+                                                 "Start":  "2026-08-11T12:09:29.259235056Z",
+                                                 "End":  "2026-08-11T12:09:29.55358138Z",
+                                                 "ExitCode":  0,
+                                                 "Output":  ""
+                                             },
+                                             {
+                                                 "Start":  "2026-08-11T12:09:32.554961033Z",
+                                                 "End":  "2026-08-11T12:09:32.942112113Z",
+                                                 "ExitCode":  0,
+                                                 "Output":  ""
+                                             },
+                                             {
+                                                 "Start":  "2026-08-11T12:09:35.940240459Z",
+                                                 "End":  "2026-08-11T12:09:36.255973271Z",
+                                                 "ExitCode":  0,
+                                                 "Output":  ""
+                                             },
+                                             {
+                                                 "Start":  "2026-08-11T12:09:39.257356242Z",
+                                                 "End":  "2026-08-11T12:09:39.601977391Z",
+                                                 "ExitCode":  0,
+                                                 "Output":  ""
+                                             }
+                                         ]
+                             }
+              },
+    "Image":  "sha256:fee2a6dcd7e412ea5aa6432b300aa6dacea0800dc2e0f00dae9160cd9dfe8bed",
+    "ResolvConfPath":  "/var/lib/docker/containers/beee5a55089831bae6063d7a9b651011fe9f3ff3f2b6bf43443d7059ce6bff59/resolv.conf",
+    "HostnamePath":  "/var/lib/docker/containers/beee5a55089831bae6063d7a9b651011fe9f3ff3f2b6bf43443d7059ce6bff59/hostname",
+    "HostsPath":  "/var/lib/docker/containers/beee5a55089831bae6063d7a9b651011fe9f3ff3f2b6bf43443d7059ce6bff59/hosts",
+    "LogPath":  "/var/lib/docker/containers/beee5a55089831bae6063d7a9b651011fe9f3ff3f2b6bf43443d7059ce6bff59/beee5a55089831bae6063d7a9b651011fe9f3ff3f2b6bf43443d7059ce6bff59-json.log",
+    "Name":  "/doeng-mvcdiag-t02-ai0-mockcap-001-experiment-mock-1",
+    "RestartCount":  0,
+    "Driver":  "overlayfs",
+    "Platform":  "linux",
+    "MountLabel":  "",
+    "ProcessLabel":  "",
+    "AppArmorProfile":  "",
+    "ExecIDs":  null,
+    "HostConfig":  {
+                       "Binds":  null,
+                       "ContainerIDFile":  "",
+                       "LogConfig":  {
+                                         "Type":  "json-file",
+                                         "Config":  {
+
+                                                    }
+                                     },
+                       "NetworkMode":  "doeng-mvcdiag-t02-ai0-mockcap-001_default",
+                       "PortBindings":  {
+                                            "9100/tcp":  [
+                                                             {
+                                                                 "HostIp":  "",
+                                                                 "HostPort":  "9100"
+                                                             }
+                                                         ]
+                                        },
+                       "RestartPolicy":  {
+                                             "Name":  "no",
+                                             "MaximumRetryCount":  0
+                                         },
+                       "AutoRemove":  false,
+                       "VolumeDriver":  "",
+                       "VolumesFrom":  null,
+                       "ConsoleSize":  [
+                                           0,
+                                           0
+                                       ],
+                       "CapAdd":  null,
+                       "CapDrop":  null,
+                       "CgroupnsMode":  "private",
+                       "Dns":  null,
+                       "DnsOptions":  null,
+                       "DnsSearch":  null,
+                       "ExtraHosts":  [
+
+                                      ],
+                       "GroupAdd":  null,
+                       "IpcMode":  "private",
+                       "Cgroup":  "",
+                       "Links":  null,
+                       "OomScoreAdj":  0,
+                       "PidMode":  "",
+                       "Privileged":  false,
+                       "PublishAllPorts":  false,
+                       "ReadonlyRootfs":  false,
+                       "SecurityOpt":  null,
+                       "UTSMode":  "",
+                       "UsernsMode":  "",
+                       "ShmSize":  67108864,
+                       "Runtime":  "runc",
+                       "Isolation":  "",
+                       "CpuShares":  0,
+                       "Memory":  1073741824,
+                       "NanoCpus":  4000000000,
+                       "CgroupParent":  "",
+                       "BlkioWeight":  0,
+                       "BlkioWeightDevice":  null,
+                       "BlkioDeviceReadBps":  null,
+                       "BlkioDeviceWriteBps":  null,
+                       "BlkioDeviceReadIOps":  null,
+                       "BlkioDeviceWriteIOps":  null,
+                       "CpuPeriod":  0,
+                       "CpuQuota":  0,
+                       "CpuRealtimePeriod":  0,
+                       "CpuRealtimeRuntime":  0,
+                       "CpusetCpus":  "",
+                       "CpusetMems":  "",
+                       "Devices":  null,
+                       "DeviceCgroupRules":  null,
+                       "DeviceRequests":  null,
+                       "MemoryReservation":  0,
+                       "MemorySwap":  2147483648,
+                       "MemorySwappiness":  null,
+                       "OomKillDisable":  null,
+                       "PidsLimit":  null,
+                       "Ulimits":  null,
+                       "CpuCount":  0,
+                       "CpuPercent":  0,
+                       "IOMaximumIOps":  0,
+                       "IOMaximumBandwidth":  0,
+                       "MaskedPaths":  [
+                                           "/proc/acpi",
+                                           "/proc/asound",
+                                           "/proc/interrupts",
+                                           "/proc/kcore",
+                                           "/proc/keys",
+                                           "/proc/latency_stats",
+                                           "/proc/sched_debug",
+                                           "/proc/scsi",
+                                           "/proc/timer_list",
+                                           "/proc/timer_stats",
+                                           "/sys/devices/virtual/powercap",
+                                           "/sys/firmware"
+                                       ],
+                       "ReadonlyPaths":  [
+                                             "/proc/bus",
+                                             "/proc/fs",
+                                             "/proc/irq",
+                                             "/proc/sys",
+                                             "/proc/sysrq-trigger"
+                                         ]
+                   },
+    "Storage":  {
+                    "RootFS":  {
+                                   "Snapshot":  {
+                                                    "Name":  "overlayfs"
+                                                }
+                               }
+                },
+    "Mounts":  [
+
+               ],
+    "Config":  {
+                   "Hostname":  "beee5a550898",
+                   "Domainname":  "",
+                   "User":  "",
+                   "AttachStdin":  false,
+                   "AttachStdout":  true,
+                   "AttachStderr":  true,
+                   "ExposedPorts":  {
+                                        "9100/tcp":  {
+
+                                                     }
+                                    },
+                   "Tty":  false,
+                   "OpenStdin":  false,
+                   "StdinOnce":  false,
+                   "Env":  [
+                               "MOCK_MEMBER_ID=15",
+                               "MOCK_AI_RESULT=true",
+                               "MOCK_AI_DELAY_MS=0",
+                               "MOCK_AI_STATUS=200",
+                               "MOCK_STORAGE_DELAY_MS=100",
+                               "MOCK_STORAGE_STATUS=200",
+                               "MOCK_PORT=9100",
+                               "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                               "NODE_VERSION=20.20.2",
+                               "YARN_VERSION=1.22.22"
+                           ],
+                   "Cmd":  [
+                               "node",
+                               "server.js"
+                           ],
+                   "Healthcheck":  {
+                                       "Test":  [
+                                                    "CMD",
+                                                    "node",
+                                                    "-e",
+                                                    "fetch(\u0027http://127.0.0.1:9100/health\u0027).then(r=\u003e{if(!r.ok)process.exit(1)}).catch(()=\u003eprocess.exit(1))"
+                                                ],
+                                       "Interval":  3000000000,
+                                       "Timeout":  3000000000,
+                                       "Retries":  20
+                                   },
+                   "Image":  "doeng-mvcdiag-mock:locked",
+                   "Volumes":  null,
+                   "WorkingDir":  "/app",
+                   "Entrypoint":  [
+                                      "docker-entrypoint.sh"
+                                  ],
+                   "Labels":  {
+                                  "com.docker.compose.config-hash":  "75594b388e824b946df525757a18508e78d47bb572eee7a13f0920d8cabf183a",
+                                  "com.docker.compose.container-number":  "1",
+                                  "com.docker.compose.depends_on":  "",
+                                  "com.docker.compose.image":  "sha256:fee2a6dcd7e412ea5aa6432b300aa6dacea0800dc2e0f00dae9160cd9dfe8bed",
+                                  "com.docker.compose.oneoff":  "False",
+                                  "com.docker.compose.project":  "doeng-mvcdiag-t02-ai0-mockcap-001",
+                                  "com.docker.compose.project.config_files":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment.yaml,D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\mvc-diagnostic-images.override.yml,D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\MVC-DIAG-T02-AI0-MOCKCAP-001\\mock-capacity.override.yml",
+                                  "com.docker.compose.project.working_dir":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend",
+                                  "com.docker.compose.service":  "experiment-mock",
+                                  "com.docker.compose.version":  "5.1.3"
+                              },
+                   "StopTimeout":  1
+               },
+    "NetworkSettings":  {
+                            "SandboxID":  "188f5cbf242112f47386bca4e9e2be70df1a846692261e44c3e470571e1e9502",
+                            "SandboxKey":  "/var/run/docker/netns/188f5cbf2421",
+                            "Ports":  {
+                                          "9100/tcp":  [
+                                                           {
+                                                               "HostIp":  "0.0.0.0",
+                                                               "HostPort":  "9100"
+                                                           },
+                                                           {
+                                                               "HostIp":  "::",
+                                                               "HostPort":  "9100"
+                                                           }
+                                                       ]
+                                      },
+                            "Networks":  {
+                                             "doeng-mvcdiag-t02-ai0-mockcap-001_default":  {
+                                                                                               "IPAMConfig":  null,
+                                                                                               "Links":  null,
+                                                                                               "Aliases":  [
+                                                                                                               "doeng-mvcdiag-t02-ai0-mockcap-001-experiment-mock-1",
+                                                                                                               "experiment-mock"
+                                                                                                           ],
+                                                                                               "DriverOpts":  null,
+                                                                                               "GwPriority":  0,
+                                                                                               "NetworkID":  "9460f58c1432a8c1ad769db6e26b3a20b44053471e431b70ccb314e4242b18b4",
+                                                                                               "EndpointID":  "5cbf7a1f98cb6e3d2c8da687b69bf53c075002a334ab15ac6954fae695e4f8bc",
+                                                                                               "Gateway":  "192.168.128.1",
+                                                                                               "IPAddress":  "192.168.128.2",
+                                                                                               "MacAddress":  "ce:b4:91:a6:00:e6",
+                                                                                               "IPPrefixLen":  20,
+                                                                                               "IPv6Gateway":  "",
+                                                                                               "GlobalIPv6Address":  "",
+                                                                                               "GlobalIPv6PrefixLen":  0,
+                                                                                               "DNSNames":  [
+                                                                                                                "doeng-mvcdiag-t02-ai0-mockcap-001-experiment-mock-1",
+                                                                                                                "experiment-mock",
+                                                                                                                "beee5a550898"
+                                                                                                            ]
+                                                                                           }
+                                         }
+                        },
+    "ImageManifestDescriptor":  {
+                                    "mediaType":  "application/vnd.oci.image.manifest.v1+json",
+                                    "digest":  "sha256:39253222cd2a3638c8f549c46ff3fa2df36d45304db3e40d3df6dfd90a37db6d",
+                                    "size":  1430,
+                                    "platform":  {
+                                                     "architecture":  "amd64",
+                                                     "os":  "linux"
+                                                 }
+                                }
+}

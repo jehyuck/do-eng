@@ -1,0 +1,10 @@
+﻿{
+    "mockNanoCpus":  4000000000,
+    "mockMemoryBytes":  1073741824,
+    "mvcNanoCpus":  2000000000,
+    "mvcMemoryBytes":  3221225472,
+    "mockRestart":  0,
+    "mockOom":  false,
+    "mvcRestart":  0,
+    "mvcOom":  false
+}
