@@ -228,7 +228,17 @@ function Assert-FreshProject {
     $ids = @(& docker ps -aq --filter "label=com.docker.compose.project=$composeProject" 2>$null |
         Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
     if ($LASTEXITCODE -ne 0) { throw "FRESH_PROJECT_GUARD: unable to inspect project" }
-    $guard = [ordered]@{ project = $composeProject; existingContainerIds = @($ids); pass = $ids.Count -eq 0 }
+    $volumes = @(& docker volume ls -q --filter "label=com.docker.compose.project=$composeProject" 2>$null |
+        Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
+    if ($LASTEXITCODE -ne 0) { throw "FRESH_PROJECT_GUARD: unable to inspect project volumes" }
+    $guard = [ordered]@{
+        project = $composeProject
+        existingContainerIds = @($ids)
+        existingVolumes = @($volumes)
+        containerCount = $ids.Count
+        volumeCount = $volumes.Count
+        pass = $ids.Count -eq 0 -and $volumes.Count -eq 0
+    }
     Write-JsonFile (Join-Path $resultDirectory "fresh-project-guard.json") $guard
     if (-not $guard.pass) { throw "FRESH_PROJECT_GUARD: FAIL" }
 }
@@ -238,7 +248,7 @@ function Assert-MvcRuntimeContract {
     $environment = Get-ContainerEnvironment $Container
     $javaOptions = [string]$environment.JAVA_TOOL_OPTIONS
     $actual = [ordered]@{
-        sourceRoot = "backend/experiment-mock"
+        sourceRoot = "backend/doEngGameMvc"
         imageId = $Container.Image
         nanoCpus = $Container.HostConfig.NanoCpus
         memory = $Container.HostConfig.Memory
