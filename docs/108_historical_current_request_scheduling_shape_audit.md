@@ -116,10 +116,10 @@ REQUEST_SCHEDULING_SHAPE:
 MATERIALLY_DIFFERENT
 
 HISTORICAL_DISCREPANCY_CANDIDATE:
-WORKLOAD_SCHEDULER_SEMANTICS_SUPPORTED
+WORKLOAD_SCHEDULER_SEMANTICS_INCONCLUSIVE
 ```
 
-The basis is the directly observed initial-arrival difference: historical had 160 scheduled by T+1.016s, whereas current reached 54 at T+1.003s, 161 at T+2.006s, and 321 at T+3.020s. The historical per-user timestamp evidence and historical source text are missing, so this remains a supported shape discrepancy candidate, not proof that scheduler semantics alone caused the performance difference.
+The basis is the directly observed initial-arrival difference: historical had 160 scheduled by T+1.016s, whereas current reached 54 at T+1.003s, 161 at T+2.006s, and 321 at T+3.020s. The historical per-user timestamp evidence and historical load-driver source text are missing, so the scheduler discrepancy and its causal direction remain inconclusive; this does not establish that scheduler semantics alone caused the performance difference.
 
 The early completion comparison points in the opposite direction for a scheduler-only explanation of the current collapse: at the first progress sample at or after T+10s, historical had 1,511 starts and 1,191 completions, while current had 1,441 starts and only 4 completions. This supports an early completion discrepancy and moves the causal focus toward per-request processing/runtime behavior rather than arrival scheduling alone.
 
