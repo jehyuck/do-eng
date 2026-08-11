@@ -53,6 +53,10 @@ Set-Content -Encoding UTF8 -LiteralPath $OutputPath -Value ""
 $started = Get-Date
 $samples = 0
 $failedSamples = 0
+$successfulApplicationSamples = 0
+$successfulMockSamples = 0
+$readinessFailures = 0
+$containerStateFailures = 0
 while (((Get-Date) - $started).TotalSeconds -lt $DurationSeconds) {
     $sample = [ordered]@{
         capturedAt = (Get-Date).ToUniversalTime().ToString("o")
@@ -63,7 +67,10 @@ while (((Get-Date) - $started).TotalSeconds -lt $DurationSeconds) {
         container = Get-State
     }
     $samples++
-    if (-not $sample.application.ok -or -not $sample.readiness.ok -or -not $sample.mock.ok -or $null -eq $sample.container) { $failedSamples++ }
+    if ($sample.application.ok) { $successfulApplicationSamples++ } else { $failedSamples++ }
+    if ($sample.mock.ok) { $successfulMockSamples++ }
+    if (-not $sample.readiness.ok) { $readinessFailures++ }
+    if ($null -eq $sample.container) { $containerStateFailures++ }
     ($sample | ConvertTo-Json -Depth 12 -Compress) | Add-Content -Encoding UTF8 -LiteralPath $OutputPath
     Start-Sleep -Seconds $IntervalSeconds
 }
@@ -73,6 +80,13 @@ $summary = [ordered]@{
     intervalSeconds = $IntervalSeconds
     sampleCount = $samples
     failedSampleCount = $failedSamples
+    successfulApplicationSamples = $successfulApplicationSamples
+    failedApplicationSamples = $failedSamples
+    successfulMockSamples = $successfulMockSamples
+    failedMockSamples = $samples - $successfulMockSamples
+    readinessFailures = $readinessFailures
+    containerStateFailures = $containerStateFailures
+    coverageRatio = if ($samples -gt 0) { $successfulApplicationSamples / $samples } else { 0 }
     observerValid = $true
 }
 $summary | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 -LiteralPath ([IO.Path]::ChangeExtension($OutputPath, ".summary.json"))

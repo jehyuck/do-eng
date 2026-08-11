@@ -22,7 +22,8 @@
     { "id": "T03", "mode": "AI_DECODE", "payload": "REAL", "aiDelayMs": 1000 },
     { "id": "T04", "mode": "AI_STORAGE", "payload": "REAL", "aiDelayMs": 1000, "storageDelayMs": 100 },
     { "id": "T05", "mode": "TOKEN_AI_STORAGE", "payload": "REAL", "aiDelayMs": 1000, "storageDelayMs": 100 },
-    { "id": "T06", "mode": "FULL", "payload": "REAL", "aiDelayMs": 1000, "storageDelayMs": 100 }
+    { "id": "T06", "mode": "FULL", "payload": "REAL", "aiDelayMs": 1000, "storageDelayMs": 100 },
+    { "id": "T07", "mode": "FULL_ORIGINAL_SCHEDULER", "payload": "REAL", "aiDelayMs": 1000, "storageDelayMs": 100 }
   ],
   "boundaryMatrix": [
     { "id": "B00", "kind": "COLD_REFERENCE", "warmup": "NONE", "aiDelayMs": 1000, "intervalMs": 1000, "requestTimeoutMs": 10000 },

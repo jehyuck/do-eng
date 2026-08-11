@@ -33,7 +33,8 @@ public class MvcDiagnosticProbeService {
             String image,
             String answer,
             String authorization,
-            String runId) {
+            String runId,
+            String requestId) {
         String effectiveMode = mode == null ? "INGRESS" : mode.trim().toUpperCase();
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("mode", effectiveMode);
@@ -55,13 +56,13 @@ public class MvcDiagnosticProbeService {
                 result.put("steps", new String[] {"JSON_DESERIALIZE", "AI_HTTP", "BASE64_DECODE"});
                 return result;
             case "AI_STORAGE":
-                return aiStorage(result, image, answer, runId);
+                return aiStorage(result, image, answer, runId, requestId);
             case "TOKEN_AI_STORAGE":
                 if (authorization == null || authorization.isBlank()) {
                     throw new IllegalArgumentException("Authorization is required for TOKEN_AI_STORAGE");
                 }
                 result.put("memberId", tokenClient.confirm(authorization));
-                return aiStorage(result, image, answer, runId);
+                return aiStorage(result, image, answer, runId, requestId);
             case "FULL":
                 result.put("productionEndpoint", "/game/face");
                 result.put("steps", new String[] {"USE_PRODUCTION_ENDPOINT"});
@@ -75,11 +76,13 @@ public class MvcDiagnosticProbeService {
             Map<String, Object> result,
             String image,
             String answer,
-            String runId) {
+            String runId,
+            String requestId) {
         AiDecisionResult ai = aiClient.decide(image, answer);
         byte[] decoded = ImagePayloadDecoder.decodeDataUrlOrBase64(image);
         String key = storage.upload(
-                "diagnostic/" + (runId == null ? "unknown" : runId) + ".jpeg",
+                "diagnostic/" + (runId == null ? "unknown" : runId) + "/"
+                        + (requestId == null ? "unknown" : requestId) + ".jpeg",
                 decoded);
         result.put("ai", ai);
         result.put("decodedBytes", decoded.length);

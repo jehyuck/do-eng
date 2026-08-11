@@ -112,7 +112,8 @@ while (((Get-Date) - $startedAt).TotalSeconds -lt $MaxWaitSeconds) {
         applicationSnapshot = $snapshot
         stableCount = $stableCount
     }
-    if ($stableCount -ge $StableSeconds) {
+    $stableElapsedMs = if ($stableStartedAt) { [math]::Round(((Get-Date) - $stableStartedAt).TotalMilliseconds) } else { 0 }
+    if ($stableStartedAt -and $stableElapsedMs -ge ($StableSeconds * 1000)) {
         $readyForLoadAt = Get-Date
         break
     }
@@ -140,6 +141,9 @@ $result = [ordered]@{
     mockAiInFlight = if ($last.mockMetrics) { $last.mockMetrics.body.aiInFlight } else { $null }
     mockStorageInFlight = if ($last.mockMetrics) { $last.mockMetrics.body.storageInFlight } else { $null }
     stableWindowSeconds = $StableSeconds
+    stableWindowActualMs = if ($stableStartedAt -and $readyForLoadAt) {
+        [math]::Round(($readyForLoadAt - $stableStartedAt).TotalMilliseconds)
+    } else { 0 }
     loadAllowed = $null -ne $readyForLoadAt
 }
 $result | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 -LiteralPath $OutputPath

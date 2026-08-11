@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const mode = (process.env.MODE || 'INGRESS').toUpperCase();
 const payloadProfile = (process.env.PAYLOAD_PROFILE || 'REAL').toUpperCase();
@@ -13,28 +14,34 @@ const answer = process.env.ANSWER || 'happy';
 const sceneId = process.env.SCENE_ID || '2';
 const resultPath = process.env.RESULT_PATH || path.join(process.cwd(), 'mvc-diagnostic-results.json');
 const progressPath = process.env.PROGRESS_PATH || path.join(process.cwd(), 'mvc-diagnostic-progress.jsonl');
+const fixturePath = process.env.FIXTURE_PATH || path.join(process.cwd(), 'image', 'arc.jpg');
+
+function loadTokens() {
+  if (!process.env.AUTH_TOKENS_PATH) return null;
+  const value = JSON.parse(fs.readFileSync(process.env.AUTH_TOKENS_PATH, 'utf8').replace(/^\uFEFF/, ''));
+  if (!Array.isArray(value) || value.length !== activeUsers ||
+      value.some((item) => typeof item !== 'string' || item.trim() === '') ||
+      new Set(value).size !== value.length) {
+    throw new Error('AUTH_TOKENS_PATH must contain ACTIVE_USERS distinct non-empty strings');
+  }
+  return value;
+}
+
+const perVuTokens = loadTokens();
 
 function buildPayload() {
+  const fixtureBytes = fs.readFileSync(fixturePath);
   if (payloadProfile === 'SMALL') {
-    const bytes = Buffer.alloc(1024, 0x41);
+    const bytes = fixtureBytes.subarray(0, 1024);
     return `data:image/jpeg;base64,${bytes.toString('base64')}`;
   }
-  const fixturePath = process.env.FIXTURE_PATH || path.join(process.cwd(), 'image', 'arc.jpg');
-  const bytes = fs.readFileSync(fixturePath);
-  return `data:image/jpeg;base64,${bytes.toString('base64')}`;
+  return `data:image/jpeg;base64,${fixtureBytes.toString('base64')}`;
 }
 
 function authFor(user) {
+  if (perVuTokens) return perVuTokens[user - 1];
   if (process.env.AUTH_TOKEN) return process.env.AUTH_TOKEN;
-  if (!process.env.AUTH_TOKENS_PATH) return null;
-  try {
-    const value = JSON.parse(fs.readFileSync(process.env.AUTH_TOKENS_PATH, 'utf8'));
-    const users = Array.isArray(value) ? value : (value.users || []);
-    const item = users.find((candidate) => Number(candidate.user || candidate.userId || candidate.memberId) === user);
-    return item && (item.authorization || item.token || item.authToken) || null;
-  } catch (_) {
-    return null;
-  }
+  return null;
 }
 
 function quantile(values, q) {
@@ -44,6 +51,9 @@ function quantile(values, q) {
 }
 
 const image = buildPayload();
+const fixtureBytes = fs.readFileSync(fixturePath);
+const payloadBytes = payloadProfile === 'SMALL' ? fixtureBytes.subarray(0, 1024) : fixtureBytes;
+const requestJsonBytes = Buffer.byteLength(JSON.stringify({ image }));
 fs.writeFileSync(progressPath, '');
 const requests = [];
 const timers = [];
@@ -90,12 +100,14 @@ async function submit(user, sequence) {
   try {
     const headers = {
       'Content-Type': 'application/json',
-      'X-Mission-Run-Id': runId
+      'X-Experiment-Run-Id': runId,
+      'X-Experiment-Request-Id': record.requestId
     };
     const auth = authFor(user);
-    if (auth && mode !== 'INGRESS' && mode !== 'AI' && mode !== 'AI_DECODE' && mode !== 'AI_STORAGE') {
+    if (auth && (mode === 'TOKEN_AI_STORAGE' || mode === 'FULL')) {
       headers.Authorization = auth;
     }
+    if (mode === 'FULL') headers['X-Mission-Run-Id'] = `${runId}-u${user}`;
     const query = mode === 'FULL'
       ? `answer=${encodeURIComponent(answer)}&sceneId=${encodeURIComponent(sceneId)}`
       : `mode=${encodeURIComponent(mode)}&answer=${encodeURIComponent(answer)}&runId=${encodeURIComponent(runId)}`;
@@ -161,7 +173,14 @@ setTimeout(async () => {
     maxInFlight,
     successfulRps: requests.filter((item) => item.status === 200).length / elapsedSeconds,
     totalRps: requests.length / elapsedSeconds,
-    payload: { bytes: Buffer.byteLength(image), profile: payloadProfile },
+    payload: {
+      sourceFixture: fixturePath,
+      binaryBytes: payloadBytes.length,
+      binarySha256: crypto.createHash('sha256').update(payloadBytes).digest('hex'),
+      base64Chars: image.split(',')[1].length,
+      requestJsonBytes,
+      profile: payloadProfile
+    },
     requests
   };
   fs.writeFileSync(resultPath, JSON.stringify(result, null, 2));

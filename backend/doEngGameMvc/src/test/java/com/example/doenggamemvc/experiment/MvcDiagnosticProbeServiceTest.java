@@ -44,7 +44,7 @@ class MvcDiagnosticProbeServiceTest {
     @Test
     void ingressDoesNotCallExternalServices() {
         Map<String, Object> result = service.probe(
-                "INGRESS", "aGVsbG8=", "happy", null, "run");
+                "INGRESS", "aGVsbG8=", "happy", null, "run", "request");
 
         assertEquals("INGRESS", result.get("mode"));
         verify(aiClient, never()).decide(anyString(), anyString());
@@ -59,7 +59,7 @@ class MvcDiagnosticProbeServiceTest {
         when(aiClient.decide(anyString(), anyString())).thenReturn(decision);
 
         Map<String, Object> result = service.probe(
-                "AI_DECODE", "aGVsbG8=", "happy", null, "run");
+                "AI_DECODE", "aGVsbG8=", "happy", null, "run", "request");
 
         assertEquals(5, result.get("decodedBytes"));
         verify(aiClient).decide("aGVsbG8=", "happy");
@@ -72,21 +72,21 @@ class MvcDiagnosticProbeServiceTest {
         decision.setResult(true);
         when(tokenClient.confirm("Bearer token")).thenReturn(15L);
         when(aiClient.decide(anyString(), anyString())).thenReturn(decision);
-        when(storage.upload(anyString(), any())).thenReturn("diagnostic/run.jpeg");
+        when(storage.upload(anyString(), any())).thenReturn("diagnostic/run/request.jpeg");
 
         Map<String, Object> result = service.probe(
-                "TOKEN_AI_STORAGE", "aGVsbG8=", "happy", "Bearer token", "run");
+                "TOKEN_AI_STORAGE", "aGVsbG8=", "happy", "Bearer token", "run", "request");
 
         assertEquals(15L, result.get("memberId"));
-        assertEquals("diagnostic/run.jpeg", result.get("storageKey"));
+        assertEquals("diagnostic/run/request.jpeg", result.get("storageKey"));
         verify(tokenClient).confirm("Bearer token");
         verify(aiClient).decide("aGVsbG8=", "happy");
-        verify(storage).upload(eq("diagnostic/run.jpeg"), argThat(bytes -> Arrays.equals(bytes, "hello".getBytes())));
+        verify(storage).upload(eq("diagnostic/run/request.jpeg"), argThat(bytes -> Arrays.equals(bytes, "hello".getBytes())));
     }
 
     @Test
     void tokenModeRequiresAuthorization() {
         assertThrows(IllegalArgumentException.class, () -> service.probe(
-                "TOKEN_AI_STORAGE", "aGVsbG8=", "happy", null, "run"));
+                "TOKEN_AI_STORAGE", "aGVsbG8=", "happy", null, "run", "request"));
     }
 }

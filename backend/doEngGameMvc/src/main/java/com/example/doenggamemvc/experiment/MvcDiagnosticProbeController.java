@@ -30,12 +30,15 @@ public class MvcDiagnosticProbeController {
             @RequestParam(defaultValue = "happy") String answer,
             @RequestParam(defaultValue = "diagnostic") String runId,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false)
-            String authorization) {
+            String authorization,
+            @RequestHeader(value = "X-Experiment-Request-Id", required = false)
+            String requestId) {
         return ResponseEntity.ok(service.probe(
                 mode,
                 request.getImage(),
                 answer,
                 authorization,
-                runId));
+                runId,
+                requestId));
     }
 }
