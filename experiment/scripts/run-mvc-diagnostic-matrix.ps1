@@ -60,13 +60,23 @@ if (-not $Execute) {
 $imageContractProject = "$ComposeProjectPrefix-image-contract"
 docker compose -p $imageContractProject -f $composeFile build mvc experiment-mock
 if ($LASTEXITCODE -ne 0) { throw "Immutable image build failed" }
-$mvcContractIds = @(& docker compose -p $imageContractProject -f $composeFile images -q mvc 2>$null)
-$mockContractIds = @(& docker compose -p $imageContractProject -f $composeFile images -q experiment-mock 2>$null)
+$mvcBuiltImage = "${imageContractProject}-mvc:latest"
+$mockBuiltImage = "${imageContractProject}-experiment-mock:latest"
+$mvcImageId = ([string](@(& docker image inspect $mvcBuiltImage --format "{{.Id}}" 2>$null) -join "")).Trim()
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($mvcImageId) -or $mvcImageId -notmatch '^sha256:') {
+    throw "Could not resolve built MVC image ID"
+}
+$mockImageId = ([string](@(& docker image inspect $mockBuiltImage --format "{{.Id}}" 2>$null) -join "")).Trim()
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($mockImageId) -or $mockImageId -notmatch '^sha256:') {
+    throw "Could not resolve built experiment-mock image ID"
+}
 $matrixImageContract = [ordered]@{
     builtAt = (Get-Date).ToUniversalTime().ToString("o")
     project = $imageContractProject
-    mvcImageId = if ($mvcContractIds.Count -gt 0) { ([string]$mvcContractIds[0]).Trim() } else { "" }
-    mockImageId = if ($mockContractIds.Count -gt 0) { ([string]$mockContractIds[0]).Trim() } else { "" }
+    mvcImageTag = $mvcBuiltImage
+    mvcImageId = $mvcImageId
+    mockImageTag = $mockBuiltImage
+    mockImageId = $mockImageId
 }
 if ([string]::IsNullOrWhiteSpace($matrixImageContract.mvcImageId) -or
     [string]::IsNullOrWhiteSpace($matrixImageContract.mockImageId)) {
@@ -78,6 +88,10 @@ docker tag $matrixImageContract.mvcImageId $lockedMvcImage
 if ($LASTEXITCODE -ne 0) { throw "Could not create locked MVC image tag" }
 docker tag $matrixImageContract.mockImageId $lockedMockImage
 if ($LASTEXITCODE -ne 0) { throw "Could not create locked mock image tag" }
+$lockedMvcId = ([string](@(& docker image inspect $lockedMvcImage --format "{{.Id}}" 2>$null) -join "")).Trim()
+if ($LASTEXITCODE -ne 0 -or $lockedMvcId -ne $matrixImageContract.mvcImageId) { throw "Locked MVC image ID mismatch" }
+$lockedMockId = ([string](@(& docker image inspect $lockedMockImage --format "{{.Id}}" 2>$null) -join "")).Trim()
+if ($LASTEXITCODE -ne 0 -or $lockedMockId -ne $matrixImageContract.mockImageId) { throw "Locked mock image ID mismatch" }
 $imageOverride = Join-Path $ResultsRoot "mvc-diagnostic-images.override.yml"
 @"
 services:
