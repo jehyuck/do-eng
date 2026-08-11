@@ -95,11 +95,29 @@ function Get-CaseClassification($case) {
     $resultPath = Join-Path (Join-Path $ResultsRoot "MVC-DIAG-$($case.id)") "client-results.json"
     if (-not (Test-Path -LiteralPath $resultPath)) { throw "Missing result for $($case.id)" }
     $rawResult = Get-Content -Raw -LiteralPath $resultPath | ConvertFrom-Json
-    $result = if ($null -ne $rawResult.summary) { $rawResult.summary } else { $rawResult }
-    $started = if ($null -ne $result.started) { $result.started } else { $result.startedRequests }
-    $successes = if ($null -ne $result.http200) { $result.http200 } else { $result.successfulRequests }
-    $timeouts = if ($null -ne $result.timeout) { $result.timeout } else { @($result.requests | Where-Object { $_.transport.category -eq "CLIENT_ABORT_DEADLINE" }).Count }
-    $http4xx = if ($null -ne $result.http4xx) { $result.http4xx } else { @($result.requests | Where-Object { $_.status -ge 400 -and $_.status -lt 500 }).Count }
+    $isMissionLoad = $null -ne $rawResult.summary -and $null -ne $rawResult.requests
+    $result = if ($isMissionLoad) { $rawResult.summary } else { $rawResult }
+    $requests = @($rawResult.requests)
+    $outcomeCounts = $result.outcomeCounts
+    $getOutcomeCount = {
+        param([string]$name)
+        if ($null -eq $outcomeCounts) { return $null }
+        $property = $outcomeCounts.PSObject.Properties[$name]
+        if ($null -eq $property) { return $null }
+        return [int]$property.Value
+    }
+    $started = if ($isMissionLoad) { $result.startedRequests } else { $result.started }
+    $successes = if ($isMissionLoad) { $result.successfulRequests } else { $result.http200 }
+    $timeouts = if ($isMissionLoad) { & $getOutcomeCount "CLIENT_TIMEOUT" } else { $result.timeout }
+    if ($null -eq $timeouts) {
+        $timeouts = @($requests | Where-Object {
+            $_.transport.category -eq "CLIENT_ABORT_DEADLINE" -or $_.error -eq "AbortError"
+        }).Count
+    }
+    $http4xx = if ($isMissionLoad) { & $getOutcomeCount "HTTP_4XX_DOWNSTREAM" } else { $result.http4xx }
+    if ($null -eq $http4xx) {
+        $http4xx = @($requests | Where-Object { $_.status -ge 400 -and $_.status -lt 500 }).Count
+    }
     $successRate = if ($started -gt 0) { [double]$successes / $started } else { 0 }
     $timeoutRate = if ($started -gt 0) { [double]$timeouts / $started } else { 1 }
     $http4xxRate = if ($started -gt 0) { [double]$http4xx / $started } else { 0 }
@@ -250,31 +268,73 @@ function Observe-PostLoadIdle($caseDir, [int]$seconds = 30) {
 
 function Invoke-B01Warmup($case, $target, $caseDir) {
     $warmupRequests = 20
+    $boundaryMode = [string]$case.mode
+    $actualWarmupMode = if ($boundaryMode -eq "FULL_ORIGINAL_SCHEDULER") { "FULL" } else { $boundaryMode }
+    $authorizationRequired = $actualWarmupMode -in @("TOKEN_AI_STORAGE", "FULL")
+    $warmupTarget = if ($actualWarmupMode -eq "FULL") { "http://127.0.0.1:8002/game/face" } else { "http://127.0.0.1:8002/experiment/mvc-probe" }
+    $warmupPayload = [string]$case.payload
     $tokenPath = $env:AUTH_TOKENS_PATH
-    $warmupTokens = @((Get-Content -Raw -LiteralPath $tokenPath | ConvertFrom-Json))
-    for ($index = 1; $index -le $warmupRequests; $index++) {
-        $env:TARGET_URL = $target
-        $env:MODE = "FULL"
-        $env:PAYLOAD_PROFILE = "REAL"
-        $env:ACTIVE_USERS = "1"
-        $env:INTERVAL_MS = "60000"
-        $env:DURATION_MS = "1"
-        $env:REQUEST_TIMEOUT_MS = [string]$case.requestTimeoutMs
-        $env:FIXTURE_PATH = $fixturePath
-        $env:ANSWER = "happy"
-        $env:SCENE_ID = "2"
-        $env:AUTH_TOKEN = [string]$warmupTokens[0]
-        Remove-Item Env:AUTH_TOKENS_PATH -ErrorAction SilentlyContinue
-        $env:EXPERIMENT_RUN_ID = "MVC-DIAG-$($case.id)-W$index"
-        $env:RESULT_PATH = Join-Path $caseDir "warmup-$index.json"
-        $env:PROGRESS_PATH = Join-Path $caseDir "warmup-$index.progress.jsonl"
-        & $NodeCommand (Join-Path $repositoryRoot "experiment\load\mvc-diagnostic-load.js")
-        if ($LASTEXITCODE -ne 0) { throw "B01 warmup request $index failed" }
+    $warmupTokens = @()
+    if ($authorizationRequired) {
+        if ([string]::IsNullOrWhiteSpace($tokenPath) -or -not (Test-Path -LiteralPath $tokenPath)) {
+            throw "B01_WARMUP: INVALID_CONFIGURATION (token file required for $boundaryMode)"
+        }
+        $warmupTokens = @((Get-Content -Raw -LiteralPath $tokenPath | ConvertFrom-Json))
+        if ($warmupTokens.Count -lt 1 -or [string]::IsNullOrWhiteSpace([string]$warmupTokens[0])) {
+            throw "B01_WARMUP: INVALID_CONFIGURATION (token file is empty)"
+        }
     }
-    [ordered]@{ mode = "FULL"; endpoint = "/game/face"; requests = $warmupRequests; concurrency = 1; fixturePath = $fixturePath; answer = "happy"; sceneId = 2 } |
-        ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $caseDir "warmup-contract.json")
-    $env:AUTH_TOKENS_PATH = $tokenPath
-    Remove-Item Env:AUTH_TOKEN -ErrorAction SilentlyContinue
+    $successfulRequests = 0
+    try {
+        for ($index = 1; $index -le $warmupRequests; $index++) {
+            $env:TARGET_URL = $warmupTarget
+            $env:MODE = $actualWarmupMode
+            $env:PAYLOAD_PROFILE = $warmupPayload
+            $env:ACTIVE_USERS = "1"
+            $env:INTERVAL_MS = "60000"
+            $env:DURATION_MS = "1"
+            $env:REQUEST_TIMEOUT_MS = [string]$case.requestTimeoutMs
+            $env:FIXTURE_PATH = $fixturePath
+            $env:ANSWER = "happy"
+            $env:SCENE_ID = "2"
+            if ($authorizationRequired) {
+                $env:AUTH_TOKEN = [string]$warmupTokens[0]
+                Remove-Item Env:AUTH_TOKENS_PATH -ErrorAction SilentlyContinue
+            } else {
+                Remove-Item Env:AUTH_TOKEN -ErrorAction SilentlyContinue
+                Remove-Item Env:AUTH_TOKENS_PATH -ErrorAction SilentlyContinue
+            }
+            $env:EXPERIMENT_RUN_ID = "MVC-DIAG-$($case.id)-W$index"
+            $warmupResultPath = Join-Path $caseDir "warmup-$index.json"
+            $env:RESULT_PATH = $warmupResultPath
+            $env:PROGRESS_PATH = Join-Path $caseDir "warmup-$index.progress.jsonl"
+            & $NodeCommand (Join-Path $repositoryRoot "experiment\load\mvc-diagnostic-load.js")
+            if ($LASTEXITCODE -ne 0) { throw "B01 warmup request $index failed" }
+            $warmupResult = Get-Content -Raw -LiteralPath $warmupResultPath | ConvertFrom-Json
+            $request = @($warmupResult.requests) | Select-Object -First 1
+            $isSuccess = $warmupResult.started -eq 1 -and $warmupResult.completed -eq 1 -and
+                $null -ne $request -and $request.status -ge 200 -and $request.status -lt 300 -and
+                $warmupResult.timeout -eq 0 -and $warmupResult.connectionError -eq 0 -and
+                $warmupResult.http4xx -eq 0 -and $warmupResult.http5xx -eq 0
+            if (-not $isSuccess) { throw "B01 warmup request $index returned a non-2xx/error result" }
+            $successfulRequests++
+        }
+    } finally {
+        if ($authorizationRequired) {
+            $env:AUTH_TOKENS_PATH = $tokenPath
+            Remove-Item Env:AUTH_TOKEN -ErrorAction SilentlyContinue
+        }
+    }
+    [ordered]@{
+        boundaryMode = $boundaryMode
+        actualWarmupMode = $actualWarmupMode
+        target = $warmupTarget
+        payload = $warmupPayload
+        requests = $warmupRequests
+        successfulRequests = $successfulRequests
+        authorizationRequired = $authorizationRequired
+        fixturePath = $fixturePath
+    } | ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $caseDir "warmup-contract.json")
     if (-not (Wait-IdleWindow 5)) { throw "B01 warmup idle gate failed" }
 }
 
