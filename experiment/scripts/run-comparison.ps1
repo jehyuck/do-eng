@@ -12,6 +12,12 @@ param(
     [switch]$CpuNormalizationSelfTest,
     [switch]$RunnerArgumentSelfTest,
     [switch]$ExperimentMockSelectionSelfTest,
+    [switch]$ObservabilityPassthroughSelfTest,
+    [int]$EnableObservability = 0,
+    [int]$EnableJfr = -1,
+    [int]$EnableContainerMonitor = 1,
+    [int]$SkipApplicationSnapshot = 0,
+    [int]$SkipMockMetrics = 0,
     [string]$NodeCommand
 )
 
@@ -32,6 +38,22 @@ function Resolve-RunnerConfigPath($path) {
         return [System.IO.Path]::GetFullPath($path)
     }
     return [System.IO.Path]::GetFullPath((Join-Path $repositoryRoot $path))
+}
+function Get-ObservabilityRunnerArguments {
+    param(
+        [int]$Observability,
+        [int]$Jfr,
+        [int]$ContainerMonitor,
+        [int]$SkipApplication,
+        [int]$SkipMock
+    )
+    @(
+        "-EnableObservability", [string]$Observability,
+        "-EnableJfr", [string]$Jfr,
+        "-EnableContainerMonitor", [string]$ContainerMonitor,
+        "-SkipApplicationSnapshot", [string]$SkipApplication,
+        "-SkipMockMetrics", [string]$SkipMock
+    )
 }
 function Get-ExperimentMockSelection([string]$image, [string]$service, [string]$composeProject) {
     $prebuilt = -not [string]::IsNullOrWhiteSpace($image)
@@ -91,6 +113,20 @@ if ($RunnerArgumentSelfTest) {
     }
     $result | ConvertTo-Json -Depth 5
     if (-not ($result.relative.pass -and $result.absolute.pass)) { exit 1 }
+    exit 0
+}
+if ($ObservabilityPassthroughSelfTest) {
+    $arguments = Get-ObservabilityRunnerArguments 1 1 1 0 0
+    $expected = @(
+        "-EnableObservability", "1",
+        "-EnableJfr", "1",
+        "-EnableContainerMonitor", "1",
+        "-SkipApplicationSnapshot", "0",
+        "-SkipMockMetrics", "0"
+    )
+    $pass = (@($arguments) -join "|") -eq (@($expected) -join "|")
+    [ordered]@{ arguments = @($arguments); pass = $pass } | ConvertTo-Json -Depth 4
+    if (-not $pass) { exit 1 }
     exit 0
 }
 if ($null -eq $ComposeFiles -or $ComposeFiles.Count -eq 0) {
@@ -280,6 +316,7 @@ try {
         "-ServerService", $service, "-ComposeProject", $ComposeProject, "-ComposeFiles", ($composePaths -join ","),
         "-ConfigPath", $resolvedRunnerConfigPath
     )
+    $runnerArguments += Get-ObservabilityRunnerArguments $EnableObservability $EnableJfr $EnableContainerMonitor $SkipApplicationSnapshot $SkipMockMetrics
     if ($NodeCommand) { $runnerArguments += @("-NodeCommand", $NodeCommand) }
     & powershell.exe @runnerArguments
     if ($LASTEXITCODE -ne 0) { throw "Comparison runner failed" }
