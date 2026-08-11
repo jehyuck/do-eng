@@ -1,0 +1,71 @@
+﻿[
+    {
+        "Name": "doeng-mvcdiag-network-audit-001_default",
+        "Id": "2211df22c27047d32b266413bf71e7b9b3be349f43b7fa178a510010d17aaa1e",
+        "Created": "2026-08-11T13:41:50.539215448Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "192.168.128.0/20",
+                    "Gateway": "192.168.128.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Options": {
+            "com.docker.network.enable_ipv4": "true",
+            "com.docker.network.enable_ipv6": "false"
+        },
+        "Labels": {
+            "com.docker.compose.config-hash": "c03bd25129b2df4401246e03bc896a068d034528c4118cf77a6f50070f8c1dd6",
+            "com.docker.compose.network": "default",
+            "com.docker.compose.project": "doeng-mvcdiag-network-audit-001",
+            "com.docker.compose.version": "5.1.3"
+        },
+        "Containers": {
+            "26ed733c9857cf420e67774289eb982534768930321f61552a0d677ee673fc25": {
+                "Name": "doeng-mvcdiag-network-audit-001-mariadb-1",
+                "EndpointID": "986355e990050e26fb298fbeb6c3477274d9e5b095b16d5fe0f167ed4ad1a503",
+                "MacAddress": "76:84:64:5a:cb:5e",
+                "IPv4Address": "192.168.128.3/20",
+                "IPv6Address": ""
+            },
+            "4cd064c9c47671ff2179fdebce3266f8ab68713a68692ec23050d564a6efe6e8": {
+                "Name": "doeng-mvcdiag-network-audit-001-mvc-1",
+                "EndpointID": "b2eff4d87fd6e548515eba31c14ade8ba46be84c69bc4b22aab97cb92b988e62",
+                "MacAddress": "36:1e:ef:30:24:a0",
+                "IPv4Address": "192.168.128.4/20",
+                "IPv6Address": ""
+            },
+            "6156efd0bc1c5a58d231af813811a0a0136d8092f197494a1e4efac41ba9ee4a": {
+                "Name": "doeng-mvcdiag-network-audit-001-experiment-mock-1",
+                "EndpointID": "4b0dd348fde9f8eded7a7b8c718f353a85aec4d63887e1ce972cce840981ff5b",
+                "MacAddress": "ae:b0:2f:4a:41:a8",
+                "IPv4Address": "192.168.128.2/20",
+                "IPv6Address": ""
+            }
+        },
+        "Status": {
+            "IPAM": {
+                "Subnets": {
+                    "192.168.128.0/20": {
+                        "IPsInUse": 6,
+                        "DynamicIPsAvailable": 4090
+                    }
+                }
+            }
+        }
+    }
+]

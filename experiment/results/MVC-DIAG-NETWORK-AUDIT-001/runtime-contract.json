@@ -1,0 +1,30 @@
+﻿{
+    "head":  "16219727e7b455c5c056336aa9b4aa72e259c665",
+    "project":  "doeng-mvcdiag-network-audit-001",
+    "network":  "doeng-mvcdiag-network-audit-001_default",
+    "mvc":  {
+                "containerId":  "4cd064c9c47671ff2179fdebce3266f8ab68713a68692ec23050d564a6efe6e8",
+                "imageId":  "sha256:edf0b39b32a6771edc24479b87a4ec273f7336a61aca08f837baaca6c34733e7",
+                "networks":  [
+                                 "doeng-mvcdiag-network-audit-001_default"
+                             ],
+                "env":  {
+                            "DOENG_HTTP_CONNECT_TIMEOUT_MS":  "2000",
+                            "DOENG_EXTERNAL_AI_BASE_URL":  "http://experiment-mock:9100/analyze",
+                            "DOENG_HTTP_RESPONSE_TIMEOUT_MS":  "10000"
+                        },
+                "restartCount":  0,
+                "oomKilled":  false,
+                "exitCode":  0
+            },
+    "mock":  {
+                 "containerId":  "6156efd0bc1c5a58d231af813811a0a0136d8092f197494a1e4efac41ba9ee4a",
+                 "imageId":  "sha256:fee2a6dcd7e412ea5aa6432b300aa6dacea0800dc2e0f00dae9160cd9dfe8bed",
+                 "networks":  [
+                                  "doeng-mvcdiag-network-audit-001_default"
+                              ],
+                 "restartCount":  0,
+                 "oomKilled":  false,
+                 "exitCode":  0
+             }
+}

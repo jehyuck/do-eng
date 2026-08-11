@@ -1,0 +1,1 @@
+﻿{"networkErrorLogMatches":"NOT_CAPTURED","unknownHost":0,"connectionRefused":0,"connectionReset":0,"http4xx":"NOT_CAPTURED","http5xx":"NOT_CAPTURED","note":"Existing compact T02 artifacts contain client outcomes but no application stdout/stderr log capture."}

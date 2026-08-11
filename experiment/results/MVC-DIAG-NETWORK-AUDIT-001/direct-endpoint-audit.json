@@ -1,0 +1,41 @@
+﻿{
+    "dns":  {
+                "tool":  "getent hosts",
+                "result":  "192.168.128.2 experiment-mock",
+                "resolvedIp":  "192.168.128.2",
+                "pass":  true
+            },
+    "health":  {
+                   "url":  "http://experiment-mock:9100/health",
+                   "status":  200,
+                   "elapsedMs":  4.423,
+                   "body":  "{\"status\":\"ok\",\"ai\":{\"result\":true,\"delayMs\":0,\"status\":200,\"closeBeforeResponse\":false},\"storage\":{\"delayMs\":100,\"status\":200}}"
+               },
+    "small":  {
+                  "payloadBytes":  1024,
+                  "requestSha256":  "4579446c3c0c951dbcfc95299b87f062c299b897336f49cbe5c85020898afe78",
+                  "configuredEndpoint":  "http://experiment-mock:9100/analyze",
+                  "configuredEndpointStatus":  404,
+                  "configuredEndpointBody":  "{\"error\":\"not found\"}",
+                  "actualEndpoint":  "http://experiment-mock:9100/analyze/face",
+                  "actualEndpointStatus":  200,
+                  "actualEndpointElapsedMs":  5.474,
+                  "actualEndpointBody":  "{\"result\":true,\"image\":\"\u003cbase64 response omitted\u003e\"}"
+              },
+    "real":  {
+                 "payloadBytes":  265745,
+                 "requestSha256":  "a8d393297bfebfd5852378716e0e34f3e6c41301d06245c473322ff246069aec",
+                 "configuredEndpoint":  "http://experiment-mock:9100/analyze",
+                 "configuredEndpointStatus":  404,
+                 "configuredEndpointBody":  "{\"error\":\"not found\"}",
+                 "actualEndpoint":  "http://experiment-mock:9100/analyze/face",
+                 "actualEndpointStatus":  200,
+                 "actualEndpointElapsedMs":  14.149,
+                 "actualEndpointBody":  "{\"result\":true,\"image\":\"\u003cbase64 response omitted\u003e\"}"
+             },
+    "metricsAfterDirect":  {
+                               "aiCompleted":  2,
+                               "aiMaxInFlight":  1,
+                               "requestCounts":  "POST /analyze/face=4 (two initial BOM-invalid probes plus two corrected successful probes)"
+                           }
+}

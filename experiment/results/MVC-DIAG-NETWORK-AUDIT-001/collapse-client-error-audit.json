@@ -1,0 +1,40 @@
+﻿{
+    "networkErrorLogMatches":  "NOT_CAPTURED",
+    "historicalRuns":  [
+                           {
+                               "connectionError":  0,
+                               "http200":  35,
+                               "run":  "MVC-DIAG-T02-CLOSURE-001",
+                               "started":  9105,
+                               "error":  "This operation was aborted",
+                               "timeout":  9070,
+                               "http5xx":  0,
+                               "http4xx":  0
+                           },
+                           {
+                               "connectionError":  0,
+                               "http200":  64,
+                               "run":  "MVC-DIAG-T02-AI0-001",
+                               "started":  9228,
+                               "error":  "This operation was aborted",
+                               "timeout":  9166,
+                               "http5xx":  0,
+                               "http4xx":  0
+                           },
+                           {
+                               "connectionError":  0,
+                               "http200":  5901,
+                               "run":  "MVC-DIAG-T02-AI0-MOCKCAP-001",
+                               "started":  9572,
+                               "error":  "This operation was aborted",
+                               "timeout":  4079,
+                               "http5xx":  0,
+                               "http4xx":  0
+                           }
+                       ],
+    "applicationLogArtifacts":  [
+                                    "MVC-DIAG-T02-CLOSURE-001: application stdout/stderr not captured in compact artifact",
+                                    "MVC-DIAG-T02-AI0-001: application stdout/stderr not captured in compact artifact",
+                                    "MVC-DIAG-T02-AI0-MOCKCAP-001: application stdout/stderr not captured in compact artifact"
+                                ]
+}
