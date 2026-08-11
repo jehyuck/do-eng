@@ -1,0 +1,16 @@
+{
+  "pair": "IO1000-PAIR001",
+  "configCommit": "17e8f887f02d351c2eecb39e086cdcfa70b8944e",
+  "gitHead": "17e8f887f02d351c2eecb39e086cdcfa70b8944e",
+  "config": "experiment/config/comparison-vu160-service-3s-ai1000ms.json",
+  "aiDelayMs": 1000,
+  "missionLoadSha256": "F3A6EB36798A57CE408DE85E5420F65273BB5C2684BC02618822C4C78095619B",
+  "fixture": "image/arc.jpg",
+  "fixtureSha256": "1EEADB414471C8F89207118BAAD01D1A9EC7B05306DF0482A79D92D2C615FA99",
+  "runs": {
+    "webflux": {"runId":"IO1000-W001","artifactRoot":"experiment/results/IO1000-W001","runtimeIdentity":"experiment/results/runtime-identities/IO1000-W001/runtime-identity.json","executionValidity":"VALID","results":{"started":7530,"completed":7530,"http200":7530,"http500":0,"http503":0,"timeout":0,"connectionError":0,"trueResponses":7530,"trueSuccessRate":100.0,"successfulRps":71.714286,"totalRps":71.714286,"p50":1154,"p95":3739,"p99":6135,"maxInFlight":355,"aiMaxInFlight":118,"aiCompleted":7530,"storageMaxInFlight":33,"storageCompleted":7530,"drainCompleted":true,"timeToZeroMs":2000}},
+    "mvc400": {"runId":"IO1000-M001","artifactRoot":"experiment/results/IO1000-M001","runtimeIdentity":"experiment/results/runtime-identities/IO1000-M001/runtime-identity.json","executionValidity":"VALID","results":{"started":5539,"completed":5539,"http200":763,"http500":0,"http503":0,"timeout":4776,"connectionError":0,"trueResponses":763,"trueSuccessRate":13.775,"successfulRps":7.266667,"totalRps":52.752381,"p50":5379,"p95":9620,"p99":9918,"maxInFlight":599,"aiMaxInFlight":257,"aiCompleted":5536,"storageMaxInFlight":148,"storageCompleted":5536,"drainCompleted":true,"timeToZeroMs":2028}}
+  },
+  "pairParity": {"result":"PASS","onlyIndependentVariable":"downstream.aiDelayMs","mariaDbImageId":true,"loadAndResourceConditions":true},
+  "classification": {"pairValid":true}
+}
