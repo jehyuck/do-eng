@@ -1,44 +1,98 @@
 # MVC AI Original Scheduler Confirmation
 
-## Current execution
+## Execution
 
-- Base HEAD: `ff35fcc301ea124ecf55905650c59eff26bfb08c`
+- Base HEAD: `0cc3f1472e76a04de5b4cfecd3737b460b973bd2`
 - Runner: `experiment/scripts/run-mvc-ai-original-scheduler-confirmation.ps1 -Execute`
-- Execution status: `STOPPED_INVALID`
-- Failure phase: client process bootstrap, after startup gate and runtime contracts
-- Failure: `node` was not available on PATH; PowerShell raised `CommandNotFoundException`.
-- No HTTP request was started: `started=0`.
+- Run ID: `MVC-AI-ORIGINAL-SCHED-001`
+- Execution status: `COMPLETE`
+- Measurement validity: `VALID`
+- Application classification: `COLLAPSE`
+- WebFlux: `NO`
 
-## Gate evidence
+The prior Node bootstrap failure is preserved as historical provenance under:
+
+- `experiment/results/bootstrap-history/MVC-AI-ORIGINAL-SCHED-001-node-recovery-before-pass`
+- `experiment/results/bootstrap-history/MVC-AI-ORIGINAL-SCHED-001-bootstrap-pass`
+
+The stale project volume was verified to belong to the expected Compose project, had zero attached containers, and was removed before the BootstrapOnly gate. No other volume was removed.
+
+## Validity gates
 
 | Gate | Status |
 |---|---|
 | Image contract | PASS |
 | Fresh project guard | PASS |
+| Node runtime contract | PASS |
 | Startup gate | PASS |
 | MVC runtime contract | PASS |
 | Mock runtime contract | PASS |
-| Client accounting | FAIL / not reached |
-| Scheduler contract | FAIL / not reached |
-| Observer contract | FAIL / not reached |
+| Client accounting contract | PASS |
+| Scheduler contract | PASS |
+| Observer contract | PASS |
 | Final MVC state | PASS |
 | Final mock state | PASS |
-| Measurement validity | `false` |
+| Node exit code | `0` |
+| Performance workload started | YES |
+| Measurement validity | `true` |
 
-Startup evidence: container started at `2026-08-11T15:35:43.724500139Z`, ready for load at `2026-08-11T15:36:03.9998530Z`, startup age `20275ms`, stable window `11278ms`.
+Node runtime: `C:\Users\KOSCOM\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe`, version `v24.14.0`.
 
-The canonical MVC and mock image IDs were present locally and the run-specific tags matched them. The freshness guard found zero existing containers and zero existing project volumes. Runtime cleanup completed without restart or OOM.
+## Workload result
 
-## Workload disposition
+| Metric | Value |
+|---|---:|
+| Started | 8,909 |
+| Completed | 8,909 |
+| Successful (`HTTP_200_ACCEPTED`) | 967 |
+| Timeout | 6,441 |
+| Connection error | 1,490 |
+| HTTP 500 | 11 |
+| Success rate | 10.853% |
+| Timeout rate | 72.313% |
+| Total RPS | 148.483 |
+| p50 | 8,124 ms |
+| p95 | 9,846 ms |
+| p99 | 9,981 ms |
+| Max in-flight | 1,591 |
+| Success-triggered reconnects | 410 |
 
-- Performance workload: `NO`
-- Node mission-load process: `NOT_STARTED`
-- WebFlux: `NO`
-- Application error counts: all requested exception/error patterns were `0`.
-- No application outcome or performance classification is inferred.
+All requests were completed or classified; unfinished requests were `0`. The result is classified as `COLLAPSE` under the registered classification because success was below 80%.
 
-The raw `measurement-validity.json` records `performanceWorkloadStarted=true` because the runner sets that flag immediately before attempting the Node invocation. The recorded `nodeExitCode=null`, `CommandNotFoundException`, and zero started requests establish that the Node process itself did not start; this run is therefore a setup failure, not a performance result.
+## Scheduler and observer evidence
 
-The prior `$PSScriptRoot` initialization failure and bootstrap-only artifacts remain preserved under `experiment/results/bootstrap-history/MVC-AI-ORIGINAL-SCHED-001-pre-measurement`.
+- `loadScenario`: `reconnect-ramp`
+- `arrivalMode`: `staggered`
+- `activeMissions`: `160`
+- `initialActiveUsers`: `160`
+- `activationStepUsers`: `1`
+- `activationIntervalMs`: `3000`
+- `reconnectDelayMs`: `1000`
+- `intervalMs`: `1000`
+- `durationMs`: `60000`
+- `requestTimeoutMs`: `10000`
+- Success matcher: JSON path `ai.result`
+- Fixture: `image/arc.jpg`, 265,745 bytes, SHA-256 `1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99`
 
-No automatic retry or code/config change was performed after this execution.
+Observer maxima from the captured samples:
+
+- Tomcat busy: `400`
+- Tomcat queue: `1,612`
+- HTTP active: `363`
+- HTTP pending: `0`
+- AI in-flight: `110`
+- Storage in-flight: `0`
+- Container restart: `0`
+- OOMKilled: `false`
+
+The mock drain completed after `16,328 ms`; terminal AI/storage in-flight values were both `0`. The observer artifact recorded readiness polling failures during load, but its contract remained valid and application/mock samples were captured.
+
+## Interpretation boundary
+
+`SCHEDULER_SEMANTICS_EFFECT: NOT_SUFFICIENT`
+
+`IMMEDIATE_FIXED_SCHEDULER_CONFOUNDER: NOT_ESTABLISHED`
+
+This execution establishes a valid result for the configured scheduler and records a collapse outcome. It does not by itself establish a low-level root cause or isolate the scheduler as causal.
+
+No automatic rerun or additional workload was executed.
