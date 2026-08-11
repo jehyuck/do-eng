@@ -101,6 +101,18 @@ services:
     image: $lockedMockImage
 "@ | Set-Content -Encoding UTF8 -LiteralPath $imageOverride
 $runtimeComposeFiles = @($composeFile, $imageOverride)
+$runtimeComposeFilesJson = ConvertTo-Json -Compress -InputObject @($runtimeComposeFiles)
+$runtimeComposeFilesBase64 = [Convert]::ToBase64String(
+    [Text.Encoding]::UTF8.GetBytes($runtimeComposeFilesJson))
+$decodedRuntimeComposeFiles = @(
+    ([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($runtimeComposeFilesBase64)) |
+        ConvertFrom-Json) | ForEach-Object { [string]$_ }
+)
+if ($decodedRuntimeComposeFiles.Count -ne $runtimeComposeFiles.Count -or
+    $decodedRuntimeComposeFiles[0] -ne $runtimeComposeFiles[0] -or
+    $decodedRuntimeComposeFiles[1] -ne $runtimeComposeFiles[1]) {
+    throw "COMPOSE_FILES_SERIALIZATION_CONTRACT: FAIL"
+}
 $matrixImageContract.lockedMvcImage = $lockedMvcImage
 $matrixImageContract.lockedMockImage = $lockedMockImage
 $matrixImageContract | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $ResultsRoot "matrix-image-contract.json")
@@ -422,7 +434,7 @@ function Invoke-Case($case) {
     if ($LASTEXITCODE -ne 0) { throw "compose up failed for $($case.id)" }
     try {
         & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "wait-mvc-readiness.ps1") `
-            -ComposeProject $project -ServerService mvc -ComposeFiles $runtimeComposeFiles -OutputPath (Join-Path $caseDir "startup-gate.json")
+            -ComposeProject $project -ServerService mvc -ComposeFilesBase64 $runtimeComposeFilesBase64 -OutputPath (Join-Path $caseDir "startup-gate.json")
         if ($LASTEXITCODE -ne 0) { throw "STARTUP_GATE: FAIL for $($case.id)" }
         $mvcImageId = Write-RuntimeContract $project $caseDir
         $mockImageId = (Get-Container $project "experiment-mock").Image
@@ -447,12 +459,13 @@ function Invoke-Case($case) {
             $measurementContract = Set-CaseMeasurementEnvironment $case $target $caseDir
             Assert-B01MeasurementEnvironment $case $caseDir $measurementContract
         }
-        $observer = Start-Process -FilePath "powershell.exe" -ArgumentList @(
+        $observerArguments = @(
             "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "observe-mvc-diagnostic.ps1"),
             "-ComposeProject", $project, "-ServerService", "mvc", "-DurationSeconds", [string]([math]::Ceiling($manifest.defaults.durationMs / 1000)),
-            "-ComposeFiles", $runtimeComposeFiles,
+            "-ComposeFilesBase64", $runtimeComposeFilesBase64,
             "-OutputPath", (Join-Path $caseDir "observer.jsonl")
-        ) -PassThru -WindowStyle Hidden
+        )
+        $observer = Start-Process -FilePath "powershell.exe" -ArgumentList $observerArguments -PassThru -WindowStyle Hidden
         if ($case.mode -eq "FULL_ORIGINAL_SCHEDULER") {
             $env:ACTIVE_MISSIONS = [string]$manifest.defaults.activeUsers
             $env:LOAD_SCENARIO = "reconnect-ramp"

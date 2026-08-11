@@ -7,11 +7,25 @@ param(
     [int]$MainPort = 8002,
     [int]$ManagementPort = 9002,
     [int]$MockPort = 9100,
+    [string]$ComposeFilesBase64 = "",
     [Parameter(Mandatory = $true)][string]$OutputPath
 )
 
 $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$composeFilesSource = "PARAMETER_DEFAULT"
+if (-not [string]::IsNullOrWhiteSpace($ComposeFilesBase64)) {
+    try {
+        $bytes = [Convert]::FromBase64String($ComposeFilesBase64)
+        $json = [Text.Encoding]::UTF8.GetString($bytes)
+        $decoded = $json | ConvertFrom-Json
+        if ($decoded.Count -lt 1) { throw "Decoded compose file list is empty" }
+        $ComposeFiles = @($decoded | ForEach-Object { [string]$_ })
+        $composeFilesSource = "BASE64_JSON"
+    } catch {
+        throw "COMPOSE_FILES_DECODE: FAIL — $($_.Exception.Message)"
+    }
+}
 $composeArguments = @()
 foreach ($file in $ComposeFiles) {
     $path = if ([IO.Path]::IsPathRooted($file)) { $file } else { Join-Path $repositoryRoot $file }
@@ -75,6 +89,8 @@ while (((Get-Date) - $started).TotalSeconds -lt $DurationSeconds) {
     Start-Sleep -Seconds $IntervalSeconds
 }
 $summary = [ordered]@{
+    composeFileCount = @($ComposeFiles).Count
+    composeFilesSource = $composeFilesSource
     capturedAt = (Get-Date).ToUniversalTime().ToString("o")
     durationSeconds = $DurationSeconds
     intervalSeconds = $IntervalSeconds
