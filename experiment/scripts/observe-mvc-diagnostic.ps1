@@ -35,14 +35,29 @@ if (-not [IO.Path]::IsPathRooted($OutputPath)) { $OutputPath = Join-Path $reposi
 $parent = Split-Path -Parent $OutputPath
 New-Item -ItemType Directory -Force -Path $parent | Out-Null
 
+function Convert-HttpContentToText {
+    param($Content)
+    if ($null -eq $Content) { return "" }
+    if ($Content -is [byte[]]) { return [Text.Encoding]::UTF8.GetString($Content) }
+    if ($Content -is [string]) { return $Content }
+    return [string]$Content
+}
+
+function Convert-HttpContent {
+    param($Content)
+    $text = Convert-HttpContentToText $Content
+    if ([string]::IsNullOrWhiteSpace($text)) { return $null }
+    try { return $text | ConvertFrom-Json } catch { return $text }
+}
+
 function Get-Json($uri) {
     try {
         $response = Invoke-WebRequest -UseBasicParsing -Uri $uri -TimeoutSec 1
-        $body = $null
-        try { $body = $response.Content | ConvertFrom-Json } catch { $body = $response.Content }
-        return [ordered]@{ ok = $true; status = $response.StatusCode; body = $body }
+        $text = Convert-HttpContentToText $response.Content
+        $body = Convert-HttpContent $response.Content
+        return [ordered]@{ ok = $true; status = [int]$response.StatusCode; text = $text; body = $body }
     } catch {
-        return [ordered]@{ ok = $false; status = 0; body = $null; error = $_.Exception.Message }
+        return [ordered]@{ ok = $false; status = 0; text = ""; body = $null; error = $_.Exception.Message }
     }
 }
 
@@ -83,7 +98,8 @@ while (((Get-Date) - $started).TotalSeconds -lt $DurationSeconds) {
     $samples++
     if ($sample.application.ok) { $successfulApplicationSamples++ } else { $failedSamples++ }
     if ($sample.mock.ok) { $successfulMockSamples++ }
-    if (-not $sample.readiness.ok) { $readinessFailures++ }
+    if (-not ($sample.readiness.ok -and $sample.readiness.status -eq 200 -and
+            $sample.readiness.body.status -eq "UP")) { $readinessFailures++ }
     if ($null -eq $sample.container) { $containerStateFailures++ }
     ($sample | ConvertTo-Json -Depth 12 -Compress) | Add-Content -Encoding UTF8 -LiteralPath $OutputPath
     Start-Sleep -Seconds $IntervalSeconds

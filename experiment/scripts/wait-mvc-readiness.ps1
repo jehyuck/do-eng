@@ -37,17 +37,30 @@ if ([string]::IsNullOrWhiteSpace($OutputPath)) {
     $OutputPath = Join-Path $repositoryRoot $OutputPath
 }
 
+function Convert-HttpContentToText {
+    param($Content)
+    if ($null -eq $Content) { return "" }
+    if ($Content -is [byte[]]) { return [Text.Encoding]::UTF8.GetString($Content) }
+    if ($Content -is [string]) { return $Content }
+    return [string]$Content
+}
+
+function Convert-HttpContent {
+    param($Content)
+    $text = Convert-HttpContentToText $Content
+    if ([string]::IsNullOrWhiteSpace($text)) { return $null }
+    try { return $text | ConvertFrom-Json } catch { return $text }
+}
+
 function Get-HttpJson {
     param([string]$Uri)
     try {
         $response = Invoke-WebRequest -UseBasicParsing -Uri $Uri -TimeoutSec 2
-        $body = $null
-        if (-not [string]::IsNullOrWhiteSpace($response.Content)) {
-            try { $body = $response.Content | ConvertFrom-Json } catch { $body = $response.Content }
-        }
-        return [pscustomobject]@{ status = [int]$response.StatusCode; body = $body }
+        $text = Convert-HttpContentToText $response.Content
+        $body = Convert-HttpContent $response.Content
+        return [pscustomobject]@{ status = [int]$response.StatusCode; text = $text; body = $body }
     } catch {
-        return [pscustomobject]@{ status = 0; body = $null }
+        return [pscustomobject]@{ status = 0; text = ""; body = $null }
     }
 }
 
