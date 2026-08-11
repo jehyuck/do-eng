@@ -316,8 +316,9 @@ ORDER BY member_id, mission_run_id;
 
 function Get-ServerContainerId {
     param([switch]$IncludeStopped)
-    $psArguments = @("ps", "-q")
+    $psArguments = @("ps")
     if ($IncludeStopped) { $psArguments += "--all" }
+    $psArguments += @("-q", $ServerService)
     $output = @(& docker compose -p $ComposeProject @composeArguments @psArguments 2>$null)
     if ($LASTEXITCODE -ne 0) { return $null }
     $ids = @($output | ForEach-Object {
