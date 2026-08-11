@@ -53,6 +53,71 @@ function Test-SummaryContract {
     return $true
 }
 
+function Assert-ClientAccounting {
+    param($Client)
+    $summary = $Client.summary
+    $actual = [ordered]@{
+        startedRequests = $summary.startedRequests
+        completedRequests = $summary.completedRequests
+        unfinishedRequests = $summary.unfinishedRequests
+        accountingValid = $summary.accounting.valid
+        nodeExitCode = $script:nodeExitCode
+    }
+    $pass = $actual.nodeExitCode -eq 0 -and $actual.startedRequests -gt 0 -and
+        $actual.completedRequests -eq $actual.startedRequests -and
+        $actual.unfinishedRequests -eq 0 -and $actual.accountingValid -eq $true
+    $actual.pass = $pass
+    Write-JsonFile (Join-Path $resultDirectory "client-accounting-contract.json") $actual
+    if (-not $pass) { throw "CLIENT_ACCOUNTING_CONTRACT: FAIL" }
+}
+
+function Assert-ObserverContract {
+    param([string]$ObserverSummaryPath)
+    if (-not (Test-Path -LiteralPath $ObserverSummaryPath)) { throw "OBSERVER_CONTRACT: missing summary" }
+    $summary = Get-Content -Raw -LiteralPath $ObserverSummaryPath | ConvertFrom-Json
+    $pass = $summary.sampleCount -gt 0 -and $summary.observerValid -eq $true -and
+        $summary.successfulApplicationSamples -gt 0 -and
+        $summary.successfulMockSamples -gt 0 -and
+        $summary.containerStateFailures -lt $summary.sampleCount
+    $contract = [ordered]@{
+        expected = [ordered]@{
+            sampleCount = "> 0"
+            observerValid = $true
+            successfulApplicationSamples = "> 0"
+            successfulMockSamples = "> 0"
+            containerStateFailures = "< sampleCount"
+        }
+        actual = $summary
+        pass = $pass
+    }
+    Write-JsonFile (Join-Path $resultDirectory "observer-contract.json") $contract
+    if (-not $pass) { throw "OBSERVER_CONTRACT: FAIL" }
+}
+
+function Capture-FinalContainerState {
+    param([string]$Service, [string]$Path)
+    $container = Get-InspectedContainer $Service
+    $state = [ordered]@{
+        capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+        containerId = $container.Id
+        imageId = $container.Image
+        running = $container.State.Running
+        restartCount = $container.RestartCount
+        oomKilled = $container.State.OOMKilled
+        exitCode = $container.State.ExitCode
+        status = $container.State.Status
+    }
+    Write-JsonFile $Path $state
+    return $state
+}
+
+function Assert-FinalContainerState {
+    param($State, [string]$Name)
+    $pass = $State.running -eq $true -and $State.restartCount -eq 0 -and $State.oomKilled -eq $false
+    Write-JsonFile (Join-Path $resultDirectory "$Name-final-state-contract.json") ([ordered]@{ actual = $State; pass = $pass })
+    if (-not $pass) { throw "$Name`_FINAL_STATE: FAIL" }
+}
+
 function Write-InitialArrivalSummary {
     param([string]$ClientResultsPath)
     $client = Get-Content -Raw -LiteralPath $ClientResultsPath | ConvertFrom-Json
@@ -105,6 +170,140 @@ $clientStdout = Join-Path $resultDirectory "client-process.stdout.log"
 $clientStderr = Join-Path $resultDirectory "client-process.stderr.log"
 $mvcStdout = Join-Path $resultDirectory "application-container.stdout.log"
 $mvcStderr = Join-Path $resultDirectory "application-container.stderr.log"
+$canonicalImageContractPath = Join-Path $RepositoryRoot "experiment/results/matrix-image-contract.json"
+$expectedMvcImageId = "sha256:984fa39f3ab397d831086f8bef96402180c1d80d2d47b0a0274b2189652b6d4d"
+$expectedMockImageId = "sha256:0bbf354a08732a5dbfd3a3013218a6f1955d74c1bc41ecc407e819ba1788bbf6"
+$lockedMvcImage = "doeng-mvcdiag-mvc:locked"
+$lockedMockImage = "doeng-mvcdiag-mock:locked"
+
+function Get-InspectedContainer {
+    param([string]$Service)
+    $id = (& docker compose -p $composeProject -f $baseCompose -f $imageOverride -f $runtimeOverride ps -q $Service 2>$null |
+        Select-Object -First 1).Trim()
+    if ([string]::IsNullOrWhiteSpace($id)) { throw "Could not resolve container for $Service" }
+    $raw = @(& docker inspect $id 2>$null)
+    if ($LASTEXITCODE -ne 0) { throw "docker inspect failed for $Service" }
+    return (($raw -join [Environment]::NewLine) | ConvertFrom-Json)[0]
+}
+
+function Get-ContainerEnvironment {
+    param($Container)
+    $environment = @{}
+    foreach ($entry in @($Container.Config.Env)) {
+        $parts = ([string]$entry) -split "=", 2
+        if ($parts.Count -eq 2) { $environment[$parts[0]] = $parts[1] }
+    }
+    return $environment
+}
+
+function Get-ImageId {
+    param([string]$Tag)
+    $id = ([string](@(& docker image inspect $Tag --format "{{.Id}}" 2>$null) -join "")).Trim()
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($id)) { throw "Could not inspect image $Tag" }
+    return $id
+}
+
+function Assert-CanonicalImageContract {
+    if (-not (Test-Path -LiteralPath $canonicalImageContractPath)) { throw "IMAGE_CONTRACT: missing canonical contract" }
+    $contract = Get-Content -Raw -LiteralPath $canonicalImageContractPath | ConvertFrom-Json
+    $mvcId = Get-ImageId $lockedMvcImage
+    $mockId = Get-ImageId $lockedMockImage
+    $actual = [ordered]@{
+        mvcImage = $mvcId
+        mockImage = $mockId
+        expectedMvcImage = $expectedMvcImageId
+        expectedMockImage = $expectedMockImageId
+        sourceContractMvcImage = [string]$contract.mvcImageId
+        sourceContractMockImage = [string]$contract.mockImageId
+    }
+    $pass = $mvcId -eq $expectedMvcImageId -and $mockId -eq $expectedMockImageId -and
+        [string]$contract.mvcImageId -eq $expectedMvcImageId -and
+        [string]$contract.mockImageId -eq $expectedMockImageId
+    $actual.pass = $pass
+    Write-JsonFile (Join-Path $resultDirectory "image-contract.json") $actual
+    if (-not $pass) { throw "IMAGE_CONTRACT: FAIL" }
+}
+
+function Assert-FreshProject {
+    $ids = @(& docker ps -aq --filter "label=com.docker.compose.project=$composeProject" 2>$null |
+        Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
+    if ($LASTEXITCODE -ne 0) { throw "FRESH_PROJECT_GUARD: unable to inspect project" }
+    $guard = [ordered]@{ project = $composeProject; existingContainerIds = @($ids); pass = $ids.Count -eq 0 }
+    Write-JsonFile (Join-Path $resultDirectory "fresh-project-guard.json") $guard
+    if (-not $guard.pass) { throw "FRESH_PROJECT_GUARD: FAIL" }
+}
+
+function Assert-MvcRuntimeContract {
+    param($Container)
+    $environment = Get-ContainerEnvironment $Container
+    $javaOptions = [string]$environment.JAVA_TOOL_OPTIONS
+    $actual = [ordered]@{
+        sourceRoot = "backend/experiment-mock"
+        imageId = $Container.Image
+        nanoCpus = $Container.HostConfig.NanoCpus
+        memory = $Container.HostConfig.Memory
+        environment = [ordered]@{
+            DOENG_MVC_MAX_THREADS = $environment.DOENG_MVC_MAX_THREADS
+            DOENG_HTTP_MAX_CONNECTIONS = $environment.DOENG_HTTP_MAX_CONNECTIONS
+            DOENG_DB_POOL_MAX_SIZE = $environment.DOENG_DB_POOL_MAX_SIZE
+            JAVA_TOOL_OPTIONS = $javaOptions
+        }
+    }
+    $expected = [ordered]@{
+        imageId = $expectedMvcImageId
+        nanoCpus = 2000000000
+        memory = 3221225472
+        DOENG_MVC_MAX_THREADS = "400"
+        DOENG_HTTP_MAX_CONNECTIONS = "400"
+        DOENG_DB_POOL_MAX_SIZE = "10"
+        javaXms = "512m"
+        javaXmx = "2048m"
+    }
+    $pass = $actual.imageId -eq $expected.imageId -and $actual.nanoCpus -eq $expected.nanoCpus -and
+        $actual.memory -eq $expected.memory -and
+        $actual.environment.DOENG_MVC_MAX_THREADS -eq $expected.DOENG_MVC_MAX_THREADS -and
+        $actual.environment.DOENG_HTTP_MAX_CONNECTIONS -eq $expected.DOENG_HTTP_MAX_CONNECTIONS -and
+        $actual.environment.DOENG_DB_POOL_MAX_SIZE -eq $expected.DOENG_DB_POOL_MAX_SIZE -and
+        $javaOptions -match "-Xms512m" -and $javaOptions -match "-Xmx2048m"
+    Write-JsonFile (Join-Path $resultDirectory "runtime-contract.json") ([ordered]@{ expected = $expected; actual = $actual; pass = $pass })
+    if (-not $pass) { throw "MVC_RUNTIME_CONTRACT: FAIL" }
+}
+
+function Assert-MockRuntimeContract {
+    param($Container)
+    $environment = Get-ContainerEnvironment $Container
+    $actual = [ordered]@{
+        imageId = $Container.Image
+        nanoCpus = $Container.HostConfig.NanoCpus
+        memory = $Container.HostConfig.Memory
+        environment = [ordered]@{
+            MOCK_AI_RESULT = $environment.MOCK_AI_RESULT
+            MOCK_AI_DELAY_MS = $environment.MOCK_AI_DELAY_MS
+            MOCK_AI_STATUS = $environment.MOCK_AI_STATUS
+            MOCK_STORAGE_DELAY_MS = $environment.MOCK_STORAGE_DELAY_MS
+            MOCK_STORAGE_STATUS = $environment.MOCK_STORAGE_STATUS
+        }
+    }
+    $expected = [ordered]@{
+        imageId = $expectedMockImageId
+        nanoCpus = 4000000000
+        memory = 1073741824
+        MOCK_AI_RESULT = "true"
+        MOCK_AI_DELAY_MS = "0"
+        MOCK_AI_STATUS = "200"
+        MOCK_STORAGE_DELAY_MS = "100"
+        MOCK_STORAGE_STATUS = "200"
+    }
+    $pass = $actual.imageId -eq $expected.imageId -and $actual.nanoCpus -eq $expected.nanoCpus -and
+        $actual.memory -eq $expected.memory -and
+        $actual.environment.MOCK_AI_RESULT -eq $expected.MOCK_AI_RESULT -and
+        $actual.environment.MOCK_AI_DELAY_MS -eq $expected.MOCK_AI_DELAY_MS -and
+        $actual.environment.MOCK_AI_STATUS -eq $expected.MOCK_AI_STATUS -and
+        $actual.environment.MOCK_STORAGE_DELAY_MS -eq $expected.MOCK_STORAGE_DELAY_MS -and
+        $actual.environment.MOCK_STORAGE_STATUS -eq $expected.MOCK_STORAGE_STATUS
+    Write-JsonFile (Join-Path $resultDirectory "mock-runtime-contract.json") ([ordered]@{ expected = $expected; actual = $actual; pass = $pass })
+    if (-not $pass) { throw "MOCK_RUNTIME_CONTRACT: FAIL" }
+}
 
 $env:APP_CPU = "2.0"
 $env:APP_MEMORY = "3g"
@@ -127,7 +326,22 @@ $env:MOCK_DRAIN_SUMMARY_PATH = Join-Path $resultDirectory "mock-drain-summary.js
 $observerProcess = $null
 $mvcLogProcess = $null
 $originalError = $null
+$script:imageContractPass = $false
+$script:freshProjectGuardPass = $false
+$script:startupGatePass = $false
+$script:mvcRuntimeContractPass = $false
+$script:mockRuntimeContractPass = $false
+$script:clientAccountingPass = $false
+$script:schedulerContractPass = $false
+$script:observerContractPass = $false
+$script:mvcFinalStatePass = $false
+$script:mockFinalStatePass = $false
+$script:nodeExitCode = $null
 try {
+    Assert-CanonicalImageContract
+    $script:imageContractPass = $true
+    Assert-FreshProject
+    $script:freshProjectGuardPass = $true
     & docker compose -p $composeProject -f $baseCompose -f $imageOverride -f $runtimeOverride up -d --no-build mariadb experiment-mock mvc
     if ($LASTEXITCODE -ne 0) { throw "Compose startup failed" }
 
@@ -135,25 +349,18 @@ try {
         -ComposeProject $composeProject -ServerService mvc -MainPort 8002 -ManagementPort 9002 -MockPort 9100 `
         -ComposeFilesBase64 $composeFilesBase64 -OutputPath (Join-Path $resultDirectory "startup-gate.json")
     if ($LASTEXITCODE -ne 0) { throw "Startup gate failed" }
+    $script:startupGatePass = $true
 
-    $mvcId = Get-ServiceContainerId "mvc"
-    $mockId = Get-ServiceContainerId "experiment-mock"
-    docker inspect $mvcId | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $resultDirectory "container-state.json")
-    docker inspect $mockId | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $resultDirectory "mock-container-state.json")
-    Write-JsonFile (Join-Path $resultDirectory "runtime-contract.json") ([ordered]@{
-        composeProject = $composeProject
-        composeFiles = $composeFiles
-        composeFilesSource = "BASE64_JSON"
-        mvcContainerId = $mvcId
-        mockContainerId = $mockId
-    })
-    Write-JsonFile (Join-Path $resultDirectory "mock-runtime-contract.json") ([ordered]@{
-        composeProject = $composeProject
-        service = "experiment-mock"
-        containerId = $mockId
-        sourceRoot = "backend/experiment-mock"
-        composeFilesSource = "BASE64_JSON"
-    })
+    $mvcContainer = Get-InspectedContainer "mvc"
+    $mockContainer = Get-InspectedContainer "experiment-mock"
+    $mvcId = $mvcContainer.Id
+    $mockId = $mockContainer.Id
+    $mvcContainer | ConvertTo-Json -Depth 30 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $resultDirectory "container-state-start.json")
+    $mockContainer | ConvertTo-Json -Depth 30 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $resultDirectory "mock-container-state-start.json")
+    Assert-MvcRuntimeContract $mvcContainer
+    $script:mvcRuntimeContractPass = $true
+    Assert-MockRuntimeContract $mockContainer
+    $script:mockRuntimeContractPass = $true
 
     $mvcLogProcess = Start-Process -FilePath "docker" -ArgumentList @("logs", "-f", $mvcId) -RedirectStandardOutput $mvcStdout -RedirectStandardError $mvcStderr -PassThru -WindowStyle Hidden
     $observerArgs = @(
@@ -191,6 +398,7 @@ try {
     $clientStartedAt = Get-Date
     & $nodeCommand $loadScript 1> $clientStdout 2> $clientStderr
     $nodeExitCode = $LASTEXITCODE
+    $script:nodeExitCode = $nodeExitCode
     $clientFinishedAt = Get-Date
     Write-JsonFile (Join-Path $resultDirectory "client-process-contract.json") ([ordered]@{
         startedAt = $clientStartedAt.ToUniversalTime().ToString("o")
@@ -214,7 +422,12 @@ try {
         captureMode = "docker logs -f"
     })
     $client = Get-Content -Raw -LiteralPath $clientResults | ConvertFrom-Json
+    Assert-ClientAccounting $client
+    $script:clientAccountingPass = $true
     if (-not (Test-SummaryContract $client.summary)) { throw "SCHEDULER_CONTRACT failed" }
+    $script:schedulerContractPass = $true
+    Assert-ObserverContract (Join-Path $resultDirectory "observer.summary.json")
+    $script:observerContractPass = $true
     Write-InitialArrivalSummary $clientResults
     Write-JsonFile (Join-Path $resultDirectory "scheduler-contract.json") ([ordered]@{
         valid = $true
@@ -235,6 +448,46 @@ catch {
 finally {
     if ($observerProcess -and -not $observerProcess.HasExited) { Stop-Process -Id $observerProcess.Id -Force }
     if ($mvcLogProcess -and -not $mvcLogProcess.HasExited) { Stop-Process -Id $mvcLogProcess.Id -Force }
+    if ($Execute) {
+        Write-JsonFile (Join-Path $resultDirectory "application-log-capture.json") ([ordered]@{
+            containerId = $mvcId
+            stdoutPath = $mvcStdout
+            stderrPath = $mvcStderr
+            captureMode = "docker logs -f"
+        })
+    }
+    if ($Execute -and $mvcId -and $mockId) {
+        try {
+            $mvcFinal = Capture-FinalContainerState "mvc" (Join-Path $resultDirectory "container-state-final.json")
+            $mockFinal = Capture-FinalContainerState "experiment-mock" (Join-Path $resultDirectory "mock-container-state-final.json")
+            $script:mvcFinalStatePass = $mvcFinal.running -eq $true -and $mvcFinal.restartCount -eq 0 -and $mvcFinal.oomKilled -eq $false
+            $script:mockFinalStatePass = $mockFinal.running -eq $true -and $mockFinal.restartCount -eq 0 -and $mockFinal.oomKilled -eq $false
+            Write-JsonFile (Join-Path $resultDirectory "mvc-final-state-contract.json") ([ordered]@{ actual = $mvcFinal; pass = $script:mvcFinalStatePass })
+            Write-JsonFile (Join-Path $resultDirectory "mock-final-state-contract.json") ([ordered]@{ actual = $mockFinal; pass = $script:mockFinalStatePass })
+        } catch {
+            $_.Exception.Message | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $resultDirectory "final-state-capture-error.txt")
+        }
+    }
+    if ($Execute) {
+        $measurementValid = $script:imageContractPass -and $script:freshProjectGuardPass -and
+            $script:startupGatePass -and $script:mvcRuntimeContractPass -and $script:mockRuntimeContractPass -and
+            $script:nodeExitCode -eq 0 -and $script:clientAccountingPass -and $script:schedulerContractPass -and
+            $script:observerContractPass -and $script:mvcFinalStatePass -and $script:mockFinalStatePass
+        Write-JsonFile (Join-Path $resultDirectory "measurement-validity.json") ([ordered]@{
+            imageContract = if ($script:imageContractPass) { "PASS" } else { "FAIL" }
+            freshProjectGuard = if ($script:freshProjectGuardPass) { "PASS" } else { "FAIL" }
+            startupGate = if ($script:startupGatePass) { "PASS" } else { "FAIL" }
+            mvcRuntimeContract = if ($script:mvcRuntimeContractPass) { "PASS" } else { "FAIL" }
+            mockRuntimeContract = if ($script:mockRuntimeContractPass) { "PASS" } else { "FAIL" }
+            nodeExitCode = $script:nodeExitCode
+            clientAccountingContract = if ($script:clientAccountingPass) { "PASS" } else { "FAIL" }
+            schedulerContract = if ($script:schedulerContractPass) { "PASS" } else { "FAIL" }
+            observerContract = if ($script:observerContractPass) { "PASS" } else { "FAIL" }
+            mvcFinalState = if ($script:mvcFinalStatePass) { "PASS" } else { "FAIL" }
+            mockFinalState = if ($script:mockFinalStatePass) { "PASS" } else { "FAIL" }
+            measurementValid = $measurementValid
+        })
+    }
     if ($Execute) {
         & docker compose -p $composeProject -f $baseCompose -f $imageOverride -f $runtimeOverride down --remove-orphans
     }
