@@ -2,6 +2,7 @@ const fs = require("fs")
 const path = require("path")
 const crypto = require("crypto")
 const { monitorEventLoopDelay } = require("perf_hooks")
+const { responseMatchesSuccess } = require("./response-success-matcher")
 
 const targetUrl =
   process.env.TARGET_URL || "http://127.0.0.1:8000/game/face"
@@ -27,6 +28,10 @@ const requestTimeoutMs = positiveInteger("REQUEST_TIMEOUT_MS", 10000)
 const targetP95Ms = positiveInteger("TARGET_P95_MS", 3000)
 const sceneId = positiveInteger("SCENE_ID", 2)
 const answer = process.env.ANSWER || "happy"
+const successJsonPath = optionalString("SUCCESS_JSON_PATH")
+const sendAuthorization = booleanEnvironment("SEND_AUTHORIZATION", true)
+const sendMissionRunId = booleanEnvironment("SEND_MISSION_RUN_ID", true)
+const sendSceneId = booleanEnvironment("SEND_SCENE_ID", true)
 const authorization =
   process.env.AUTH_TOKEN || "Bearer experiment-member-15"
 const authTokensPath = process.env.AUTH_TOKENS_PATH
@@ -108,6 +113,17 @@ function nonNegativeInteger(name, fallback) {
     throw new Error(`${name} must be a non-negative integer`)
   }
   return value
+}
+
+function optionalString(name) {
+  const value = process.env[name]
+  return value === undefined || value.trim() === "" ? null : value.trim()
+}
+
+function booleanEnvironment(name, fallback) {
+  const value = process.env[name]
+  if (value === undefined || value.trim() === "") return fallback
+  return value.trim().toLowerCase() !== "false"
 }
 
 function createDeterministicFixture(size) {
@@ -234,7 +250,7 @@ const payload = JSON.stringify({
 const requestBodyBytes = Buffer.byteLength(payload)
 const requestUrl = new URL(targetUrl)
 requestUrl.searchParams.set("answer", answer)
-requestUrl.searchParams.set("sceneId", String(sceneId))
+if (sendSceneId) requestUrl.searchParams.set("sceneId", String(sceneId))
 
 const users = Array.from({ length: activeMissions }, (_, index) => ({
   index,
@@ -264,6 +280,7 @@ let progressTimer = null
 let completedAtLoadStop = 0
 let inFlightAtLoadStop = 0
 let successTriggeredVuExits = 0
+let successTriggeredReconnects = 0
 let prematureVuExits = 0
 
 function writeProgress(event) {
@@ -328,17 +345,18 @@ async function submitFrame(user) {
   let transport = null
   try {
     try {
-      response = await fetch(requestUrl, {
-      method: "POST",
-      headers: {
-        Authorization: user.authorization,
+      const headers = {
         "Content-Type": "application/json",
         "X-Experiment-Run-Id": experimentRunId,
         "X-Experiment-Request-Id": requestId,
-        "X-Mission-Run-Id": missionRunId,
-      },
-      body: payload,
-      signal: controller.signal,
+      }
+      if (sendAuthorization) headers.Authorization = user.authorization
+      if (sendMissionRunId) headers["X-Mission-Run-Id"] = missionRunId
+      response = await fetch(requestUrl, {
+        method: "POST",
+        headers,
+        body: payload,
+        signal: controller.signal,
       })
     } catch (error) {
       transport = transportError(error, "PHASE_FETCH_HEADERS", deadlineAborted)
@@ -351,7 +369,7 @@ async function submitFrame(user) {
       transport = transportError(error, "PHASE_RESPONSE_BODY", deadlineAborted)
       throw error
     }
-    const normalizedBody = body.trim().toLowerCase()
+    const successTriggerMatched = responseMatchesSuccess(body, successJsonPath)
 
     results.push({
       requestId,
@@ -369,21 +387,23 @@ async function submitFrame(user) {
       completedAt: new Date().toISOString(),
       error: null,
       transport: null,
+      successTriggerMatched,
     })
 
     if (
       loadScenario === "reconnect-ramp" &&
-      normalizedBody === "true" &&
+      successTriggerMatched &&
       user.activeMission &&
       user.missionRunId === missionRunId
     ) {
+      successTriggeredReconnects += 1
       user.activeMission = false
       activeMissionUsers -= 1
       clearInterval(user.timer)
       user.reconnectTimer = setTimeout(() => {
         startReconnectMission(user)
       }, reconnectDelayMs)
-    } else if (stopUserOnTrue && normalizedBody === "true") {
+    } else if (stopUserOnTrue && successTriggerMatched) {
       user.active = false
       successTriggeredVuExits += 1
       clearInterval(user.timer)
@@ -405,6 +425,7 @@ async function submitFrame(user) {
       completedAt: new Date().toISOString(),
       error: error.name,
       transport: transport || transportError(error, "PHASE_FETCH_HEADERS", deadlineAborted),
+      successTriggerMatched: false,
     })
   } finally {
     clearTimeout(timeout)
@@ -677,6 +698,7 @@ async function run() {
     prematureVuExits,
     noSuccessTriggeredVuExit: successTriggeredVuExits === 0,
     noPrematureVuExit: prematureVuExits === 0,
+    successTriggeredReconnects,
   }
   accounting.valid = Object.entries(accounting)
     .filter(([key]) => key.includes("Matches") || key.startsWith("no"))
@@ -725,6 +747,12 @@ async function run() {
     arrivalMode,
     loadScenario,
     accountingMode,
+    sendAuthorization,
+    sendMissionRunId,
+    sendSceneId,
+    successMatchMode: successJsonPath ? "json-path" : "literal-true",
+    successJsonPath,
+    successTriggeredReconnects,
     activeMissions,
     initialActiveUsers,
     activationStepUsers,
