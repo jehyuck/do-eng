@@ -1,0 +1,79 @@
+{
+  "pair": "I1S-AI1S-PAIR001",
+  "configCommit": "4c7478bd0a837ff651852f73eee6a0a83e1cdce0",
+  "gitHead": "4c7478bd0a837ff651852f73eee6a0a83e1cdce0",
+  "config": "experiment/config/comparison-vu160-service-1s-ai1000ms.json",
+  "baselineConfig": "experiment/config/comparison-vu160-service-1s.json",
+  "configOnlyDifference": "downstream.aiDelayMs: 2000 -> 1000",
+  "missionLoadSha256": "F3A6EB36798A57CE408DE85E5420F65273BB5C2684BC02618822C4C78095619B",
+  "fixture": "image/arc.jpg",
+  "fixtureSha256": "1EEADB414471C8F89207118BAAD01D1A9EC7B05306DF0482A79D92D2C615FA99",
+  "runs": {
+    "webflux": {
+      "runId": "I1S-AI1S-W001",
+      "artifactRoot": "experiment/results/I1S-AI1S-W001",
+      "runtimeIdentity": "experiment/results/runtime-identities/I1S-AI1S-W001/runtime-identity.json",
+      "executionValidity": "VALID",
+      "results": {
+        "started": 14623,
+        "completed": 14623,
+        "http200": 14274,
+        "http500": 330,
+        "http503": 0,
+        "timeout": 19,
+        "connectionError": 0,
+        "trueResponses": 14274,
+        "trueSuccessRate": 97.6133,
+        "successfulRps": 135.942857,
+        "totalRps": 139.266667,
+        "successfulHttp200P50": 1295,
+        "successfulHttp200P95": 6488,
+        "successfulHttp200P99": 8387,
+        "maxInFlight": 1053,
+        "aiMaxInFlight": 307,
+        "aiCompleted": 14342,
+        "storageMaxInFlight": 106,
+        "storageCompleted": 14293,
+        "drainCompleted": true,
+        "timeToZeroMs": 2013
+      }
+    },
+    "mvc400": {
+      "runId": "I1S-AI1S-M001",
+      "artifactRoot": "experiment/results/I1S-AI1S-M001",
+      "runtimeIdentity": "experiment/results/runtime-identities/I1S-AI1S-M001/runtime-identity.json",
+      "executionValidity": "VALID",
+      "results": {
+        "started": 16464,
+        "completed": 16464,
+        "http200": 60,
+        "http500": 0,
+        "http503": 0,
+        "timeout": 16404,
+        "connectionError": 0,
+        "trueResponses": 60,
+        "trueSuccessRate": 0.3644,
+        "successfulRps": 0.571429,
+        "totalRps": 156.8,
+        "successfulHttp200P50": 9161,
+        "successfulHttp200P95": 9959,
+        "successfulHttp200P99": 9998,
+        "maxInFlight": 1615,
+        "aiMaxInFlight": 400,
+        "aiCompleted": 16464,
+        "storageMaxInFlight": 289,
+        "storageCompleted": 16464,
+        "drainCompleted": false,
+        "timeToZeroMs": null
+      }
+    }
+  },
+  "pairParity": {
+    "result": "PASS",
+    "onlyIndependentVariable": "downstream.aiDelayMs",
+    "loadAndResourceConditions": true,
+    "missionLoad": true,
+    "fixture": true,
+    "mariaDbImageId": true
+  }
+}
