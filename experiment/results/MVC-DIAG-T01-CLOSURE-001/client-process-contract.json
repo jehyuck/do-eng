@@ -1,0 +1,13 @@
+﻿{
+    "startedAt":  "2026-08-11T11:37:14.6231822Z",
+    "finishedAt":  "2026-08-11T11:38:15.4071731Z",
+    "elapsedMs":  60784,
+    "nodePath":  "C:\\Users\\KOSCOM\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "nodeVersion":  "v24.14.0",
+    "scriptPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\load\\mvc-diagnostic-load.js",
+    "payloadProfile":  "REAL",
+    "exitCode":  0,
+    "resultPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\MVC-DIAG-T01-CLOSURE-001\\client-results.json",
+    "progressPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\MVC-DIAG-T01-CLOSURE-001\\client-progress.jsonl",
+    "fixturePath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\image\\arc.jpg"
+}
