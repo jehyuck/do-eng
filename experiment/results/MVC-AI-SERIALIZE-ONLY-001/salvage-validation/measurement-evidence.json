@@ -1,0 +1,63 @@
+{
+  "runId": "MVC-AI-SERIALIZE-ONLY-001",
+  "measurement": "SALVAGED_VALID",
+  "classification": "STABLE",
+  "serializationOnlyCollapse": "NO",
+  "serializationPathSufficient": "NO",
+  "execution": {
+    "nodeExitCode": 0,
+    "performanceWorkloadStarted": true,
+    "startedRequests": 8899,
+    "completedRequests": 8899,
+    "unfinishedRequests": 0,
+    "accountingValid": true
+  },
+  "keyMetrics": {
+    "successfulRequests": 8891,
+    "connectionErrors": 8,
+    "clientTimeouts": 0,
+    "successRate": 0.9991010225868076,
+    "p50Ms": 23,
+    "p95Ms": 75,
+    "p99Ms": 1044,
+    "maxMs": 2479,
+    "maxInFlight": 166
+  },
+  "contracts": {
+    "runtime": "PASS",
+    "mockRuntime": "PASS",
+    "scheduler": "PASS",
+    "observer": "PASS",
+    "noNetwork": "PASS",
+    "mvcFinalState": "PASS",
+    "mockFinalState": "PASS"
+  },
+  "noNetwork": {
+    "requestCountsPresent": true,
+    "analyzeFaceKeyPresent": false,
+    "postAnalyzeFace": 0,
+    "aiCompleted": 0,
+    "aiMaxInFlight": 0
+  },
+  "validityNote": "The parent runner measurement-validity.json is non-authoritative because post-processing did not complete. This salvage record is derived from the preserved raw result and independent contract artifacts.",
+  "interpretationBoundary": "REAL payload inbound handling, AI request-body construction, and production-equivalent Jackson JSON serialization alone did not reproduce the prior MVC collapse. This does not establish Jackson irrelevance or identify a RestTemplate, Apache HttpClient, socket, or other root cause.",
+  "authoritativeArtifacts": [
+    "client-results.json",
+    "client-process-contract.json",
+    "client-accounting-contract.json",
+    "scheduler-contract.json",
+    "observer.summary.json",
+    "observer-contract.json",
+    "runtime-contract.json",
+    "mock-runtime-contract.json",
+    "serialize-only-network-contract.json",
+    "mvc-final-state-contract.json",
+    "mock-final-state-contract.json",
+    "startup-gate.json",
+    "serialize-only-image-contract.json"
+  ],
+  "nonAuthoritativeArtifacts": [
+    "measurement-validity.json",
+    "serialize-only-static-contract.json"
+  ]
+}
