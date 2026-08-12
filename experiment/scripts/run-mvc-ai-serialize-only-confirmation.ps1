@@ -209,17 +209,6 @@ if ($BootstrapOnly) {
     exit 0
 }
 
-$imageContractPath = Join-Path $resultDirectory "serialize-only-image-contract.json"
-if (-not (Test-Path $imageContractPath)) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: missing Bootstrap artifact" }
-$imageContract = Get-Content -Raw $imageContractPath | ConvertFrom-Json
-if ($imageContract.pass -ne $true) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: FAIL" }
-if ([string]$imageContract.mvcSourceTree -ne $mvcSourceTree) { throw "MVC_SOURCE_PROVENANCE: FAIL" }
-$authoritativeMvcImageId = [string]$imageContract.mvcImageId
-$resolvedMvcImageId = Get-ImageId $mvcImageTag
-if ($resolvedMvcImageId -ne $authoritativeMvcImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: MVC image mismatch" }
-$mockId = Get-ImageId $mockImageTag
-if ($mockId -ne $expectedMockImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: mock image mismatch" }
-
 $imagesOverride = Join-Path $resultDirectory "serialize-only.images.override.yml"
 $resourcesOverride = Join-Path $resultDirectory "serialize-only.runtime.override.yml"
 @(
@@ -247,8 +236,10 @@ $started = $false
 $observer = $null
 $client = $null
 $clientExitCode = $null
+$accounting = $null
+$executionError = $null
 $gates = [ordered]@{
-    imageContract = $true; sourceGate = $true; freshProjectGuard = $true; nodeRuntimeContract = $true
+    imageContract = $false; sourceGate = $true; freshProjectGuard = $true; nodeRuntimeContract = $true
     startupGate = $false; mvcRuntimeContract = $false; mockRuntimeContract = $false; clientAccounting = $false; nodeExitCodeZero = $false
     schedulerContract = $false; observerContract = $false; networkContract = $false; finalMvcState = $false
     finalMockState = $false; clientProcessStarted = $false; performanceWorkloadStarted = $false
@@ -278,10 +269,31 @@ $env:SUCCESS_JSON_PATH = "serialization.result"
 $env:SEND_AUTHORIZATION = "false"
 $env:SEND_MISSION_RUN_ID = "false"
 $env:SEND_SCENE_ID = "false"
+$env:APP_CPU = "2.0"
+$env:APP_MEMORY = "3g"
+$env:MVC_MAX_THREADS = "400"
+$env:HTTP_MAX_CONNECTIONS = "400"
+$env:DB_POOL_MAX_SIZE = "10"
+$env:JAVA_XMS = "512m"
+$env:JAVA_XMX = "2048m"
+$env:MOCK_AI_RESULT = "true"
+$env:MOCK_AI_DELAY_MS = "0"
+$env:MOCK_AI_STATUS = "200"
+$env:MOCK_STORAGE_DELAY_MS = "100"
+$env:MOCK_STORAGE_STATUS = "200"
 
 try {
+    $imageContractPath = Join-Path $resultDirectory "serialize-only-image-contract.json"
+    if (-not (Test-Path $imageContractPath)) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: missing Bootstrap artifact" }
+    $imageContract = Get-Content -Raw $imageContractPath | ConvertFrom-Json
+    if ($imageContract.pass -ne $true) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: FAIL" }
+    if ([string]$imageContract.mvcSourceTree -ne $mvcSourceTree) { throw "MVC_SOURCE_PROVENANCE: FAIL" }
+    $authoritativeMvcImageId = [string]$imageContract.mvcImageId
+    $resolvedMvcImageId = Get-ImageId $mvcImageTag
+    if ($resolvedMvcImageId -ne $authoritativeMvcImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: MVC image mismatch" }
     $mockId = Get-ImageId $mockImageTag
     if ($mockId -ne $expectedMockImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: mock image mismatch" }
+    $gates.imageContract = $true
     & docker compose @composeArguments up -d --no-build mariadb experiment-mock mvc
     if ($LASTEXITCODE -ne 0) { throw "Compose startup failed" }
     $started = $true
@@ -289,8 +301,29 @@ try {
     $mock = Get-ServiceContainer "experiment-mock"
     $gates.mvcRuntimeContract = Test-MvcRuntimeContract $mvc $authoritativeMvcImageId
     $gates.mockRuntimeContract = Test-MockRuntimeContract $mock
-    Write-JsonArtifact (Join-Path $resultDirectory "runtime-contract.json") ([ordered]@{ pass = $gates.mvcRuntimeContract; imageId = $mvc.Image; cpuNano = $mvc.HostConfig.NanoCpus; memoryBytes = $mvc.HostConfig.Memory })
-    Write-JsonArtifact (Join-Path $resultDirectory "mock-runtime-contract.json") ([ordered]@{ pass = $gates.mockRuntimeContract; imageId = $mock.Image; cpuNano = $mock.HostConfig.NanoCpus; memoryBytes = $mock.HostConfig.Memory })
+    $mvcEnv = Get-EnvironmentMap $mvc
+    $mockEnv = Get-EnvironmentMap $mock
+    Write-JsonArtifact (Join-Path $resultDirectory "runtime-contract.json") ([ordered]@{
+        imageId = $mvc.Image
+        cpuNano = $mvc.HostConfig.NanoCpus
+        memoryBytes = $mvc.HostConfig.Memory
+        DOENG_MVC_MAX_THREADS = $mvcEnv.DOENG_MVC_MAX_THREADS
+        DOENG_HTTP_MAX_CONNECTIONS = $mvcEnv.DOENG_HTTP_MAX_CONNECTIONS
+        DOENG_DB_POOL_MAX_SIZE = $mvcEnv.DOENG_DB_POOL_MAX_SIZE
+        JAVA_TOOL_OPTIONS = $mvcEnv.JAVA_TOOL_OPTIONS
+        pass = $gates.mvcRuntimeContract
+    })
+    Write-JsonArtifact (Join-Path $resultDirectory "mock-runtime-contract.json") ([ordered]@{
+        imageId = $mock.Image
+        cpuNano = $mock.HostConfig.NanoCpus
+        memoryBytes = $mock.HostConfig.Memory
+        MOCK_AI_RESULT = $mockEnv.MOCK_AI_RESULT
+        MOCK_AI_DELAY_MS = $mockEnv.MOCK_AI_DELAY_MS
+        MOCK_AI_STATUS = $mockEnv.MOCK_AI_STATUS
+        MOCK_STORAGE_DELAY_MS = $mockEnv.MOCK_STORAGE_DELAY_MS
+        MOCK_STORAGE_STATUS = $mockEnv.MOCK_STORAGE_STATUS
+        pass = $gates.mockRuntimeContract
+    })
     if (-not $gates.mvcRuntimeContract -or -not $gates.mockRuntimeContract) { throw "RUNTIME_CONTRACT: FAIL" }
 
     $startupPath = Join-Path $resultDirectory "startup-gate.json"
@@ -355,6 +388,8 @@ try {
     $progressPath = Join-Path $resultDirectory "client-progress.jsonl"
     if (Test-Path $progressPath) { $firstProgress = @(Get-Content $progressPath | Select-Object -First 4) }
     Write-JsonArtifact (Join-Path $resultDirectory "initial-arrival-summary.json") ([ordered]@{ runId = $runId; firstProgressLines = $firstProgress; lineCountObserved = @($firstProgress).Count })
+} catch {
+    $executionError = $_
 } finally {
     if ($observer -and -not $observer.HasExited) { Stop-Process -Id $observer.Id -Force }
     if ($started) {
@@ -370,17 +405,32 @@ try {
     }
 }
 
-$measurementValid = ($gates.Values -notcontains $false)
+$measurementValid = ([bool]$gates.performanceWorkloadStarted -and ($gates.Values -notcontains $false))
 $classification = "INVALID"
 $serializationPathSufficient = "NOT_ESTABLISHED"
+$executionStatus = "INVALID"
+if (-not $gates.performanceWorkloadStarted) { $executionStatus = "MEASUREMENT_NOT_STARTED" }
 if ($measurementValid) {
     $successRate = $accounting.successRate
     $timeoutRate = $accounting.timeoutRate
+    $executionStatus = "VALID"
     if ($successRate -ge 0.95 -and $timeoutRate -le 0.05) { $classification = "STABLE"; $serializationPathSufficient = "NO" }
     elseif ($successRate -ge 0.80 -and $successRate -lt 0.95) { $classification = "DEGRADED" }
     else { $classification = "COLLAPSE"; $serializationPathSufficient = "SUPPORTED" }
 }
+if ($executionError) {
+    Write-JsonArtifact (Join-Path $resultDirectory "execute-failure.json") ([ordered]@{
+        message = $executionError.Exception.Message
+        exceptionType = $executionError.Exception.GetType().FullName
+        composeStarted = [bool]$started
+        clientProcessStarted = [bool]$gates.clientProcessStarted
+        performanceWorkloadStarted = [bool]$gates.performanceWorkloadStarted
+        capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+    })
+}
 Write-JsonArtifact (Join-Path $resultDirectory "measurement-validity.json") ([ordered]@{
+    executionStatus = $executionStatus
+    composeStarted = [bool]$started
     sourceGate = if ($gates.sourceGate) { "PASS" } else { "FAIL" }
     imageContract = if ($gates.imageContract) { "PASS" } else { "FAIL" }
     freshProjectGuard = if ($gates.freshProjectGuard) { "PASS" } else { "FAIL" }
@@ -402,3 +452,4 @@ Write-JsonArtifact (Join-Path $resultDirectory "measurement-validity.json") ([or
     classification = $classification
     serializationPathSufficient = $serializationPathSufficient
 })
+if ($executionError) { throw $executionError.Exception }
