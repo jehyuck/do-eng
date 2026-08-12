@@ -20,6 +20,5 @@ class MvcAiRequestSerializationProbeTest {
         assertEquals(true, result.get("result"));
         assertTrue((Integer) serialization.get("serializedBytes") > 0);
         assertEquals("application/json", serialization.get("contentType"));
-        assertTrue(((String) serialization.get("sha256")).matches("[0-9a-f]{64}"));
     }
 }

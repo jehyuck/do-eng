@@ -3,9 +3,6 @@ package com.example.doenggamemvc.experiment;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,14 +38,13 @@ public class MvcAiRequestSerializationProbe {
             throw new IllegalStateException("AI request serialization failed", exception);
         }
 
-        byte[] serialized = output.bytes();
+        int serializedBytes = output.size();
         Map<String, Object> serialization = new java.util.LinkedHashMap<>();
-        serialization.put("result", serialized.length > 0);
-        serialization.put("serializedBytes", serialized.length);
+        serialization.put("result", serializedBytes > 0);
+        serialization.put("serializedBytes", serializedBytes);
         serialization.put("contentType", output.getHeaders().getContentType() == null
                 ? null
                 : output.getHeaders().getContentType().toString());
-        serialization.put("sha256", sha256(serialized));
 
         Map<String, Object> result = new java.util.LinkedHashMap<>();
         result.put("result", true);
@@ -71,19 +67,6 @@ public class MvcAiRequestSerializationProbe {
                         "externalRestTemplate has no MappingJackson2HttpMessageConverter"));
     }
 
-    private static String sha256(byte[] bytes) {
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA-256").digest(bytes);
-            StringBuilder result = new StringBuilder(digest.length * 2);
-            for (byte value : digest) {
-                result.append(String.format("%02x", value));
-            }
-            return result.toString();
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("SHA-256 is unavailable", exception);
-        }
-    }
-
     private static final class ByteArrayHttpOutputMessage implements HttpOutputMessage {
         private final HttpHeaders headers = new HttpHeaders();
         private final ByteArrayOutputStream body = new ByteArrayOutputStream();
@@ -98,8 +81,8 @@ public class MvcAiRequestSerializationProbe {
             return body;
         }
 
-        private byte[] bytes() {
-            return body.toByteArray();
+        private int size() {
+            return body.size();
         }
     }
 }
