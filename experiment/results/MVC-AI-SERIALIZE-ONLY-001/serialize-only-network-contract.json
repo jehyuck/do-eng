@@ -1,0 +1,8 @@
+﻿{
+    "pass":  true,
+    "requestCountsPresent":  true,
+    "analyzeFaceKeyPresent":  false,
+    "analyzeFacePostCount":  0,
+    "aiCompleted":  0,
+    "aiMaxInFlight":  0
+}

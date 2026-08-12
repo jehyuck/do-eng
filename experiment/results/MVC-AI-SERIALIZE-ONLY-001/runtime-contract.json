@@ -1,0 +1,10 @@
+﻿{
+    "imageId":  "sha256:bc823b95e4fa54faf4e3ec5296265524dc36a68eb2a3c6e15eb194405a5d0879",
+    "cpuNano":  2000000000,
+    "memoryBytes":  3221225472,
+    "DOENG_MVC_MAX_THREADS":  "400",
+    "DOENG_HTTP_MAX_CONNECTIONS":  "400",
+    "DOENG_DB_POOL_MAX_SIZE":  "10",
+    "JAVA_TOOL_OPTIONS":  "-Xms512m -Xmx2048m -XX:+UseG1GC",
+    "pass":  true
+}

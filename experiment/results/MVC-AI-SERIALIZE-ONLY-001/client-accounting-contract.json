@@ -1,0 +1,14 @@
+﻿{
+    "valid":  true,
+    "nodeExitCode":  0,
+    "summary":  {
+                    "startedRequests":  8899,
+                    "completedRequests":  8899,
+                    "unfinishedRequests":  0,
+                    "successfulRequests":  8891,
+                    "clientTimeout":  0,
+                    "connectionError":  0,
+                    "successRate":  0.99910102258680755,
+                    "timeoutRate":  0
+                }
+}

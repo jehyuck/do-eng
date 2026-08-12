@@ -1,0 +1,12 @@
+﻿{
+    "attempted":  true,
+    "started":  true,
+    "performanceWorkloadStarted":  true,
+    "processId":  25960,
+    "nodePath":  "C:\\Users\\KOSCOM\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "nodeVersion":  "v24.14.0",
+    "scriptPath":  "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\load\\mission-load.js",
+    "exitCode":  0,
+    "startedAt":  "2026-08-12T02:37:14.4771166Z",
+    "finishedAt":  "2026-08-12T02:38:15.9943334Z"
+}

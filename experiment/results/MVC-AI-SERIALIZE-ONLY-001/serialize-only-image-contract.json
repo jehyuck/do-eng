@@ -1,0 +1,15 @@
+﻿{
+    "runId":  "MVC-AI-SERIALIZE-ONLY-001",
+    "sourceHead":  "1e7d813f95249d086b58c3a0d91e2deb5a940a57",
+    "mvcSourceTree":  "147e2a7910db4da1290374711ed31ecd42016f3a",
+    "dockerfile":  "backend/doEngGameMvc/Dockerfile.experiment",
+    "buildContext":  "backend/doEngGameMvc",
+    "mvcImageTag":  "doeng-mvc-ai-serialize-only-mvc:locked",
+    "mvcImageId":  "sha256:bc823b95e4fa54faf4e3ec5296265524dc36a68eb2a3c6e15eb194405a5d0879",
+    "buildExitCode":  0,
+    "productionSourceGate":  "PASS",
+    "canonicalMockImageId":  "sha256:0bbf354a08732a5dbfd3a3013218a6f1955d74c1bc41ecc407e819ba1788bbf6",
+    "runSpecificMockTag":  "doeng-mvc-ai-serialize-only-mock:locked",
+    "runSpecificMockImageId":  "sha256:0bbf354a08732a5dbfd3a3013218a6f1955d74c1bc41ecc407e819ba1788bbf6",
+    "pass":  true
+}

@@ -1,0 +1,77 @@
+﻿{
+    "composeFileCount":  3,
+    "composeFiles":  [
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\backend\\docker-compose.experiment.yaml",
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\MVC-AI-SERIALIZE-ONLY-001\\serialize-only.images.override.yml",
+                         "D:\\T7\\workspace\\_작업공간\\50_로컬레포\\active\\projects\\jehyuck\\do-eng\\experiment\\results\\MVC-AI-SERIALIZE-ONLY-001\\serialize-only.runtime.override.yml"
+                     ],
+    "composeFilesSource":  "BASE64_JSON",
+    "containerStartedAt":  "2026-08-12T02:36:54.382616498Z",
+    "firstLivenessUpAt":  "2026-08-12T02:37:14.0580312Z",
+    "firstReadinessUpAt":  "2026-08-12T02:37:14.0590347Z",
+    "stableWindowStartedAt":  "2026-08-12T02:37:02.1201722Z",
+    "readyForLoadAt":  "2026-08-12T02:37:14.0612794Z",
+    "startupAgeMsAtLoad":  19679,
+    "livenessAttempts":  10,
+    "readinessAttempts":  7,
+    "canaryAttempts":  8,
+    "containerId":  "cb7c2bfd9144231a7b3dba81b4a888eddb73bb51aba0b4e27fc24b3f695fae12",
+    "restartCount":  0,
+    "oomKilled":  false,
+    "mainLiveness":  {
+                         "status":  200,
+                         "text":  "{\"status\":\"UP\"}",
+                         "body":  {
+                                      "status":  "UP"
+                                  }
+                     },
+    "managementLiveness":  {
+                               "status":  200,
+                               "text":  "{\"status\":\"UP\"}",
+                               "body":  {
+                                            "status":  "UP"
+                                        }
+                           },
+    "mainReadiness":  {
+                          "status":  200,
+                          "text":  "{\"status\":\"UP\"}",
+                          "body":  {
+                                       "status":  "UP"
+                                   }
+                      },
+    "managementReadiness":  {
+                                "status":  200,
+                                "text":  "{\"status\":\"UP\"}",
+                                "body":  {
+                                             "status":  "UP"
+                                         }
+                            },
+    "mockHealth":  {
+                       "status":  200,
+                       "text":  "{\"status\":\"ok\",\"ai\":{\"result\":true,\"delayMs\":0,\"status\":200,\"closeBeforeResponse\":false},\"storage\":{\"delayMs\":100,\"status\":200},\"storedObjectCount\":0,\"strictAuth\":false,\"authRegisteredUsers\":0,\"requestCounts\":{}}",
+                       "body":  {
+                                    "status":  "ok",
+                                    "ai":  {
+                                               "result":  true,
+                                               "delayMs":  0,
+                                               "status":  200,
+                                               "closeBeforeResponse":  false
+                                           },
+                                    "storage":  {
+                                                    "delayMs":  100,
+                                                    "status":  200
+                                                },
+                                    "storedObjectCount":  0,
+                                    "strictAuth":  false,
+                                    "authRegisteredUsers":  0,
+                                    "requestCounts":  {
+
+                                                      }
+                                }
+                   },
+    "mockAiInFlight":  0,
+    "mockStorageInFlight":  0,
+    "stableWindowSeconds":  10,
+    "stableWindowActualMs":  11941,
+    "loadAllowed":  true
+}

@@ -1,0 +1,9 @@
+﻿{
+    "valid":  true,
+    "loadScenario":  "reconnect-ramp",
+    "arrivalMode":  "staggered",
+    "successMatchMode":  "json-path",
+    "successJsonPath":  "serialization.result",
+    "freeze":  true,
+    "successTriggeredReconnects":  8807
+}
