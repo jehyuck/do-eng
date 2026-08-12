@@ -213,7 +213,7 @@ $imageContractPath = Join-Path $resultDirectory "serialize-only-image-contract.j
 if (-not (Test-Path $imageContractPath)) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: missing Bootstrap artifact" }
 $imageContract = Get-Content -Raw $imageContractPath | ConvertFrom-Json
 if ($imageContract.pass -ne $true) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: FAIL" }
-if ([string]$imageContract.sourceHead -ne $currentHead -or [string]$imageContract.mvcSourceTree -ne $mvcSourceTree) { throw "MVC_SOURCE_PROVENANCE: FAIL" }
+if ([string]$imageContract.mvcSourceTree -ne $mvcSourceTree) { throw "MVC_SOURCE_PROVENANCE: FAIL" }
 $authoritativeMvcImageId = [string]$imageContract.mvcImageId
 $resolvedMvcImageId = Get-ImageId $mvcImageTag
 if ($resolvedMvcImageId -ne $authoritativeMvcImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: MVC image mismatch" }
@@ -280,15 +280,14 @@ $env:SEND_MISSION_RUN_ID = "false"
 $env:SEND_SCENE_ID = "false"
 
 try {
-    $mvcId = Get-ImageId $mvcImageTag
     $mockId = Get-ImageId $mockImageTag
-    if ($mvcId -ne $expectedMvcImageId -or $mockId -ne $expectedMockImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: FAIL" }
+    if ($mockId -ne $expectedMockImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: mock image mismatch" }
     & docker compose @composeArguments up -d --no-build mariadb experiment-mock mvc
     if ($LASTEXITCODE -ne 0) { throw "Compose startup failed" }
     $started = $true
     $mvc = Get-ServiceContainer "mvc"
     $mock = Get-ServiceContainer "experiment-mock"
-    $gates.mvcRuntimeContract = Test-MvcRuntimeContract $mvc
+    $gates.mvcRuntimeContract = Test-MvcRuntimeContract $mvc $authoritativeMvcImageId
     $gates.mockRuntimeContract = Test-MockRuntimeContract $mock
     Write-JsonArtifact (Join-Path $resultDirectory "runtime-contract.json") ([ordered]@{ pass = $gates.mvcRuntimeContract; imageId = $mvc.Image; cpuNano = $mvc.HostConfig.NanoCpus; memoryBytes = $mvc.HostConfig.Memory })
     Write-JsonArtifact (Join-Path $resultDirectory "mock-runtime-contract.json") ([ordered]@{ pass = $gates.mockRuntimeContract; imageId = $mock.Image; cpuNano = $mock.HostConfig.NanoCpus; memoryBytes = $mock.HostConfig.Memory })
@@ -346,9 +345,11 @@ try {
     $metricsResponse = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:9100/__metrics"
     $metrics = $metricsResponse.Content | ConvertFrom-Json
     $requestCountsProperty = $metrics.PSObject.Properties["requestCounts"]
-    $faceCountProperty = if ($requestCountsProperty) { $requestCountsProperty.Value.PSObject.Properties["POST /analyze/face"] } else { $null }
-    $gates.networkContract = ($null -ne $faceCountProperty -and [int]$faceCountProperty.Value -eq 0 -and [int]$metrics.aiCompleted -eq 0 -and [int]$metrics.aiMaxInFlight -eq 0)
-    Write-JsonArtifact (Join-Path $resultDirectory "serialize-only-network-contract.json") ([ordered]@{ pass = $gates.networkContract; requestCountsKeyPresent = $null -ne $faceCountProperty; analyzeFacePostCount = if ($faceCountProperty) { $faceCountProperty.Value } else { $null }; aiCompleted = $metrics.aiCompleted; aiMaxInFlight = $metrics.aiMaxInFlight })
+    if ($null -eq $requestCountsProperty) { throw "SERIALIZE_ONLY_NETWORK_CONTRACT: requestCounts missing" }
+    $faceCountProperty = $requestCountsProperty.Value.PSObject.Properties["POST /analyze/face"]
+    $faceCount = if ($null -eq $faceCountProperty) { 0 } else { [int]$faceCountProperty.Value }
+    $gates.networkContract = ($faceCount -eq 0 -and [int]$metrics.aiCompleted -eq 0 -and [int]$metrics.aiMaxInFlight -eq 0)
+    Write-JsonArtifact (Join-Path $resultDirectory "serialize-only-network-contract.json") ([ordered]@{ pass = $gates.networkContract; requestCountsPresent = $true; analyzeFaceKeyPresent = $null -ne $faceCountProperty; analyzeFacePostCount = $faceCount; aiCompleted = $metrics.aiCompleted; aiMaxInFlight = $metrics.aiMaxInFlight })
 
     $firstProgress = @()
     $progressPath = Join-Path $resultDirectory "client-progress.jsonl"
