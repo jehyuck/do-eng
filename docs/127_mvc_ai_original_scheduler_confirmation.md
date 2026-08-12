@@ -42,20 +42,20 @@ Node runtime: `C:\Users\KOSCOM\.cache\codex-runtimes\codex-primary-runtime\depen
 
 | Metric | Value |
 |---|---:|
-| Started | 8,909 |
-| Completed | 8,909 |
-| Successful (`HTTP_200_ACCEPTED`) | 967 |
-| Timeout | 6,441 |
-| Connection error | 1,490 |
-| HTTP 500 | 11 |
-| Success rate | 10.853% |
-| Timeout rate | 72.313% |
-| Total RPS | 148.483 |
-| p50 | 8,124 ms |
-| p95 | 9,846 ms |
-| p99 | 9,981 ms |
-| Max in-flight | 1,591 |
-| Success-triggered reconnects | 410 |
+| Started | 7,276 |
+| Completed | 7,276 |
+| Successful (`HTTP_200_ACCEPTED`) | 1,085 |
+| Timeout | 6,059 |
+| Connection error | 0 |
+| HTTP 500 | 132 |
+| Success rate | 14.91% |
+| Timeout rate | 83.27% |
+| Total RPS | 121.267 |
+| p50 | 8,496 ms |
+| p95 | 9,837 ms |
+| p99 | 9,974 ms |
+| Max in-flight | 1,598 |
+| Success-triggered reconnects | 446 |
 
 All requests were completed or classified; unfinished requests were `0`. The result is classified as `COLLAPSE` under the registered classification because success was below 80%.
 
@@ -77,15 +77,15 @@ All requests were completed or classified; unfinished requests were `0`. The res
 Observer maxima from the captured samples:
 
 - Tomcat busy: `400`
-- Tomcat queue: `1,612`
-- HTTP active: `363`
+- Tomcat queue: `1,844`
+- HTTP active: `373`
 - HTTP pending: `0`
-- AI in-flight: `110`
+- AI in-flight: `117`
 - Storage in-flight: `0`
 - Container restart: `0`
 - OOMKilled: `false`
 
-The mock drain completed after `16,328 ms`; terminal AI/storage in-flight values were both `0`. The observer artifact recorded readiness polling failures during load, but its contract remained valid and application/mock samples were captured.
+The mock drain completed after `10,038 ms`; terminal AI/storage in-flight values were both `0`. The observer artifact recorded readiness polling failures during load, but its contract remained valid and application/mock samples were captured.
 
 ## Interpretation boundary
 
@@ -99,11 +99,8 @@ No automatic rerun or additional workload was executed.
 
 ## Evidence provenance closure
 
-This document also preserves an earlier documented candidate with `started=8,909`,
-`successful=967`, `timeout=6,441`, `connectionError=1,490`, and `HTTP 500=11`.
-The raw artifact for that candidate is not present in the current local result
-directory or bootstrap-history archives, so those values are documented provenance,
-not locally re-verifiable raw evidence.
+An earlier documented result exists, but its raw artifact is unavailable. It is
+non-canonical and is not used for quantitative conclusions.
 
 The locally re-verifiable raw candidate is recorded in
 `docs/128_mvc_ai_original_scheduler_evidence_manifest.md` with
@@ -113,7 +110,7 @@ but only the raw candidate is used as canonical evidence in this closure.
 
 `VALID_MEASUREMENT_COUNT: 1`
 
-`REGISTERED_ONE_RUN_CONTRACT: VIOLATED`
+`REGISTERED_ONE_RUN_CONTRACT: NOT_VERIFIABLE`
 
 `SECOND_EXECUTION_TRIGGER: NOT_ESTABLISHED`
 
