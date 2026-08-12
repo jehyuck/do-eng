@@ -22,10 +22,12 @@ $mvcContext = Join-Path $RepositoryRoot "backend/doEngGameMvc"
 $loadScript = Join-Path $RepositoryRoot "experiment/load/mission-load.js"
 $mvcImageTag = "doeng-mvc-ai-serialize-only-mvc:locked"
 $mockImageTag = "doeng-mvc-ai-serialize-only-mock:locked"
-$canonicalMockTag = "doeng-mvcdiag-mock:locked"
-$expectedMvcImageId = "sha256:b62eaaec1c1a2e506560de3540300939373aa44cf62201f50fd011b2d1b10fa0"
 $expectedMockImageId = "sha256:0bbf354a08732a5dbfd3a3013218a6f1955d74c1bc41ecc407e819ba1788bbf6"
 $sourceBaseline = "0cc3f1472e76a04de5b4cfecd3737b460b973bd2"
+$currentHead = (git rev-parse HEAD).Trim()
+if ($LASTEXITCODE -ne 0) { throw "Could not resolve Git HEAD" }
+$mvcSourceTree = (git rev-parse "HEAD:backend/doEngGameMvc").Trim()
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($mvcSourceTree)) { throw "Could not resolve MVC source tree" }
 
 function Write-JsonArtifact {
     param([string]$Path, $Value)
@@ -107,9 +109,9 @@ function Get-EnvironmentMap {
 }
 
 function Test-MvcRuntimeContract {
-    param($Container)
+    param($Container, [string]$ExpectedImageId)
     $env = Get-EnvironmentMap $Container
-    return ($Container.Image -eq $expectedMvcImageId -and
+    return ($Container.Image -eq $ExpectedImageId -and
         $Container.HostConfig.NanoCpus -eq 2000000000 -and
         $Container.HostConfig.Memory -eq 3221225472 -and
         $env.DOENG_MVC_MAX_THREADS -eq "400" -and
@@ -151,34 +153,37 @@ Assert-SourceGate
 $node = Get-NodeRuntime
 
 if ($BootstrapOnly) {
-    $existingMvcId = $null
-    try { $existingMvcId = Get-ImageId $mvcImageTag } catch { $existingMvcId = $null }
-    if ($existingMvcId -eq $expectedMvcImageId) {
-        $mvcId = $existingMvcId
-    } else {
-        $bootstrapTag = "doeng-mvc-ai-serialize-only-mvc:bootstrap-$PID"
-        & docker build -f $dockerfile -t $bootstrapTag $mvcContext
-        if ($LASTEXITCODE -ne 0) { throw "MVC image build failed" }
-        $mvcId = Get-ImageId $bootstrapTag
-        if ($mvcId -ne $expectedMvcImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: FAIL (built $mvcId; expected $expectedMvcImageId)" }
-        & docker tag $mvcId $mvcImageTag
-        if ($LASTEXITCODE -ne 0) { throw "MVC locked tag failed" }
-    }
-    $mockId = Get-ImageId $canonicalMockTag
-    if ($mockId -ne $expectedMockImageId) { throw "CANONICAL_MOCK_IMAGE_CONTRACT: FAIL" }
+    $bootstrapTag = "doeng-mvc-ai-serialize-only-mvc:bootstrap-$PID"
+    & docker build -f $dockerfile -t $bootstrapTag $mvcContext
+    $mvcBuildExitCode = $LASTEXITCODE
+    if ($mvcBuildExitCode -ne 0) { throw "MVC image build failed" }
+    $mvcId = Get-ImageId $bootstrapTag
+    & docker tag $mvcId $mvcImageTag
+    if ($LASTEXITCODE -ne 0) { throw "MVC locked tag failed" }
+    $lockedMvcId = Get-ImageId $mvcImageTag
+    if ($lockedMvcId -ne $mvcId) { throw "MVC locked image ID mismatch" }
+    $mockId = Get-ImageId $expectedMockImageId
     & docker tag $mockId $mockImageTag
     if ($LASTEXITCODE -ne 0) { throw "Canonical mock tag failed" }
+    $runMockId = Get-ImageId $mockImageTag
+    if ($runMockId -ne $expectedMockImageId) { throw "Run-specific mock image ID mismatch" }
     Write-JsonArtifact (Join-Path $resultDirectory "serialize-only-image-contract.json") ([ordered]@{
-        sourceHead = (git rev-parse HEAD)
-        mvcImageTag = $mvcImageTag
-        mvcImageId = $mvcId
+        runId = $runId
+        sourceHead = $currentHead
+        mvcSourceTree = $mvcSourceTree
         dockerfile = "backend/doEngGameMvc/Dockerfile.experiment"
-        context = "backend/doEngGameMvc"
+        buildContext = "backend/doEngGameMvc"
+        mvcImageTag = $mvcImageTag
+        mvcImageId = $lockedMvcId
+        buildExitCode = $mvcBuildExitCode
         productionSourceGate = "PASS"
-        canonicalMockTag = $canonicalMockTag
-        canonicalMockImageId = $mockId
-        pass = ($mvcId -eq $expectedMvcImageId -and $mockId -eq $expectedMockImageId)
+        canonicalMockImageId = $expectedMockImageId
+        runSpecificMockTag = $mockImageTag
+        runSpecificMockImageId = $runMockId
+        pass = ($mvcBuildExitCode -eq 0 -and $lockedMvcId -eq $mvcId -and $runMockId -eq $expectedMockImageId)
     })
+    if ($mvcBuildExitCode -ne 0) { throw "MVC_BUILD: FAIL" }
+    if ($lockedMvcId -ne $mvcId -or $runMockId -ne $expectedMockImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: FAIL" }
     $containers = @(& docker ps -aq --filter "label=com.docker.compose.project=$project" 2>$null)
     $volumes = @(& docker volume ls -q --filter "label=com.docker.compose.project=$project" 2>$null)
     if ($containers.Count -ne 0 -or $volumes.Count -ne 0) { throw "FRESH_PROJECT_GUARD: FAIL" }
@@ -203,6 +208,17 @@ if ($BootstrapOnly) {
     Write-Output "BOOTSTRAP_ONLY_VALIDATION: PASS"
     exit 0
 }
+
+$imageContractPath = Join-Path $resultDirectory "serialize-only-image-contract.json"
+if (-not (Test-Path $imageContractPath)) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: missing Bootstrap artifact" }
+$imageContract = Get-Content -Raw $imageContractPath | ConvertFrom-Json
+if ($imageContract.pass -ne $true) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: FAIL" }
+if ([string]$imageContract.sourceHead -ne $currentHead -or [string]$imageContract.mvcSourceTree -ne $mvcSourceTree) { throw "MVC_SOURCE_PROVENANCE: FAIL" }
+$authoritativeMvcImageId = [string]$imageContract.mvcImageId
+$resolvedMvcImageId = Get-ImageId $mvcImageTag
+if ($resolvedMvcImageId -ne $authoritativeMvcImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: MVC image mismatch" }
+$mockId = Get-ImageId $mockImageTag
+if ($mockId -ne $expectedMockImageId) { throw "SERIALIZE_ONLY_IMAGE_CONTRACT: mock image mismatch" }
 
 $imagesOverride = Join-Path $resultDirectory "serialize-only.images.override.yml"
 $resourcesOverride = Join-Path $resultDirectory "serialize-only.runtime.override.yml"
