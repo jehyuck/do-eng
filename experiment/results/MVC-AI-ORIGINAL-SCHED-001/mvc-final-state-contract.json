@@ -1,0 +1,13 @@
+﻿{
+    "actual":  {
+                   "capturedAt":  "2026-08-11T16:11:03.4892374Z",
+                   "containerId":  "8211b6c14afa6285b94c0a892729bcd9ae3f690a7635c726ae480bc298df49d5",
+                   "imageId":  "sha256:984fa39f3ab397d831086f8bef96402180c1d80d2d47b0a0274b2189652b6d4d",
+                   "running":  true,
+                   "restartCount":  0,
+                   "oomKilled":  false,
+                   "exitCode":  0,
+                   "status":  "running"
+               },
+    "pass":  true
+}

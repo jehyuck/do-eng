@@ -1,0 +1,18 @@
+﻿{
+    "imageContract":  "PASS",
+    "freshProjectGuard":  "PASS",
+    "nodeRuntimeContract":  "PASS",
+    "startupGate":  "PASS",
+    "mvcRuntimeContract":  "PASS",
+    "mockRuntimeContract":  "PASS",
+    "nodeExitCode":  0,
+    "clientAccountingContract":  "PASS",
+    "schedulerContract":  "PASS",
+    "observerContract":  "PASS",
+    "mvcFinalState":  "PASS",
+    "mockFinalState":  "PASS",
+    "clientProcessInvocationAttempted":  true,
+    "clientProcessStarted":  true,
+    "performanceWorkloadStarted":  true,
+    "measurementValid":  true
+}

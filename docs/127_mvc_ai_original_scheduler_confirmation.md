@@ -96,3 +96,27 @@ The mock drain completed after `16,328 ms`; terminal AI/storage in-flight values
 This execution establishes a valid result for the configured scheduler and records a collapse outcome. It does not by itself establish a low-level root cause or isolate the scheduler as causal.
 
 No automatic rerun or additional workload was executed.
+
+## Evidence provenance closure
+
+This document also preserves an earlier documented candidate with `started=8,909`,
+`successful=967`, `timeout=6,441`, `connectionError=1,490`, and `HTTP 500=11`.
+The raw artifact for that candidate is not present in the current local result
+directory or bootstrap-history archives, so those values are documented provenance,
+not locally re-verifiable raw evidence.
+
+The locally re-verifiable raw candidate is recorded in
+`docs/128_mvc_ai_original_scheduler_evidence_manifest.md` with
+`started=7,276`, `successful=1,085`, `timeout=6,059`, `connectionError=0`, and
+`HTTP 500=132`. Both documented/raw candidates are classified as `COLLAPSE`,
+but only the raw candidate is used as canonical evidence in this closure.
+
+`VALID_MEASUREMENT_COUNT: 1`
+
+`REGISTERED_ONE_RUN_CONTRACT: VIOLATED`
+
+`SECOND_EXECUTION_TRIGGER: NOT_ESTABLISHED`
+
+`SCHEDULER_SEMANTICS_EFFECT: NOT_SUFFICIENT`
+
+`IMMEDIATE_FIXED_SCHEDULER_CONFOUNDER: NOT_ESTABLISHED`

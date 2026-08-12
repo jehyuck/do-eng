@@ -1,0 +1,11 @@
+﻿{
+    "valid":  true,
+    "loadScenario":  "reconnect-ramp",
+    "arrivalMode":  "staggered",
+    "successMatchMode":  "json-path",
+    "successJsonPath":  "ai.result",
+    "sendAuthorization":  false,
+    "sendMissionRunId":  false,
+    "sendSceneId":  false,
+    "successTriggeredReconnects":  446
+}

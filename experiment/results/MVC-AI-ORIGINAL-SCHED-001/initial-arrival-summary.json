@@ -1,0 +1,22 @@
+﻿{
+    "runId":  "MVC-AI-ORIGINAL-SCHED-001",
+    "source":  "client-results.json requestStartedAt",
+    "firstFourSeconds":  [
+                             {
+                                 "second":  1,
+                                 "started":  12
+                             },
+                             {
+                                 "second":  2,
+                                 "started":  63
+                             },
+                             {
+                                 "second":  3,
+                                 "started":  116
+                             },
+                             {
+                                 "second":  4,
+                                 "started":  160
+                             }
+                         ]
+}
