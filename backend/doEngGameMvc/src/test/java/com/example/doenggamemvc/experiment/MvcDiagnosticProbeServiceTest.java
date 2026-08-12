@@ -34,11 +34,15 @@ class MvcDiagnosticProbeServiceTest {
     @Mock
     private MissionImageStorage storage;
 
+    @Mock
+    private MvcAiRequestSerializationProbe serializationProbe;
+
     private MvcDiagnosticProbeService service;
 
     @BeforeEach
     void setUp() {
-        service = new MvcDiagnosticProbeService(aiClient, tokenClient, storage);
+        service = new MvcDiagnosticProbeService(
+                aiClient, tokenClient, storage, serializationProbe);
     }
 
     @Test
@@ -88,5 +92,22 @@ class MvcDiagnosticProbeServiceTest {
     void tokenModeRequiresAuthorization() {
         assertThrows(IllegalArgumentException.class, () -> service.probe(
                 "TOKEN_AI_STORAGE", "aGVsbG8=", "happy", null, "run", "request"));
+    }
+
+    @Test
+    void serializeOnlyDoesNotCallExternalServices() {
+        when(serializationProbe.serialize("aGVsbG8=", "happy"))
+                .thenReturn(Map.of(
+                        "result", true,
+                        "serialization", Map.of("serializedBytes", 42)));
+
+        Map<String, Object> result = service.probe(
+                "SERIALIZE_ONLY", "aGVsbG8=", "happy", null, "run", "request");
+
+        assertEquals(true, result.get("result"));
+        verify(serializationProbe).serialize("aGVsbG8=", "happy");
+        verify(aiClient, never()).decide(anyString(), anyString());
+        verify(tokenClient, never()).confirm(anyString());
+        verify(storage, never()).upload(anyString(), any());
     }
 }

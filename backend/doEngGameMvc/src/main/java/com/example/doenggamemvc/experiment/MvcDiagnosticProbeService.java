@@ -18,14 +18,17 @@ public class MvcDiagnosticProbeService {
     private final AiClient aiClient;
     private final TokenClient tokenClient;
     private final MissionImageStorage storage;
+    private final MvcAiRequestSerializationProbe serializationProbe;
 
     public MvcDiagnosticProbeService(
             AiClient aiClient,
             TokenClient tokenClient,
-            MissionImageStorage storage) {
+            MissionImageStorage storage,
+            MvcAiRequestSerializationProbe serializationProbe) {
         this.aiClient = aiClient;
         this.tokenClient = tokenClient;
         this.storage = storage;
+        this.serializationProbe = serializationProbe;
     }
 
     public Map<String, Object> probe(
@@ -44,6 +47,11 @@ public class MvcDiagnosticProbeService {
         switch (effectiveMode) {
             case "INGRESS":
                 result.put("steps", new String[] {"JSON_DESERIALIZE"});
+                return result;
+            case "SERIALIZE_ONLY":
+                result.putAll(serializationProbe.serialize(image, answer));
+                result.put("mode", effectiveMode);
+                result.put("runId", runId);
                 return result;
             case "AI":
                 result.put("ai", aiClient.decide(image, answer));
