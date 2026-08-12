@@ -7,7 +7,7 @@ $baseCompose = "backend\docker-compose.experiment.yaml"
 $overrideCompose = "experiment\compose\mvc400-vu120-ai1s.override.yml"
 $configPath = "experiment\config\mvc400-vu120-ai1s.json"
 $composeProject = "doeng-mvc400-vu120-ai1s"
-$runId = "SPOT-MVC400-VU120-AI1S-002"
+$runId = "SPOT-MVC400-VU120-AI1S-003"
 $composeArgs = @("-p", $composeProject, "-f", $baseCompose, "-f", $overrideCompose)
 
 function Get-ComposeContainerId {
@@ -90,7 +90,7 @@ try {
     & powershell.exe -NoProfile -ExecutionPolicy Bypass `
       -File ".\experiment\scripts\run-isolated-vu-success-smoke.ps1" `
       -RunId $runId `
-      -Implementation "MVC400-VU120-AI1S-SPOTCHECK" `
+      -Implementation "MVC400" `
       -TargetUrl "http://127.0.0.1:8002/game/face" `
       -ServerService "mvc" `
       -ComposeProject $composeProject `
