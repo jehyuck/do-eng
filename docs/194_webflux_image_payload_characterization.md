@@ -8,10 +8,15 @@
 
 - Source HEAD: `407e380f0fdb91a167685ebc8300b544039b3d75`
 - Clean local branch: `profile/image-payload-407e`
-- Raw run: `experiment/results/WEBFLUX-IMAGE-PAYLOAD-PROFILE-002`
-- Canonical index: `experiment/results/WEBFLUX-IMAGE-PAYLOAD-PROFILE/README.md`
+- Run ID: `WEBFLUX-IMAGE-PAYLOAD-PROFILE-002`
+- Raw Evidence package: [Google Drive package](https://drive.google.com/file/d/1feo1eQ5PHwAexUyyb5b9751SDPw0cYJv/view)
+- Raw Evidence manifest: [Google Drive manifest](https://drive.google.com/file/d/1psdM__CT2WUK3kY2bGR08XTOBk5acGm2/view)
+- Package SHA-256: `2edaa463aed21f38848b41abbed1b5a8f12d628a35deaeda06ed23fd89d6bf72`
+- Raw file count: `40`
+- Raw uncompressed total size: `75325421` bytes
 - Source aggregate SHA256: `2f93279f9d8dab7b746b2d90c3cd9df7f98e6c9a71beef64d8be1b352a2f1929`
 - Fixture: `image/arc.jpg`, 265745 bytes, `1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99`
+- JFR: `jvm-recording.jfr`, SHA-256 `cc8cb206a5bd9a9113ce3e49c9435c443e11079aa8a2f245465833ee7b2bc75f`
 - Runtime: Java 11.0.31; JFR source/copied size was 15976541/15976541 bytes.
 
 ## 실행 유효성 및 결과
