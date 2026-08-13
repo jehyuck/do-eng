@@ -31,7 +31,17 @@
     "issue": 4,
     "document": "docs/194_webflux_image_payload_characterization.md",
     "run": "WEBFLUX-IMAGE-PAYLOAD-PROFILE-002",
-    "evidenceCommit": "e3ac034ec26f1c7f14dd3b09419cd7d012249863"
+    "sourceHead": "407e380f0fdb91a167685ebc8300b544039b3d75",
+    "rawEvidence": {
+      "storage": "GOOGLE_DRIVE",
+      "packageFileId": "1feo1eQ5PHwAexUyyb5b9751SDPw0cYJv",
+      "packageSha256": "2edaa463aed21f38848b41abbed1b5a8f12d628a35deaeda06ed23fd89d6bf72",
+      "rawFileCount": 40,
+      "rawTotalSizeBytes": 75325421,
+      "manifestFileId": "1psdM__CT2WUK3kY2bGR08XTOBk5acGm2",
+      "jfrFilename": "jvm-recording.jfr",
+      "jfrSha256": "cc8cb206a5bd9a9113ce3e49c9435c443e11079aa8a2f245465833ee7b2bc75f"
+    }
   },
   "claimBoundary": {
     "throughputRatio": "1.80x",
