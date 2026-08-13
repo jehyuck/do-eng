@@ -19,8 +19,11 @@ do-eng의 이미지 게임 요청은 webcam image를 수신한 뒤 외부 AI ser
 - Repository: `jehyuck/do-eng`
 - Base source HEAD: `407e380f0fdb91a167685ebc8300b544039b3d75`
 - Documentation branch: `docs/doeng-technical-closure-20260813`
-- Image-payload evidence commit: `e3ac034ec26f1c7f14dd3b09419cd7d012249863`
 - Image-payload document: `docs/194_webflux_image_payload_characterization.md`
+- Image-payload Raw Evidence: [Google Drive package](https://drive.google.com/file/d/1feo1eQ5PHwAexUyyb5b9751SDPw0cYJv/view)
+- Image-payload Evidence manifest: [Google Drive manifest](https://drive.google.com/file/d/1psdM__CT2WUK3kY2bGR08XTOBk5acGm2/view)
+- Image-payload package SHA-256: `2edaa463aed21f38848b41abbed1b5a8f12d628a35deaeda06ed23fd89d6bf72`
+- Image-payload run: `WEBFLUX-IMAGE-PAYLOAD-PROFILE-002`
 - SERVICE3S closure: `docs/104_webflux_mvc_final_experiment_closure.md`
 - Fixed-periodic plan: `docs/125_fixed_periodic_frame_matrix_plan.md`
 - Image-payload open Issue: GitHub Issue #4
