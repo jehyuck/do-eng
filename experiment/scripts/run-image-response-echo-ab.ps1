@@ -10,7 +10,7 @@ if (-not $Execute) {
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $resultsRoot = Join-Path $repositoryRoot "experiment\results"
-$orchestrationRoot = Join-Path $resultsRoot "WEBFLUX-IMAGE-ECHO-AB-20260814"
+$orchestrationRoot = Join-Path $resultsRoot "WEBFLUX-IMAGE-ECHO-AB-20260814-R1"
 $baseCompose = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "backend\docker-compose.experiment.yaml"))
 $overrideCompose = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "experiment\compose\experiment-1-37-runtime.override.yml"))
 $configPath = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "experiment\config\comparison-vu160-service-3s.json"))
@@ -103,7 +103,7 @@ try {
         $eventsProcess = $null
 
         try {
-            $eventsProcess = Start-Process -FilePath "docker" -ArgumentList @("events", "--filter", "label=com.docker.compose.project=$($run.project)", "--format", "{{json .}}") -RedirectStandardOutput $eventStdout -RedirectStandardError $eventStderr -PassThru -WindowStyle Hidden
+            $eventsProcess = Start-Process -FilePath "docker" -ArgumentList @("events") -RedirectStandardOutput $eventStdout -RedirectStandardError $eventStderr -PassThru -WindowStyle Hidden
             $upCode = Invoke-Captured -FilePath "docker" -Arguments (@("compose", "-p", $run.project) + $composeArgs + @("up", "-d", "flux-corrected")) -StdoutPath $composeStdout -StderrPath $composeStderr
             if ($upCode -ne 0) { throw "Compose startup failed with exit code $upCode" }
 
@@ -174,7 +174,13 @@ try {
                 Stop-Process -Id $eventsProcess.Id -Force -ErrorAction SilentlyContinue
                 $eventsProcess.WaitForExit()
             }
-            (& docker compose -p $run.project @composeArgs down --remove-orphans 2>&1) | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runOrchestration "compose-down.log")
+            $previousErrorActionPreference = $ErrorActionPreference
+            $ErrorActionPreference = "Continue"
+            try {
+                (& docker compose -p $run.project @composeArgs down --remove-orphans 2>&1) | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runOrchestration "compose-down.log")
+            } finally {
+                $ErrorActionPreference = $previousErrorActionPreference
+            }
         }
     }
 } catch {
