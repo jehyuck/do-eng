@@ -1,0 +1,63 @@
+{
+  "experiment": "WEBFLUX-IMAGE-ECHO-AB-20260814",
+  "classification": "TARGET_COST_REDUCED_NO_SERVICE_GAIN",
+  "sourceHead": "56727aefea341b9d907d72d135fa42739bcb2e7f",
+  "branch": "experiment/image-response-echo-ab-20260814",
+  "fixture": {
+    "path": "image/arc.jpg",
+    "bytes": 265745,
+    "sha256": "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99"
+  },
+  "contract": {
+    "activeMissions": 160,
+    "loadScenario": "reconnect-ramp",
+    "arrivalMode": "staggered",
+    "intervalMs": 3000,
+    "durationMs": 105000,
+    "requestTimeoutMs": 10000,
+    "aiDelayMs": 2000,
+    "storageDelayMs": 100,
+    "appCpu": "2.0",
+    "appMemory": "3g",
+    "httpMaxConnections": 400,
+    "httpPendingMaxCount": 400,
+    "dbPoolMaxSize": 10,
+    "jvmXms": "512m",
+    "jvmXmx": "2048m"
+  },
+  "functionalGate": "experiment/results/functional-echo-ab/functional-gate-resolution.json",
+  "runs": [
+    { "logicalSlot": "A1", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-A1", "condition": "A", "echoImage": true, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-A1", "executionValidity": "VALID", "jfrValid": true },
+    { "logicalSlot": "B1", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-B1", "condition": "B", "echoImage": false, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-B1", "executionValidity": "VALID", "jfrValid": true },
+    { "logicalSlot": "B2", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-B2", "condition": "B", "echoImage": false, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-B2", "executionValidity": "VALID", "jfrValid": true },
+    { "logicalSlot": "A2", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-A2", "condition": "A", "echoImage": true, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-A2", "executionValidity": "VALID", "jfrValid": true },
+    { "logicalSlot": "A3", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-A3", "condition": "A", "echoImage": true, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-A3", "executionValidity": "VALID", "jfrValid": true },
+    { "logicalSlot": "B3", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-B3", "condition": "B", "echoImage": false, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-B3", "executionValidity": "VALID", "jfrValid": true }
+  ],
+  "priorAttempt": {
+    "logicalSlot": "A1",
+    "attempt": 1,
+    "callerObservation": "RUNNER_PROCESS_TIMEOUT / INCOMPLETE_ARTIFACT",
+    "laterRawState": "verification-summary.json finalized as VALID",
+    "retryRunExecuted": false,
+    "reason": "The original detached cohort completed A1 through B3; no replacement run was added."
+  },
+  "authoritativeFilesPerRun": [
+    "environment.json",
+    "run-config.json",
+    "resolved-experiment-config.json",
+    "verification-summary.json",
+    "client-results.json",
+    "client-summary.stdout.json",
+    "mock-control.json",
+    "mock-requests.json",
+    "mock-metrics-after.json",
+    "mock-drain-summary.json",
+    "jfr-validation.json",
+    "jfr-summary.txt",
+    "jvm-recording.jfr",
+    "response-size-summary.json",
+    "outer-runtime.json"
+  ],
+  "rawEvidencePolicy": "Large run artifacts remain local/evidence-package only; this manifest and the result document are tracked."
+}
