@@ -105,12 +105,13 @@ sampled execution-sample observation, not a total allocation-byte measurement.
 
 ## Classification
 
-`TARGET_COST_REDUCED_NO_SERVICE_GAIN`
+`INCONCLUSIVE_OR_REGRESSION`
 
-Functional equivalence passed and the target `_skipString` cost decreased in
-all three pairs. A repeated service-level improvement was not established:
-the B condition was better on some service metrics in pairs 1 and 3, but worse
-on successful RPS and success rate in pair 2 and on several metrics in pair 1.
+The target `_skipString` cost decreased in all three pairs, but the
+service-level result is mixed and includes repeated regression signals. The B
+condition improved p95 in two of three pairs, while successful RPS and success
+rate were worse in two of three pairs. B1 also recorded a failed application
+outcome assertion even though its execution validity remained `VALID`.
 
 ## Confirmed
 
@@ -119,7 +120,12 @@ on successful RPS and success rate in pair 2 and on several metrics in pair 1.
 - The response-side Jackson `_skipString` sampled cost was eliminated in all
   three B runs under this contract.
 - The six runs were execution-valid and used the same frozen contract.
-- A repeated service-level gain was not demonstrated by this six-run cohort.
+- The target cost reduction did not establish a repeated service-level gain;
+  the service-level classification is therefore inconclusive or regressive.
+- B1 `executionValidity` was `VALID`, while
+  `applicationOutcomePassed` was `false` because
+  `oneProgressAndPicturePerVu`, `oneStoredObjectPerVu`, and `reconnectRamp`
+  were false.
 
 ## Not established
 
@@ -133,8 +139,8 @@ on successful RPS and success rate in pair 2 and on several metrics in pair 1.
 
 Allowed: under this fixed WebFlux request flow and mock contract, removing the
 unused AI response image reduced the targeted response-side Jackson sampled
-cost, but did not produce a repeated service-level improvement across the
-three pairs.
+cost. The service-level effect across the three pairs is
+`INCONCLUSIVE_OR_REGRESSION`.
 
 Prohibited: claiming that the image echo is the sole cause of MVC collapse,
 that the change universally improves service performance, or that production

@@ -1,7 +1,8 @@
 {
   "experiment": "WEBFLUX-IMAGE-ECHO-AB-20260814",
-  "classification": "TARGET_COST_REDUCED_NO_SERVICE_GAIN",
-  "sourceHead": "56727aefea341b9d907d72d135fa42739bcb2e7f",
+  "classification": "INCONCLUSIVE_OR_REGRESSION",
+  "experimentHead": "56727aefea341b9d907d72d135fa42739bcb2e7f",
+  "frozenApplicationSource": "407e380f0fdb91a167685ebc8300b544039b3d75",
   "branch": "experiment/image-response-echo-ab-20260814",
   "fixture": {
     "path": "image/arc.jpg",
@@ -28,7 +29,7 @@
   "functionalGate": "experiment/results/functional-echo-ab/functional-gate-resolution.json",
   "runs": [
     { "logicalSlot": "A1", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-A1", "condition": "A", "echoImage": true, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-A1", "executionValidity": "VALID", "jfrValid": true },
-    { "logicalSlot": "B1", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-B1", "condition": "B", "echoImage": false, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-B1", "executionValidity": "VALID", "jfrValid": true },
+    { "logicalSlot": "B1", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-B1", "condition": "B", "echoImage": false, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-B1", "executionValidity": "VALID", "jfrValid": true, "applicationOutcomePassed": false },
     { "logicalSlot": "B2", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-B2", "condition": "B", "echoImage": false, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-B2", "executionValidity": "VALID", "jfrValid": true },
     { "logicalSlot": "A2", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-A2", "condition": "A", "echoImage": true, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-A2", "executionValidity": "VALID", "jfrValid": true },
     { "logicalSlot": "A3", "attempt": 1, "runId": "WEBFLUX-IMAGE-ECHO-A3", "condition": "A", "echoImage": true, "resultPath": "experiment/results/WEBFLUX-IMAGE-ECHO-A3", "executionValidity": "VALID", "jfrValid": true },
