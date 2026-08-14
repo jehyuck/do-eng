@@ -439,6 +439,7 @@ const server = http.createServer(async (request, response) => {
       requestReceived: true,
       delayStarted: false,
       writeStarted: false,
+      responseBytes: null,
       responseFinished: false,
       requestAborted: false,
       requestClosed: false,
@@ -479,21 +480,28 @@ const server = http.createServer(async (request, response) => {
             request.socket.destroy()
             return
           }
-          lifecycle.writeStarted = true
-          observeAiLifecycle("MOCK_AI_RESPONSE_WRITE_STARTED", request, lifecycle)
+          let responseStatus = 200
+          let responseBody
           if (snapshot.status >= 400) {
-            sendJson(response, snapshot.status, {
+            responseStatus = snapshot.status
+            responseBody = {
               error: "mock AI failure",
               status: snapshot.status,
-            })
-            return
+            }
+          } else {
+            responseBody = { result: snapshot.result }
+            if (snapshot.echoImage) {
+              responseBody.image = snapshot.result ? normalizeBase64(body.image) : null
+            }
           }
-
-          const aiResponse = { result: snapshot.result }
-          if (snapshot.echoImage) {
-            aiResponse.image = snapshot.result ? normalizeBase64(body.image) : null
-          }
-          sendJson(response, 200, aiResponse)
+          lifecycle.responseBytes = Buffer.byteLength(JSON.stringify(responseBody))
+          lifecycle.writeStarted = true
+          observeAiLifecycle("MOCK_AI_RESPONSE_WRITE_STARTED", request, lifecycle, {
+            responseStatus,
+            responseBytes: lifecycle.responseBytes,
+            echoImage: snapshot.echoImage,
+          })
+          sendJson(response, responseStatus, responseBody)
         } finally {
           if (requestGeneration === resetGeneration) {
             aiInFlight -= 1
