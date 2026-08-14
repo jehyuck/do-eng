@@ -139,3 +139,21 @@ pair valid.
 
 The plan commit and mock-only functional smoke must pass before any A/B
 measurement workload begins.
+
+## 12. Readiness gate resolution
+
+The initial functional-gate attempt stopped before any business request. The
+WebFlux runtime was healthy on its management port (`9001/actuator/health`
+returned HTTP 200 with `{"status":"UP"}`), while the generic main-port
+readiness probes returned HTTP 404. The readiness helper now has an explicit
+management-health mode for this WebFlux contract; its default MVC checks are
+unchanged. The optional observability snapshot is not required in this mode.
+
+The corrected readiness smoke passed with two compose files, a running
+container, restart count 0, OOMKilled false, and a stable health window.
+The A/B one-request functional gate then passed for both conditions: each
+returned HTTP 200 and `true`, reached AI/storage/DB once, and stored 265745
+bytes with SHA-256
+`1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99`.
+The mock-only response-shape regression confirms that A includes `image` and
+B omits it. No performance workload has started.
