@@ -25,13 +25,25 @@
     "plan": "docs/126_webflux_pool_headroom_experiment_plan.md"
   },
   "imagePayload": {
-    "status": "OPEN",
+    "status": "CLOSED",
     "profileStatus": "VALID",
-    "verdictStatus": "NOT_YET_CLOSED",
+    "verdictStatus": "CLOSED",
+    "classification": "PAYLOAD_COST_MATERIAL_CANDIDATE",
+    "verdictClosedDate": "2026-08-14",
     "issue": 4,
     "document": "docs/194_webflux_image_payload_characterization.md",
+    "verdictDocument": "docs/196_webflux_image_payload_verdict_closure.md",
     "run": "WEBFLUX-IMAGE-PAYLOAD-PROFILE-002",
     "sourceHead": "407e380f0fdb91a167685ebc8300b544039b3d75",
+    "verdictEvidence": {
+      "measurementStart": "2026-08-13T09:20:49.818Z",
+      "measurementStop": "2026-08-13T09:22:34.831Z",
+      "windowSeconds": 35,
+      "executionSampleDenominators": [1195, 1042, 1092],
+      "cpuGateThresholdPercent": 5.0,
+      "cpuGateMinimumWindows": 2,
+      "cpuGateQualifyingWindows": 3
+    },
     "rawEvidence": {
       "storage": "GOOGLE_DRIVE",
       "packageFileId": "1feo1eQ5PHwAexUyyb5b9751SDPw0cYJv",
@@ -47,6 +59,8 @@
     "throughputRatio": "1.80x",
     "p95Ratio": "2.70x",
     "halfSecondClassification": "LOAD_GENERATOR_LIMITED",
-    "poolRootCause": "NOT_ESTABLISHED"
+    "poolRootCause": "NOT_ESTABLISHED",
+    "imagePayloadClassification": "PAYLOAD_COST_MATERIAL_CANDIDATE",
+    "imagePayloadOptimizationEffect": "NOT_ESTABLISHED"
   }
 }
