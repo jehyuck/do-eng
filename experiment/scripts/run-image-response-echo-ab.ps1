@@ -10,7 +10,7 @@ if (-not $Execute) {
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $resultsRoot = Join-Path $repositoryRoot "experiment\results"
-$orchestrationRoot = Join-Path $resultsRoot "WEBFLUX-IMAGE-ECHO-AB-20260814-R2"
+$orchestrationRoot = Join-Path $resultsRoot "WEBFLUX-IMAGE-ECHO-AB-20260814-R3"
 $baseCompose = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "backend\docker-compose.experiment.yaml"))
 $overrideCompose = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "experiment\compose\experiment-1-37-runtime.override.yml"))
 $configPath = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "experiment\config\comparison-vu160-service-3s.json"))
@@ -124,7 +124,7 @@ try {
             $readinessCode = Invoke-Captured -FilePath "powershell.exe" -Arguments $readinessArgs -StdoutPath $readinessStdout -StderrPath $readinessStderr
             if ($readinessCode -ne 0) { throw "Startup/readiness gate failed with exit code $readinessCode" }
             $readinessGate = Get-Content -Raw -LiteralPath $readinessOutput | ConvertFrom-Json
-            if ($readinessGate.pass -ne $true) { throw "Startup/readiness gate did not pass" }
+            if ($readinessGate.loadAllowed -ne $true) { throw "Startup/readiness gate did not pass" }
 
             New-Item -ItemType Directory -Force -Path $runDirectory | Out-Null
             $runnerArgs = @(
