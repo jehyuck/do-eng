@@ -10,7 +10,7 @@ if (-not $Execute) {
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $resultsRoot = Join-Path $repositoryRoot "experiment\results"
-$orchestrationRoot = Join-Path $resultsRoot "WEBFLUX-IMAGE-ECHO-AB-20260814-R1"
+$orchestrationRoot = Join-Path $resultsRoot "WEBFLUX-IMAGE-ECHO-AB-20260814-R2"
 $baseCompose = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "backend\docker-compose.experiment.yaml"))
 $overrideCompose = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "experiment\compose\experiment-1-37-runtime.override.yml"))
 $configPath = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "experiment\config\comparison-vu160-service-3s.json"))
@@ -76,8 +76,14 @@ function Invoke-Captured {
         [Parameter(Mandatory = $true)][string]$StdoutPath,
         [Parameter(Mandatory = $true)][string]$StderrPath
     )
-    & $FilePath @Arguments 1> $StdoutPath 2> $StderrPath
-    return [int]$LASTEXITCODE
+    $previousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        & $FilePath @Arguments 1> $StdoutPath 2> $StderrPath
+        return [int]$LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+    }
 }
 
 function Save-Json {
