@@ -8,6 +8,7 @@ const defaultAiState = {
   result: String(process.env.MOCK_AI_RESULT || "false").toLowerCase() === "true",
   delayMs: Number(process.env.MOCK_AI_DELAY_MS || 0),
   status: Number(process.env.MOCK_AI_STATUS || 200),
+  echoImage: String(process.env.MOCK_AI_ECHO_IMAGE || "true").toLowerCase() === "true",
   closeBeforeResponse: false,
 }
 
@@ -299,6 +300,7 @@ const server = http.createServer(async (request, response) => {
         result: body.result === undefined ? aiState.result : Boolean(body.result),
         delayMs: body.delayMs === undefined ? aiState.delayMs : Number(body.delayMs),
         status: body.status === undefined ? aiState.status : Number(body.status),
+        echoImage: body.echoImage === undefined ? aiState.echoImage : Boolean(body.echoImage),
         closeBeforeResponse:
           body.closeBeforeResponse === undefined
             ? aiState.closeBeforeResponse
@@ -487,10 +489,11 @@ const server = http.createServer(async (request, response) => {
             return
           }
 
-          sendJson(response, 200, {
-            result: snapshot.result,
-            image: snapshot.result ? normalizeBase64(body.image) : null,
-          })
+          const aiResponse = { result: snapshot.result }
+          if (snapshot.echoImage) {
+            aiResponse.image = snapshot.result ? normalizeBase64(body.image) : null
+          }
+          sendJson(response, 200, aiResponse)
         } finally {
           if (requestGeneration === resetGeneration) {
             aiInFlight -= 1
