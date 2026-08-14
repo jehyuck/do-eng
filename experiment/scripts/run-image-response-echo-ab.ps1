@@ -10,7 +10,7 @@ if (-not $Execute) {
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $resultsRoot = Join-Path $repositoryRoot "experiment\results"
-$orchestrationRoot = Join-Path $resultsRoot "WEBFLUX-IMAGE-ECHO-AB-20260814-R4"
+$orchestrationRoot = Join-Path $resultsRoot "WEBFLUX-IMAGE-ECHO-AB-20260814-R5"
 $baseCompose = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "backend\docker-compose.experiment.yaml"))
 $overrideCompose = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "experiment\compose\experiment-1-37-runtime.override.yml"))
 $configPath = [IO.Path]::GetFullPath((Join-Path $repositoryRoot "experiment\config\comparison-vu160-service-3s.json"))
@@ -25,7 +25,7 @@ $sourceHead = (& git -C $repositoryRoot rev-parse HEAD).Trim()
 $branch = (& git -C $repositoryRoot branch --show-current).Trim()
 
 $runs = @(
-    [pscustomobject]@{ id = "WEBFLUX-IMAGE-ECHO-A1"; condition = "A"; echoImage = 1; project = "doeng-echo-ab-a1" },
+    [pscustomobject]@{ id = "WEBFLUX-IMAGE-ECHO-A1-RETRY1"; logicalSlot = "A1"; attempt = 2; retryReason = "HARNESS_TIMEOUT_RECOVERY"; priorAttempt = "WEBFLUX-IMAGE-ECHO-A1"; condition = "A"; echoImage = 1; project = "doeng-echo-ab-a1-retry1" },
     [pscustomobject]@{ id = "WEBFLUX-IMAGE-ECHO-B1"; condition = "B"; echoImage = 0; project = "doeng-echo-ab-b1" },
     [pscustomobject]@{ id = "WEBFLUX-IMAGE-ECHO-B2"; condition = "B"; echoImage = 0; project = "doeng-echo-ab-b2" },
     [pscustomobject]@{ id = "WEBFLUX-IMAGE-ECHO-A2"; condition = "A"; echoImage = 1; project = "doeng-echo-ab-a2" },
@@ -162,6 +162,10 @@ try {
             }
             Save-Json ([ordered]@{
                 runId = $run.id
+                logicalSlot = $run.logicalSlot
+                attempt = $run.attempt
+                retryReason = $run.retryReason
+                priorAttempt = $run.priorAttempt
                 condition = $run.condition
                 echoImage = $run.echoImage -eq 1
                 composeProject = $run.project
