@@ -7,6 +7,7 @@ param(
     [int]$MockPort = 9100,
     [int]$MaxWaitSeconds = 120,
     [int]$StableSeconds = 10,
+    [switch]$UseManagementHealthForReadiness,
     [string]$ComposeFilesBase64 = "",
     [string]$OutputPath = ""
 )
@@ -108,6 +109,13 @@ while (((Get-Date) - $startedAt).TotalSeconds -lt $MaxWaitSeconds) {
     $managementLive = Get-HttpJson "http://127.0.0.1:$ManagementPort/actuator/health/liveness"
     $mainReady = Get-HttpJson "http://127.0.0.1:$MainPort/readyz"
     $managementReady = Get-HttpJson "http://127.0.0.1:$ManagementPort/actuator/health/readiness"
+    if ($UseManagementHealthForReadiness) {
+        $managementHealth = Get-HttpJson "http://127.0.0.1:$ManagementPort/actuator/health"
+        $mainLive = $managementHealth
+        $managementLive = $managementHealth
+        $mainReady = $managementHealth
+        $managementReady = $managementHealth
+    }
     $canary = Get-HttpJson "http://127.0.0.1:$MainPort/test"
     $mockHealth = Get-HttpJson "http://127.0.0.1:$MockPort/health"
     $mockMetrics = Get-HttpJson "http://127.0.0.1:$MockPort/__metrics"
