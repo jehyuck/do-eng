@@ -1,0 +1,42 @@
+{
+  "experiment": "WEBFLUX-IMAGE-ECHO-AB-20260814",
+  "classification": "INCONCLUSIVE_OR_REGRESSION",
+  "experimentHead": "56727aefea341b9d907d72d135fa42739bcb2e7f",
+  "frozenApplicationSource": "407e380f0fdb91a167685ebc8300b544039b3d75",
+  "packageFilename": "doeng_WEBFLUX-IMAGE-ECHO-AB-20260814_Evidence.zip",
+  "packageSha256": "8e6430cf9a683e2813cee38294b81bd430b1b9b1342d95d75622eb347990e790",
+  "packageSizeBytes": 41843816,
+  "rawFileCount": 220,
+  "rawTotalSizeBytes": 837077630,
+  "runIds": [
+    "WEBFLUX-IMAGE-ECHO-A1",
+    "WEBFLUX-IMAGE-ECHO-B1",
+    "WEBFLUX-IMAGE-ECHO-B2",
+    "WEBFLUX-IMAGE-ECHO-A2",
+    "WEBFLUX-IMAGE-ECHO-A3",
+    "WEBFLUX-IMAGE-ECHO-B3"
+  ],
+  "runOrder": ["A1", "B1", "B2", "A2", "A3", "B3"],
+  "runs": [
+    { "runId": "WEBFLUX-IMAGE-ECHO-A1", "executionValidity": "VALID", "jfrFilename": "jvm-recording.jfr", "jfrSha256": "71d65e8a958eb1b6d7f2cff704e3ed5d872ad689a3d622228fbb497be2440cc0" },
+    { "runId": "WEBFLUX-IMAGE-ECHO-B1", "executionValidity": "VALID", "jfrFilename": "jvm-recording.jfr", "jfrSha256": "4f137e04bd45c55b4cbc1daf611021ee3def648e752a66f75d72799fb4abb4ec" },
+    { "runId": "WEBFLUX-IMAGE-ECHO-B2", "executionValidity": "VALID", "jfrFilename": "jvm-recording.jfr", "jfrSha256": "05dfeec422de578edd794ab52fe947709f5c9b1e9df0b8b62113a141055ff1f7" },
+    { "runId": "WEBFLUX-IMAGE-ECHO-A2", "executionValidity": "VALID", "jfrFilename": "jvm-recording.jfr", "jfrSha256": "31279f0c8c275bc321329f4d03ed75f46f2f4595811098dfe95b6b2b4591f94d" },
+    { "runId": "WEBFLUX-IMAGE-ECHO-A3", "executionValidity": "VALID", "jfrFilename": "jvm-recording.jfr", "jfrSha256": "530044a132c68885c68f6b72a358ea52e6a6ef00059af417137758402dc61690" },
+    { "runId": "WEBFLUX-IMAGE-ECHO-B3", "executionValidity": "VALID", "jfrFilename": "jvm-recording.jfr", "jfrSha256": "0b519c493b2bfecc5b4526f3ca72016c0087a6ad73af008630f142b6194cac37" }
+  ],
+  "functionalGateArtifact": "experiment/results/functional-echo-ab/functional-gate-resolution.json",
+  "finalResultDocument": "docs/198_webflux_ai_response_echo_ab_result.md",
+  "finalClassificationCommit": "f21c47bba5f86b5d09233ac591808d2fbb503a81",
+  "packageTimestamp": "2026-08-14T04:26:50.2063582Z",
+  "rawEvidence": {
+    "storage": "GOOGLE_DRIVE",
+    "folderId": "1BUp2ybRmDSoqX5V0_jNU5zRWfSJmktn5",
+    "packageFileId": "1foqe7Bxrhams6xCOsOVdSrj9jvex0izu",
+    "manifestFileId": "1SblXpA_Lavv2E5nOBtoJwSNgKZhbHtOC",
+    "packageSha256": "8e6430cf9a683e2813cee38294b81bd430b1b9b1342d95d75622eb347990e790",
+    "packageSizeBytes": 41843816,
+    "rawFileCount": 220,
+    "rawTotalSizeBytes": 837077630
+  }
+}

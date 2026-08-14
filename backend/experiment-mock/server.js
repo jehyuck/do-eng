@@ -8,6 +8,7 @@ const defaultAiState = {
   result: String(process.env.MOCK_AI_RESULT || "false").toLowerCase() === "true",
   delayMs: Number(process.env.MOCK_AI_DELAY_MS || 0),
   status: Number(process.env.MOCK_AI_STATUS || 200),
+  echoImage: String(process.env.MOCK_AI_ECHO_IMAGE || "true").toLowerCase() === "true",
   closeBeforeResponse: false,
 }
 
@@ -299,6 +300,7 @@ const server = http.createServer(async (request, response) => {
         result: body.result === undefined ? aiState.result : Boolean(body.result),
         delayMs: body.delayMs === undefined ? aiState.delayMs : Number(body.delayMs),
         status: body.status === undefined ? aiState.status : Number(body.status),
+        echoImage: body.echoImage === undefined ? aiState.echoImage : Boolean(body.echoImage),
         closeBeforeResponse:
           body.closeBeforeResponse === undefined
             ? aiState.closeBeforeResponse
@@ -437,6 +439,7 @@ const server = http.createServer(async (request, response) => {
       requestReceived: true,
       delayStarted: false,
       writeStarted: false,
+      responseBytes: null,
       responseFinished: false,
       requestAborted: false,
       requestClosed: false,
@@ -477,20 +480,28 @@ const server = http.createServer(async (request, response) => {
             request.socket.destroy()
             return
           }
-          lifecycle.writeStarted = true
-          observeAiLifecycle("MOCK_AI_RESPONSE_WRITE_STARTED", request, lifecycle)
+          let responseStatus = 200
+          let responseBody
           if (snapshot.status >= 400) {
-            sendJson(response, snapshot.status, {
+            responseStatus = snapshot.status
+            responseBody = {
               error: "mock AI failure",
               status: snapshot.status,
-            })
-            return
+            }
+          } else {
+            responseBody = { result: snapshot.result }
+            if (snapshot.echoImage) {
+              responseBody.image = snapshot.result ? normalizeBase64(body.image) : null
+            }
           }
-
-          sendJson(response, 200, {
-            result: snapshot.result,
-            image: snapshot.result ? normalizeBase64(body.image) : null,
+          lifecycle.responseBytes = Buffer.byteLength(JSON.stringify(responseBody))
+          lifecycle.writeStarted = true
+          observeAiLifecycle("MOCK_AI_RESPONSE_WRITE_STARTED", request, lifecycle, {
+            responseStatus,
+            responseBytes: lifecycle.responseBytes,
+            echoImage: snapshot.echoImage,
           })
+          sendJson(response, responseStatus, responseBody)
         } finally {
           if (requestGeneration === resetGeneration) {
             aiInFlight -= 1

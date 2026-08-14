@@ -66,14 +66,36 @@ async function run() {
     image: "aGVsbG8=",
   })
 
+  const noEchoControlResponse = await fetch("http://127.0.0.1:19100/__control", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ echoImage: false }),
+  })
+  assert.strictEqual(noEchoControlResponse.status, 200)
+
+  const noEchoAiResponse = await fetch("http://127.0.0.1:19100/analyze/face", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      answer: "happy",
+      image: "data:image/jpeg;base64,aGVsbG8=",
+    }),
+  })
+  assert.strictEqual(noEchoAiResponse.status, 200)
+  assert.deepStrictEqual(await noEchoAiResponse.json(), { result: true })
+
   const requestsResponse = await fetch("http://127.0.0.1:19100/__requests")
   assert.strictEqual(requestsResponse.status, 200)
   const requests = await requestsResponse.json()
   assert.deepStrictEqual(requests.counts, {
     "GET /api/member/ai": 1,
-    "POST /analyze/face": 1,
+    "POST /analyze/face": 2,
   })
-  assert.strictEqual(requests.requests.length, 2)
+  assert.strictEqual(requests.requests.length, 3)
 }
 
 run()

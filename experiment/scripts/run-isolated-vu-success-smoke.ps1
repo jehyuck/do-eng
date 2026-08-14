@@ -48,6 +48,8 @@ param(
     [ValidateRange(0, 86400000)]
     [int]$WarmupMs = 0,
     [bool]$AiResult = $true,
+    [ValidateSet(0, 1)]
+    [int]$EchoImage = 1,
     [ValidateRange(100, 599)]
     [int]$AiStatus = 200,
     [ValidateRange(100, 599)]
@@ -210,6 +212,7 @@ $effectiveActivationStepUsers = if ($LoadScenario -eq "reconnect-ramp") { $Activ
 if (Test-Path -LiteralPath $runDirectory) {
     throw "Run result directory already exists: $runDirectory"
 }
+New-Item -ItemType Directory -Force -Path $runDirectory | Out-Null
 if (Test-Path -LiteralPath $privateTokenPath) {
     throw "Private token file already exists: $privateTokenPath"
 }
@@ -519,6 +522,7 @@ try {
         sceneId = $SceneId
         answer = $Answer
         ai = [ordered]@{ result = $AiResult; delayMs = $AiDelayMs; status = $AiStatus }
+        echoImage = $EchoImage -eq 1
         storage = [ordered]@{ delayMs = $StorageDelayMs; status = $StorageStatus }
         observability = [ordered]@{
             enabled = $observabilityEnabled
@@ -553,13 +557,18 @@ try {
     if (-not $preRunMockIdle) { throw "Pre-run mock in-flight is not zero" }
 
     Invoke-RestMethod -Method Post -Uri "$mockBaseUrl/__reset" -ContentType "application/json" -Body "{}" | Out-Null
-    Invoke-RestMethod -Method Post -Uri "$mockBaseUrl/__control" -ContentType "application/json" -Body (([ordered]@{
+    $mockControl = Invoke-RestMethod -Method Post -Uri "$mockBaseUrl/__control" -ContentType "application/json" -Body (([ordered]@{
         result = $AiResult
+        echoImage = $EchoImage -eq 1
         delayMs = $AiDelayMs
         status = $AiStatus
         storageDelayMs = $StorageDelayMs
         storageStatus = $StorageStatus
-    }) | ConvertTo-Json -Compress) | ConvertTo-Json -Depth 4 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "mock-control.json")
+    }) | ConvertTo-Json -Compress)
+    $mockControl | ConvertTo-Json -Depth 4 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "mock-control.json")
+    if ([bool]$mockControl.ai.echoImage -ne ($EchoImage -eq 1)) {
+        throw "Mock echoImage readback did not match requested condition"
+    }
 
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "provision-experiment-users.ps1") `
         -RunId $RunId -ComposeProject $ComposeProject -UserCount $ActiveMissions `

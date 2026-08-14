@@ -7,6 +7,7 @@ param(
     [int]$MockPort = 9100,
     [int]$MaxWaitSeconds = 120,
     [int]$StableSeconds = 10,
+    [switch]$UseManagementHealthForReadiness,
     [string]$ComposeFilesBase64 = "",
     [string]$OutputPath = ""
 )
@@ -108,10 +109,21 @@ while (((Get-Date) - $startedAt).TotalSeconds -lt $MaxWaitSeconds) {
     $managementLive = Get-HttpJson "http://127.0.0.1:$ManagementPort/actuator/health/liveness"
     $mainReady = Get-HttpJson "http://127.0.0.1:$MainPort/readyz"
     $managementReady = Get-HttpJson "http://127.0.0.1:$ManagementPort/actuator/health/readiness"
+    if ($UseManagementHealthForReadiness) {
+        $managementHealth = Get-HttpJson "http://127.0.0.1:$ManagementPort/actuator/health"
+        $mainLive = $managementHealth
+        $managementLive = $managementHealth
+        $mainReady = $managementHealth
+        $managementReady = $managementHealth
+    }
     $canary = Get-HttpJson "http://127.0.0.1:$MainPort/test"
     $mockHealth = Get-HttpJson "http://127.0.0.1:$MockPort/health"
     $mockMetrics = Get-HttpJson "http://127.0.0.1:$MockPort/__metrics"
-    $snapshot = Get-HttpJson "http://127.0.0.1:$ManagementPort/actuator/doengexperiment"
+    $snapshot = if ($UseManagementHealthForReadiness) {
+        $null
+    } else {
+        Get-HttpJson "http://127.0.0.1:$ManagementPort/actuator/doengexperiment"
+    }
     $attempts.liveness++
     if (Test-Up $mainLive -and Test-Up $managementLive -and $null -eq $firstLivenessAt) { $firstLivenessAt = Get-Date }
     if (Test-Up $mainReady -and Test-Up $managementReady -and $null -eq $firstReadinessAt) { $firstReadinessAt = Get-Date }
@@ -120,9 +132,10 @@ while (((Get-Date) - $startedAt).TotalSeconds -lt $MaxWaitSeconds) {
     $mockReady = $mockHealth.status -eq 200 -and $mockMetrics.status -eq 200 -and
         ($mockMetrics.body.aiInFlight -as [double]) -eq 0 -and
         ($mockMetrics.body.storageInFlight -as [double]) -eq 0
+    $observabilityReady = $UseManagementHealthForReadiness -or (Test-Idle $snapshot)
     $allReady = $containerReady -and (Test-Up $mainLive) -and (Test-Up $managementLive) -and
         (Test-Up $mainReady) -and (Test-Up $managementReady) -and $canary.status -eq 200 -and
-        $mockReady -and (Test-Idle $snapshot)
+        $mockReady -and $observabilityReady
     if ($allReady) {
         if ($stableCount -eq 0) { $stableStartedAt = Get-Date }
         $stableCount++
