@@ -212,6 +212,7 @@ $effectiveActivationStepUsers = if ($LoadScenario -eq "reconnect-ramp") { $Activ
 if (Test-Path -LiteralPath $runDirectory) {
     throw "Run result directory already exists: $runDirectory"
 }
+New-Item -ItemType Directory -Force -Path $runDirectory | Out-Null
 if (Test-Path -LiteralPath $privateTokenPath) {
     throw "Private token file already exists: $privateTokenPath"
 }
