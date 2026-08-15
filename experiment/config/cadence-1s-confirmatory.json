@@ -1,0 +1,54 @@
+{
+  "experiment": "1S_FIXED_PERIODIC_CONFIRMATORY",
+  "baseCommit": "d7448a74a1e45f6bf5a02e4624a3052ca86ac99a",
+  "load": {
+    "activeUsers": 160,
+    "intervalMs": 1000,
+    "durationMs": 105000,
+    "requestTimeoutMs": 10000,
+    "arrivalMode": "staggered",
+    "loadScenario": "single-success",
+    "accountingMode": "corrected",
+    "stopUserOnTrue": false,
+    "initialActiveUsers": 160,
+    "activationStepUsers": 1,
+    "activationIntervalMs": 3000,
+    "reconnectDelayMs": 1000,
+    "expectedRequestOpportunities": 16800
+  },
+  "downstream": {
+    "aiResult": true,
+    "aiStatus": 200,
+    "aiDelayMs": 2000,
+    "echoImage": true,
+    "storageStatus": 200,
+    "storageDelayMs": 100
+  },
+  "application": {
+    "cpu": "2.0",
+    "memory": "3g"
+  },
+  "http": {
+    "maxConnections": 400,
+    "pendingMaxCount": 400,
+    "connectTimeoutMs": 2000,
+    "responseTimeoutMs": 10000,
+    "pendingAcquireTimeoutMs": 10000
+  },
+  "database": { "poolMaxSize": 10 },
+  "mvc": { "maxThreads": 400 },
+  "jvm": { "xms": "512m", "xmx": "2048m" },
+  "fixture": {
+    "path": "image/arc.jpg",
+    "bytes": 265745,
+    "sha256": "1eeadb414471c8f89207118baad01d1a9ec7b05306df0482a79d92d2c615fa99"
+  },
+  "runOrder": [
+    { "logicalRun": "MVC1", "implementation": "MVC400" },
+    { "logicalRun": "WEBFLUX1", "implementation": "WebFlux" },
+    { "logicalRun": "WEBFLUX2", "implementation": "WebFlux" },
+    { "logicalRun": "MVC2", "implementation": "MVC400" },
+    { "logicalRun": "MVC3", "implementation": "MVC400" },
+    { "logicalRun": "WEBFLUX3", "implementation": "WebFlux" }
+  ]
+}
