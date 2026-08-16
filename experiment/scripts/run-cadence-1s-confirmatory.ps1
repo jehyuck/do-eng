@@ -2,6 +2,7 @@ param(
     [switch]$DryRun,
     [switch]$Execute,
     [switch]$ReviewApproved,
+    [switch]$NativeIoSelfTest,
     [string]$NodeCommand = "node"
 )
 
@@ -19,7 +20,7 @@ $env:GIT_CONFIG_COUNT = "1"
 $env:GIT_CONFIG_KEY_0 = "safe.directory"
 $env:GIT_CONFIG_VALUE_0 = "*"
 
-if ($DryRun -eq $Execute) {
+if (-not $NativeIoSelfTest -and $DryRun -eq $Execute) {
     throw "Specify exactly one of -DryRun or -Execute"
 }
 
@@ -48,6 +49,56 @@ function Get-ExpectedRequestOpportunities {
         }
     }
     return $total
+}
+
+function Invoke-NativeProcess {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$FilePath,
+        [string[]]$ArgumentList = @(),
+        [Parameter(Mandatory = $true)]
+        [string]$StdOutPath,
+        [Parameter(Mandatory = $true)]
+        [string]$StdErrPath
+    )
+    $parentDirectories = @((Split-Path -Parent $StdOutPath), (Split-Path -Parent $StdErrPath)) | Where-Object { $_ }
+    foreach ($directory in $parentDirectories | Select-Object -Unique) {
+        if (-not (Test-Path -LiteralPath $directory)) { New-Item -ItemType Directory -Force -Path $directory | Out-Null }
+    }
+    $process = Start-Process -FilePath $FilePath `
+        -ArgumentList $ArgumentList `
+        -Wait `
+        -PassThru `
+        -RedirectStandardOutput $StdOutPath `
+        -RedirectStandardError $StdErrPath
+    return [int]$process.ExitCode
+}
+
+function Test-NativeIoHelper {
+    $testDirectory = Join-Path ([IO.Path]::GetTempPath()) "doeng-cadence-native-io-$([guid]::NewGuid().ToString('N'))"
+    New-Item -ItemType Directory -Force -Path $testDirectory | Out-Null
+    try {
+        $stdoutA = Join-Path $testDirectory "a.stdout.log"
+        $stderrA = Join-Path $testDirectory "a.stderr.log"
+        $exitA = Invoke-NativeProcess -FilePath "powershell.exe" -ArgumentList @(
+            "-NoProfile", "-Command", "[Console]::Error.WriteLine('synthetic stderr'); exit 0"
+        ) -StdOutPath $stdoutA -StdErrPath $stderrA
+        if ($exitA -ne 0 -or [string]::IsNullOrWhiteSpace((Get-Content -Raw -LiteralPath $stderrA))) {
+            throw "Native stderr + exit 0 regression failed"
+        }
+
+        $stdoutB = Join-Path $testDirectory "b.stdout.log"
+        $stderrB = Join-Path $testDirectory "b.stderr.log"
+        $exitB = Invoke-NativeProcess -FilePath "powershell.exe" -ArgumentList @(
+            "-NoProfile", "-Command", "[Console]::Error.WriteLine('synthetic failure'); exit 7"
+        ) -StdOutPath $stdoutB -StdErrPath $stderrB
+        if ($exitB -ne 7 -or [string]::IsNullOrWhiteSpace((Get-Content -Raw -LiteralPath $stderrB))) {
+            throw "Native stderr + non-zero exit regression failed"
+        }
+    } finally {
+        if (Test-Path -LiteralPath $testDirectory) { Remove-Item -LiteralPath $testDirectory -Recurse -Force }
+    }
+    return $true
 }
 
 function Test-ActiveMissionsPropagation {
@@ -141,6 +192,17 @@ function Assert-Contract {
     }
 }
 
+if ($NativeIoSelfTest) {
+    Test-NativeIoHelper | Out-Null
+    [ordered]@{
+        nativeProcessHelper = "PASS"
+        stderrExitZero = "PASS"
+        stderrNonZero = "PASS"
+        performanceExecution = "DISABLED"
+    } | ConvertTo-Json
+    exit 0
+}
+
 $config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
 $contract = Assert-Contract $config
 $nodeForValidation = $NodeCommand
@@ -191,12 +253,10 @@ $implementations = @{
 
 function Invoke-ComposeCommand {
     param([string]$Project, [string[]]$Arguments, [string]$StdOutPath, [string]$StdErrPath)
-    if ($StdOutPath) {
-        & docker compose -p $Project @composeArguments @Arguments 1> $StdOutPath 2> $StdErrPath
-    } else {
-        & docker compose -p $Project @composeArguments @Arguments
-    }
-    return [int]$LASTEXITCODE
+    if (-not $StdOutPath) { $StdOutPath = Join-Path ([IO.Path]::GetTempPath()) "doeng-cadence-compose-$([guid]::NewGuid().ToString('N')).stdout.log" }
+    if (-not $StdErrPath) { $StdErrPath = Join-Path ([IO.Path]::GetTempPath()) "doeng-cadence-compose-$([guid]::NewGuid().ToString('N')).stderr.log" }
+    $nativeArguments = @("compose", "-p", $Project) + $composeArguments + $Arguments
+    return Invoke-NativeProcess -FilePath "docker.exe" -ArgumentList $nativeArguments -StdOutPath $StdOutPath -StdErrPath $StdErrPath
 }
 
 function Wait-Readiness {
@@ -249,8 +309,9 @@ function Invoke-ConfirmatoryRun {
             "-ArrivalMode", "staggered", "-InitialActiveUsers", "160", "-ActivationStepUsers", "1", "-ActivationIntervalMs", "3000", "-ReconnectDelayMs", "1000",
             "-OutcomeMode", "controlled-admission"
         )
-        & powershell.exe @runnerArgs 1> (Join-Path $orchestrationDirectory "runner.stdout.log") 2> (Join-Path $orchestrationDirectory "runner.stderr.log")
-        $clientExitCode = [int]$LASTEXITCODE
+        $clientExitCode = Invoke-NativeProcess -FilePath "powershell.exe" -ArgumentList $runnerArgs `
+            -StdOutPath (Join-Path $orchestrationDirectory "runner.stdout.log") `
+            -StdErrPath (Join-Path $orchestrationDirectory "runner.stderr.log")
         $clientPath = Join-Path $resultsRoot "$runId\client-results.json"
         if (-not (Test-Path -LiteralPath $clientPath)) { throw "Client result missing; exit=$clientExitCode" }
         Get-ChildItem -LiteralPath $orchestrationDirectory -Filter "*.log" -File | Copy-Item -Destination $runDirectory -Force
