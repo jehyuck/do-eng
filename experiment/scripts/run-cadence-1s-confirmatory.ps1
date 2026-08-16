@@ -30,9 +30,60 @@ function Invoke-Git {
     return @($output)
 }
 
+function Get-CurrentHead {
+    return ((Invoke-Git @("rev-parse", "HEAD")) -join "").Trim()
+}
+
+function Get-ExpectedRequestOpportunities {
+    param(
+        [int]$ActiveMissions,
+        [int]$IntervalMs,
+        [int]$DurationMs
+    )
+    $total = [int64]0
+    for ($index = 0; $index -lt $ActiveMissions; $index++) {
+        $phase = [math]::Floor(($index * $IntervalMs) / $ActiveMissions)
+        if ($phase -lt $DurationMs) {
+            $total += 1 + [math]::Floor(($DurationMs - 1 - $phase) / $IntervalMs)
+        }
+    }
+    return $total
+}
+
+function Test-ActiveMissionsPropagation {
+    param([string]$NodeExecutable)
+    $resolvedNode = $NodeExecutable
+    if (-not (Test-Path -LiteralPath $resolvedNode)) {
+        $command = Get-Command $NodeExecutable -ErrorAction SilentlyContinue
+        if ($null -eq $command) { throw "Node executable not found for propagation test: $NodeExecutable" }
+        $resolvedNode = $command.Source
+    }
+    $previous = [Environment]::GetEnvironmentVariable("ACTIVE_MISSIONS", "Process")
+    try {
+        $env:ACTIVE_MISSIONS = "160"
+        $observed = (& $resolvedNode -e "process.stdout.write(process.env.ACTIVE_MISSIONS || '')").Trim()
+        if ($LASTEXITCODE -ne 0 -or $observed -ne "160") { throw "ACTIVE_MISSIONS propagation failed: '$observed'" }
+    } finally {
+        if ($null -eq $previous) { Remove-Item Env:ACTIVE_MISSIONS -ErrorAction SilentlyContinue }
+        else { [Environment]::SetEnvironmentVariable("ACTIVE_MISSIONS", $previous, "Process") }
+    }
+    return $true
+}
+
 function Assert-Contract {
     param($Config)
-    if ((Invoke-Git @("rev-parse", "HEAD")).Trim() -ne $baseCommit) { throw "CANONICAL_BASE mismatch" }
+    $currentHead = Get-CurrentHead
+    $ancestorCheck = & git -c "safe.directory=*" merge-base --is-ancestor $baseCommit $currentHead
+    if ($LASTEXITCODE -ne 0) { throw "CANONICAL_BASE ancestry mismatch: $baseCommit is not an ancestor of $currentHead" }
+    $productionPrefixes = @(
+        "backend/doEngGameFlux/src/main/",
+        "backend/doEngGameMvc/src/main/"
+    )
+    $sourceDiff = @(Invoke-Git @("diff", "--name-only", "$baseCommit..$currentHead")) | Where-Object {
+        $candidate = $_.Trim().Replace("\\", "/")
+        $productionPrefixes | Where-Object { $candidate.StartsWith($_, [System.StringComparison]::OrdinalIgnoreCase) }
+    }
+    if ($sourceDiff.Count -ne 0) { throw "PRODUCTION_SOURCE_GATE: NO ($($sourceDiff -join '; '))" }
     . (Join-Path $repositoryRoot "experiment\scripts\comparison-source-gate.ps1")
     $sourceStatus = Get-ComparisonSourceStatus -RepositoryRoot $repositoryRoot
     if (-not $sourceStatus.clean) { throw "PRODUCTION_SOURCE_GATE: NO ($($sourceStatus.dirtyPaths -join '; '))" }
@@ -48,9 +99,9 @@ function Assert-Contract {
     if ($fixture.Length -ne [int64]$Config.fixture.bytes) { throw "Fixture byte mismatch" }
     if ((Get-FileHash -Algorithm SHA256 -LiteralPath $fixture.FullName).Hash.ToLowerInvariant() -ne $Config.fixture.sha256) { throw "Fixture SHA mismatch" }
     foreach ($file in @($runScript, $loadScript) + $composeFiles) { if (-not (Test-Path -LiteralPath $file)) { throw "Missing input: $file" } }
-    if ($Config.load.loadScenario -ne "single-success" -or $Config.load.stopUserOnTrue) { throw "Fixed-periodic contract mismatch" }
+    if ($Config.load.loadScenario -ne "single-success" -or $Config.load.accountingMode -ne "corrected" -or $Config.load.stopUserOnTrue) { throw "Fixed-periodic contract mismatch" }
     $checks = @(
-        @{ name = "activeUsers"; actual = $Config.load.activeUsers; expected = 160 },
+        @{ name = "activeMissions"; actual = $Config.load.activeMissions; expected = 160 },
         @{ name = "intervalMs"; actual = $Config.load.intervalMs; expected = 1000 },
         @{ name = "durationMs"; actual = $Config.load.durationMs; expected = 105000 },
         @{ name = "requestTimeoutMs"; actual = $Config.load.requestTimeoutMs; expected = 10000 },
@@ -69,6 +120,9 @@ function Assert-Contract {
     foreach ($check in $checks) {
         if ([string]$check.actual -ne [string]$check.expected) { throw "Frozen contract mismatch: $($check.name)" }
     }
+    $expectedOpportunities = Get-ExpectedRequestOpportunities $Config.load.activeMissions $Config.load.intervalMs $Config.load.durationMs
+    if ($expectedOpportunities -ne [int64]$Config.load.expectedRequestOpportunities) { throw "Expected request opportunity formula mismatch" }
+    if ([string]$Config.load.expectedOpportunityFormula -notmatch "floor\(i\*intervalMs/activeMissions\)") { throw "Expected request opportunity formula is not preregistered" }
     if ($Config.runOrder.Count -ne 6) { throw "Run count mismatch" }
     $expected = @("MVC1", "WEBFLUX1", "WEBFLUX2", "MVC2", "MVC3", "WEBFLUX3")
     if ((@($Config.runOrder | ForEach-Object logicalRun) -join ",") -ne ($expected -join ",")) { throw "Run order mismatch" }
@@ -76,19 +130,36 @@ function Assert-Contract {
     foreach ($pattern in @("setInterval(() => {", "void submitFrame(user)", "stopUserOnTrue", 'loadScenario === "reconnect-ramp"')) {
         if ($source -notmatch [regex]::Escape($pattern)) { throw "Lower-level semantic marker missing: $pattern" }
     }
+    if ($source -notmatch [regex]::Escape('single-success')) { throw "Single-success scheduler marker missing" }
+    if ($source -notmatch [regex]::Escape('arrivalMode === "staggered"')) { throw "Staggered scheduler marker missing" }
+    if ($source -notmatch "ACTIVE_MISSIONS") { throw "ACTIVE_MISSIONS lower-level binding missing" }
+    return [ordered]@{
+        currentHead = $currentHead
+        ancestry = $true
+        productionSourceClean = $true
+        expectedRequestOpportunities = $expectedOpportunities
+    }
 }
 
 $config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
-Assert-Contract $config
+$contract = Assert-Contract $config
+$nodeForValidation = $NodeCommand
+if ($DryRun) {
+    $propagation = Test-ActiveMissionsPropagation $nodeForValidation
+}
 
 if ($DryRun) {
     [ordered]@{
-        canonicalBase = $baseCommit
+        canonicalApplicationBase = $baseCommit
+        experimentHarnessHead = $contract.currentHead
+        ancestryGate = $contract.ancestry
         worktreeClean = $true
-        productionSourceClean = $true
+        productionSourceClean = $contract.productionSourceClean
+        activeMissionsConfigKey = "activeMissions"
+        activeMissionsPropagation = [ordered]@{ value = $config.load.activeMissions; status = if ($propagation) { "PASS" } else { "FAIL" } }
         runCount = 6
         runOrder = @($config.runOrder | ForEach-Object logicalRun)
-        vu = $config.load.activeUsers
+        vu = $config.load.activeMissions
         intervalMs = $config.load.intervalMs
         aiDelayMs = $config.downstream.aiDelayMs
         storageDelayMs = $config.downstream.storageDelayMs
@@ -100,7 +171,9 @@ if ($DryRun) {
         stopUserOnTrue = $config.load.stopUserOnTrue
         fixedPeriodicSemantics = "single-success label with STOP_USER_ON_TRUE=false; each user uses setInterval after staggered phase"
         reconnectSemantics = "no reconnect branch in this contract; reconnect-ramp branch remains distinct in lower-level runner"
-        validityGate = "expected opportunities, actual starts, scheduling fidelity, event-loop delay, generator CPU/RSS"
+        expectedRequestOpportunities = [ordered]@{ value = $contract.expectedRequestOpportunities; formula = $config.load.expectedOpportunityFormula }
+        validityGate = "PASS iff actualStartedRequests == expectedRequestOpportunities; scheduling fidelity, event-loop delay, generator CPU/RSS are recorded"
+        resultDirectoryOwner = "LOWER_LEVEL_RUNNER"
         performanceExecution = "DISABLED"
     } | ConvertTo-Json -Depth 8
     exit 0
@@ -145,7 +218,9 @@ function Invoke-ConfirmatoryRun {
     $runId = "CADENCE-1S-$LogicalRun"
     $runDirectory = Join-Path $resultsRoot $runId
     if (Test-Path -LiteralPath $runDirectory) { throw "Existing result directory: $runDirectory" }
-    New-Item -ItemType Directory -Force -Path $runDirectory | Out-Null
+    $orchestrationDirectory = Join-Path ([IO.Path]::GetTempPath()) "doeng-cadence-1s-$runId"
+    if (Test-Path -LiteralPath $orchestrationDirectory) { Remove-Item -LiteralPath $orchestrationDirectory -Recurse -Force }
+    New-Item -ItemType Directory -Force -Path $orchestrationDirectory | Out-Null
     $project = "doeng-cadence-$($LogicalRun.ToLowerInvariant())"
     $envValues = [ordered]@{
         APP_CPU = "2.0"; APP_MEMORY = "3g"; HTTP_MAX_CONNECTIONS = "400"; HTTP_PENDING_MAX_COUNT = "400"
@@ -158,9 +233,9 @@ function Invoke-ConfirmatoryRun {
     foreach ($key in $envValues.Keys) { $previous[$key] = [Environment]::GetEnvironmentVariable($key, "Process"); [Environment]::SetEnvironmentVariable($key, $envValues[$key], "Process") }
     $runtimeStarted = $false
     try {
-        $buildCode = Invoke-ComposeCommand $project @("build", "experiment-mock", $spec.service) (Join-Path $runDirectory "compose-build.stdout.log") (Join-Path $runDirectory "compose-build.stderr.log")
+        $buildCode = Invoke-ComposeCommand $project @("build", "experiment-mock", $spec.service) (Join-Path $orchestrationDirectory "compose-build.stdout.log") (Join-Path $orchestrationDirectory "compose-build.stderr.log")
         if ($buildCode -ne 0) { throw "Compose build failed: $buildCode" }
-        $upCode = Invoke-ComposeCommand $project @("up", "-d", $spec.service) (Join-Path $runDirectory "compose-up.stdout.log") (Join-Path $runDirectory "compose-up.stderr.log")
+        $upCode = Invoke-ComposeCommand $project @("up", "-d", $spec.service) (Join-Path $orchestrationDirectory "compose-up.stdout.log") (Join-Path $orchestrationDirectory "compose-up.stderr.log")
         if ($upCode -ne 0) { throw "Compose up failed: $upCode" }
         $runtimeStarted = $true
         Wait-Readiness $spec.port
@@ -168,26 +243,30 @@ function Invoke-ConfirmatoryRun {
             "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $runScript,
             "-RunId", $runId, "-Implementation", $Implementation, "-TargetUrl", "http://127.0.0.1:$($spec.port)/game/face",
             "-ServerService", $spec.service, "-ComposeProject", $project, "-ComposeFiles", ($composeFiles -join ","),
-            "-ConfigPath", $configPath, "-FixturePath", "image\arc.jpg", "-NodeCommand", $NodeCommand,
+            "-ConfigPath", $configPath, "-ActiveMissions", "160", "-FixturePath", "image\arc.jpg", "-NodeCommand", $NodeCommand,
             "-EnableObservability", "1", "-EnableContainerMonitor", "1", "-EnableJfr", "0", "-SkipApplicationSnapshot", "0", "-SkipMockMetrics", "0",
             "-DrainObservationSeconds", "15", "-EchoImage", "1", "-LoadScenario", "single-success", "-AccountingMode", "corrected",
             "-ArrivalMode", "staggered", "-InitialActiveUsers", "160", "-ActivationStepUsers", "1", "-ActivationIntervalMs", "3000", "-ReconnectDelayMs", "1000",
             "-OutcomeMode", "controlled-admission"
         )
-        & powershell.exe @runnerArgs 1> (Join-Path $runDirectory "runner.stdout.log") 2> (Join-Path $runDirectory "runner.stderr.log")
+        & powershell.exe @runnerArgs 1> (Join-Path $orchestrationDirectory "runner.stdout.log") 2> (Join-Path $orchestrationDirectory "runner.stderr.log")
         $clientExitCode = [int]$LASTEXITCODE
         $clientPath = Join-Path $resultsRoot "$runId\client-results.json"
         if (-not (Test-Path -LiteralPath $clientPath)) { throw "Client result missing; exit=$clientExitCode" }
+        Get-ChildItem -LiteralPath $orchestrationDirectory -Filter "*.log" -File | Copy-Item -Destination $runDirectory -Force
         $summary = (Get-Content -Raw -LiteralPath $clientPath | ConvertFrom-Json).summary
+        $expectedOpportunities = [int64]$config.load.expectedRequestOpportunities
         $validity = [ordered]@{
-            runId = $runId; logicalRun = $LogicalRun; implementation = $Implementation; expectedRequestOpportunities = 16800
-            actualRequestStarts = $summary.startedRequests; schedulingFidelity = [double]$summary.startedRequests / 16800
+            runId = $runId; logicalRun = $LogicalRun; implementation = $Implementation; expectedRequestOpportunities = $expectedOpportunities
+            expectedOpportunityFormula = $config.load.expectedOpportunityFormula
+            actualRequestStarts = $summary.startedRequests; schedulingFidelity = [double]$summary.startedRequests / $expectedOpportunities
             loadGenerator = $summary.loadGenerator; clientProcessExitCode = $clientExitCode
-            loadGeneratorValid = ($summary.startedRequests -eq 16800 -and $clientExitCode -eq 0)
+            loadGeneratorValid = ($summary.startedRequests -eq $expectedOpportunities -and $clientExitCode -eq 0)
         }
         $validity | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "load-generator-validity.json")
     } finally {
         if ($runtimeStarted) { Invoke-ComposeCommand $project @("down", "--remove-orphans") $null $null | Out-Null }
+        if (Test-Path -LiteralPath $orchestrationDirectory) { Remove-Item -LiteralPath $orchestrationDirectory -Recurse -Force }
         foreach ($key in $envValues.Keys) {
             if ($null -eq $previous[$key]) { Remove-Item "Env:$key" -ErrorAction SilentlyContinue }
             else { [Environment]::SetEnvironmentVariable($key, $previous[$key], "Process") }

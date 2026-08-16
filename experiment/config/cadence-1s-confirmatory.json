@@ -2,7 +2,7 @@
   "experiment": "1S_FIXED_PERIODIC_CONFIRMATORY",
   "baseCommit": "d7448a74a1e45f6bf5a02e4624a3052ca86ac99a",
   "load": {
-    "activeUsers": 160,
+    "activeMissions": 160,
     "intervalMs": 1000,
     "durationMs": 105000,
     "requestTimeoutMs": 10000,
@@ -14,7 +14,8 @@
     "activationStepUsers": 1,
     "activationIntervalMs": 3000,
     "reconnectDelayMs": 1000,
-    "expectedRequestOpportunities": 16800
+    "expectedRequestOpportunities": 16800,
+    "expectedOpportunityFormula": "sum over i=0..activeMissions-1 of (1 + floor((durationMs - 1 - floor(i*intervalMs/activeMissions))/intervalMs)) for phase < durationMs"
   },
   "downstream": {
     "aiResult": true,
