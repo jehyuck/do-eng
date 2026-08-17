@@ -3,6 +3,7 @@ param(
     [switch]$Execute,
     [switch]$ReviewApproved,
     [switch]$NativeIoSelfTest,
+    [switch]$FailureCaptureSelfTest,
     [string]$NodeCommand = "node"
 )
 
@@ -20,7 +21,7 @@ $env:GIT_CONFIG_COUNT = "1"
 $env:GIT_CONFIG_KEY_0 = "safe.directory"
 $env:GIT_CONFIG_VALUE_0 = "*"
 
-if (-not $NativeIoSelfTest -and $DryRun -eq $Execute) {
+if (-not $NativeIoSelfTest -and -not $FailureCaptureSelfTest -and $DryRun -eq $Execute) {
     throw "Specify exactly one of -DryRun or -Execute"
 }
 
@@ -97,6 +98,37 @@ function Test-NativeIoHelper {
         }
     } finally {
         if (Test-Path -LiteralPath $testDirectory) { Remove-Item -LiteralPath $testDirectory -Recurse -Force }
+    }
+    return $true
+}
+
+function Test-FailureCapturePolicy {
+    $root = Join-Path ([IO.Path]::GetTempPath()) "doeng-cadence-failure-capture-$([guid]::NewGuid().ToString('N'))"
+    $orchestration = Join-Path $root "orchestration"
+    $failure = Join-Path $root "failure"
+    New-Item -ItemType Directory -Force -Path $orchestration | Out-Null
+    try {
+        $exitCode = Invoke-NativeProcess -FilePath "powershell.exe" -ArgumentList @(
+            "-NoProfile", "-Command", "[Console]::Error.WriteLine('synthetic failure'); exit 7"
+        ) -StdOutPath (Join-Path $orchestration "runner.stdout.log") -StdErrPath (Join-Path $orchestration "runner.stderr.log")
+        if ($exitCode -ne 7) { throw "Synthetic failure exit code was not preserved" }
+        New-Item -ItemType Directory -Force -Path $failure | Out-Null
+        Get-ChildItem -LiteralPath $orchestration -File | Copy-Item -Destination $failure -Force
+        [ordered]@{ exitCode = $exitCode; stdout = "runner.stdout.log"; stderr = "runner.stderr.log" } |
+            ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $failure "compose-build-process.json")
+        [ordered]@{ stage = "COMPOSE_BUILD"; workloadStarted = $false; actualRequestsStarted = 0; performanceRunCounted = $false; artifacts = @(Get-ChildItem -LiteralPath $failure -File | ForEach-Object Name) } |
+            ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $failure "preload-failure.json")
+        if (-not (Test-Path (Join-Path $failure "runner.stderr.log")) -or
+            (Get-Content -Raw (Join-Path $failure "runner.stderr.log")).Trim() -ne "synthetic failure") { throw "Synthetic failure stderr was not preserved" }
+        if ((Get-Content -Raw (Join-Path $failure "compose-build-process.json") | ConvertFrom-Json).exitCode -ne 7) { throw "Synthetic failure metadata was not preserved" }
+
+        $successDirectory = Join-Path $root "success"
+        $successCode = Invoke-NativeProcess -FilePath "powershell.exe" -ArgumentList @(
+            "-NoProfile", "-Command", "exit 0"
+        ) -StdOutPath (Join-Path $orchestration "success.stdout.log") -StdErrPath (Join-Path $orchestration "success.stderr.log")
+        if ($successCode -ne 0 -or (Test-Path -LiteralPath $successDirectory)) { throw "Synthetic success created failure evidence" }
+    } finally {
+        if (Test-Path -LiteralPath $root) { Remove-Item -LiteralPath $root -Recurse -Force }
     }
     return $true
 }
@@ -206,6 +238,16 @@ if ($NativeIoSelfTest) {
     exit 0
 }
 
+if ($FailureCaptureSelfTest) {
+    Test-FailureCapturePolicy | Out-Null
+    [ordered]@{
+        failureExitAndStderrPreservation = "PASS"
+        successNoFailureArtifact = "PASS"
+        performanceExecution = "DISABLED"
+    } | ConvertTo-Json
+    exit 0
+}
+
 $config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
 $contract = Assert-Contract $config
 $nodeForValidation = $NodeCommand
@@ -277,12 +319,25 @@ function Wait-Readiness {
     throw "STARTUP_GATE failed for port $Port"
 }
 
+function Get-NextPreloadFailureDirectory {
+    param([string]$RunId)
+    $failureRoot = Join-Path $resultsRoot "_preload-blocked"
+    New-Item -ItemType Directory -Force -Path $failureRoot | Out-Null
+    $attempt = 1
+    do {
+        $candidate = Join-Path $failureRoot "$RunId-PRELOAD-BLOCKED-$('{0:D2}' -f $attempt)"
+        $attempt++
+    } while (Test-Path -LiteralPath $candidate)
+    return $candidate
+}
+
 function Invoke-ConfirmatoryRun {
     param($LogicalRun, $Implementation)
     $spec = $implementations[$Implementation]
     $runId = "CADENCE-1S-$LogicalRun"
     $runDirectory = Join-Path $resultsRoot $runId
     if (Test-Path -LiteralPath $runDirectory) { throw "Existing result directory: $runDirectory" }
+    $failureDirectory = Get-NextPreloadFailureDirectory $runId
     $orchestrationDirectory = Join-Path ([IO.Path]::GetTempPath()) "doeng-cadence-1s-$runId"
     if (Test-Path -LiteralPath $orchestrationDirectory) { Remove-Item -LiteralPath $orchestrationDirectory -Recurse -Force }
     New-Item -ItemType Directory -Force -Path $orchestrationDirectory | Out-Null
@@ -297,13 +352,24 @@ function Invoke-ConfirmatoryRun {
     $previous = @{}
     foreach ($key in $envValues.Keys) { $previous[$key] = [Environment]::GetEnvironmentVariable($key, "Process"); [Environment]::SetEnvironmentVariable($key, $envValues[$key], "Process") }
     $runtimeStarted = $false
+    $currentStage = "PREPARE"
+    $buildCode = $null
+    $upCode = $null
+    $clientExitCode = $null
+    $failureException = $null
     try {
+        $currentStage = "COMPOSE_BUILD"
         $buildCode = Invoke-ComposeCommand $project @("build", "experiment-mock", $spec.service) (Join-Path $orchestrationDirectory "compose-build.stdout.log") (Join-Path $orchestrationDirectory "compose-build.stderr.log")
         if ($buildCode -ne 0) { throw "Compose build failed: $buildCode" }
+        [ordered]@{ exitCode = $buildCode; stdout = "compose-build.stdout.log"; stderr = "compose-build.stderr.log" } |
+            ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $orchestrationDirectory "compose-build-process.json")
+        $currentStage = "COMPOSE_UP"
         $upCode = Invoke-ComposeCommand $project @("up", "-d", $spec.service) (Join-Path $orchestrationDirectory "compose-up.stdout.log") (Join-Path $orchestrationDirectory "compose-up.stderr.log")
         if ($upCode -ne 0) { throw "Compose up failed: $upCode" }
         $runtimeStarted = $true
+        $currentStage = "READINESS"
         Wait-Readiness $spec.port
+        $currentStage = "LOWER_LEVEL_RUNNER"
         $runnerArgs = @(
             "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $runScript,
             "-RunId", $runId, "-Implementation", $Implementation, "-TargetUrl", "http://127.0.0.1:$($spec.port)/game/face",
@@ -318,13 +384,6 @@ function Invoke-ConfirmatoryRun {
             -StdOutPath (Join-Path $orchestrationDirectory "runner.stdout.log") `
             -StdErrPath (Join-Path $orchestrationDirectory "runner.stderr.log")
         $clientPath = Join-Path $resultsRoot "$runId\client-results.json"
-        $logDestination = $runDirectory
-        if (-not (Test-Path -LiteralPath $logDestination)) {
-            $failureRoot = Join-Path $resultsRoot "_preload-blocked"
-            $logDestination = Join-Path $failureRoot "$runId-$([DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ'))"
-            New-Item -ItemType Directory -Force -Path $logDestination | Out-Null
-        }
-        Get-ChildItem -LiteralPath $orchestrationDirectory -Filter "*.log" -File | Copy-Item -Destination $logDestination -Force
         if (-not (Test-Path -LiteralPath $clientPath)) { throw "Client result missing; exit=$clientExitCode" }
         $summary = (Get-Content -Raw -LiteralPath $clientPath | ConvertFrom-Json).summary
         $expectedOpportunities = [int64]$config.load.expectedRequestOpportunities
@@ -336,8 +395,42 @@ function Invoke-ConfirmatoryRun {
             loadGeneratorValid = ($summary.startedRequests -eq $expectedOpportunities -and $clientExitCode -eq 0)
         }
         $validity | ConvertTo-Json -Depth 12 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "load-generator-validity.json")
+        $currentStage = "COMPLETE"
+    } catch {
+        $failureException = $_
+        throw
     } finally {
-        if ($runtimeStarted) { Invoke-ComposeCommand $project @("down", "--remove-orphans") $null $null | Out-Null }
+        $logDestination = if (Test-Path -LiteralPath $runDirectory) { $runDirectory } else { $failureDirectory }
+        New-Item -ItemType Directory -Force -Path $logDestination | Out-Null
+        if (Test-Path -LiteralPath $orchestrationDirectory) {
+            Get-ChildItem -LiteralPath $orchestrationDirectory -File | Copy-Item -Destination $logDestination -Force
+        }
+        if ($null -ne $failureException -and $currentStage -ne "COMPLETE") {
+            $actualRequestsStarted = 0
+            $clientPath = Join-Path $runDirectory "client-results.json"
+            if (Test-Path -LiteralPath $clientPath) {
+                try { $actualRequestsStarted = [int]((Get-Content -Raw -LiteralPath $clientPath | ConvertFrom-Json).summary.startedRequests) } catch { $actualRequestsStarted = 0 }
+            }
+            if ($null -ne $buildCode) {
+                [ordered]@{ exitCode = $buildCode; stdout = "compose-build.stdout.log"; stderr = "compose-build.stderr.log" } |
+                    ConvertTo-Json | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $logDestination "compose-build-process.json")
+            }
+            [ordered]@{
+                logicalRun = $LogicalRun
+                implementation = $Implementation
+                harnessHead = Get-CurrentHead
+                stage = $currentStage
+                workloadStarted = $actualRequestsStarted -gt 0
+                actualRequestsStarted = $actualRequestsStarted
+                performanceRunCounted = $actualRequestsStarted -gt 0
+                exception = $failureException.Exception.Message
+                capturedAt = (Get-Date).ToUniversalTime().ToString("o")
+                artifacts = @(Get-ChildItem -LiteralPath $logDestination -File | ForEach-Object Name)
+            } | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $logDestination "preload-failure.json")
+        }
+        if ($runtimeStarted) {
+            try { Invoke-ComposeCommand $project @("down", "--remove-orphans") $null $null | Out-Null } catch { }
+        }
         if (Test-Path -LiteralPath $orchestrationDirectory) { Remove-Item -LiteralPath $orchestrationDirectory -Recurse -Force }
         foreach ($key in $envValues.Keys) {
             if ($null -eq $previous[$key]) { Remove-Item "Env:$key" -ErrorAction SilentlyContinue }
