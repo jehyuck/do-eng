@@ -153,6 +153,40 @@ function Test-ActiveMissionsPropagation {
     return $true
 }
 
+function Resolve-NodeExecutable {
+    param([Parameter(Mandatory = $true)][string]$NodeCommand)
+    if ([string]::IsNullOrWhiteSpace($NodeCommand)) { throw "Node executable command is empty" }
+    $candidate = $null
+    if (Test-Path -LiteralPath $NodeCommand -PathType Leaf) {
+        $candidate = (Resolve-Path -LiteralPath $NodeCommand).Path
+    } else {
+        $command = Get-Command $NodeCommand -CommandType Application -ErrorAction SilentlyContinue
+        if ($null -eq $command) { throw "Node executable not found: $NodeCommand" }
+        $candidate = if ($command.Source) { $command.Source } else { $command.Path }
+        $candidate = (Resolve-Path -LiteralPath $candidate).Path
+    }
+    if (-not (Test-Path -LiteralPath $candidate -PathType Leaf)) { throw "Resolved Node executable does not exist: $candidate" }
+    if ([IO.Path]::GetExtension($candidate).ToLowerInvariant() -ne ".exe") { throw "Resolved Node executable is not an executable file: $candidate" }
+    return $candidate
+}
+
+function Test-NodeSpawn {
+    param([Parameter(Mandatory = $true)][string]$NodeExecutable)
+    $testDirectory = Join-Path ([IO.Path]::GetTempPath()) "doeng-cadence-node-$([guid]::NewGuid().ToString('N'))"
+    New-Item -ItemType Directory -Force -Path $testDirectory | Out-Null
+    try {
+        $stdout = Join-Path $testDirectory "stdout.log"
+        $stderr = Join-Path $testDirectory "stderr.log"
+        $nodeExpression = "process.stdout.write(String.fromCharCode(78,79,68,69,95,76,65,85,78,67,72,95,79,75))"
+        $exitCode = Invoke-NativeProcess -FilePath $NodeExecutable -ArgumentList @("--eval=$nodeExpression") -StdOutPath $stdout -StdErrPath $stderr
+        $observed = if (Test-Path -LiteralPath $stdout) { (Get-Content -Raw -LiteralPath $stdout) } else { "" }
+        if ($exitCode -ne 0 -or $observed -ne "NODE_LAUNCH_OK") { throw "Node spawn self-test failed: exit=$exitCode stdout='$observed'" }
+        return [ordered]@{ spawned = $true; exitCode = $exitCode; stdout = $observed; stderrEmpty = [string]::IsNullOrEmpty((Get-Content -Raw -LiteralPath $stderr)) }
+    } finally {
+        if (Test-Path -LiteralPath $testDirectory) { Remove-Item -LiteralPath $testDirectory -Recurse -Force }
+    }
+}
+
 function Assert-Contract {
     param($Config)
     $currentHead = Get-CurrentHead
@@ -250,6 +284,10 @@ if ($FailureCaptureSelfTest) {
 
 $config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
 $contract = Assert-Contract $config
+$NodeCommand = Resolve-NodeExecutable $NodeCommand
+$nodeVersion = ((& $NodeCommand --version 2>&1) -join "").Trim()
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($nodeVersion)) { throw "Unable to obtain Node version from $NodeCommand" }
+$nodeSpawn = Test-NodeSpawn $NodeCommand
 $nodeForValidation = $NodeCommand
 if ($DryRun) {
     $propagation = Test-ActiveMissionsPropagation $nodeForValidation
@@ -266,6 +304,10 @@ if ($DryRun) {
         unexpectedChangeGate = $contract.unexpectedChangeGate
         activeMissionsConfigKey = "activeMissions"
         activeMissionsPropagation = [ordered]@{ value = $config.load.activeMissions; status = if ($propagation) { "PASS" } else { "FAIL" } }
+        nodeExecutableResolvedPath = $NodeCommand
+        nodeExecutableExists = (Test-Path -LiteralPath $NodeCommand -PathType Leaf)
+        nodeVersion = $nodeVersion
+        nodeSpawnSelfTest = $nodeSpawn
         runCount = 6
         runOrder = @($config.runOrder | ForEach-Object logicalRun)
         vu = $config.load.activeMissions
