@@ -233,6 +233,18 @@ if ([string]::IsNullOrWhiteSpace($NodeCommand)) {
     }
 }
 
+function Invoke-NodeLoadProcess {
+    param(
+        [Parameter(Mandatory = $true)][string]$NodePath,
+        [Parameter(Mandatory = $true)][string]$ScriptPath,
+        [Parameter(Mandatory = $true)][string]$StdOutPath,
+        [Parameter(Mandatory = $true)][string]$StdErrPath
+    )
+    $process = Start-Process -FilePath $NodePath -ArgumentList @($ScriptPath) -WorkingDirectory $repositoryRoot `
+        -Wait -PassThru -RedirectStandardOutput $StdOutPath -RedirectStandardError $StdErrPath
+    return [int]$process.ExitCode
+}
+
 function Invoke-DatabaseSql {
     param([Parameter(Mandatory = $true)][string]$Sql)
     $output = & docker compose -p $ComposeProject @composeArguments exec -T mariadb `
@@ -611,6 +623,32 @@ try {
     $env:MOCK_DRAIN_PATH = Join-Path $runDirectory "mock-drain.jsonl"
     $env:MOCK_DRAIN_SUMMARY_PATH = Join-Path $runDirectory "mock-drain-summary.json"
 
+    $clientScriptPath = Join-Path $repositoryRoot "experiment\load\mission-load.js"
+    $clientStdoutPath = Join-Path $runDirectory "client-summary.stdout.json"
+    $clientStderrPath = Join-Path $runDirectory "client-driver.stderr.log"
+    $clientProcessContract = [ordered]@{
+        nodeExecutable = $NodeCommand
+        scriptPath = $clientScriptPath
+        activeMissions = $ActiveMissions
+        intervalMs = $IntervalMs
+        durationMs = $DurationMs
+        requestTimeoutMs = $RequestTimeoutMs
+        arrivalMode = $ArrivalMode
+        loadScenario = $LoadScenario
+        accountingMode = $AccountingMode
+        stopUserOnTrue = $env:STOP_USER_ON_TRUE -eq "true"
+        fixturePath = $resolvedFixture
+        fixtureSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $resolvedFixture).Hash.ToLowerInvariant()
+        resultPath = $env:RESULT_PATH
+        progressPath = $env:PROGRESS_PATH
+        tokenFileExists = Test-Path -LiteralPath $privateTokenPath
+        tokenCount = @($preparedUsers.users).Count
+        timestamp = (Get-Date).ToUniversalTime().ToString("o")
+        workloadStarted = $false
+        processSpawned = $false
+    }
+    $clientProcessContract | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "client-process-contract.json")
+
 $monitorProcess = $null
 $monitorDurationSeconds = [int][Math]::Ceiling($DurationMs / 1000) + 2
 $jfrContainerFile = "/tmp/$RunId.jfr"
@@ -668,9 +706,18 @@ if ($observabilityEnabled) {
         }
     }
 
-    $clientStdout = & $NodeCommand (Join-Path $repositoryRoot "experiment\load\mission-load.js")
-    if ($LASTEXITCODE -ne 0) { throw "Load driver failed" }
-    $clientStdout | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "client-summary.stdout.json")
+    $clientExitCode = Invoke-NodeLoadProcess -NodePath $NodeCommand -ScriptPath $clientScriptPath `
+        -StdOutPath $clientStdoutPath -StdErrPath $clientStderrPath
+    $clientProcessContract.processSpawned = $true
+    $clientProcessContract.spawnedAt = (Get-Date).ToUniversalTime().ToString("o")
+    $clientProcessContract | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "client-process-contract.json")
+    [ordered]@{
+        started = $true
+        exitCode = $clientExitCode
+        stdout = "client-summary.stdout.json"
+        stderr = "client-driver.stderr.log"
+    } | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 -LiteralPath (Join-Path $runDirectory "client-driver-process.json")
+    if ($clientExitCode -ne 0) { throw "CLIENT_DRIVER_FAILURE: exit=$clientExitCode" }
 
     if ($observabilityEnabled) {
         $monitorStatus = $null

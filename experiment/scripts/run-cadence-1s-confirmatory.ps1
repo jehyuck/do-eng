@@ -135,15 +135,16 @@ function Assert-Contract {
         $productionPrefixes | Where-Object { $candidate.StartsWith($_, [System.StringComparison]::OrdinalIgnoreCase) }
     }
     if ($sourceDiff.Count -ne 0) { throw "PRODUCTION_SOURCE_GATE: NO ($($sourceDiff -join '; '))" }
-    . (Join-Path $repositoryRoot "experiment\scripts\comparison-source-gate.ps1")
-    $sourceStatus = Get-ComparisonSourceStatus -RepositoryRoot $repositoryRoot
-    if (-not $sourceStatus.clean) { throw "PRODUCTION_SOURCE_GATE: NO ($($sourceStatus.dirtyPaths -join '; '))" }
-    $allowed = @("experiment/config/cadence-1s-confirmatory.json", "experiment/scripts/run-cadence-1s-confirmatory.ps1")
-    $unexpectedStatus = @(Invoke-Git @("status", "--short", "--untracked-files=all") | Where-Object {
+    $productionWorkingTreeStatus = @(Invoke-Git @("status", "--short", "--untracked-files=all", "--", "backend/doEngGameFlux/src/main", "backend/doEngGameMvc/src/main"))
+    if ($productionWorkingTreeStatus.Count -ne 0) { throw "PRODUCTION_SOURCE_GATE: NO ($($productionWorkingTreeStatus -join '; '))" }
+    $approvedExperimentTools = @("experiment/scripts/run-cadence-1s-confirmatory.ps1", "experiment/scripts/run-isolated-vu-success-smoke.ps1")
+    $allStatus = @(Invoke-Git @("status", "--short", "--untracked-files=all"))
+    $unexpectedStatus = @($allStatus | Where-Object {
         $line = $_.Trim()
-        -not ($allowed | Where-Object { $line -match [regex]::Escape($_) })
+        $path = ($line -replace '^\s*[?A-Z!]{1,2}\s+', '').Replace("\\", "/")
+        $approvedExperimentTools -notcontains $path
     })
-    if ($unexpectedStatus.Count -ne 0) { throw "WORKTREE_CLEAN: NO ($($unexpectedStatus -join '; '))" }
+    if ($unexpectedStatus.Count -ne 0) { throw "UNEXPECTED_CHANGE_GATE: NO ($($unexpectedStatus -join '; '))" }
     $fixturePath = Join-Path $repositoryRoot $Config.fixture.path
     if (-not (Test-Path -LiteralPath $fixturePath)) { throw "Fixture missing" }
     $fixture = Get-Item -LiteralPath $fixturePath
@@ -188,6 +189,8 @@ function Assert-Contract {
         currentHead = $currentHead
         ancestry = $true
         productionSourceClean = $true
+        approvedExperimentToolChanges = $true
+        unexpectedChangeGate = $true
         expectedRequestOpportunities = $expectedOpportunities
     }
 }
@@ -217,6 +220,8 @@ if ($DryRun) {
         ancestryGate = $contract.ancestry
         worktreeClean = $true
         productionSourceClean = $contract.productionSourceClean
+        approvedExperimentToolChanges = $contract.approvedExperimentToolChanges
+        unexpectedChangeGate = $contract.unexpectedChangeGate
         activeMissionsConfigKey = "activeMissions"
         activeMissionsPropagation = [ordered]@{ value = $config.load.activeMissions; status = if ($propagation) { "PASS" } else { "FAIL" } }
         runCount = 6
@@ -313,8 +318,14 @@ function Invoke-ConfirmatoryRun {
             -StdOutPath (Join-Path $orchestrationDirectory "runner.stdout.log") `
             -StdErrPath (Join-Path $orchestrationDirectory "runner.stderr.log")
         $clientPath = Join-Path $resultsRoot "$runId\client-results.json"
+        $logDestination = $runDirectory
+        if (-not (Test-Path -LiteralPath $logDestination)) {
+            $failureRoot = Join-Path $resultsRoot "_preload-blocked"
+            $logDestination = Join-Path $failureRoot "$runId-$([DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ'))"
+            New-Item -ItemType Directory -Force -Path $logDestination | Out-Null
+        }
+        Get-ChildItem -LiteralPath $orchestrationDirectory -Filter "*.log" -File | Copy-Item -Destination $logDestination -Force
         if (-not (Test-Path -LiteralPath $clientPath)) { throw "Client result missing; exit=$clientExitCode" }
-        Get-ChildItem -LiteralPath $orchestrationDirectory -Filter "*.log" -File | Copy-Item -Destination $runDirectory -Force
         $summary = (Get-Content -Raw -LiteralPath $clientPath | ConvertFrom-Json).summary
         $expectedOpportunities = [int64]$config.load.expectedRequestOpportunities
         $validity = [ordered]@{
